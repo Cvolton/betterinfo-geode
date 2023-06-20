@@ -4,5 +4,13 @@
 	"id": "cvolton.betterinfo",
 	"name": "BetterInfo",
 	"developer": "Cvolton",
-	"description": "betterinfo geode real (not fake)"
+	"description": "betterinfo geode real (not fake)",
+	"settings": {
+        "show-comment-ids": {
+            "name": "Show comment IDs",
+            "description": "Whether comment IDs should be shown in comment cells",
+            "type": "bool",
+            "default": false
+        }
+    }
 }
