@@ -3,6 +3,7 @@
 
 #include "../utils.hpp"
 #include "../managers/BetterInfoOnline.h"
+#include "../layers/LeaderboardViewLayer.h"
 
 using namespace geode::prelude;
 
@@ -65,9 +66,9 @@ class $modify(BIProfilePage, ProfilePage) {
     void onProfilePageLeaderboard(CCObject* sender){
         auto score = this->m_score;
 
-        /*auto scene = LeaderboardViewLayer::scene(score->m_accountID);
+        auto scene = LeaderboardViewLayer::scene(score->m_accountID);
         auto transitionFade = CCTransitionFade::create(0.5, scene);
-        CCDirector::sharedDirector()->pushScene(transitionFade);*/
+        CCDirector::sharedDirector()->pushScene(transitionFade);
     }
 
     void onProfilePageReload(CCObject* sender){
