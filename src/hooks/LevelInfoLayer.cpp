@@ -1,0 +1,27 @@
+#include <Geode/Bindings.hpp>
+#include <Geode/Modify/LevelInfoLayer.hpp>
+
+#include "../layers/UnregisteredProfileLayer.h"
+
+using namespace geode::prelude;
+
+class $modify(LevelInfoLayer) {
+    bool init(GJGameLevel* level) {
+        if (!LevelInfoLayer::init(level)) return false;
+
+        auto playerName = static_cast<CCMenuItemSpriteExtra*>(this->getChildByID("creator-info-menu")->getChildByID("creator-name"));
+        playerName->setEnabled(true);
+
+        return true;
+    }
+
+    void onViewProfile(CCObject* sender) {
+
+        if(this->m_level->m_accountID == 0) {
+            UnregisteredProfileLayer::displayProfile(this->m_level->m_userID, this->m_level->m_creatorName);
+            return;
+        }
+
+        LevelInfoLayer::onViewProfile(sender);
+    }
+};
