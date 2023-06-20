@@ -7,7 +7,7 @@ project(BetterInfo VERSION 1.0.0)
 # Use GLOB_RECURSE instead of GLOB
 # to recursively add all source files 
 # under src/ 
-file(GLOB SOURCES
+file(GLOB_RECURSE SOURCES
 	src/*.cpp
 )
 
