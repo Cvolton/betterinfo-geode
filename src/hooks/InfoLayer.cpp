@@ -3,6 +3,7 @@
 
 #include "../layers/CustomLevelSearchLayer.h"
 #include "../layers/JumpToPageLayer.h"
+#include "../layers/UnregisteredProfileLayer.h"
 
 using namespace geode::prelude;
 
@@ -112,7 +113,7 @@ class $modify(BIInfoLayer, InfoLayer) {
 
     void onMore(CCObject* sender) {
         if(this->m_level->m_accountID == 0) {
-            //UnregisteredProfileLayer::displayProfile(this->m_pLevel->userID, this->m_pLevel->userName);
+            UnregisteredProfileLayer::displayProfile(this->m_level->m_userID, this->m_level->m_creatorName);
             return;
         }
 
