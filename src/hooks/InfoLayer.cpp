@@ -129,4 +129,25 @@ class $modify(BIInfoLayer, InfoLayer) {
 
         ExtendedLevelInfo::create(this->m_level)->show();
     }
+
+    void setupCommentsBrowser(CCArray* a3) {
+
+        InfoLayer::setupCommentsBrowser(a3);
+
+        if(this->m_itemCount >= 999) this->m_rightArrow->setVisible(true);
+    }
+
+    void loadPage(int page, bool reload) {
+        InfoLayer::loadPage(page, reload);
+
+        CCMenu* menu = static_cast<CCMenu*>(this->m_commentsBtn->getParent());
+
+        auto commentBtn = static_cast<CCMenuItemSpriteExtra*>(menu->getChildByID("bi-comment-page-btn"));
+        if(commentBtn == nullptr) return;
+
+        auto commentBtnSprite = static_cast<ButtonSprite*>(commentBtn->getChildren()->objectAtIndex(0));
+        if(commentBtnSprite == nullptr) return;
+
+        commentBtnSprite->setString(std::to_string(page+1).c_str());
+    }
 };
