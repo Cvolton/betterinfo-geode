@@ -1,5 +1,8 @@
 #include "utils.hpp"
 
+#include <Geode/cocos/support/base64.h>
+#include <Geode/cocos/support/zip_support/ZipUtils.h>
+
 CCSprite* BetterInfo::createWithBISpriteFrameName(const char* name){
         //TODO: geodify
         auto sprite = CCSprite::createWithSpriteFrameName(name);
@@ -57,6 +60,64 @@ const char* BetterInfo::rankIcon(int position){
         else if (position <= 200) return "rankIcon_top200_001.png";
         else if (position <= 500) return "rankIcon_top500_001.png";
         return "rankIcon_top1000_001.png";
+}
+
+std::string BetterInfo::decodeBase64Gzip(const std::string& input) {
+        unsigned char* levelString;
+        unsigned char* levelStringFull;
+        int levelStringSize = base64Decode((unsigned char *)(input.c_str()), input.size(), &levelString);
+        int levelStringSizeDeflated = ZipUtils::ccInflateMemory(levelString, levelStringSize, &levelStringFull);
+
+        std::string levelStringFullStd((char*)levelStringFull, levelStringSizeDeflated);
+
+        delete levelString;
+        delete levelStringFull;
+
+        return levelStringFullStd;
+}
+
+std::string BetterInfo::fileSize(size_t bytes) {
+        std::stringstream size;
+        size << std::setprecision(4);
+
+        if(bytes > (1024*1024)) size << ( bytes / (float)(1024*1024) ) << "MB";
+        else if(bytes > (1024)) size << ( bytes / (float)(1024) ) << "KB";
+        else size << bytes << "B";
+
+        return size.str();
+}
+
+std::string BetterInfo::fixColorCrashes(std::string input) {
+        int tags = 0;
+
+        std::string openingTag = "<c";
+        for(std::string::size_type pos = 0; (pos = input.find(openingTag, pos)) != std::string::npos; tags++) {
+                pos += openingTag.length();
+        }
+
+        std::string closingTag = "</c>";
+        for(std::string::size_type pos = 0; (pos = input.find(closingTag, pos)) != std::string::npos; tags--) {
+                pos += closingTag.length();
+        }
+
+        for(int i = 0; i < tags; i++) {
+                input.append("  </c>");
+        }
+
+        return input;
+}
+
+std::string BetterInfo::fixNullByteCrash(std::string input) {
+        for(auto& character : input) {
+                if(character == '\0') character = ' ';
+        }
+        return input;
+}
+
+std::string BetterInfo::timeToString(time_t input) {
+        struct tm time3;
+        localtime_s(&time3, &input);
+        return std::format("{}-{:02}-{:02} {:02}:{:02}", time3.tm_year + 1900, time3.tm_mon + 1, time3.tm_mday, time3.tm_hour, time3.tm_min);
 }
 
 void BetterInfo::copyToClipboard(const char* text){

@@ -9,6 +9,12 @@ namespace BetterInfo {
     CCSprite* createPlaceholder();
 
     const char* rankIcon(int position);
+
+    std::string decodeBase64Gzip(const std::string& input);
+    std::string fileSize(size_t bytes);
+    std::string fixColorCrashes(std::string input);
+    std::string fixNullByteCrash(std::string input);
+    std::string timeToString(time_t input);
     
     void copyToClipboard(const char* text);
     void copyToClipboard(const char* text, CCLayer* parent);

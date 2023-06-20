@@ -2,6 +2,7 @@
 #include <Geode/Modify/LevelInfoLayer.hpp>
 
 #include "../layers/UnregisteredProfileLayer.h"
+#include "../layers/ExtendedLevelInfo.h"
 
 using namespace geode::prelude;
 
@@ -23,5 +24,9 @@ class $modify(LevelInfoLayer) {
         }
 
         LevelInfoLayer::onViewProfile(sender);
+    }
+
+    void onLevelInfo(CCObject* sender) {
+        ExtendedLevelInfo::showProgressDialog(this->m_level);
     }
 };
