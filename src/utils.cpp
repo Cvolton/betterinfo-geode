@@ -78,3 +78,27 @@ std::string BetterInfo::getSongUrl(int audioID) {
 bool BetterInfo::isNewGrounds(int audioID) {
         return BetterInfo::getSongUrl(audioID).find("://audio.ngfiles.com/") != std::string::npos;
 }
+
+/*
+    This is a reimplementation of GameLevelManager::responseToDict
+    because I couldn't get it to work. It's not 1:1 with the original
+    but it achieves the same purpose.
+*/
+CCDictionary* BetterInfo::responseToDict(const std::string& response){
+    auto dict = CCDictionary::create();
+
+    std::stringstream responseStream(response);
+    std::string currentKey;
+    std::string keyID;
+
+    unsigned int i = 0;
+    while(getline(responseStream, currentKey, ':')){
+
+        if(i % 2 == 0) keyID = currentKey;
+        else dict->setObject(CCString::create(currentKey.c_str()),keyID);
+
+        i++;
+    }
+
+    return dict;
+}

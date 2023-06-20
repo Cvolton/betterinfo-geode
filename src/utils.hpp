@@ -15,4 +15,6 @@ namespace BetterInfo {
 
     std::string getSongUrl(int audioID);
     bool isNewGrounds(int audioID);
+
+    cocos2d::CCDictionary* responseToDict(const std::string& response);
 }

@@ -2,6 +2,7 @@
 #include <Geode/Modify/ProfilePage.hpp>
 
 #include "../utils.hpp"
+#include "../managers/BetterInfoOnline.h"
 
 using namespace geode::prelude;
 
@@ -239,17 +240,17 @@ class $modify(BIProfilePage, ProfilePage) {
     void getUserInfoFailed(int id){
         ProfilePage::getUserInfoFailed(id);
 
-        //BetterInfoOnline::sharedState()->loadScores(id, false, reinterpret_cast<ProfilePage*>(this - sizeof(CommentUploadDelegate) - sizeof(LevelCommentDelegate) - sizeof(FLAlertLayerProtocol) - sizeof(FLAlertLayer)));
+        BetterInfoOnline::sharedState()->loadScores(id, false, this);
     }
 
     void onClose(CCObject* sender) {
-        //BetterInfoOnline::sharedState()->m_scoreProfilePage = nullptr;
+        BetterInfoOnline::sharedState()->m_scoreProfilePage = nullptr;
 
         ProfilePage::onClose(sender);
     }
 
     void keyBackClicked() {
-        //BetterInfoOnline::sharedState()->m_scoreProfilePage = nullptr;
+        BetterInfoOnline::sharedState()->m_scoreProfilePage = nullptr;
 
         ProfilePage::keyBackClicked();
     }
