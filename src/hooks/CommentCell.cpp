@@ -86,6 +86,7 @@ class $modify(BICommentCell, CommentCell) {
             buttonButton->setPosition(37 - (winSize.width / 2), smallCommentsMode ? 18.5f - (winSize.height / 2) : 50.5f - (winSize.height / 2) );
             buttonButton->setAnchorPoint({0.1f,0});
             buttonButton->setEnabled(true);
+            buttonButton->setID("bi-profile-button");
             menu->addChild(buttonButton);
 
         }else{
@@ -102,6 +103,7 @@ class $modify(BICommentCell, CommentCell) {
             CCPoint largePosition({154 - (winSize.width / 2), 60 - (winSize.height / 2) });
             commentsButton->setPosition(smallCommentsMode ? smallPosition : largePosition);
             commentsButton->setSizeMult(1.2f);
+            commentsButton->setID("bi-comments-button");
 
         }
 
