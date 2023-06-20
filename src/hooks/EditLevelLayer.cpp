@@ -1,9 +1,15 @@
 #include <Geode/Bindings.hpp>
 #include <Geode/Modify/EditLevelLayer.hpp>
 
+#include "../layers/ExtendedLevelInfo.h"
+
 using namespace geode::prelude;
 
 class $modify(BIEditLevelLayer, EditLevelLayer) {
+    /*
+     * Callbacks
+     */
+
     void onEditLevelGoToLevel(CCObject* sender) {
         auto searchObject = GJSearchObject::create(SearchType::Search, std::to_string(this->m_level->m_levelID));
         auto browserLayer = LevelBrowserLayer::scene(searchObject);
@@ -12,6 +18,10 @@ class $modify(BIEditLevelLayer, EditLevelLayer) {
 
         CCDirector::sharedDirector()->pushScene(transitionFade);
     }
+
+    /*
+     * Hooks
+     */
 
     bool init(GJGameLevel* level) {
         if(!EditLevelLayer::init(level)) return false;
@@ -41,5 +51,9 @@ class $modify(BIEditLevelLayer, EditLevelLayer) {
         }
 
         return true;
+    }
+
+    void onLevelInfo(CCObject* sender) {
+        ExtendedLevelInfo::showProgressDialog(this->m_level);
     }
 };
