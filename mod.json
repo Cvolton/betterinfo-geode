@@ -17,6 +17,12 @@
             "description": "Whether the custom level info dialog from BI should be used",
             "type": "bool",
             "default": true
+        },
+        "fix-green-users": {
+            "name": "Fix broken usernames",
+            "description": "Whether destroyed green usernames no longer returned by the servers should be fixed using data from the GDHistory project",
+            "type": "bool",
+            "default": true
         }
     }
 }
