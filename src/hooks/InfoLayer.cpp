@@ -2,12 +2,13 @@
 #include <Geode/Modify.hpp>
 
 #include "../layers/CustomLevelSearchLayer.h"
+#include "../layers/JumpToPageLayer.h"
 
 using namespace geode::prelude;
 
 class $modify(BIInfoLayer, InfoLayer) {
     void onJumpToPageLayer(CCObject* sender) {
-        //JumpToPageLayer::create(this)->show();
+        JumpToPageLayer::create(this)->show();
     }
 
     void onCustomSearch(CCObject* sender) {
