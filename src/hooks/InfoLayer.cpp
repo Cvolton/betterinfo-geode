@@ -4,6 +4,7 @@
 #include "../layers/CustomLevelSearchLayer.h"
 #include "../layers/JumpToPageLayer.h"
 #include "../layers/UnregisteredProfileLayer.h"
+#include "../layers/ExtendedLevelInfo.h"
 
 using namespace geode::prelude;
 
@@ -118,5 +119,14 @@ class $modify(BIInfoLayer, InfoLayer) {
         }
 
         InfoLayer::onMore(sender);
+    }
+
+    void onLevelInfo(CCObject* sender) {
+        if(!Mod::get()->getSettingValue<bool>("level-info")){
+            InfoLayer::onLevelInfo(sender);
+            return;
+        }
+
+        ExtendedLevelInfo::create(this->m_level)->show();
     }
 };

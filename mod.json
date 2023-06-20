@@ -11,6 +11,12 @@
             "description": "Whether comment IDs should be shown in comment cells",
             "type": "bool",
             "default": false
+        },
+        "level-info": {
+            "name": "Enable Extended Level Info",
+            "description": "Whether the custom level info dialog from BI should be used",
+            "type": "bool",
+            "default": true
         }
     }
 }
