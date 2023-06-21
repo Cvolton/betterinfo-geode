@@ -4,44 +4,14 @@
 #include <fstream>
 
 bool BetterInfoCache::init(){
-    auto loadResult = load();
-    if(!loadResult) {
-        log::warn("Unable to load BI cache");
-    }
-
+    if(!BaseJsonManager::init("cache.json")) return false;
+    checkDailies();
     return true;
 }
 
-Result<> BetterInfoCache::load() {
-    //copied straight from https://github.com/geode-sdk/geode/blob/9cd0327766386a6c2b347d483bb6556cae6f7f48/loader/src/loader/ModImpl.cpp#L172
-    auto savedPath = Mod::get()->getSaveDir() / "cache.json";
-    if (ghc::filesystem::exists(savedPath)) {
-        GEODE_UNWRAP_INTO(auto data, utils::file::readString(savedPath));
-
-        try {
-            this->m_json = json::parse(data);
-        } catch (std::exception& err) {
-            return Err(std::string("Unable to parse cache: ") + err.what());
-        }
-        if (!m_json.is_object()) {
-            log::warn("cache.json was somehow not an object, forcing it to one");
-            m_json = json::Object();
-        }
-    }
-}
-
-Result<> BetterInfoCache::save() {
-    //m_json["level-name-dict"] = m_levelNameDict;
-    //m_json["coin-count-dict"] = m_coinCountDict;
-
-    std::string savedStr = m_json.dump();
-
-    auto res2 = utils::file::writeString(Mod::get()->getSaveDir() / "cache.json", savedStr);
-    if (!res2) {
-        log::error("Unable to save values: {}", res2.unwrapErr());
-    }
-
-    return Ok();
+void BetterInfoCache::validateLoadedData() {
+    validateIsObject("level-name-dict");
+    validateIsObject("coin-count-dict");
 }
 
 BetterInfoCache::BetterInfoCache(){}
@@ -58,7 +28,7 @@ void BetterInfoCache::checkDailies() {
         if(currentLvl == nullptr) continue;
 
         auto idString = std::to_string(currentLvl->m_levelID);
-        if(m_levelNameDict.find(currentLvl->m_levelID) != m_levelNameDict.end() && m_coinCountDict.find(currentLvl->m_levelID) != m_coinCountDict.end()) continue;
+        if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString)) continue;
 
         auto levelFromSaved = static_cast<GJGameLevel*>(GLM->m_onlineLevels->objectForKey(std::to_string(currentLvl->m_levelID).c_str()));
         if(levelFromSaved != nullptr) cacheLevel(levelFromSaved);
@@ -66,14 +36,13 @@ void BetterInfoCache::checkDailies() {
     }
 
     if(!toDownload.empty()) cacheLevels(toDownload);
-
-    this->save();
+    doSave();
 }
 
 void BetterInfoCache::cacheLevel(GJGameLevel* level) {
     auto idString = std::to_string(level->m_levelID);
-    m_levelNameDict[level->m_levelID] = level->m_levelName;
-    m_coinCountDict[level->m_levelID] = level->m_coins;
+    m_json["level-name-dict"][idString] = std::string(level->m_levelName);
+    m_json["coin-count-dict"][idString] = level->m_coins;
 }
 
 void BetterInfoCache::cacheLevels(std::set<int> toDownload) {
@@ -106,14 +75,26 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload) {
 
 }
 
-const char* BetterInfoCache::getLevelName(int levelID) {
-    if(m_levelNameDict.find(levelID) == m_levelNameDict.end()) return "Unknown";
-    return m_levelNameDict[levelID].c_str();
+std::string BetterInfoCache::getLevelName(int levelID) {
+    auto idString = std::to_string(levelID);
+    if(!objectExists("level-name-dict", idString)) return "Unknown";
+
+    try {
+        return m_json["level-name-dict"][idString].as_string();
+    } catch(std::exception) {
+        return "Unknown (malformed JSON)";
+    }
 }
 
 int BetterInfoCache::getCoinCount(int levelID) {
-    if(m_coinCountDict.find(levelID) == m_coinCountDict.end()) return 3;
-    return m_coinCountDict[levelID];
+    auto idString = std::to_string(levelID);
+    if(!objectExists("coin-count-dict", idString)) return 3;
+
+    try {
+        return m_json["coin-count-dict"][idString].as_int();
+    } catch(std::exception) {
+        return 3;
+    }
 }
 
 void BetterInfoCache::loadListFinished(cocos2d::CCArray* levels, const char*) {
@@ -124,7 +105,7 @@ void BetterInfoCache::loadListFinished(cocos2d::CCArray* levels, const char*) {
         cacheLevel(level);
     }
 
-    this->save();
+    doSave();
 }
 
 void BetterInfoCache::loadListFailed(const char*) {}

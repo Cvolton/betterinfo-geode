@@ -1,23 +1,17 @@
 #pragma once
-#pragma once
 
-#include <Geode/Geode.hpp>
+#include "BaseJsonManager.h"
 
-using namespace geode::prelude;
-
-class BetterInfoCache : public CCObject, public OnlineListDelegate {
+class BetterInfoCache : public BaseJsonManager, public OnlineListDelegate {
 	inline static BetterInfoCache* m_instance = nullptr;
 	BetterInfoCache();
 
-
 public:
-	json::Value m_json = json::Object();
-	std::unordered_map<int, std::string> m_levelNameDict;
-	std::unordered_map<int, int> m_coinCountDict;
 
 	bool init();
-	Result<> load();
-	Result<> save();
+
+	void validateLoadedData();
+
 	static BetterInfoCache* sharedState(){
 	    if(m_instance == nullptr){
 	        m_instance = new BetterInfoCache;
@@ -31,7 +25,7 @@ public:
 	void cacheLevel(GJGameLevel* level);
 	void cacheLevels(std::set<int> toDownload);
 
-	const char* getLevelName(int levelID);
+	std::string getLevelName(int levelID);
 	int getCoinCount(int levelID);
 
 	void loadListFinished(cocos2d::CCArray*, const char*);
