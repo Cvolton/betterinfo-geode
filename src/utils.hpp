@@ -39,6 +39,7 @@ namespace BetterInfo {
     cocos2d::CCDictionary* responseToDict(const std::string& response);
 
     GJGameLevel* getLevelFromSaved(int levelID);
+    std::deque<GJGameLevel*> completedDeque();
 
     int levelDifficultyAsInt(GJGameLevel* level);
     int levelDemonDifficultyAsInt(GJGameLevel* level);

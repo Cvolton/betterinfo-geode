@@ -235,6 +235,17 @@ GJGameLevel* BetterInfo::getLevelFromSaved(int levelID) {
         return static_cast<GJGameLevel*>(GameLevelManager::sharedState()->m_onlineLevels->objectForKey(std::to_string(levelID)));
 }
 
+std::deque<GJGameLevel*> BetterInfo::completedDeque() {
+        std::deque<GJGameLevel*> levelsDeque;
+        auto levels = GameLevelManager::sharedState()->m_onlineLevels;
+        CCDictElement* obj;
+        CCDICT_FOREACH(levels, obj){
+                auto currentLvl = static_cast<GJGameLevel*>(obj->getObject());
+                levelsDeque.push_back(currentLvl);
+        }
+        return levelsDeque;
+}
+
 int BetterInfo::levelDifficultyAsInt(GJGameLevel* level) {
         if(level->m_demon != 0) return 6;
         if(level->m_autoLevel) return -1;

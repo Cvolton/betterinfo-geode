@@ -2,6 +2,7 @@
 #include <Geode/Modify/CreatorLayer.hpp>
 
 #include "../utils.hpp"
+#include "../layers/CustomCreatorLayer.h"
 #include "../layers/LevelBrowserEndLayer.h"
 #include "../layers/LevelSearchViewLayer.h"
 #include "../layers/ProfileSearchOptions.h"
@@ -13,9 +14,9 @@ class $modify(BICreatorLayer, CreatorLayer) {
      * Callbacks
      */
     void onCustomCreatorLayer(CCObject* sender){
-        /*auto browserLayer = CustomCreatorLayer::scene();
+        auto browserLayer = CustomCreatorLayer::scene();
         auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
-        CCDirector::sharedDirector()->pushScene(transitionFade);*/
+        CCDirector::sharedDirector()->pushScene(transitionFade);
     }
 
     /*
