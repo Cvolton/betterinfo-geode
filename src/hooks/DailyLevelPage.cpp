@@ -2,6 +2,7 @@
 #include <Geode/Modify/DailyLevelPage.hpp>
 
 #include "../utils.hpp"
+#include "../layers/DailyViewLayer.h"
 
 using namespace geode::prelude;
 
@@ -10,10 +11,9 @@ class $modify(BIDailyLevelPage, DailyLevelPage) {
      * Callbacks
      */
     void onDailyHistory(CCObject* sender){
-        /*auto self = cast<DailyLevelPage*>(this);
-        auto layer = DailyViewLayer::scene(self->isWeekly);
+        auto layer = DailyViewLayer::scene(this->m_weekly);
         auto transitionFade = CCTransitionFade::create(0.5, layer);
-        CCDirector::sharedDirector()->pushScene(transitionFade);*/
+        CCDirector::sharedDirector()->pushScene(transitionFade);
     }
 
     /*

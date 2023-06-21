@@ -1,16 +1,16 @@
 #pragma once
 #include "CvoltonAlertLayerStub.h"
-//#include "DailyViewLayer.h"
+#include "DailyViewLayer.h"
 
 class JumpToPageLayer : public CvoltonAlertLayerStub {
     InfoLayer* m_infoLayer = nullptr;
-    //DailyViewLayer* m_dailyViewLayer = nullptr;
+    DailyViewLayer* m_dailyViewLayer = nullptr;
     CCTextInputNode* m_textNode;
 public:
     static JumpToPageLayer* create(InfoLayer* infoLayer);
-    //static JumpToPageLayer* create(DailyViewLayer* dailyViewLayer);
+    static JumpToPageLayer* create(DailyViewLayer* dailyViewLayer);
     bool init(InfoLayer* infoLayer);
-    //bool init(DailyViewLayer* dailyViewLayer);
+    bool init(DailyViewLayer* dailyViewLayer);
     void onClose(cocos2d::CCObject* sender);
     void onOK(cocos2d::CCObject* sender);
     void onPrev(cocos2d::CCObject* sender);

@@ -13,7 +13,7 @@ JumpToPageLayer* JumpToPageLayer::create(InfoLayer* infoLayer){
     return ret;
 }
 
-/*JumpToPageLayer* JumpToPageLayer::create(DailyViewLayer* dailyViewLayer){
+JumpToPageLayer* JumpToPageLayer::create(DailyViewLayer* dailyViewLayer){
     auto ret = new JumpToPageLayer();
     if (ret && ret->init(dailyViewLayer)) {
         //robert 1 :D
@@ -24,7 +24,7 @@ JumpToPageLayer* JumpToPageLayer::create(InfoLayer* infoLayer){
         ret = nullptr;
     }
     return ret;
-}*/
+}
 
 bool JumpToPageLayer::init(InfoLayer* infoLayer) {
     infoLayer->retain();
@@ -32,11 +32,11 @@ bool JumpToPageLayer::init(InfoLayer* infoLayer) {
     return init();
 }
 
-/*bool JumpToPageLayer::init(DailyViewLayer* dailyViewLayer) {
+bool JumpToPageLayer::init(DailyViewLayer* dailyViewLayer) {
     dailyViewLayer->retain();
     m_dailyViewLayer = dailyViewLayer;
     return init();
-}*/
+}
 
 void JumpToPageLayer::onClose(cocos2d::CCObject* sender)
 {
