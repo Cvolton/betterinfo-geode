@@ -3,6 +3,7 @@
 
 #include "../utils.hpp"
 #include "../layers/LevelBrowserEndLayer.h"
+#include "../layers/LevelSearchViewLayer.h"
 #include "../layers/ProfileSearchOptions.h"
 
 using namespace geode::prelude;
@@ -14,9 +15,9 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     void onLevelBrowserFilter(CCObject* sender){
         if(BetterInfo::isLocal(this->m_searchObject)) ProfileSearchOptions::create(this, "user_search")->show();
         else {
-            /*auto layer = LevelSearchViewLayer::scene(this->searchObject);
+            auto layer = LevelSearchViewLayer::scene(this->m_searchObject);
             auto transitionFade = CCTransitionFade::create(0.5, layer);
-            CCDirector::sharedDirector()->pushScene(transitionFade);*/
+            CCDirector::sharedDirector()->pushScene(transitionFade);
         }
     }    
 

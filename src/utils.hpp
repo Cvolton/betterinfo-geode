@@ -3,12 +3,15 @@
 #include <Geode/utils/general.hpp>
 using namespace geode::prelude;
 
+#include "objects/BISearchObject.h"
+
 namespace BetterInfo {
     CCSprite* createWithBISpriteFrameName(const char* name);
     CCSprite* createBISprite(const char* name);
     CCSprite* createPlaceholder();
-    
+
     int randomNumber(int start, int end);
+    void strToLower(std::string& str);
 
     const char* rankIcon(int position);
 
@@ -17,6 +20,7 @@ namespace BetterInfo {
     bool isLocal(GJSearchObject* searchObj);
     bool isFalseTotal(GJSearchObject* searchObj);
     bool isStarUseless(GJSearchObject* searchObj);
+    bool isAdvancedEnabled(GJSearchObject* searchObj);
 
     bool isSavedFiltered();
 
@@ -33,4 +37,14 @@ namespace BetterInfo {
     bool isNewGrounds(int audioID);
 
     cocos2d::CCDictionary* responseToDict(const std::string& response);
+
+    GJGameLevel* getLevelFromSaved(int levelID);
+
+    int levelDifficultyAsInt(GJGameLevel* level);
+    int levelDemonDifficultyAsInt(GJGameLevel* level);
+    bool levelHasCollectedCoins(GJGameLevel* level);
+
+    bool validateRangeItem(const BISearchObject::RangeItem& rangeItem, int value);
+    bool levelMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
+    bool levelProgressMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
 }

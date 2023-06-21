@@ -63,6 +63,10 @@ int BetterInfo::randomNumber(int start, int end){
     return distribute(generator);
 }
 
+void BetterInfo::strToLower(std::string& str) {
+        for(auto& c : str) c = tolower(c);
+}
+
 const char* BetterInfo::rankIcon(int position){
         if (position == 1) return "rankIcon_1_001.png";
         else if (position > 1000 || position <= 0) return "rankIcon_all_001.png";
@@ -107,6 +111,18 @@ bool BetterInfo::isStarUseless(GJSearchObject* searchObject){
                 || searchObject->m_searchType == SearchType::WeeklyVault
                 || isLocal(searchObject);
 }
+
+bool BetterInfo::isAdvancedEnabled(GJSearchObject* searchObject) {
+        return searchObject->m_searchType == SearchType::Search
+                || searchObject->m_searchType == SearchType::Downloaded
+                || searchObject->m_searchType == SearchType::MostLiked
+                || searchObject->m_searchType == SearchType::Trending
+                || searchObject->m_searchType == SearchType::Recent
+                || searchObject->m_searchType == SearchType::Awarded
+                || searchObject->m_searchType == SearchType::Followed
+                || searchObject->m_searchType == SearchType::Friends;
+}
+
 
 bool BetterInfo::isSavedFiltered() {
         //TODO: implement
@@ -213,4 +229,109 @@ CCDictionary* BetterInfo::responseToDict(const std::string& response){
     }
 
     return dict;
+}
+
+GJGameLevel* BetterInfo::getLevelFromSaved(int levelID) {
+        return static_cast<GJGameLevel*>(GameLevelManager::sharedState()->m_onlineLevels->objectForKey(std::to_string(levelID)));
+}
+
+int BetterInfo::levelDifficultyAsInt(GJGameLevel* level) {
+        if(level->m_demon != 0) return 6;
+        if(level->m_autoLevel) return -1;
+        return (level->m_ratings == 0) ? 0 : (level->m_ratingsSum / level->m_ratings);
+}
+
+int BetterInfo::levelDemonDifficultyAsInt(GJGameLevel* level) {
+        int demonDifficulty = 2;
+        if(level->m_demonDifficulty >= 5) demonDifficulty = level->m_demonDifficulty - 2;
+        else if(level->m_demonDifficulty >= 3) demonDifficulty = level->m_demonDifficulty - 3;
+        return demonDifficulty;
+}
+
+bool BetterInfo::levelHasCollectedCoins(GJGameLevel* level) {
+        auto coinDict = GameStatsManager::sharedState()->m_verifiedUserCoins;
+        auto coinDict2 = GameStatsManager::sharedState()->m_pendingUserCoins;
+        bool hasAllCoins = true;
+        for(int i = 0; i < level->m_coins; i++){
+                bool hasntCoin = coinDict->objectForKey(level->getCoinKey(i + 1)) == nullptr && coinDict2->objectForKey(level->getCoinKey(i + 1)) == nullptr;
+                if(hasntCoin) hasAllCoins = false;
+        }
+        return hasAllCoins;
+}
+
+bool BetterInfo::validateRangeItem(const BISearchObject::RangeItem& rangeItem, int value) {
+        if(!rangeItem.enabled) return true;
+        if(rangeItem.min != 0 && rangeItem.min > value) return false;
+        if(rangeItem.max != 0 && rangeItem.max < value) return false;
+        return true;
+}
+
+bool BetterInfo::levelMatchesObject(GJGameLevel* level, const BISearchObject& searchObj) {
+
+        if(!searchObj.difficulty.empty() && searchObj.difficulty.find(levelDifficultyAsInt(level)) == searchObj.difficulty.end()) return false;
+        if(!searchObj.length.empty() && searchObj.length.find(level->m_levelLength) == searchObj.length.end()) return false;
+        if(!searchObj.demonDifficulty.empty() && level->m_demon != 0
+                && searchObj.difficulty.find(6) != searchObj.difficulty.end()
+                && searchObj.demonDifficulty.find(levelDemonDifficultyAsInt(level)) == searchObj.demonDifficulty.end()
+                ) return false;
+
+        std::string query = searchObj.str;
+        std::string name = level->m_levelName;
+        strToLower(query);
+        strToLower(name);
+
+        if(name.find(query) == std::string::npos) return false;
+
+
+        if(searchObj.star && level->m_stars == 0) return false;
+        if(searchObj.noStar && level->m_stars != 0) return false;
+        if(searchObj.featured && level->m_featured <= 0) return false;
+        if(searchObj.original && level->m_originalLevel > 0) return false;
+        if(searchObj.twoPlayer && !level->m_twoPlayerMode) return false;
+        if(searchObj.coins && (level->m_coins == 0 || level->m_coinsVerified == 0)) return false;
+        if(searchObj.noCoins && (level->m_coins != 0 && level->m_coinsVerified != 0)) return false;
+        if(searchObj.epic && !level->m_isEpic) return false;
+        //TODO: searchObj.folder
+        if(searchObj.song) {
+                if(!searchObj.songCustom && level->m_audioTrack != searchObj.songID) return false;
+                if(searchObj.songCustom && level->m_songID != searchObj.songID) return false;
+        }
+        if(searchObj.copied && level->m_originalLevel <= 0) return false;
+        //TODO: searchObj.ldm
+        
+        //TODO: searchObj.copyable
+        //TODO: searchObj.freeCopy
+        if(searchObj.unfeatured && level->m_featured > 0) return false;
+        if(searchObj.unepic && level->m_isEpic) return false;
+        if(!validateRangeItem(searchObj.starRange, level->m_stars)) return false;
+        if(!validateRangeItem(searchObj.gameVersion, level->m_gameVersion)) return false;
+
+        if(!levelProgressMatchesObject(level, searchObj)) return false;
+
+        bool hasAllCoins = levelHasCollectedCoins(level);
+        if(searchObj.completedCoins && (!hasAllCoins || level->m_coins == 0)) return false;
+        if(searchObj.uncompletedCoins && (hasAllCoins || level->m_coins == 0)) return false;
+
+        return true;
+}
+
+bool BetterInfo::levelProgressMatchesObject(GJGameLevel* level, const BISearchObject& searchObj) {
+        if(!validateRangeItem(searchObj.idRange, level->m_levelID)) return false;
+
+        auto levelFromSaved = getLevelFromSaved(level->m_levelID);
+        if(searchObj.uncompleted && (levelFromSaved && levelFromSaved->m_normalPercent == 100)) return false;
+        if(searchObj.uncompletedOrbs && (!levelFromSaved || levelFromSaved->m_orbCompletion == 100)) return false;
+        if(searchObj.uncompletedLeaderboard && (!levelFromSaved || levelFromSaved->m_newNormalPercent2 == 100)) return false;
+
+        if(searchObj.completed && (!levelFromSaved || levelFromSaved->m_normalPercent != 100)) return false;
+        if(searchObj.completedOrbs && (!levelFromSaved || levelFromSaved->m_orbCompletion != 100)) return false;
+        if(searchObj.completedLeaderboard && (!levelFromSaved || levelFromSaved->m_newNormalPercent2 != 100)) return false;
+
+        if(!validateRangeItem(searchObj.percentage, (levelFromSaved ? levelFromSaved->m_normalPercent : 0))) return false;
+        if(!validateRangeItem(searchObj.percentageOrbs, (levelFromSaved ? levelFromSaved->m_orbCompletion : 0))) return false;
+        if(!validateRangeItem(searchObj.percentageLeaderboard, (levelFromSaved ? levelFromSaved->m_newNormalPercent2 : 0))) return false;
+
+        if(searchObj.downloaded && (!levelFromSaved || std::string(levelFromSaved->m_levelString).empty())) return false;
+
+        return true;
 }
