@@ -53,6 +53,18 @@ CCSprite* BetterInfo::createPlaceholder(){
         return sprite;
 }
 
+CCMenuItemSpriteExtra* BetterInfo::createTextButton(CCLayer* parent, const char* text, cocos2d::SEL_MenuHandler handler, int width, float height, float scale){
+    auto buttonSprite = ButtonSprite::create(text, width, true, "bigFont.fnt", "GJ_button_01.png", height, scale);
+    auto buttonButton = CCMenuItemSpriteExtra::create(
+        buttonSprite,
+        parent,
+        handler
+    );
+    buttonButton->setSizeMult(1.2f);
+
+    return buttonButton;
+}
+
 int BetterInfo::randomNumber(int start, int end){
     std::random_device os_seed;
     const unsigned int seed = os_seed();

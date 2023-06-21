@@ -10,6 +10,8 @@ namespace BetterInfo {
     CCSprite* createBISprite(const char* name);
     CCSprite* createPlaceholder();
 
+    CCMenuItemSpriteExtra* createTextButton(cocos2d::CCLayer* parent, const char* text, cocos2d::SEL_MenuHandler handler, int width, float height, float scale);
+
     int randomNumber(int start, int end);
     void strToLower(std::string& str);
 
