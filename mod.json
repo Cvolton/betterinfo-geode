@@ -23,6 +23,12 @@
             "description": "Whether destroyed green usernames no longer returned by the servers should be fixed using data from the GDHistory project",
             "type": "bool",
             "default": true
+        },
+        "alt-button": {
+            "name": "Alternative button texture",
+            "description": "BI :)",
+            "type": "bool",
+            "default": false
         }
     }
 }
