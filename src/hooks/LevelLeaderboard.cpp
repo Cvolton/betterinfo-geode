@@ -1,11 +1,6 @@
 #include <Geode/Bindings.hpp>
 #include <Geode/Modify/LevelLeaderboard.hpp>
 
-#include "../layers/CustomLevelSearchLayer.h"
-#include "../layers/JumpToPageLayer.h"
-#include "../layers/UnregisteredProfileLayer.h"
-#include "../layers/ExtendedLevelInfo.h"
-
 using namespace geode::prelude;
 
 class $modify(BILevelLeaderboard, LevelLeaderboard) {
