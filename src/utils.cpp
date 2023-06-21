@@ -1,5 +1,7 @@
 #include "utils.hpp"
 
+#include <random>
+
 #include <Geode/cocos/support/base64.h>
 #include <Geode/cocos/support/zip_support/ZipUtils.h>
 
@@ -51,6 +53,16 @@ CCSprite* BetterInfo::createPlaceholder(){
         return sprite;
 }
 
+int BetterInfo::randomNumber(int start, int end){
+    std::random_device os_seed;
+    const unsigned int seed = os_seed();
+
+    std::mt19937 generator(seed);
+    std::uniform_int_distribution<int> distribute(start, end);
+
+    return distribute(generator);
+}
+
 const char* BetterInfo::rankIcon(int position){
         if (position == 1) return "rankIcon_1_001.png";
         else if (position > 1000 || position <= 0) return "rankIcon_all_001.png";
@@ -60,6 +72,45 @@ const char* BetterInfo::rankIcon(int position){
         else if (position <= 200) return "rankIcon_top200_001.png";
         else if (position <= 500) return "rankIcon_top500_001.png";
         return "rankIcon_top1000_001.png";
+}
+
+int BetterInfo::levelsPerPage(GJSearchObject* searchObject){
+        const int levelsPerPageLow = 10;
+        const int levelsPerPageHigh = 20;
+
+        return ((isLocal(searchObject) && GameManager::sharedState()->getGameVariable("0093")) ? levelsPerPageHigh : levelsPerPageLow);
+}
+
+bool BetterInfo::isLocal(GJSearchObject* searchObject){
+        return searchObject->m_searchType == SearchType::MyLevels 
+                || searchObject->m_searchType == SearchType::SavedLevels 
+                || searchObject->m_searchType == SearchType::FavouriteLevels;
+}
+
+bool BetterInfo::isFalseTotal(GJSearchObject* searchObject){
+        return searchObject->m_searchType == SearchType::ListsOnClick
+                || searchObject->m_searchType == SearchType::Featured
+                || searchObject->m_searchType == SearchType::HallOfFame;
+}
+
+bool BetterInfo::isStarUseless(GJSearchObject* searchObject){
+        return searchObject->m_searchType == SearchType::Featured
+                || searchObject->m_searchType == SearchType::Magic
+                || searchObject->m_searchType == SearchType::MapPack
+                || searchObject->m_searchType == SearchType::MapPackOnClick
+                || searchObject->m_searchType == SearchType::Awarded
+                || searchObject->m_searchType == SearchType::Users
+                || searchObject->m_searchType == SearchType::HallOfFame
+                || searchObject->m_searchType == SearchType::FeaturedGDW
+                || searchObject->m_searchType == SearchType::Similar
+                || searchObject->m_searchType == SearchType::DailyVault
+                || searchObject->m_searchType == SearchType::WeeklyVault
+                || isLocal(searchObject);
+}
+
+bool BetterInfo::isSavedFiltered() {
+        //TODO: implement
+        return false;
 }
 
 std::string BetterInfo::decodeBase64Gzip(const std::string& input) {

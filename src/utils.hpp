@@ -7,8 +7,18 @@ namespace BetterInfo {
     CCSprite* createWithBISpriteFrameName(const char* name);
     CCSprite* createBISprite(const char* name);
     CCSprite* createPlaceholder();
+    
+    int randomNumber(int start, int end);
 
     const char* rankIcon(int position);
+
+    int levelsPerPage(GJSearchObject* searchObj);
+
+    bool isLocal(GJSearchObject* searchObj);
+    bool isFalseTotal(GJSearchObject* searchObj);
+    bool isStarUseless(GJSearchObject* searchObj);
+
+    bool isSavedFiltered();
 
     std::string decodeBase64Gzip(const std::string& input);
     std::string fileSize(size_t bytes);
