@@ -7,6 +7,11 @@
 using namespace geode::prelude;
 
 class $modify(LevelInfoLayer) {
+    static void onModify(auto& self) {
+        auto res = self.setHookPriority("LevelInfoLayer::onViewProfile", 99999);
+        res = self.setHookPriority("LevelInfoLayer::onLevelInfo", 99999);
+    }
+
     bool init(GJGameLevel* level) {
         if (!LevelInfoLayer::init(level)) return false;
 

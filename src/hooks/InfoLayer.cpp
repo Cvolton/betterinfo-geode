@@ -9,6 +9,11 @@
 using namespace geode::prelude;
 
 class $modify(BIInfoLayer, InfoLayer) {
+    static void onModify(auto& self) {
+        auto res = self.setHookPriority("InfoLayer::onMore", 99999);
+        res = self.setHookPriority("InfoLayer::onLevelInfo", 99999);
+    }
+
     void onJumpToPageLayer(CCObject* sender) {
         JumpToPageLayer::create(this)->show();
     }

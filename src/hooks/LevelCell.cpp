@@ -7,6 +7,10 @@
 using namespace geode::prelude;
 
 class $modify(LevelCell) {
+    static void onModify(auto& self) {
+        auto res = self.setHookPriority("LevelCell::onViewProfile", 99999);
+    }
+
     void onViewProfile(CCObject* sender) {
 
         if(this->m_level->m_accountID == 0) {

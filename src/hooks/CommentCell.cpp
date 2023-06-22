@@ -7,6 +7,11 @@
 using namespace geode::prelude;
 
 class $modify(BICommentCell, CommentCell) {
+    bool retained = false;
+
+    static void onModify(auto& self) {
+        auto res = self.setHookPriority("CommentCell::onLike", 99999);
+    }
 
     /*
      * Callbacks
@@ -112,16 +117,17 @@ class $modify(BICommentCell, CommentCell) {
     //The following CommentCell functions are required as fixes for crashes caused by refreshing the layer while liking/deleting an item
     void onConfirmDelete(CCObject* sender) {
         this->retain();
+        m_fields->retained = true;
         CommentCell::onConfirmDelete(sender);
     }
 
     void FLAlert_Clicked(FLAlertLayer* layer, bool btn) {
         CommentCell::FLAlert_Clicked(layer, btn);
 
-        this->release();
+        if(m_fields->retained) this->release();
+        m_fields->retained = false;
     }
 
-    //TODO: mark this as an early hook however u do that in geode
     //This function is simple enough that it's easier to rewrite it than to figure out how midhooks work
     void onLike(CCObject* sender) {
         if(!this->m_comment) return;
@@ -147,11 +153,13 @@ class $modify(BICommentCell, CommentCell) {
         layer->m_likeDelegate = this;
         layer->show();
         this->retain();
+        m_fields->retained = true;
     }
 
     void likedItem(LikeItemType type, int id, int special) {
         CommentCell::likedItem(type, id, special);
 
-        this->release();
+        if(m_fields->retained) this->release();
+        m_fields->retained = false;
     }
 };
