@@ -144,7 +144,6 @@ class $modify(GameLevelManager) {
             }
 
             if(Mod::get()->getSavedValue<bool>("user_search_star") && level->m_stars == 0) continue;
-            //TODO: respect completed mode
             if(Mod::get()->getSavedValue<bool>("user_search_uncompleted") && level->m_normalPercent == 100) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_completed") && level->m_normalPercent != 100) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_uncompletedorbs") && level->m_orbCompletion == 100) continue;

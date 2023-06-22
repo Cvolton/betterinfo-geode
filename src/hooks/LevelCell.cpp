@@ -58,7 +58,7 @@ class $modify(BILevelCell, LevelCell) {
                 idTextNode->setOpacity(152);
                 menu->addChild(idTextNode);
                 //TODO: CvoltonManager
-                if(this->m_level->m_dailyID > 0){// || CvoltonManager::sharedState()->getOption("white_id")){
+                if(this->m_level->m_dailyID > 0 || Mod::get()->getSettingValue<bool>("white-id")){
                     idTextNode->setColor({255,255,255});
                     idTextNode->setOpacity(200);
                 }

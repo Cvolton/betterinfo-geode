@@ -35,6 +35,12 @@
             "description": "Automatically submits your level score to the level leaderboards upon exiting a level",
             "type": "bool",
             "default": false
+        },
+        "white-id": {
+            "name": "White Level ID text",
+            "description": "Displays level IDs in level search white instead of grey. Useful if you have transparent lists",
+            "type": "bool",
+            "default": false
         }
     },
     "resources": {
