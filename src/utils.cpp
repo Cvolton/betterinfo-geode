@@ -423,6 +423,8 @@ void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
 
                         textNode->setString(newString.c_str());
                         playerName->setPositionX(playerName->getPositionX() + (difference * 5));
+                        textNode->setPositionX(textNode->getPositionX() + (difference * 5.5));
+                        playerName->setContentSize(textNode->getContentSize() * textNode->getScale());
 
                 }
         }
