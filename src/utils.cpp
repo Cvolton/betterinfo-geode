@@ -7,15 +7,12 @@
 #include <Geode/cocos/support/zip_support/ZipUtils.h>
 
 CCSprite* BetterInfo::createWithBISpriteFrameName(const char* name){
-        //TODO: geodify
-        auto sprite = CCSprite::createWithSpriteFrameName(name);
-        if(sprite) return sprite;
-
-        return createPlaceholder();
+        return createBISprite(name);
 }
 
 CCSprite* BetterInfo::createBISprite(const char* name){
         //TODO: geodify
+        name = Mod::get()->expandSpriteName(name);
         auto sprite = CCSprite::create(name);
         if(sprite) return sprite;
 

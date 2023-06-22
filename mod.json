@@ -36,5 +36,10 @@
             "type": "bool",
             "default": false
         }
+    },
+    "resources": {
+        "sprites": [
+            "resources/*.png"
+        ]
     }
 }
