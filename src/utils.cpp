@@ -420,8 +420,10 @@ void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
                         auto playerName = static_cast<CCMenuItemSpriteExtra*>(menu->getChildren()->objectAtIndex(1));
                         auto textNode = static_cast<CCLabelBMFont*>(playerName->getChildren()->objectAtIndex(0));
 
+                        auto userName = GameLevelManager::sharedState()->userNameForUserID(levelCell->m_level->m_userID);
+
                         auto oldString = std::string(textNode->getString());
-                        auto newString = fmt::format("By {}", std::string(GameLevelManager::sharedState()->userNameForUserID(levelCell->m_level->m_userID)));
+                        auto newString = fmt::format("By {}", std::string(userName));
 
                         size_t difference = newString.length() - oldString.length();
 
@@ -432,6 +434,8 @@ void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
                         //playerName->setPositionX((-(winSize.width / 2) + 23.5) + (playerName->getContentSize().width / 2));
                         playerName->setPositionX((-285.5 + 23.5) + (playerName->getContentSize().width / 2));
                         textNode->setPositionX(playerName->getContentSize().width / 2);
+
+                        levelCell->m_level->m_creatorName = userName;
 
                 }
         }
