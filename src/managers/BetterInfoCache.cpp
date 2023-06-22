@@ -107,19 +107,22 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
     auto idString = std::to_string(userID);
     if(!objectExists("username-dict", idString)) {
         //if gdhistory was faster, this could be sync and the feature would be more efficient, sadly gdhistory is not faster
-        if(download) web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).text().then([userID](const std::string& userData){
-            log::info("{}", userData);
-            //GEODE_UNWRAP_INTO(auto data, userData);
-            auto data = json::parse(userData);
-            std::string username;
+        if(download && m_attemptedUsernames.find(userID) == m_attemptedUsernames.end()) {
+            web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).text().then([userID](const std::string& userData){
+                log::info("{}", userData);
+                //GEODE_UNWRAP_INTO(auto data, userData);
+                auto data = json::parse(userData);
+                std::string username;
 
-            if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
-            else if(data["username"].is_string()) username = data["username"].as_string();
+                if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
+                else if(data["username"].is_string()) username = data["username"].as_string();
 
-            BetterInfoCache::sharedState()->storeUserName(userID, username);
-        }).expect([](const std::string& error){
+                BetterInfoCache::sharedState()->storeUserName(userID, username);
+            }).expect([](const std::string& error){
 
-        });
+            });
+            m_attemptedUsernames.insert(userID);
+        }
         return "";
     }
 

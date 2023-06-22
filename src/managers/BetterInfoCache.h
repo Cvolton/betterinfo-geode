@@ -3,6 +3,7 @@
 #include "BaseJsonManager.h"
 
 class BetterInfoCache : public BaseJsonManager, public OnlineListDelegate {
+	std::set<int> m_attemptedUsernames;
 	inline static BetterInfoCache* m_instance = nullptr;
 	BetterInfoCache();
 
