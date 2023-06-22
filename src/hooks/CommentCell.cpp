@@ -104,8 +104,8 @@ class $modify(BICommentCell, CommentCell) {
                 menu_selector(BICommentCell::onLevelInfoNoLoad)
             );
             menu->addChild(commentsButton);
-            CCPoint smallPosition({206 - (winSize.width / 2), 24.5f - (winSize.height / 2) });
-            CCPoint largePosition({154 - (winSize.width / 2), 60 - (winSize.height / 2) });
+            CCPoint smallPosition(206 - (winSize.width / 2), 24.5f - (winSize.height / 2));
+            CCPoint largePosition(154 - (winSize.width / 2), 60 - (winSize.height / 2));
             commentsButton->setPosition(smallCommentsMode ? smallPosition : largePosition);
             commentsButton->setSizeMult(1.2f);
             commentsButton->setID("bi-comments-button");
