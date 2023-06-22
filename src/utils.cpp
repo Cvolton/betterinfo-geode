@@ -426,9 +426,12 @@ void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
                         size_t difference = newString.length() - oldString.length();
 
                         textNode->setString(newString.c_str());
-                        playerName->setPositionX(playerName->getPositionX() + (difference * 5));
-                        textNode->setPositionX(textNode->getPositionX() + (difference * 5.5));
                         playerName->setContentSize(textNode->getContentSize() * textNode->getScale());
+                        //playerName->setPositionX(playerName->getContentSize().width / 2);
+                        auto winSize = CCDirector::sharedDirector()->getWinSize();
+                        //playerName->setPositionX((-(winSize.width / 2) + 23.5) + (playerName->getContentSize().width / 2));
+                        playerName->setPositionX((-285.5 + 23.5) + (playerName->getContentSize().width / 2));
+                        textNode->setPositionX(playerName->getContentSize().width / 2);
 
                 }
         }
