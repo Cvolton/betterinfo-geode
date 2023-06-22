@@ -1,6 +1,7 @@
 #include "utils.hpp"
 
 #include <random>
+#include <fmt/format.h>
 
 #include <Geode/cocos/support/base64.h>
 #include <Geode/cocos/support/zip_support/ZipUtils.h>
@@ -196,7 +197,7 @@ std::string BetterInfo::fixNullByteCrash(std::string input) {
 std::string BetterInfo::timeToString(time_t input) {
         struct tm time3;
         localtime_s(&time3, &input);
-        return std::format("{}-{:02}-{:02} {:02}:{:02}", time3.tm_year + 1900, time3.tm_mon + 1, time3.tm_mday, time3.tm_hour, time3.tm_min);
+        return fmt::format("{}-{:02}-{:02} {:02}:{:02}", time3.tm_year + 1900, time3.tm_mon + 1, time3.tm_mday, time3.tm_hour, time3.tm_min);
 }
 
 void BetterInfo::copyToClipboard(const char* text){

@@ -158,7 +158,7 @@ void LevelBrowserEndLayer::onTimer(float dt) {
         double timePerRequest = (double) (m_lastLoad - m_maxReached) / (m_requests - m_requestsToMax);
         int requestsRemaining = (m_requestsToMax * 2) - m_requests;
         time_t timeElapsed = std::time(nullptr) - m_lastLoad;
-        m_timer->setString(std::format("{:.0f}", (timePerRequest * requestsRemaining) - timeElapsed).c_str());
+        m_timer->setString(fmt::format("{:.0f}", (timePerRequest * requestsRemaining) - timeElapsed).c_str());
         m_timer->setVisible(true);
     }
 }

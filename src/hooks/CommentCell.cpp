@@ -48,7 +48,7 @@ class $modify(BICommentCell, CommentCell) {
         //bool smallCommentsMode = GameManager::sharedState()->getGameVariable("0088");
         bool smallCommentsMode = this->m_height == 36; //this is how robtop does the check
 
-        auto idText = CCLabelBMFont::create(std::format("#{}", b->m_commentID).c_str(), "chatFont.fnt");
+        auto idText = CCLabelBMFont::create(fmt::format("#{}", b->m_commentID).c_str(), "chatFont.fnt");
         idText->setPosition(smallCommentsMode ? CCPoint(332, 12.5) : CCPoint(329, 21.5));
         idText->setAnchorPoint({1, .5f});
         idText->setScale(smallCommentsMode ? .325f : .425f);

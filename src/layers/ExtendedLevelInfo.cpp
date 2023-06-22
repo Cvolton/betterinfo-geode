@@ -163,8 +163,6 @@ std::string ExtendedLevelInfo::printableProgress(std::string personalBests, int 
     std::string printable;
     //std::reverse(std::begin(progresses), std::end(progresses));
     for(auto i : progresses){
-        //contentStream << percentage << "% ";
-        //printable.insert(0, std::format("{}% ", percentage));
         printable = std::to_string(percentage) + "% " + printable;
         percentage -= i;
     }

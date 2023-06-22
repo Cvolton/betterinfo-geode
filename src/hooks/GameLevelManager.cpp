@@ -15,8 +15,8 @@ class $modify(GameLevelManager) {
 
     bool validateRangeOption(const std::string& option, int value) {
         if(Mod::get()->getSavedValue<bool>(option)) {
-            int min = Mod::get()->getSavedValue<int>(std::format("{}_min", option));
-            int max = Mod::get()->getSavedValue<int>(std::format("{}_max", option));
+            int min = Mod::get()->getSavedValue<int>(fmt::format("{}_min", option));
+            int max = Mod::get()->getSavedValue<int>(fmt::format("{}_max", option));
             if(min != 0 && value < min) return false;
             if(max != 0 && value > max) return false;
         }
