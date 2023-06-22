@@ -403,9 +403,13 @@ void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
         //auto newLayer 
 
         auto listLayer = getChildOfType<GJListLayer>(levelBrowserLayer, 0);
+        if(!listLayer) return;
         auto listView = getChildOfType<CustomListView>(listLayer, 0);
+        if(!listView) return;
         auto tableView = getChildOfType<TableView>(listView, 0);
+        if(!tableView) return;
         auto contentLayer = getChildOfType<CCContentLayer>(tableView, 0);
+        if(!contentLayer) return;
         auto children = CCArrayExt<CCNode>(contentLayer->getChildren());
 
         for(auto& child : children) {
