@@ -1,15 +1,20 @@
 #include <Geode/Bindings.hpp>
 #include <Geode/modify/LevelCell.hpp>
 
+#include "../managers/BetterInfoCache.h"
 #include "../layers/UnregisteredProfileLayer.h"
 #include "../utils.hpp"
 
 using namespace geode::prelude;
 
-class $modify(LevelCell) {
+class $modify(BILevelCell, LevelCell) {
     static void onModify(auto& self) {
         auto res = self.setHookPriority("LevelCell::onViewProfile", 99999);
     }
+
+    /*
+     * Hooks
+     */
 
     void onViewProfile(CCObject* sender) {
 
@@ -22,6 +27,10 @@ class $modify(LevelCell) {
     }
 
     void loadCustomLevelCell() {
+        if(std::string(m_level->m_creatorName).empty()) {
+            m_level->m_creatorName = BetterInfoCache::sharedState()->getUserName(m_level->m_userID, false);
+        }
+
         LevelCell::loadCustomLevelCell();
 
         auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(1));

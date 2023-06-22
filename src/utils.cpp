@@ -398,3 +398,32 @@ bool BetterInfo::levelProgressMatchesObject(GJGameLevel* level, const BISearchOb
 
         return true;
 }
+
+void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
+        //auto newLayer 
+
+        auto listLayer = getChildOfType<GJListLayer>(levelBrowserLayer, 0);
+        auto listView = getChildOfType<CustomListView>(listLayer, 0);
+        auto tableView = getChildOfType<TableView>(listView, 0);
+        auto contentLayer = getChildOfType<CCContentLayer>(tableView, 0);
+        auto children = CCArrayExt<CCNode>(contentLayer->getChildren());
+
+        for(auto& child : children) {
+                auto levelCell = typeinfo_cast<LevelCell*>(child);
+                if(levelCell) {
+                        auto layer = static_cast<CCLayer*>(levelCell->getChildren()->objectAtIndex(1));
+                        auto menu = getChildOfType<CCMenu>(layer, 0);
+                        auto playerName = static_cast<CCMenuItemSpriteExtra*>(menu->getChildren()->objectAtIndex(1));
+                        auto textNode = static_cast<CCLabelBMFont*>(playerName->getChildren()->objectAtIndex(0));
+
+                        auto oldString = std::string(textNode->getString());
+                        auto newString = fmt::format("By {}", std::string(GameLevelManager::sharedState()->userNameForUserID(levelCell->m_level->m_userID)));
+
+                        size_t difference = newString.length() - oldString.length();
+
+                        textNode->setString(newString.c_str());
+                        playerName->setPositionX(playerName->getPositionX() + (difference * 5));
+
+                }
+        }
+}

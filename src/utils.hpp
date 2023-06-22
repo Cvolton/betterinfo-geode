@@ -50,4 +50,6 @@ namespace BetterInfo {
     bool validateRangeItem(const BISearchObject::RangeItem& rangeItem, int value);
     bool levelMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
     bool levelProgressMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
+
+    void reloadUsernames(LevelBrowserLayer* levelBrowserLayer);
 }

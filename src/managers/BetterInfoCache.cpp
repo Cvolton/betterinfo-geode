@@ -89,17 +89,25 @@ std::string BetterInfoCache::getLevelName(int levelID) {
 }
 
 void BetterInfoCache::storeUserName(int userID, std::string username) {
+    if(username.empty()) {
+        log::info("Username empty, not storing");
+        return;
+    }
+
     auto idString = std::to_string(userID);
     log::info("Storing username {} for user ID {}", username, idString);
     m_json["username-dict"][idString] = username;
     doSave();
+
+    auto levelBrowserLayer = getChildOfType<LevelBrowserLayer>(CCDirector::sharedDirector()->getRunningScene(), 0);
+    if(levelBrowserLayer) BetterInfo::reloadUsernames(levelBrowserLayer);
 }
 
-std::string BetterInfoCache::getUserName(int userID) {
+std::string BetterInfoCache::getUserName(int userID, bool download) {
     auto idString = std::to_string(userID);
     if(!objectExists("username-dict", idString)) {
         //if gdhistory was faster, this could be sync and the feature would be more efficient, sadly gdhistory is not faster
-        web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).text().then([userID](const std::string& userData){
+        if(download) web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).text().then([userID](const std::string& userData){
             log::info("{}", userData);
             //GEODE_UNWRAP_INTO(auto data, userData);
             auto data = json::parse(userData);
