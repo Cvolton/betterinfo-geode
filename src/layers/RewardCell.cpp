@@ -40,7 +40,7 @@ void RewardCell::loadFromReward(GJRewardItem* reward) {
             default: scale = 0.7f;
         }
 
-        lastSprite = BetterInfo::createWithBISpriteFrameName(textureName);
+        lastSprite = CCSprite::createWithSpriteFrameName(textureName);
         if(rewardObj->m_specialRewardItem == SpecialRewardItem::CustomItem) {
             lastSprite = GJItemIcon::createBrowserIcon(rewardObj->m_unlockType, rewardObj->m_itemID);
         }
