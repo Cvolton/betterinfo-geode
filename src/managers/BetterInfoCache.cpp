@@ -2,6 +2,7 @@
 #include "../utils.hpp"
 
 #include <fstream>
+#include <Geode/utils/web.hpp>
 
 bool BetterInfoCache::init(){
     if(!BaseJsonManager::init("cache.json")) return false;
@@ -12,6 +13,7 @@ bool BetterInfoCache::init(){
 void BetterInfoCache::validateLoadedData() {
     validateIsObject("level-name-dict");
     validateIsObject("coin-count-dict");
+    validateIsObject("username-dict");
 }
 
 BetterInfoCache::BetterInfoCache(){}
@@ -83,6 +85,41 @@ std::string BetterInfoCache::getLevelName(int levelID) {
         return m_json["level-name-dict"][idString].as_string();
     } catch(std::exception) {
         return "Unknown (malformed JSON)";
+    }
+}
+
+void BetterInfoCache::storeUserName(int userID, std::string username) {
+    auto idString = std::to_string(userID);
+    log::info("Storing username {} for user ID {}", username, idString);
+    m_json["username-dict"][idString] = username;
+    doSave();
+}
+
+std::string BetterInfoCache::getUserName(int userID) {
+    auto idString = std::to_string(userID);
+    if(!objectExists("username-dict", idString)) {
+        //if gdhistory was faster, this could be sync and the feature would be more efficient, sadly gdhistory is not faster
+        web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).text().then([userID](const std::string& userData){
+            log::info("{}", userData);
+            //GEODE_UNWRAP_INTO(auto data, userData);
+            auto data = json::parse(userData);
+            std::string username;
+
+            if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
+            else if(data["username"].is_string()) username = data["username"].as_string();
+
+            BetterInfoCache::sharedState()->storeUserName(userID, username);
+        }).expect([](const std::string& error){
+
+        });
+        return "";
+    }
+
+    try {
+        return m_json["username-dict"][idString].as_string();
+    } catch(std::exception e) {
+        log::error("Exception in getUserName: {}", e.what());
+        return "";
     }
 }
 

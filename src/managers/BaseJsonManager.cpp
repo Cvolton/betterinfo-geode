@@ -66,5 +66,5 @@ void BaseJsonManager::validateIsObject(const char* key) {
 BaseJsonManager::BaseJsonManager(){}
 
 bool BaseJsonManager::objectExists(const char* dict, const std::string& key) {
-    return m_json["level-name-dict"].as_object().find(key) != m_json["level-name-dict"].as_object().end();
+    return m_json[dict].as_object().find(key) != m_json[dict].as_object().end();
 }

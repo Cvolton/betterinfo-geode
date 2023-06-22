@@ -25,7 +25,10 @@ public:
 	void cacheLevel(GJGameLevel* level);
 	void cacheLevels(std::set<int> toDownload);
 
+	void storeUserName(int userID, std::string username);
+
 	std::string getLevelName(int levelID);
+	std::string getUserName(int userID);
 	int getCoinCount(int levelID);
 
 	void loadListFinished(cocos2d::CCArray*, const char*);

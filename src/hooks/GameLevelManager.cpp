@@ -3,6 +3,7 @@
 
 #include "../enums.hpp"
 #include "../utils.hpp"
+#include "../managers/BetterInfoCache.h"
 
 using namespace geode::prelude;
 
@@ -32,8 +33,8 @@ class $modify(GameLevelManager) {
         auto userNameStd = std::string(userName);
 
         if(Mod::get()->getSettingValue<bool>("fix-green-users") && (userNameStd == "" || userNameStd == "-")){
-            //todo: implement gdhistory functionality
 
+            userName = BetterInfoCache::sharedState()->getUserName(userID);
             if(userID == 32471) userName = "PixelCube"; //previous dataset had an error
         }
 
