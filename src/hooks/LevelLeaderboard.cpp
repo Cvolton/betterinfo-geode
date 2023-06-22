@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/LevelLeaderboard.hpp>
+#include <Geode/modify/LevelLeaderboard.hpp>
 
 using namespace geode::prelude;
 

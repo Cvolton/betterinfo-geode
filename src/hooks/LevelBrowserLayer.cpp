@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/LevelBrowserLayer.hpp>
+#include <Geode/modify/LevelBrowserLayer.hpp>
 
 #include "../utils.hpp"
 #include "../layers/LevelBrowserEndLayer.h"

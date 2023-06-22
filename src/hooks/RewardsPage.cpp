@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/RewardsPage.hpp>
+#include <Geode/modify/RewardsPage.hpp>
 
 #include "../utils.hpp"
 #include "../layers/RewardTypeSelectLayer.h"

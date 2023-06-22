@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/InfoLayer.hpp>
+#include <Geode/modify/InfoLayer.hpp>
 
 #include "../layers/CustomLevelSearchLayer.h"
 #include "../layers/JumpToPageLayer.h"

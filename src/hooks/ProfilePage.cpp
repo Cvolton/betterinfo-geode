@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/ProfilePage.hpp>
+#include <Geode/modify/ProfilePage.hpp>
 
 #include "../utils.hpp"
 #include "../managers/BetterInfoOnline.h"

@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/MoreSearchLayer.hpp>
+#include <Geode/modify/MoreSearchLayer.hpp>
 
 #include "../layers/CvoltonSearchOptions.h"
 

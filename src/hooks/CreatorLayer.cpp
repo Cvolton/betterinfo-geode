@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/CreatorLayer.hpp>
+#include <Geode/modify/CreatorLayer.hpp>
 
 #include "../utils.hpp"
 #include "../layers/CustomCreatorLayer.h"

@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/LevelInfoLayer.hpp>
+#include <Geode/modify/LevelInfoLayer.hpp>
 
 #include "../layers/UnregisteredProfileLayer.h"
 #include "../layers/ExtendedLevelInfo.h"

@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/PlayLayer.hpp>
+#include <Geode/modify/PlayLayer.hpp>
 
 #include "../managers/BetterInfoScheduler.h"
 #include "../managers/BetterInfoStats.h"

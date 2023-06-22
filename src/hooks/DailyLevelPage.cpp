@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/DailyLevelPage.hpp>
+#include <Geode/modify/DailyLevelPage.hpp>
 
 #include "../utils.hpp"
 #include "../layers/DailyViewLayer.h"

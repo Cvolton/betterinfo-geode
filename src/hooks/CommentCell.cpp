@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/CommentCell.hpp>
+#include <Geode/modify/CommentCell.hpp>
 
 #include "../layers/UnregisteredProfileLayer.h"
 #include "../objects/FLAlertResultHandler.h"

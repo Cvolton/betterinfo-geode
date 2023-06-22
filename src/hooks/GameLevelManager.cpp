@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/GameLevelManager.hpp>
+#include <Geode/modify/GameLevelManager.hpp>
 
 #include "../enums.hpp"
 #include "../utils.hpp"

@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/LevelPage.hpp>
+#include <Geode/modify/LevelPage.hpp>
 
 #include "../layers/ExtendedLevelInfo.h"
 

@@ -1,5 +1,5 @@
 #include <Geode/Bindings.hpp>
-#include <Geode/Modify/LevelSearchLayer.hpp>
+#include <Geode/modify/LevelSearchLayer.hpp>
 
 using namespace geode::prelude;
 
