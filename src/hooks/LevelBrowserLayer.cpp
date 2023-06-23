@@ -58,6 +58,26 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     }
 
     /*
+     * Helpers
+     */
+    CCMenuItemSpriteExtra* createRandomBtn() {
+        auto winSize = CCDirector::sharedDirector()->getWinSize();
+        bool isLocal = BetterInfo::isLocal(this->m_searchObject);
+
+        auto randomSprite = BetterInfo::createWithBISpriteFrameName("BI_randomBtn_001.png");
+        randomSprite->setScale(0.9f);
+        auto randomBtn = CCMenuItemSpriteExtra::create(
+            randomSprite,
+            this,
+            menu_selector(BILevelBrowserLayer::onLevelBrowserRandom)
+        );
+        randomBtn->setPosition({ (winSize.width / 2) - 23, 88});
+        randomBtn->setID("bi-random-button");
+        if(isLocal) randomBtn->setPosition({(winSize.width / 2) - 58, 122});
+        return randomBtn;
+    }
+
+    /*
      * Hooks
      */
     void updateLevelsLabel() {
@@ -106,7 +126,10 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             starButton->setID("bi-star-button");
         }
 
+        CCMenu* searchMenu = static_cast<CCMenu*>(this->getChildByID("search-menu"));
         auto firstBtn = static_cast<CCNode*>(menu->getChildByID("bi-first-button"));
+        if(!firstBtn && searchMenu) firstBtn = static_cast<CCNode*>(searchMenu->getChildByID("bi-first-button"));
+
         if(firstBtn) {
             if(this->m_searchObject->m_page == 0) firstBtn->setVisible(false);
             else firstBtn->setVisible(true);
@@ -127,24 +150,24 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         //259 60
         firstBtn->setPosition({ - (winSize.width / 2) + 26, 60});
         if(isLocal) firstBtn->setPosition({ - (winSize.width / 2) + 67, 60});
-        if(this->m_searchObject->m_page > 0) menu->addChild(firstBtn);
+        if(this->m_searchObject->m_page > 0) {
+            if(!searchMenu) menu->addChild(firstBtn);
+            else {
+                searchMenu->addChild(firstBtn);
+                searchMenu->updateLayout();
+            }
+        }
 
         if(this->m_itemCount <= BetterInfo::levelsPerPage(this->m_searchObject)) return;
 
-        if(menu->getChildByID("bi-random-button")) return;
+        CCMenu* pageMenu = static_cast<CCMenu*>(this->getChildByID("page-menu"));
+        if(menu->getChildByID("bi-random-button") || (pageMenu && pageMenu->getChildByID("bi-random-button"))) return;
 
-        auto randomSprite = BetterInfo::createWithBISpriteFrameName("BI_randomBtn_001.png");
-        randomSprite->setScale(0.9f);
-        auto randomBtn = CCMenuItemSpriteExtra::create(
-            randomSprite,
-            this,
-            menu_selector(BILevelBrowserLayer::onLevelBrowserRandom)
-        );
-        randomBtn->setPosition({ (winSize.width / 2) - 23, 88});
-        randomBtn->setID("bi-random-button");
-        if(isLocal) randomBtn->setPosition({(winSize.width / 2) - 58, 122});
-
-        menu->addChild(randomBtn);
+        auto randomBtn = createRandomBtn();
+        if(m_searchObject->m_searchType != SearchType::MyLevels) menu->addChild(randomBtn);
+        else {
+            log::info("pageMenu");
+        }
 
         if(!isLocal){
             auto doubleArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
@@ -164,5 +187,18 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             lastBtn->setID("bi-last-button");
             menu->addChild(lastBtn);
         }
+    }
+
+    bool init(GJSearchObject* searchObj) {
+        if(!LevelBrowserLayer::init(searchObj)) return false;
+
+        if(m_searchObject->m_searchType == SearchType::MyLevels) {
+            CCMenu* pageMenu = static_cast<CCMenu*>(this->getChildByID("page-menu"));
+            auto randomBtn = createRandomBtn();
+            pageMenu->addChild(randomBtn);
+            pageMenu->updateLayout();
+        }
+
+        return true;
     }
 };
