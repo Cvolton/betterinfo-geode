@@ -46,7 +46,7 @@ public:
     void onPrev(cocos2d::CCObject*);
     void onNext(cocos2d::CCObject*);
     void onFilters(cocos2d::CCObject*);
-    void keyDown(cocos2d::enumKeyCodes key) override;
+    void keyDown(cocos2d::enumKeyCodes key);
 
     void loadListFinished(cocos2d::CCArray*, const char*);
     void loadListFailed(const char*);
