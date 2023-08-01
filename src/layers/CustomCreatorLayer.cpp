@@ -60,11 +60,11 @@ bool CustomCreatorLayer::init() {
         menu_selector(CustomCreatorLayer::onFeatured)
     );
     menu->addChild(featuredBtn);
-    featuredBtn->setPosition({-120,55});
+    featuredBtn->setPosition({-60,55});
     featuredBtn->setSizeMult(1.2f);
     featuredBtn->setID("bi-featured-button");
 
-    auto mostLikedBtn = CCMenuItemSpriteExtra::create(
+    /*auto mostLikedBtn = CCMenuItemSpriteExtra::create(
         BetterInfo::createWithBISpriteFrameName("BI_mostLikedBtn_001.png"),
         this,
         menu_selector(CustomCreatorLayer::onMostLiked)
@@ -72,7 +72,7 @@ bool CustomCreatorLayer::init() {
     menu->addChild(mostLikedBtn);
     mostLikedBtn->setPosition({0,55});
     mostLikedBtn->setSizeMult(1.2f);
-    mostLikedBtn->setID("bi-most-liked-button");
+    mostLikedBtn->setID("bi-most-liked-button");*/
 
     auto searchBtn = CCMenuItemSpriteExtra::create(
         BetterInfo::createBISprite("BI_searchLevel_001.png"),
@@ -80,7 +80,7 @@ bool CustomCreatorLayer::init() {
         menu_selector(CustomCreatorLayer::onSearch)
     );
     menu->addChild(searchBtn);
-    searchBtn->setPosition({120,55});
+    searchBtn->setPosition({60,55});
     searchBtn->setSizeMult(1.2f);
     searchBtn->setID("bi-search-button");
 
