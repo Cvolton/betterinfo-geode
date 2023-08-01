@@ -17,6 +17,8 @@ public:
 	cocos2d::CCDictionary* m_practiceAttemptDict;
 
 	bool init();
+	void migrateSaveData();
+	void migrationPopup(float dt);
 	void encodeDataTo(DS_Dictionary* data) override;
     void dataLoaded(DS_Dictionary* data) override;
     void firstLoad() override;

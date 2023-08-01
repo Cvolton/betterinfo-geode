@@ -7,7 +7,11 @@ bool BetterInfoStats::init(){
     bool init = CCNode::init();
     if(!init) return false;
 
-    this->m_fileName = "CCBetterInfoStats.dat";
+    log::info(Mod::get()->getSaveDir().string());
+    log::info((dirs::getSaveDir() / "CCBetterInfoStats.dat").string());
+
+    this->m_fileName = fmt::format("geode/mods/{}/CCBetterInfoStats.dat", Mod::get()->getID());
+    this->migrateSaveData();
 
     auto FU = CCFileUtils::sharedFileUtils();
 
@@ -32,6 +36,22 @@ bool BetterInfoStats::init(){
     this->setup();
 
     return true;
+}
+
+void BetterInfoStats::migrateSaveData() {
+    auto oldPath = dirs::getSaveDir() / "CCBetterInfoStats.dat";
+    auto newPath = dirs::getSaveDir() / std::string(this->m_fileName); //it would be better to utilize Mod::get()->getSaveDir, however that can result in future issues
+
+    if(ghc::filesystem::exists(oldPath) && !ghc::filesystem::exists(newPath)) {
+        log::info("CCBetterInfoStats exists in main GD folder but not in mod folder, migrating");
+        ghc::filesystem::rename(oldPath, newPath);
+        
+        this->getScheduler()->scheduleSelector(schedule_selector(BetterInfoStats::migrationPopup), this, 1, 0, 3, false);
+    }
+}
+
+void BetterInfoStats::migrationPopup(float dt){
+    FLAlertLayer::create("BetterInfo", "<cg>Succesfully</c> loaded stats from a previous installation of <c_>Better</c><cj>Info</c>.\n\nPlease note that if you choose to remove your data while uninstalling this version of BI, you will lose these stats permanently.", "OK")->show();
 }
 
 BetterInfoStats::BetterInfoStats(){}
