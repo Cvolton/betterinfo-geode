@@ -7,9 +7,6 @@ bool BetterInfoStats::init(){
     bool init = CCNode::init();
     if(!init) return false;
 
-    log::info(Mod::get()->getSaveDir().string());
-    log::info((dirs::getSaveDir() / "CCBetterInfoStats.dat").string());
-
     this->m_fileName = fmt::format("geode/mods/{}/CCBetterInfoStats.dat", Mod::get()->getID());
     this->migrateSaveData();
 
