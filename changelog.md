@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.0.1
+* Fixed a crashing bug
+
 ## v3.0.0
 * Initial release based on the v2.4.7 feature set
 
