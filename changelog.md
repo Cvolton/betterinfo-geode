@@ -1,4 +1,7 @@
 # Changelog
+## v3.0.2
+* Fixed a bug causing normal mode percentages to appear negative
+* Fixed a crash caused by using filtered level search
 
 ## v3.0.1
 * Fixed a crashing bug
