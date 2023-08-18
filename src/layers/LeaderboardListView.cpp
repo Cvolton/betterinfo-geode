@@ -35,5 +35,5 @@ void LeaderboardListView::loadCell(TableViewCell* cell, int index) {
 }
 
 TableViewCell* LeaderboardListView::getListCell(const char* key) {
-    return GJScoreCell::create(key, this->m_width, this->m_itemSeparation);
+    return new GJScoreCell(key, this->m_width, this->m_itemSeparation);
 }

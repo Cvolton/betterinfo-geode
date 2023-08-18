@@ -35,5 +35,5 @@ void RewardListView::loadCell(TableViewCell* cell, int index) {
 }
 
 TableViewCell* RewardListView::getListCell(const char* key) {
-    return RewardCell::create(key, { this->m_width, this->m_itemSeparation });
+    return new RewardCell(key, { this->m_width, this->m_itemSeparation });
 }
