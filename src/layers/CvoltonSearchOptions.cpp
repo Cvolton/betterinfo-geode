@@ -26,7 +26,7 @@ void CvoltonSearchOptions::onClose(cocos2d::CCObject* sender)
 
 void CvoltonSearchOptions::onInfo(cocos2d::CCObject* sender)
 {
-    FLAlertLayer::create(nullptr, "Advanced options", "<cy>Name Contains:</c> Searches entire level names, not just the beginning\n<cg>No ID search:</c> Searches level/user names for numbers instead of IDs\n<cr>No Forced Star:</c> Disables the forced Star filter when searching level names shorter than 3 characters\n<cl>Trim Spaces:</c> Removes spaces from the beginning and end of your search query\n\n<co>Completed Mode:</c> Changes which levels are sent to the completed/uncompleted filters", "OK", nullptr, 480)->show();
+    FLAlertLayer::create(nullptr, "Advanced options", "<cl>Trim Spaces:</c> Removes spaces from the beginning and end of your search query\n\n<co>Completed Mode:</c> Changes which levels are sent to the completed/uncompleted filters", "OK", nullptr, 480)->show();
 }
 
 void CvoltonSearchOptions::onPrev(cocos2d::CCObject* sender)
