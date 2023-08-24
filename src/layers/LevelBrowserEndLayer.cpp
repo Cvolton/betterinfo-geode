@@ -136,7 +136,7 @@ void LevelBrowserEndLayer::loadListFailed(const char* test){
 
     updateDisplay();
 }
-void LevelBrowserEndLayer::setupPageInfo(std::string, const char*){
+void LevelBrowserEndLayer::setupPageInfo(gd::string, const char*){
     
 }
 

@@ -309,7 +309,7 @@ void LevelSearchViewLayer::loadListFailed(const char*) {
     }
 }
 
-void LevelSearchViewLayer::setupPageInfo(std::string, const char*) {
+void LevelSearchViewLayer::setupPageInfo(gd::string, const char*) {
 
 }
 

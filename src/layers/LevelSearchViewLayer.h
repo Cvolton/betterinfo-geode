@@ -50,7 +50,7 @@ public:
 
     void loadListFinished(cocos2d::CCArray*, const char*);
     void loadListFailed(const char*);
-    void setupPageInfo(std::string, const char*);
+    void setupPageInfo(gd::string, const char*);
 
     void onSearchObjectFinished(const BISearchObject& searchObj);
     void showInfoDialog();
