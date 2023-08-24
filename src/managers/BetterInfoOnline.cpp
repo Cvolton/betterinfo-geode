@@ -35,7 +35,9 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
     request->setRequestData(
         postData->getCString(), strlen(postData->getCString())
     );
-    request->setUserData((void*) accountID);
+    auto ccInt = CCInteger::create(accountID);
+    ccInt->retain();
+    request->setUserData(ccInt);
     CCHttpClient::getInstance()->send(request);
     //request->release();
 }
@@ -46,7 +48,9 @@ void BetterInfoOnline::onScoresFinished(CCHttpClient* client, CCHttpResponse* re
     gd::vector<char>* responseData = response->getResponseData();
     std::string responseString(responseData->begin(), responseData->end());
 
-    int accountID = (int) (response->getHttpRequest()->getUserData());
+    auto ccInt = (CCInteger*) (response->getHttpRequest()->getUserData());
+    int accountID = ccInt->getValue();
+    ccInt->release();
     generateScores(responseString, accountID);
 
     sendScores(m_scoreDict[accountID], accountID);
