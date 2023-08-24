@@ -5,8 +5,7 @@
 using namespace geode::prelude;
 
 class RewardCell : public TableViewCell {
-        GJGameLevel* level;
-        void draw() override;
+        void draw();
     
     public:
         RewardCell(const char* name, cocos2d::CCSize size);

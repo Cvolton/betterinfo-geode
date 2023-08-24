@@ -19,9 +19,9 @@ public:
 	bool init();
 	void migrateSaveData();
 	void migrationPopup(float dt);
-	void encodeDataTo(DS_Dictionary* data) override;
-    void dataLoaded(DS_Dictionary* data) override;
-    void firstLoad() override;
+	void encodeDataTo(DS_Dictionary* data);
+    void dataLoaded(DS_Dictionary* data);
+    void firstLoad();
 	static BetterInfoStats* sharedState(){
 	    if(m_instance == nullptr){
 	        m_instance = new BetterInfoStats;

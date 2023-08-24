@@ -42,7 +42,7 @@ class $modify(BIInfoLayer, InfoLayer) {
 
         auto senderBtn = static_cast<CCMenuItemToggler*>(sender);
 
-        bool newState = !(reinterpret_cast<int>(senderBtn->getUserData()));
+        bool newState = !(reinterpret_cast<size_t>(senderBtn->getUserData()));
         senderBtn->setUserData(reinterpret_cast<void*>(newState));
 
         const char* text = "Live Comment Refresh: Enabled";

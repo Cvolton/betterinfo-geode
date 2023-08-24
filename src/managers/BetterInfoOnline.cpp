@@ -124,6 +124,9 @@ void BetterInfoOnline::sendScoreToProfilePage(cocos2d::CCArray* scores, int acco
                 case IconType::Spider:
                     score->m_playerSpider = score->m_iconID;
                     break;
+                case IconType::DeathEffect:
+                case IconType::Special:
+                    break;
             }
 
             m_scoreProfilePage->getUserInfoChanged(score);

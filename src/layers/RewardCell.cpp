@@ -2,8 +2,6 @@
 #include "../utils.hpp"
 
 void RewardCell::loadFromReward(GJRewardItem* reward) {
-    this->level = level;
-
     const float rowX = 48.f;
     const float rowY = 10.5f;
 

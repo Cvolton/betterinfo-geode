@@ -81,6 +81,8 @@ class $modify(GameLevelManager) {
                 case CompleteMode::percentage:
                     if((percentageMin == 0 || currentLvl->m_normalPercent >= percentageMin) && (percentageMax == 0 || currentLvl->m_normalPercent <= percentageMax)) pRet->addObject(currentLvl);
                     break;
+                default:
+                    break;
             }
         }
 

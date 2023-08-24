@@ -100,7 +100,7 @@ void DailyCell::loadFromLevel(GJGameLevel* level) {
     percentSprite->setScale(0.35f);
     this->m_mainLayer->addChild(percentSprite);
 
-    auto percent = CCLabelBMFont::create(CCString::createWithFormat("%i%%", level->m_normalPercent)->getCString(), "bigFont.fnt");
+    auto percent = CCLabelBMFont::create(CCString::createWithFormat("%i%%", level->m_normalPercent.value())->getCString(), "bigFont.fnt");
     percent->setAnchorPoint({ 0.0f, 0.5f });
     percent->setPosition(57.5f, 24.0f);
     percent->setScale(.325f);
