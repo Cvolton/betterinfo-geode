@@ -178,5 +178,6 @@ void LevelBrowserEndLayer::getOnlineLevels(GJSearchObject* searchObj) {
 
 void LevelBrowserEndLayer::onQueueDownload(float dt) {
     auto GLM = GameLevelManager::sharedState();
+    GLM->m_onlineListDelegate = this;
     GLM->getOnlineLevels(m_levelBrowserLayer->m_searchObject);
 }
