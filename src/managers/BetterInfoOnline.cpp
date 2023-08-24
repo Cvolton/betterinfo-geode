@@ -129,7 +129,7 @@ void BetterInfoOnline::sendScoreToProfilePage(cocos2d::CCArray* scores, int acco
                     break;
             }
 
-            m_scoreProfilePage->getUserInfoChanged(score);
+            m_scoreProfilePage->userInfoChanged(score);
             m_scoreProfilePage = nullptr;
             break;
         }
