@@ -31,7 +31,7 @@ void DailyListView::loadCell(TableViewCell* cell, int index) {
     static_cast<DailyCell*>(cell)->loadFromLevel(
         static_cast<GJGameLevel*>(this->m_entries->objectAtIndex(index))
     );
-    static_cast<StatsCell*>(cell)->updateBGColor(index);
+    static_cast<DailyCell*>(cell)->updateBGColor(index);
 }
 
 TableViewCell* DailyListView::getListCell(const char* key) {

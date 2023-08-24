@@ -4,7 +4,7 @@
 
 using namespace geode::prelude;
 
-class DailyCell : public TableViewCell {
+class DailyCell : public GenericListCell {
         GJGameLevel* m_level;
         
         void draw() override;

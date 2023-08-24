@@ -4,7 +4,7 @@
 
 using namespace geode::prelude;
 
-class RewardCell : public TableViewCell {
+class RewardCell : public GenericListCell {
         void draw();
     
     public:

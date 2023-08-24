@@ -31,7 +31,7 @@ void RewardListView::loadCell(TableViewCell* cell, int index) {
     static_cast<RewardCell*>(cell)->loadFromReward(
         static_cast<GJRewardItem*>(this->m_entries->objectAtIndex(index))
     );
-    static_cast<StatsCell*>(cell)->updateBGColor(index);
+    static_cast<RewardCell*>(cell)->updateBGColor(index);
 }
 
 TableViewCell* RewardListView::getListCell(const char* key) {
