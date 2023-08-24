@@ -43,7 +43,7 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
 void BetterInfoOnline::onScoresFinished(CCHttpClient* client, CCHttpResponse* response){
     if(!(response->isSucceed())) return;
 
-    std::vector<char>* responseData = response->getResponseData();
+    gd::vector<char>* responseData = response->getResponseData();
     std::string responseString(responseData->begin(), responseData->end());
 
     int accountID = (int) (response->getHttpRequest()->getUserData());
