@@ -80,9 +80,9 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     /*
      * Hooks
      */
-    void updateLevelsLabel() {
+    void setupPageInfo(gd::string a1, const char* a2) {
         //TODO: utilize geode layout system (needs modifications in loader to make the layout in the first place)
-        LevelBrowserLayer::updateLevelsLabel();
+        LevelBrowserLayer::setupPageInfo(a1, a2);
 
         if(this->m_itemCount == 9999 || BetterInfo::isFalseTotal(this->m_searchObject)) this->m_rightArrow->setVisible(true);
 
