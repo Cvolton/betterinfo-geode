@@ -237,7 +237,7 @@ void LevelSearchViewLayer::loadPage(bool reload){
     m_firstIndex = (m_page * 10) + 1;
     m_lastIndex = (m_page * 10) + currentPage->count();
     m_totalAmount = m_unloadedLevels.size() + m_loadedLevels->count();
-    m_counter->setCString(CCString::createWithFormat("%i to %i of %i / %i", m_firstIndex, m_lastIndex, m_loadedLevels->count(), m_totalAmount)->getCString());
+    m_counter->setCString(fmt::format("{} to {} of {} / {}", m_firstIndex, m_lastIndex, m_loadedLevels->count(), m_totalAmount).c_str());
 
     if(m_page == 0) m_prevBtn->setVisible(false);
     else m_prevBtn->setVisible(true);
