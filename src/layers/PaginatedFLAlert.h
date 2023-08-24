@@ -17,4 +17,5 @@ public:
     void loadPage(size_t page);
 
     void keyDown(cocos2d::enumKeyCodes key);
+    void onClose(cocos2d::CCObject* sender);
 };

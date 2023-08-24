@@ -96,3 +96,7 @@ void PaginatedFLAlert::keyDown(cocos2d::enumKeyCodes key) {
             CCLayer::keyDown(key);
     }
 }
+
+void PaginatedFLAlert::onClose(cocos2d::CCObject* sender) {
+    onBtn1(sender);
+}
