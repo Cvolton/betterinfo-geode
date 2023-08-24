@@ -183,17 +183,21 @@ bool BetterInfo::isSavedFiltered() {
 }
 
 std::string BetterInfo::decodeBase64Gzip(const std::string& input) {
-        unsigned char* levelString;
-        unsigned char* levelStringFull;
-        int levelStringSize = base64Decode((unsigned char *)(input.c_str()), input.size(), &levelString);
-        int levelStringSizeDeflated = ZipUtils::ccInflateMemory(levelString, levelStringSize, &levelStringFull);
+        //unsigned char* levelString;
+        /*unsigned char* levelStringFull;
+        //int levelStringSize = base64Decode((unsigned char *)(input.c_str()), input.size(), &levelString);
+        std::string levelString = ZipUtils::base64URLDecode(input);
+
+        //int levelStringSizeDeflated = ZipUtils::ccInflateMemory(levelString, levelStringSize, &levelStringFull);
+        int levelStringSizeDeflated = ZipUtils::ccInflateMemory(&(levelString.c_str()), levelString.size(), &levelStringFull);
 
         std::string levelStringFullStd((char*)levelStringFull, levelStringSizeDeflated);
 
-        delete levelString;
+        //delete levelString;
         delete levelStringFull;
 
-        return levelStringFullStd;
+        return levelStringFullStd;*/
+        return ZipUtils::decompressString(input, false, 0);
 }
 
 std::string BetterInfo::fileSize(size_t bytes) {
