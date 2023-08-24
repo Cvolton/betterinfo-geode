@@ -28,5 +28,5 @@ public:
     static bool compareDailies(const void* l1, const void* l2);
     static cocos2d::CCScene* scene(bool isWeekly);
     int getPage() const;
-    void keyDown(cocos2d::enumKeyCodes key) override;
+    void keyDown(cocos2d::enumKeyCodes key);
 };
