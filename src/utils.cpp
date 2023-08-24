@@ -2,6 +2,7 @@
 
 #include <random>
 #include <fmt/format.h>
+#include <time.h>
 
 #include <Geode/cocos/support/base64.h>
 #include <Geode/cocos/support/zip_support/ZipUtils.h>
@@ -234,9 +235,9 @@ std::string BetterInfo::fixNullByteCrash(std::string input) {
 }
 
 std::string BetterInfo::timeToString(time_t input) {
-        struct tm time3;
-        localtime_s(&time3, &input);
-        return fmt::format("{}-{:02}-{:02} {:02}:{:02}", time3.tm_year + 1900, time3.tm_mon + 1, time3.tm_mday, time3.tm_hour, time3.tm_min);
+        char dateString[255];
+        strftime(dateString, sizeof(dateString), "%F %H:%M", localtime(&input));
+        return dateString;
 }
 
 void BetterInfo::copyToClipboard(const char* text){
