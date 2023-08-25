@@ -104,6 +104,8 @@ void BetterInfoCache::storeUserName(int userID, std::string username) {
 }
 
 std::string BetterInfoCache::getUserName(int userID, bool download) {
+    if(userID == 0) return ""; //this prevents the request from being sent on every account comments load
+
     auto idString = std::to_string(userID);
     if(!objectExists("username-dict", idString)) {
         //if gdhistory was faster, this could be sync and the feature would be more efficient, sadly gdhistory is not faster
