@@ -122,6 +122,15 @@ bool LevelSearchViewLayer::init(BISearchObject searchObj) {
     buttonButton->setAnchorPoint({0,0});
     menu->addChild(buttonButton);
 
+    auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoIcon_001.png");
+    auto infoBtn = CCMenuItemSpriteExtra::create(
+        infoSprite,
+        this,
+        menu_selector(LevelSearchViewLayer::onInfo)
+    );
+    infoBtn->setPosition({+ (winSize.width / 2) - 25, - (winSize.height / 2) + 25});
+    menu->addChild(infoBtn);
+
     reload();
 
     if(m_gjSearchObj && !(Mod::get()->getSavedValue<bool>("lsvl_seen_info"))) showInfoDialog();
@@ -339,6 +348,10 @@ void LevelSearchViewLayer::onFilters(cocos2d::CCObject*) {
     searchOptions->show();
 }
 
+void LevelSearchViewLayer::onInfo(cocos2d::CCObject*) {
+    LevelSearchViewLayer::showInfoDialog();
+}
+
 void LevelSearchViewLayer::keyDown(enumKeyCodes key){
     switch(key){
         case KEY_Left:
@@ -367,7 +380,9 @@ void LevelSearchViewLayer::showInfoDialog() {
         "This allows you to further filter search results in ways the server usually wouldn't allow you.\n"
         "\n"
         "All of the filtering is done <cg>client-side</c>.\n"
-        "As a result it may take a while to load all results depending on the filter combinations.",
+        "As a result it may take a while to load all results depending on the filter combinations.\n"
+        "\n"
+        "Press the <cy>Filters</c> <cp>button</c> in the bottom left corner to change the enabled search filters.",
 
         "OK", 
         nullptr,
