@@ -36,6 +36,10 @@ void UnregisteredProfileLayer::displayProfile(int userID, gd::string userName, C
     GJUserScore* score = GJUserScore::create();
     score->m_userID = userID;
     score->m_userName = userName;
+    score->m_iconType = IconType::Cube;
+    score->m_iconID = 0;
+    score->m_color1 = 0;
+    score->m_color2 = 3;
     UnregisteredProfileLayer* profileLayer = UnregisteredProfileLayer::create(score, invoker);
     profileLayer->show();
 }
