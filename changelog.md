@@ -1,4 +1,8 @@
 # Changelog
+## v3.0.3
+* Initial Mac release ("view leaderboard as" is missing in the Mac version)
+* Minor bugfixes & improvements
+
 ## v3.0.2
 * Fixed a bug causing normal mode percentages to appear negative
 * Fixed a crash caused by using filtered level search
