@@ -25,6 +25,7 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
         return;
     }
 
+    #ifndef GEODE_IS_MACOS
     //only on forced reload or if we dont have cached
     CCHttpRequest* request = new CCHttpRequest;
     request->setUrl("http://www.boomlings.com/database/getGJScores20.php");
@@ -40,6 +41,7 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
     request->setUserData(ccInt);
     CCHttpClient::getInstance()->send(request);
     //request->release();
+    #endif
 }
 
 void BetterInfoOnline::onScoresFinished(CCHttpClient* client, CCHttpResponse* response){
