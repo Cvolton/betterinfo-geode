@@ -201,4 +201,14 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
 
         return true;
     }
+
+    void onInfo(CCObject* sender) {
+        FLAlertLayer::create(nullptr, "Info", 
+            "<cg>Green</c> users are unregistered.\n"
+            "<cy>Gold</c> users are unique registered.\n"
+            "<cl>Blue</c> songs are official.\n"
+            "<cp>Purple</c> songs are custom.\n"
+            "<co>Orange</c> songs are custom, not from Newgrounds.\n",
+        "OK", nullptr, 360)->show();
+    }
 };
