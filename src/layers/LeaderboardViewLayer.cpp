@@ -69,6 +69,11 @@ bool LeaderboardViewLayer::init(int accountID) {
     cornerBR->setRotation(270);
     addChild(cornerBR, -1);
 
+    m_circle = LoadingCircle::create();
+    m_circle->retain();
+    m_circle->setParentLayer(this);
+    m_circle->show();
+
     loadPage();
     BetterInfoOnline::sharedState()->loadScores(m_accountID, false, this);
 
@@ -94,8 +99,12 @@ void LeaderboardViewLayer::keyBackClicked() {
     
     setTouchEnabled(false);
     setKeypadEnabled(false);
+
     if(m_scores) m_scores->release();
+    if(m_circle) m_circle->release();
     m_scores = nullptr;
+    m_circle = nullptr;
+
     CCDirector::sharedDirector()->popSceneWithTransition(0.5f, PopTransition::kPopTransitionFade);
 }
 
@@ -115,4 +124,5 @@ void LeaderboardViewLayer::onLeaderboardFinished(cocos2d::CCArray* scores) {
     m_scores = scores;
     m_scores->retain();
     loadPage();
+    if(m_circle) m_circle->fadeAndRemove();
 }

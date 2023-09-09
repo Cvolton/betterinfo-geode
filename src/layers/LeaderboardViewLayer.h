@@ -7,6 +7,7 @@ class LeaderboardViewLayer : public cocos2d::CCLayer, public BILeaderboardDelega
     LeaderboardListView* m_leaderboardView = nullptr;
     GJListLayer* m_listLayer = nullptr;
     cocos2d::CCArray* m_scores = nullptr;
+    LoadingCircle* m_circle = nullptr;
     int m_accountID = 0;
 protected:
     virtual bool init(int accountID);
