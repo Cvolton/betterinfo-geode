@@ -8,11 +8,14 @@ using namespace geode::prelude;
 class ExtendedLevelInfo : public CvoltonAlertLayerStub {
     std::string m_primary;
     std::string m_secondary;
+    std::string m_fileSizeCompressed;
+    std::string m_fileSizeUncompressed;
     GJGameLevel* m_level;
     TextArea* m_info;
     CCMenuItemSpriteExtra* m_prevBtn;
     CCMenuItemSpriteExtra* m_nextBtn;
     int m_page = 0;
+    size_t m_objectsEstimated = 0;
 public:
     static ExtendedLevelInfo* create(GJGameLevel* level);
     void onClose(cocos2d::CCObject* sender);
@@ -22,6 +25,7 @@ public:
     void onNext(cocos2d::CCObject* sender);
     void onPrev(cocos2d::CCObject* sender);
     void loadPage(int page);
+    void refreshInfoTexts();
     static std::string getGameVersionName(int version);
     static std::string stringDate(std::string date);
     static const char* boolString(bool value);

@@ -170,6 +170,43 @@ std::string ExtendedLevelInfo::printableProgress(std::string personalBests, int 
     return printable;
 }
 
+void ExtendedLevelInfo::refreshInfoTexts() {
+    int levelPassword = m_level->m_password;
+    std::ostringstream infoText;
+    infoText << "\n<cj>Uploaded</c>: " << stringDate(m_level->m_uploadDate)
+        << "\n<cj>Updated</c>: " << stringDate(m_level->m_updateDate)
+        //<< "\n<cy>Stars Requested</c>: " << m_level->m_starsRequested
+        << "\n<cg>Original</c>: " << zeroIfNA(m_level->m_originalLevel)
+        //<< "\n<cg>Feature score</c>: " << zeroIfNA(m_level->m_featured)
+        << "\n<cy>Game Version</c>: " << getGameVersionName(m_level->m_gameVersion)
+        //<< "\nFeature Score</c>: " << m_level->m_featured
+        << "\n<co>Password</c>: " << passwordString(levelPassword)
+        << "\n<cr>In Editor</c>: " << workingTime(m_level->m_workingTime)
+        << "\n<cr>Editor (C)</c>: " << workingTime(m_level->m_workingTime2);
+
+    m_primary = infoText.str();
+    infoText.str("");
+    infoText << "\n<cj>Objects</c>: " << zeroIfNA(m_level->m_objectCount)
+        << "\n<cg>Objects (est.)</c>: " << zeroIfNA(m_objectsEstimated) //i have no idea what the 0 and 11 mean, i just copied them from PlayLayer::init
+        << "\n<cy>Feature Score</c>: " << zeroIfNA(m_level->m_featured)
+        << "\n<co>Two-player</c>: " << boolString(m_level->m_twoPlayerMode)
+        << "\n<cr>Size</c>: " << m_fileSizeCompressed << " / " << m_fileSizeUncompressed;
+    ;
+
+    m_secondary = infoText.str();
+
+    /*infoText << "<cg>Total Attempts</c>: " << m_level->attempts
+        << "\n<cl>Total Jumps</c>: " << m_level->jumps
+        << "\n<co>Clicks (best att.)</c>: " << m_level->clicks // the contents of this variable make no sense to me
+        << "\n<co>Time (best att.)</c>: " << ExtendedLevelInfo::workingTime(m_level->attemptTime) // the contents of this variable make no sense to me
+        //<< "\n<co>Is legit</c>: " << m_level->isCompletionLegitimate // the contents of this variable make no sense to me
+        << "\n<cp>Normal</c>: " << m_level->normalPercent
+        << "%\n<co>Practice</c>: " << m_level->practicePercent << "%";
+
+    if(m_level->orbCompletion != m_level->newNormalPercent2) infoText << "\n<cj>2.1 Normal</c>: " << m_level->orbCompletion << "%";
+    if(m_level->newNormalPercent2 != m_level->normalPercent) infoText << "\n<cr>2.11 Normal</c>: " << m_level->newNormalPercent2 << "%";*/
+}
+
 bool ExtendedLevelInfo::init(GJGameLevel* level){
     bool init = createBasics({440.0f, 290.0f}, menu_selector(ExtendedLevelInfo::onClose));
     if(!init) return false;
@@ -232,45 +269,19 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
     m_buttonMenu->addChild(infoBg, -1);
     infoBg->setPosition({0,-57});
 
-    //std::string levelString(ZipUtils::base64URLDecode(m_level->levelString));
-    int levelPassword = m_level->m_password;
-    std::ostringstream infoText;
-    infoText << "\n<cj>Uploaded</c>: " << stringDate(m_level->m_uploadDate)
-        << "\n<cj>Updated</c>: " << stringDate(m_level->m_updateDate)
-        //<< "\n<cy>Stars Requested</c>: " << m_level->m_starsRequested
-        << "\n<cg>Original</c>: " << zeroIfNA(m_level->m_originalLevel)
-        //<< "\n<cg>Feature score</c>: " << zeroIfNA(m_level->m_featured)
-        << "\n<cy>Game Version</c>: " << getGameVersionName(m_level->m_gameVersion)
-        //<< "\nFeature Score</c>: " << m_level->m_featured
-        << "\n<co>Password</c>: " << passwordString(levelPassword)
-        << "\n<cr>In Editor</c>: " << workingTime(m_level->m_workingTime)
-        << "\n<cr>Editor (C)</c>: " << workingTime(m_level->m_workingTime2);
+    refreshInfoTexts();
+    std::thread([this]() {
+        std::string levelString(BetterInfo::decodeBase64Gzip(m_level->m_levelString));
+        m_objectsEstimated = std::count(levelString.begin(), levelString.end(), ';');
+        m_fileSizeCompressed = BetterInfo::fileSize(m_level->m_levelString.size());
+        m_fileSizeUncompressed = BetterInfo::fileSize(levelString.size());
+        refreshInfoTexts();
+        Loader::get()->queueInMainThread([this]() {
+            this->loadPage(this->m_page);
+        });
+    }).detach();
 
-    m_primary = infoText.str();
-    std::string levelString(BetterInfo::decodeBase64Gzip(m_level->m_levelString));
-    size_t objectsEstimated = std::count(levelString.begin(), levelString.end(), ';');
-    infoText.str("");
-    infoText << "\n<cj>Objects</c>: " << zeroIfNA(m_level->m_objectCount)
-        << "\n<cg>Objects (est.)</c>: " << zeroIfNA(objectsEstimated) //i have no idea what the 0 and 11 mean, i just copied them from PlayLayer::init
-        << "\n<cy>Feature Score</c>: " << zeroIfNA(m_level->m_featured)
-        << "\n<co>Two-player</c>: " << boolString(m_level->m_twoPlayerMode)
-        << "\n<cr>Size</c>: " << BetterInfo::fileSize(m_level->m_levelString.size()) << " / " << BetterInfo::fileSize(levelString.size());
-    ;
-
-    m_secondary = infoText.str();
-
-    /*infoText << "<cg>Total Attempts</c>: " << m_level->attempts
-        << "\n<cl>Total Jumps</c>: " << m_level->jumps
-        << "\n<co>Clicks (best att.)</c>: " << m_level->clicks // the contents of this variable make no sense to me
-        << "\n<co>Time (best att.)</c>: " << ExtendedLevelInfo::workingTime(m_level->attemptTime) // the contents of this variable make no sense to me
-        //<< "\n<co>Is legit</c>: " << m_level->isCompletionLegitimate // the contents of this variable make no sense to me
-        << "\n<cp>Normal</c>: " << m_level->normalPercent
-        << "%\n<co>Practice</c>: " << m_level->practicePercent << "%";
-
-    if(m_level->orbCompletion != m_level->newNormalPercent2) infoText << "\n<cj>2.1 Normal</c>: " << m_level->orbCompletion << "%";
-    if(m_level->newNormalPercent2 != m_level->normalPercent) infoText << "\n<cr>2.11 Normal</c>: " << m_level->newNormalPercent2 << "%";*/
-
-    m_info = TextArea::create(infoText.str(), "chatFont.fnt", 1, 170, {0,1}, 20, false);
+    m_info = TextArea::create(m_primary, "chatFont.fnt", 1, 170, {0,1}, 20, false);
     m_info->setPosition({-160.5,26});
     //m_info->setPosition({-160.5,10});
     m_info->setAnchorPoint({0,1});
