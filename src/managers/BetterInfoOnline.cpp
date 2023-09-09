@@ -1,5 +1,6 @@
 #include "BetterInfoOnline.h"
 #include "../utils.hpp"
+#include <Geode/utils/web.hpp>
 
 bool BetterInfoOnline::init(){
     return true;
@@ -25,37 +26,16 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
         return;
     }
 
-    #ifndef GEODE_IS_MACOS
-    //only on forced reload or if we dont have cached
-    CCHttpRequest* request = new CCHttpRequest;
-    request->setUrl("http://www.boomlings.com/database/getGJScores20.php");
-    request->setRequestType(CCHttpRequest::HttpRequestType::kHttpPost);
-    request->setResponseCallback(this, httpresponse_selector(BetterInfoOnline::onScoresFinished));
-    //TODO: make this slightly more dynamic
-    auto postData = CCString::createWithFormat("gameVersion=21&binaryVersion=35&gdw=0&accountID=%i&type=relative&secret=Wmfd2893gb7", accountID);
-    request->setRequestData(
-        postData->getCString(), strlen(postData->getCString())
-    );
-    auto ccInt = CCInteger::create(accountID);
-    ccInt->retain();
-    request->setUserData(ccInt);
-    CCHttpClient::getInstance()->send(request);
-    //request->release();
-    #endif
-}
-
-void BetterInfoOnline::onScoresFinished(CCHttpClient* client, CCHttpResponse* response){
-    if(!(response->isSucceed())) return;
-
-    gd::vector<char>* responseData = response->getResponseData();
-    std::string responseString(responseData->begin(), responseData->end());
-
-    auto ccInt = (CCInteger*) (response->getHttpRequest()->getUserData());
-    int accountID = ccInt->getValue();
-    ccInt->release();
-    generateScores(responseString, accountID);
-
-    sendScores(m_scoreDict[accountID], accountID);
+    web::AsyncWebRequest()
+        .userAgent("")
+        .postRequest()
+        .postFields(fmt::format("gameVersion=21&binaryVersion=35&gdw=0&accountID={}&type=relative&secret=Wmfd2893gb7", accountID))
+        .fetch("http://www.boomlings.com/database/getGJScores20.php")
+        .text()
+        .then([this, accountID](const std::string& response) {
+            generateScores(response, accountID);
+            sendScores(m_scoreDict[accountID], accountID);
+        });
 }
 
 void BetterInfoOnline::generateScores(const std::string& response, int accountID){

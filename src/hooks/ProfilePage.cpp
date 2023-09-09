@@ -144,37 +144,33 @@ class $modify(BIProfilePage, ProfilePage) {
         if(a2->m_userID != GameManager::sharedState()->m_playerUserID){
             for(unsigned int i = 0; i < layer->getChildrenCount(); i++){
                 CCNode* node = dynamic_cast<CCNode*>(layer->getChildren()->objectAtIndex(i));
-                #ifndef GEODE_IS_MACOS
-                    if(node != nullptr && node->getPositionX() == (winSize.width / 2) - 164 && node->getPositionY() == (winSize.height / 2) + 123) node->setVisible(false);
-                #endif
+                if(node != nullptr && node->getPositionX() == (winSize.width / 2) - 164 && node->getPositionY() == (winSize.height / 2) + 123) node->setVisible(false);
                 if(node != nullptr && node->getPositionX() == (winSize.width / 2) && node->getPositionY() == (winSize.height / 2) + 125) node->setVisible(false);
             }
 
-            #ifndef GEODE_IS_MACOS
-                auto leaderboardButtonSprite = BetterInfo::createBISprite("BI_blankBtn_001.png");
-                auto leaderboardSprite = CCSprite::createWithSpriteFrameName(BetterInfo::rankIcon(a2->m_globalRank));
-                leaderboardSprite->setZOrder(1);
-                leaderboardSprite->setScale(1 / 0.6f);
-                if(a2->m_globalRank > 0) {
-                    if(a2->m_globalRank <= 10) leaderboardSprite->setScale(1.1f);
-                    else if(a2->m_globalRank <= 50) leaderboardSprite->setScale(1.25f);
-                    else if(a2->m_globalRank <= 200) leaderboardSprite->setScale(1.3f);
-                    else if(a2->m_globalRank <= 1000) leaderboardSprite->setScale(1 / 0.7f);
-                }
-                leaderboardSprite->setPosition({22.5f, 23});
-                leaderboardButtonSprite->addChild(leaderboardSprite);
-                leaderboardButtonSprite->setScale( (a2->m_globalRank <= 1000 && a2->m_globalRank > 0) ? 0.7f : 0.6f);
-                auto leaderboardButton = CCMenuItemSpriteExtra::create(
-                    leaderboardButtonSprite,
-                    this,
-                    menu_selector(BIProfilePage::onProfilePageLeaderboard)
-                );
-                leaderboardButton->setID("bi-leaderboard-button");
-                menu->addChild(leaderboardButton);
-                leaderboardButton->setPosition({46, -12});
-                leaderboardButton->setSizeMult(1.2f);
-                this->m_buttons->addObject(leaderboardButton);
-            #endif
+            auto leaderboardButtonSprite = BetterInfo::createBISprite("BI_blankBtn_001.png");
+            auto leaderboardSprite = CCSprite::createWithSpriteFrameName(BetterInfo::rankIcon(a2->m_globalRank));
+            leaderboardSprite->setZOrder(1);
+            leaderboardSprite->setScale(1 / 0.6f);
+            if(a2->m_globalRank > 0) {
+                if(a2->m_globalRank <= 10) leaderboardSprite->setScale(1.1f);
+                else if(a2->m_globalRank <= 50) leaderboardSprite->setScale(1.25f);
+                else if(a2->m_globalRank <= 200) leaderboardSprite->setScale(1.3f);
+                else if(a2->m_globalRank <= 1000) leaderboardSprite->setScale(1 / 0.7f);
+            }
+            leaderboardSprite->setPosition({22.5f, 23});
+            leaderboardButtonSprite->addChild(leaderboardSprite);
+            leaderboardButtonSprite->setScale( (a2->m_globalRank <= 1000 && a2->m_globalRank > 0) ? 0.7f : 0.6f);
+            auto leaderboardButton = CCMenuItemSpriteExtra::create(
+                leaderboardButtonSprite,
+                this,
+                menu_selector(BIProfilePage::onProfilePageLeaderboard)
+            );
+            leaderboardButton->setID("bi-leaderboard-button");
+            menu->addChild(leaderboardButton);
+            leaderboardButton->setPosition({46, -12});
+            leaderboardButton->setSizeMult(1.2f);
+            this->m_buttons->addObject(leaderboardButton);
 
             auto refreshSprite = CCSprite::createWithSpriteFrameName("GJ_updateBtn_001.png");
             auto refreshButton = CCMenuItemSpriteExtra::create(

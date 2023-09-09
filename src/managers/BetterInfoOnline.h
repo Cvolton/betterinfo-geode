@@ -28,7 +28,6 @@ public:
     void loadScores(int accountID, bool force);
     void loadScores(int accountID, bool force, BILeaderboardDelegate* delegate);
     void loadScores(int accountID, bool force, ProfilePage* profilePage);
-    void onScoresFinished(cocos2d::extension::CCHttpClient* client, cocos2d::extension::CCHttpResponse* response);
     void generateScores(const std::string& response, int accountID);
     void sendScores(cocos2d::CCArray* scores, int accountID);
     void sendScoreToProfilePage(cocos2d::CCArray* scores, int accountID);
