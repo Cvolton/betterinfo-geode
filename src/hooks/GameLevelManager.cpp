@@ -32,10 +32,11 @@ class $modify(GameLevelManager) {
         auto userName = GameLevelManager::userNameForUserID(userID);
         auto userNameStd = std::string(userName);
 
-        if(Mod::get()->getSettingValue<bool>("fix-green-users") && (userNameStd == "" || userNameStd == "-")){
+        if(Mod::get()->getSettingValue<bool>("fix-green-users") && (userNameStd == "" || userNameStd == "-" || userNameStd == "Player")){
 
-            userName = BetterInfoCache::sharedState()->getUserName(userID);
+            auto newUserName = BetterInfoCache::sharedState()->getUserName(userID);
             if(userID == 32471) userName = "PixelCube"; //previous dataset had an error
+            if(!newUserName.empty()) userName = newUserName;
         }
 
         return userName;

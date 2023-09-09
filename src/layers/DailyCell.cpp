@@ -34,7 +34,6 @@ void DailyCell::loadFromLevel(GJGameLevel* level) {
     starsSprite->setScale(0.8f);
     this->m_mainLayer->addChild(starsSprite);
 
-    log::info("cell {}", biCache->getLevelName(level->m_levelID));
     auto title = CCLabelBMFont::create(biCache->getLevelName(level->m_levelID).c_str(), "bigFont.fnt");
     title->setAnchorPoint({ 0.0f, .5f });
     title->setPosition(43.0f, 42.f);
