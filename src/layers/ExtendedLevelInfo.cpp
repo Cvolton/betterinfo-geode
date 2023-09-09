@@ -3,9 +3,11 @@
 #include "PaginatedFLAlert.h"
 #include "../utils.hpp"
 #include "../managers/BetterInfoStats.h"
+#include "../managers/BetterInfoCache.h"
 
 #include <deque>
 #include <algorithm>
+#include <thread>
 
 ExtendedLevelInfo* ExtendedLevelInfo::create(GJGameLevel* level){
     auto ret = new ExtendedLevelInfo();
@@ -22,6 +24,7 @@ ExtendedLevelInfo* ExtendedLevelInfo::create(GJGameLevel* level){
 
 void ExtendedLevelInfo::onClose(cocos2d::CCObject* sender)
 {
+    BetterInfoCache::sharedState()->m_uploadDateDelegate = nullptr;
     m_level->release();
     setKeypadEnabled(false);
     removeFromParentAndCleanup(true);
@@ -50,6 +53,13 @@ void ExtendedLevelInfo::onNext(cocos2d::CCObject* sender)
 void ExtendedLevelInfo::onPrev(cocos2d::CCObject* sender)
 {
     loadPage(m_page-1);
+}
+
+void ExtendedLevelInfo::onUploadDateLoaded(int levelID, const std::string& date) {
+    m_uploadDateEstimated = date;
+    log::info("onUploadDateLoaded");
+    refreshInfoTexts();
+    loadPage(m_page);
 }
 
 void ExtendedLevelInfo::loadPage(int page) {
@@ -186,7 +196,8 @@ void ExtendedLevelInfo::refreshInfoTexts() {
 
     m_primary = infoText.str();
     infoText.str("");
-    infoText << "\n<cj>Objects</c>: " << zeroIfNA(m_level->m_objectCount)
+    infoText << "\n<cj>Uploaded</c>: " << BetterInfo::isoTimeToString(m_uploadDateEstimated)
+        << "\n<cg>Objects</c>: " << zeroIfNA(m_level->m_objectCount)
         << "\n<cg>Objects (est.)</c>: " << zeroIfNA(m_objectsEstimated) //i have no idea what the 0 and 11 mean, i just copied them from PlayLayer::init
         << "\n<cy>Feature Score</c>: " << zeroIfNA(m_level->m_featured)
         << "\n<co>Two-player</c>: " << boolString(m_level->m_twoPlayerMode)
@@ -205,6 +216,21 @@ void ExtendedLevelInfo::refreshInfoTexts() {
 
     if(m_level->orbCompletion != m_level->newNormalPercent2) infoText << "\n<cj>2.1 Normal</c>: " << m_level->orbCompletion << "%";
     if(m_level->newNormalPercent2 != m_level->normalPercent) infoText << "\n<cr>2.11 Normal</c>: " << m_level->newNormalPercent2 << "%";*/
+}
+
+void ExtendedLevelInfo::setupAdditionalInfo() {
+    m_uploadDateEstimated = BetterInfoCache::sharedState()->getUploadDate(m_level->m_levelID, this);
+
+    std::thread([this]() {
+        std::string levelString(BetterInfo::decodeBase64Gzip(m_level->m_levelString));
+        m_objectsEstimated = std::count(levelString.begin(), levelString.end(), ';');
+        m_fileSizeCompressed = BetterInfo::fileSize(m_level->m_levelString.size());
+        m_fileSizeUncompressed = BetterInfo::fileSize(levelString.size());
+        refreshInfoTexts();
+        Loader::get()->queueInMainThread([this]() {
+            this->loadPage(this->m_page);
+        });
+    }).detach();
 }
 
 bool ExtendedLevelInfo::init(GJGameLevel* level){
@@ -270,16 +296,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
     infoBg->setPosition({0,-57});
 
     refreshInfoTexts();
-    std::thread([this]() {
-        std::string levelString(BetterInfo::decodeBase64Gzip(m_level->m_levelString));
-        m_objectsEstimated = std::count(levelString.begin(), levelString.end(), ';');
-        m_fileSizeCompressed = BetterInfo::fileSize(m_level->m_levelString.size());
-        m_fileSizeUncompressed = BetterInfo::fileSize(levelString.size());
-        refreshInfoTexts();
-        Loader::get()->queueInMainThread([this]() {
-            this->loadPage(this->m_page);
-        });
-    }).detach();
+    setupAdditionalInfo();
 
     m_info = TextArea::create(m_primary, "chatFont.fnt", 1, 170, {0,1}, 20, false);
     m_info->setPosition({-160.5,26});

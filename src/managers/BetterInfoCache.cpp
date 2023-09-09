@@ -14,6 +14,7 @@ void BetterInfoCache::validateLoadedData() {
     validateIsObject("level-name-dict");
     validateIsObject("coin-count-dict");
     validateIsObject("username-dict");
+    validateIsObject("upload-date-dict");
 }
 
 BetterInfoCache::BetterInfoCache(){}
@@ -88,7 +89,7 @@ std::string BetterInfoCache::getLevelName(int levelID) {
     }
 }
 
-void BetterInfoCache::storeUserName(int userID, std::string username) {
+void BetterInfoCache::storeUserName(int userID, const std::string& username) {
     if(username.empty()) {
         log::info("Username empty, not storing");
         return;
@@ -144,6 +145,53 @@ int BetterInfoCache::getCoinCount(int levelID) {
         return m_json["coin-count-dict"][idString].as_int();
     } catch(std::exception) {
         return 3;
+    }
+}
+
+void BetterInfoCache::storeUploadDate(int levelID, const std::string& date) {
+    if(date.empty()) {
+        log::info("Date empty, not storing");
+        return;
+    }
+
+    auto idString = std::to_string(levelID);
+    log::info("Storing date {} for level ID {}", date, idString);
+    m_json["upload-date-dict"][idString] = date;
+    doSave();
+
+    if(m_uploadDateDelegate) m_uploadDateDelegate->onUploadDateLoaded(levelID, date);
+    m_uploadDateDelegate = nullptr;
+}
+
+std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* delegate) {
+    if(levelID == 0) return "";
+    m_uploadDateDelegate = delegate;
+
+    auto idString = std::to_string(levelID);
+    if(!objectExists("upload-date-dict", idString)) {
+        //if gdhistory was faster, this could be sync and the feature would be more efficient, sadly gdhistory is not faster
+        if(m_attemptedLevelDates.find(levelID) == m_attemptedLevelDates.end()) {
+            web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).text().then([levelID](const std::string& userData){
+                log::info("{}", userData);
+                auto data = json::parse(userData);
+
+                if(!data["approx"].is_object()) return;
+                if(!data["approx"]["estimation"].is_string()) return;
+
+                BetterInfoCache::sharedState()->storeUploadDate(levelID, data["approx"]["estimation"].as_string());
+            }).expect([](const std::string& error){
+
+            });
+            m_attemptedLevelDates.insert(levelID);
+        }
+        return "";
+    }
+
+    try {
+        return m_json["upload-date-dict"][idString].as_string();
+    } catch(std::exception e) {
+        log::error("Exception in getUploadDate: {}", e.what());
+        return "";
     }
 }
 

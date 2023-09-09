@@ -4,12 +4,14 @@
 using namespace geode::prelude;
 
 #include "CvoltonAlertLayerStub.h"
+#include "../delegates/UploadDateDelegate.h"
 
-class ExtendedLevelInfo : public CvoltonAlertLayerStub {
+class ExtendedLevelInfo : public CvoltonAlertLayerStub, public UploadDateDelegate {
     std::string m_primary;
     std::string m_secondary;
-    std::string m_fileSizeCompressed;
-    std::string m_fileSizeUncompressed;
+    std::string m_fileSizeCompressed = "NA";
+    std::string m_fileSizeUncompressed = "NA";
+    std::string m_uploadDateEstimated = "NA";
     GJGameLevel* m_level;
     TextArea* m_info;
     CCMenuItemSpriteExtra* m_prevBtn;
@@ -24,8 +26,10 @@ public:
     void onCopyDesc(cocos2d::CCObject* sender);
     void onNext(cocos2d::CCObject* sender);
     void onPrev(cocos2d::CCObject* sender);
+    void onUploadDateLoaded(int levelID, const std::string& date);
     void loadPage(int page);
     void refreshInfoTexts();
+    void setupAdditionalInfo();
     static std::string getGameVersionName(int version);
     static std::string stringDate(std::string date);
     static const char* boolString(bool value);

@@ -31,6 +31,7 @@ namespace BetterInfo {
     std::string fixColorCrashes(std::string input);
     std::string fixNullByteCrash(std::string input);
     std::string timeToString(time_t input);
+    std::string isoTimeToString(const std::string& input);
     
     void copyToClipboard(const char* text);
     void copyToClipboard(const char* text, CCLayer* parent);
