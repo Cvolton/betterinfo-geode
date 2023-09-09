@@ -57,7 +57,6 @@ void ExtendedLevelInfo::onPrev(cocos2d::CCObject* sender)
 
 void ExtendedLevelInfo::onUploadDateLoaded(int levelID, const std::string& date) {
     m_uploadDateEstimated = date;
-    log::info("onUploadDateLoaded");
     refreshInfoTexts();
     loadPage(m_page);
 }
