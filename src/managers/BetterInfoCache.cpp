@@ -128,8 +128,11 @@ std::string BetterInfoCache::getLevelInfo(int levelID, const std::string& field)
 }
 
 void BetterInfoCache::storeDatesForLevel(GJGameLevel* level) {
-    if(!level->m_uploadDate.empty()) storeLevelInfo(level->m_levelID, "upload-date", level->m_uploadDate);
-    if(!level->m_updateDate.empty()) storeLevelInfo(level->m_levelID, "update-date", level->m_updateDate);
+    std::string uploadDateStd = level->m_uploadDate;
+    std::string updateDateStd = level->m_updateDate;
+
+    if(!uploadDateStd.empty()) storeLevelInfo(level->m_levelID, "upload-date", uploadDateStd);
+    if(!updateDateStd.empty()) storeLevelInfo(level->m_levelID, "update-date", updateDateStd);
 }
 
 std::string BetterInfoCache::getUserName(int userID, bool download) {
