@@ -1,4 +1,14 @@
 # Changelog
+## v3.0.4
+Extended Level Info:
+* Added exact upload dates
+* Added caching of relative upload dates
+* Improved loading performance
+
+View Leaderboard As:
+* Enabled on Mac
+* Added loading circle
+
 ## v3.0.3
 * Initial Mac release ("view leaderboard as" is missing in the Mac version)
 * Minor bugfixes & improvements
