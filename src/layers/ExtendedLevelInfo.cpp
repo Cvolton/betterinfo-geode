@@ -189,10 +189,12 @@ std::string ExtendedLevelInfo::addPlus(std::string date) {
 void ExtendedLevelInfo::refreshInfoTexts() {
     auto cache = BetterInfoCache::sharedState();
 
+    auto uploadDateStd = std::string(m_level->m_uploadDate);
+    auto updateDateStd = std::string(m_level->m_updateDate);
     int levelPassword = m_level->m_password;
     std::ostringstream infoText;
-    infoText << "\n<cj>Uploaded</c>: " << stringDate(!m_level->m_uploadDate.empty() ? std::string(m_level->m_uploadDate) : addPlus(cache->getLevelInfo(m_level->m_levelID, "upload-date")))
-        << "\n<cj>Updated</c>: " << stringDate(!m_level->m_updateDate.empty() ? std::string(m_level->m_updateDate) :  addPlus(cache->getLevelInfo(m_level->m_levelID, "update-date")))
+    infoText << "\n<cj>Uploaded</c>: " << stringDate(!uploadDateStd.empty() ? uploadDateStd : addPlus(cache->getLevelInfo(m_level->m_levelID, "upload-date")))
+        << "\n<cj>Updated</c>: " << stringDate(!updateDateStd.empty() ? updateDateStd :  addPlus(cache->getLevelInfo(m_level->m_levelID, "update-date")))
         //<< "\n<cy>Stars Requested</c>: " << m_level->m_starsRequested
         << "\n<cg>Original</c>: " << zeroIfNA(m_level->m_originalLevel)
         //<< "\n<cg>Feature score</c>: " << zeroIfNA(m_level->m_featured)
