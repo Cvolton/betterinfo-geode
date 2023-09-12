@@ -8,6 +8,8 @@
 #include <deque>
 #include <algorithm>
 #include <thread>
+#include <string>
+#include <iterator>
 
 ExtendedLevelInfo* ExtendedLevelInfo::create(GJGameLevel* level){
     auto ret = new ExtendedLevelInfo();
@@ -179,13 +181,18 @@ std::string ExtendedLevelInfo::printableProgress(std::string personalBests, int 
     return printable;
 }
 
+std::string ExtendedLevelInfo::addPlus(std::string date) {
+    date.insert(date.cbegin() + date.find_first_of(' '), '+');
+    return date;
+}
+
 void ExtendedLevelInfo::refreshInfoTexts() {
     auto cache = BetterInfoCache::sharedState();
 
     int levelPassword = m_level->m_password;
     std::ostringstream infoText;
-    infoText << "\n<cj>Uploaded</c>: " << stringDate(!m_level->m_uploadDate.empty() ? std::string(m_level->m_uploadDate) : cache->getLevelInfo(m_level->m_levelID, "upload-date"))
-        << "\n<cj>Updated</c>: " << stringDate(!m_level->m_updateDate.empty() ? std::string(m_level->m_updateDate) :  cache->getLevelInfo(m_level->m_levelID, "update-date"))
+    infoText << "\n<cj>Uploaded</c>: " << stringDate(!m_level->m_uploadDate.empty() ? std::string(m_level->m_uploadDate) : addPlus(cache->getLevelInfo(m_level->m_levelID, "upload-date")))
+        << "\n<cj>Updated</c>: " << stringDate(!m_level->m_updateDate.empty() ? std::string(m_level->m_updateDate) :  addPlus(cache->getLevelInfo(m_level->m_levelID, "update-date")))
         //<< "\n<cy>Stars Requested</c>: " << m_level->m_starsRequested
         << "\n<cg>Original</c>: " << zeroIfNA(m_level->m_originalLevel)
         //<< "\n<cg>Feature score</c>: " << zeroIfNA(m_level->m_featured)
