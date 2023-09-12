@@ -5,6 +5,7 @@
 #include "../layers/JumpToPageLayer.h"
 #include "../layers/UnregisteredProfileLayer.h"
 #include "../layers/ExtendedLevelInfo.h"
+#include "../managers/BetterInfoCache.h"
 
 using namespace geode::prelude;
 
@@ -58,6 +59,9 @@ class $modify(BIInfoLayer, InfoLayer) {
 
     bool init(GJGameLevel* level, GJUserScore* score) {
         if (!InfoLayer::init(level, score)) return false;
+
+        auto cache = BetterInfoCache::sharedState();
+        cache->storeDatesForLevel(this->m_level);
 
         //geode doesn't have ids defined for this so i have to resort to objectAtIndex
         auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(0));

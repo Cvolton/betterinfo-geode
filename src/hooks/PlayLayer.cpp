@@ -3,6 +3,7 @@
 
 #include "../managers/BetterInfoScheduler.h"
 #include "../managers/BetterInfoStats.h"
+#include "../managers/BetterInfoCache.h"
 
 using namespace geode::prelude;
 
@@ -20,6 +21,9 @@ class $modify(BIPlayLayer, PlayLayer) {
 
         auto stats = BetterInfoStats::sharedState();
         stats->logPlay(this->m_level);
+
+        auto cache = BetterInfoCache::sharedState();
+        cache->storeDatesForLevel(this->m_level);
 
         return true;
     }

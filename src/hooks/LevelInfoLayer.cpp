@@ -3,6 +3,7 @@
 
 #include "../layers/UnregisteredProfileLayer.h"
 #include "../layers/ExtendedLevelInfo.h"
+#include "../managers/BetterInfoCache.h"
 
 using namespace geode::prelude;
 
@@ -17,6 +18,9 @@ class $modify(LevelInfoLayer) {
 
         auto playerName = static_cast<CCMenuItemSpriteExtra*>(this->getChildByID("creator-info-menu")->getChildByID("creator-name"));
         playerName->setEnabled(true);
+
+        auto cache = BetterInfoCache::sharedState();
+        cache->storeDatesForLevel(this->m_level);
 
         return true;
     }

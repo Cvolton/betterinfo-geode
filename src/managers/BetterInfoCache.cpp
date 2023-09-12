@@ -15,6 +15,7 @@ void BetterInfoCache::validateLoadedData() {
     validateIsObject("coin-count-dict");
     validateIsObject("username-dict");
     validateIsObject("upload-date-dict");
+    validateIsObject("level-info-dict");
 }
 
 BetterInfoCache::BetterInfoCache(){}
@@ -102,6 +103,33 @@ void BetterInfoCache::storeUserName(int userID, const std::string& username) {
 
     auto levelBrowserLayer = getChildOfType<LevelBrowserLayer>(CCDirector::sharedDirector()->getRunningScene(), 0);
     if(levelBrowserLayer) BetterInfo::reloadUsernames(levelBrowserLayer);
+}
+
+void BetterInfoCache::storeLevelInfo(int levelID, const std::string& field, const std::string& value) {
+    if(field.empty() || value.empty()) {
+        log::info("Field or value empty, not storing");
+        return;
+    }
+
+    auto idString = std::to_string(levelID);
+    if(!m_json["level-info-dict"][idString].is_object()) m_json["level-info-dict"][idString] = json::Object();
+
+    log::info("Storing {} : {} for level ID {}", field, value, idString);
+    m_json["level-info-dict"][idString][field] = value;
+    doSave();
+}
+
+std::string BetterInfoCache::getLevelInfo(int levelID, const std::string& field) {
+    auto idString = std::to_string(levelID);
+    if(!m_json["level-info-dict"][idString].is_object()) m_json["level-info-dict"][idString] = json::Object();
+    if(!m_json["level-info-dict"][idString][field].is_string()) return "";
+
+    return m_json["level-info-dict"][idString][field].as_string();
+}
+
+void BetterInfoCache::storeDatesForLevel(GJGameLevel* level) {
+    if(!level->m_uploadDate.empty()) storeLevelInfo(level->m_levelID, "upload-date", level->m_uploadDate);
+    if(!level->m_updateDate.empty()) storeLevelInfo(level->m_levelID, "update-date", level->m_updateDate);
 }
 
 std::string BetterInfoCache::getUserName(int userID, bool download) {
