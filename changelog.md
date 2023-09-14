@@ -1,4 +1,7 @@
 # Changelog
+## v3.0.5
+* Fixes a crash when opening Extended Level Info on certain levels
+
 ## v3.0.4
 Extended Level Info:
 * Added exact upload dates
