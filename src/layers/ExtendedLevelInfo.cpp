@@ -182,7 +182,8 @@ std::string ExtendedLevelInfo::printableProgress(std::string personalBests, int 
 }
 
 std::string ExtendedLevelInfo::addPlus(std::string date) {
-    date.insert(date.cbegin() + date.find_first_of(' '), '+');
+    auto spaceIt = date.find_first_of(' ');
+    if(spaceIt != std::string::npos) date.insert(date.cbegin() + spaceIt, '+');
     return date;
 }
 
