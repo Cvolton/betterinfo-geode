@@ -3,6 +3,7 @@
 #include <random>
 #include <fmt/format.h>
 #include <time.h>
+#include <chrono>
 
 #include <Geode/cocos/support/base64.h>
 #include <Geode/cocos/support/zip_support/ZipUtils.h>
@@ -451,4 +452,133 @@ void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
 
                 }
         }
+}
+
+inline bool objectIDIsSpeedPortal(int id) {
+        return (id == 200 || id == 201 || id == 202 || id == 203 || id == 1334);
+}
+
+inline float travelForSpeed(int speed) {
+        switch (speed)
+        {
+        case 1:
+                return 251.16008f;
+                break;
+        case 2:
+                return 387.42014f;
+                break;
+        case 3:
+                return 468.00015f;
+                break;
+        case 4:
+                return 576.00018f;
+                break;
+        default:
+                return 311.58011f;
+                break;
+        }
+}
+
+inline float travelForPortalId(int speed) {
+        switch (speed)
+        {
+        case 200:
+                return 251.16008f;
+                break;
+        default:
+                return 311.58011f;
+                break;
+        case 202:
+                return 387.42014f;
+                break;
+        case 203:
+                return 468.00015f;
+                break;
+        case 1334:
+                return 576.00018f;
+                break;
+        }
+}
+
+inline int speedToPortalId(int speed) {
+        switch(speed) {
+        case 3:
+                return 202;
+                break;
+        case 4:
+                return 1334;
+                break;
+        case 1:
+                return 200;
+                break;
+        default:
+                return 201;
+                break;
+        case 2:
+                return 203;
+                break;
+        }
+}
+
+inline uint64_t timeInMs() {
+        using namespace std::chrono;
+        return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+}
+
+float BetterInfo::timeForLevelString(const std::string& levelString) {
+        //todo: checked portals
+        auto a = timeInMs();
+
+        auto decompressString = decodeBase64Gzip(levelString);
+        auto c = timeInMs();
+        std::stringstream responseStream(decompressString);
+        std::string currentObject;
+        std::string currentKey;
+        std::string keyID;
+
+        std::stringstream objectStream;
+        float prevPortalX = 0;
+        int prevPortalId = 0;
+
+        float timeFull = 0;
+
+        float maxPos = 0;
+        while(getline(responseStream, currentObject, ';')){
+                size_t i = 0;
+                int objID = 0;
+                float xPos = 0;
+                
+                objectStream.clear();
+                objectStream << currentObject;
+                objectStream.seekp(0);
+                objectStream.seekg(0);
+                //std::stringstream objectStream(currentObject);
+                while(getline(objectStream, currentKey, ',')) {
+
+
+                        if(i % 2 == 0) keyID = currentKey;
+                        else {
+                                if(keyID == "1") objID = std::stoi(currentKey);
+                                else if(keyID == "2") xPos = std::stof(currentKey);
+                                else if(keyID == "kA4") prevPortalId = speedToPortalId(std::stoi(currentKey));
+                        }
+                        i++;
+
+                        if(xPos != 0 && objID != 0) break;
+                }
+
+                if(maxPos < xPos) maxPos = xPos;
+                if(!objectIDIsSpeedPortal(objID)) continue;
+
+                timeFull += (xPos - prevPortalX) / travelForPortalId(prevPortalId);
+                prevPortalId = objID;
+                prevPortalX = xPos;
+        }
+
+        timeFull += (maxPos - prevPortalX) / travelForPortalId(prevPortalId);
+        auto b = timeInMs() - a;
+        log::info("time spent decompressing: {}", c - a);
+        log::info("time spent: {}", b);
+        return timeFull;
+
 }

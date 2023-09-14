@@ -53,4 +53,6 @@ namespace BetterInfo {
     bool levelProgressMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
 
     void reloadUsernames(LevelBrowserLayer* levelBrowserLayer);
+
+    float timeForLevelString(const std::string& levelString);
 }
