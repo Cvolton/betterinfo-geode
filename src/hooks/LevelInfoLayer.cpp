@@ -23,7 +23,8 @@ class $modify(LevelInfoLayer) {
         auto cache = BetterInfoCache::sharedState();
         cache->storeDatesForLevel(this->m_level);
 
-        auto label = typeinfo_cast<CCLabelBMFont*>(getChildByID("length-label"));
+        //auto label = typeinfo_cast<CCLabelBMFont*>(getChildByID("length-label"));
+        auto label = m_lengthLabel;
         if(label) {
             auto bmFont = CCLabelBMFont::create("Loading", "bigFont.fnt");
             bmFont->setID("bi-exact-time");
@@ -41,10 +42,11 @@ class $modify(LevelInfoLayer) {
         LevelInfoLayer::updateLabelValues();
         std::thread([this](){
             auto wt = ExtendedLevelInfo::workingTime(std::round(BetterInfo::timeForLevelString(m_level->m_levelString)));
+            //since whatever is done by queueInMainThread is guaranteed to execute after init is finished, this shouldn't result in a race condition
             Loader::get()->queueInMainThread([this, wt]() {
-                auto label = typeinfo_cast<CCLabelBMFont*>(getChildByID("length-label"));
+                //auto label = typeinfo_cast<CCLabelBMFont*>(getChildByID("length-label"));
                 auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("bi-exact-time"));
-                if(label && bmFont) {
+                if(bmFont) {
                     bmFont->setString(fmt::format("{}", wt).c_str());
                     //label->setString(fmt::format("{} ({})", label->getString(), wt).c_str());
                 }
