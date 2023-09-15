@@ -23,27 +23,33 @@ class $modify(LevelInfoLayer) {
         auto cache = BetterInfoCache::sharedState();
         cache->storeDatesForLevel(this->m_level);
 
+        auto label = typeinfo_cast<CCLabelBMFont*>(getChildByID("length-label"));
+        if(label) {
+            auto bmFont = CCLabelBMFont::create("Loading", "bigFont.fnt");
+            bmFont->setID("bi-exact-time");
+            bmFont->setPosition({label->getPositionX() + 1, label->getPositionY() - 2.f}); //193 - 185
+            bmFont->setAnchorPoint({0,1});
+            bmFont->setScale(0.325f);
+            addChild(bmFont);
+            label->setPositionY(label->getPositionY() + 6.f);
+        }
+
+        return true;
+    }
+
+    void updateLabelValues() {
+        LevelInfoLayer::updateLabelValues();
         std::thread([this](){
             auto wt = ExtendedLevelInfo::workingTime(std::round(BetterInfo::timeForLevelString(m_level->m_levelString)));
             Loader::get()->queueInMainThread([this, wt]() {
                 auto label = typeinfo_cast<CCLabelBMFont*>(getChildByID("length-label"));
-                if(label) {
+                auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("bi-exact-time"));
+                if(label && bmFont) {
+                    bmFont->setString(fmt::format("{}", wt).c_str());
                     //label->setString(fmt::format("{} ({})", label->getString(), wt).c_str());
-                    auto bmFont = CCLabelBMFont::create(fmt::format("{}", wt).c_str(), "bigFont.fnt");
-                    bmFont->setID("bi-exact-time");
-                    bmFont->setPosition({label->getPositionX() + 1, label->getPositionY() - 2.f}); //todo: position properly
-                    label->setPositionY(label->getPositionY() + 6.f);
-
-                    //193 - 185
-                    bmFont->setAnchorPoint({0,1});
-                    bmFont->setScale(0.325f);
-                    addChild(bmFont);
                 }
             });
         }).detach();
-        
-
-        return true;
     }
 
     void onViewProfile(CCObject* sender) {

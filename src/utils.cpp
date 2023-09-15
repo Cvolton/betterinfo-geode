@@ -526,59 +526,64 @@ inline uint64_t timeInMs() {
 }
 
 float BetterInfo::timeForLevelString(const std::string& levelString) {
-        //todo: checked portals
-        auto a = timeInMs();
+        try {
+                //todo: checked portals
+                auto a = timeInMs();
 
-        auto decompressString = decodeBase64Gzip(levelString);
-        auto c = timeInMs();
-        std::stringstream responseStream(decompressString);
-        std::string currentObject;
-        std::string currentKey;
-        std::string keyID;
+                auto decompressString = decodeBase64Gzip(levelString);
+                auto c = timeInMs();
+                std::stringstream responseStream(decompressString);
+                std::string currentObject;
+                std::string currentKey;
+                std::string keyID;
 
-        std::stringstream objectStream;
-        float prevPortalX = 0;
-        int prevPortalId = 0;
+                std::stringstream objectStream;
+                float prevPortalX = 0;
+                int prevPortalId = 0;
 
-        float timeFull = 0;
+                float timeFull = 0;
 
-        float maxPos = 0;
-        while(getline(responseStream, currentObject, ';')){
-                size_t i = 0;
-                int objID = 0;
-                float xPos = 0;
-                
-                objectStream.clear();
-                objectStream << currentObject;
-                objectStream.seekp(0);
-                objectStream.seekg(0);
-                //std::stringstream objectStream(currentObject);
-                while(getline(objectStream, currentKey, ',')) {
+                float maxPos = 0;
+                while(getline(responseStream, currentObject, ';')){
+                        size_t i = 0;
+                        int objID = 0;
+                        float xPos = 0;
+                        
+                        objectStream.clear();
+                        objectStream << currentObject;
+                        objectStream.seekp(0);
+                        objectStream.seekg(0);
+                        //std::stringstream objectStream(currentObject);
+                        while(getline(objectStream, currentKey, ',')) {
 
 
-                        if(i % 2 == 0) keyID = currentKey;
-                        else {
-                                if(keyID == "1") objID = std::stoi(currentKey);
-                                else if(keyID == "2") xPos = std::stof(currentKey);
-                                else if(keyID == "kA4") prevPortalId = speedToPortalId(std::stoi(currentKey));
+                                if(i % 2 == 0) keyID = currentKey;
+                                else {
+                                        if(keyID == "1") objID = std::stoi(currentKey);
+                                        else if(keyID == "2") xPos = std::stof(currentKey);
+                                        else if(keyID == "kA4") prevPortalId = speedToPortalId(std::stoi(currentKey));
+                                }
+                                i++;
+
+                                if(xPos != 0 && objID != 0) break;
                         }
-                        i++;
 
-                        if(xPos != 0 && objID != 0) break;
+                        if(maxPos < xPos) maxPos = xPos;
+                        if(!objectIDIsSpeedPortal(objID)) continue;
+
+                        timeFull += (xPos - prevPortalX) / travelForPortalId(prevPortalId);
+                        prevPortalId = objID;
+                        prevPortalX = xPos;
                 }
 
-                if(maxPos < xPos) maxPos = xPos;
-                if(!objectIDIsSpeedPortal(objID)) continue;
-
-                timeFull += (xPos - prevPortalX) / travelForPortalId(prevPortalId);
-                prevPortalId = objID;
-                prevPortalX = xPos;
+                timeFull += (maxPos - prevPortalX) / travelForPortalId(prevPortalId);
+                auto b = timeInMs() - a;
+                log::info("time spent decompressing: {}", c - a);
+                log::info("time spent: {}", b);
+                return timeFull;
+        } catch(std::exception e) {
+                log::error("An exception has occured while calculating time for levelString: {}", e.what());
+                return 0;
         }
-
-        timeFull += (maxPos - prevPortalX) / travelForPortalId(prevPortalId);
-        auto b = timeInMs() - a;
-        log::info("time spent decompressing: {}", c - a);
-        log::info("time spent: {}", b);
-        return timeFull;
 
 }
