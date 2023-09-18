@@ -6,6 +6,8 @@
 #include "../managers/BetterInfoCache.h"
 #include "../utils.hpp"
 
+#include <thread>
+
 using namespace geode::prelude;
 
 class $modify(LevelInfoLayer) {
