@@ -1,4 +1,7 @@
 # Changelog
+## v3.0.7
+* Bugfixes & Improvements
+
 ## v3.0.6
 * Added level length to Level Info Layer (online level play screen)
 
