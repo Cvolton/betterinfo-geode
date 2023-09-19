@@ -41,6 +41,8 @@ class $modify(LevelInfoLayer) {
     }
 
     void updateLabelValues() {
+        retain();
+
         LevelInfoLayer::updateLabelValues();
         std::thread([this](){
             auto wt = ExtendedLevelInfo::workingTime(std::round(BetterInfo::timeForLevelString(m_level->m_levelString)));
@@ -52,6 +54,7 @@ class $modify(LevelInfoLayer) {
                     bmFont->setString(fmt::format("{}", wt).c_str());
                     //label->setString(fmt::format("{} ({})", label->getString(), wt).c_str());
                 }
+                release();
             });
         }).detach();
     }
