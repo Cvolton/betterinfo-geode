@@ -1,4 +1,7 @@
 # Changelog
+## v3.0.6
+* Added level length to Level Info Layer (online level play screen)
+
 ## v3.0.5
 * Fixes a crash when opening Extended Level Info on certain levels
 
