@@ -32,7 +32,7 @@ bool RewardViewLayer::init(CCDictionary* chests, const char* title) {
     auto GSM = GameStatsManager::sharedState();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
     auto backgroundSprite = CCSprite::create("game_bg_14_001.png");
-    bool controllerConnected = CCApplication::sharedApplication()->getControllerConnected();
+    bool controllerConnected = BetterInfo::controllerConnected();
 
     backgroundSprite->setScale(winSize.width / backgroundSprite->getContentSize().width);
     backgroundSprite->setAnchorPoint({0, 0});

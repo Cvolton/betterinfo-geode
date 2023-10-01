@@ -253,7 +253,9 @@ std::string BetterInfo::isoTimeToString(const std::string& input) {
 }
 
 void BetterInfo::copyToClipboard(const char* text){
+    #ifndef GEODE_IS_ANDROID
         clipboard::write(text);
+    #endif
 }
 
 void BetterInfo::copyToClipboard(const char* text, CCLayer* parent){
@@ -585,5 +587,12 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
                 log::error("An exception has occured while calculating time for levelString: {}", e.what());
                 return 0;
         }
+}
 
+bool BetterInfo::controllerConnected() {
+    #ifdef GEODE_IS_ANDROID
+        return false;
+    #else
+        return CCApplication::sharedApplication()->getControllerConnected();
+    #endif
 }

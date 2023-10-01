@@ -2,6 +2,7 @@
 #include "JumpToPageLayer.h"
 //#include "../managers/CvoltonManager.h"
 #include "../managers/BetterInfoOnline.h"
+#include "../utils.hpp"
 
 LeaderboardViewLayer* LeaderboardViewLayer::create(int accountID) {
     auto ret = new LeaderboardViewLayer();
@@ -24,7 +25,7 @@ bool LeaderboardViewLayer::init(int accountID) {
     auto GLM = GameLevelManager::sharedState();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
     auto backgroundSprite = CCSprite::create("game_bg_14_001.png");
-    bool controllerConnected = CCApplication::sharedApplication()->getControllerConnected();
+    bool controllerConnected = BetterInfo::controllerConnected();
 
     backgroundSprite->setScale(winSize.width / backgroundSprite->getContentSize().width);
     backgroundSprite->setAnchorPoint({0, 0});

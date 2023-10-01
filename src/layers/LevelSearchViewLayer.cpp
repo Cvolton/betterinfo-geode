@@ -43,7 +43,7 @@ bool LevelSearchViewLayer::init(BISearchObject searchObj) {
     auto GLM = GameLevelManager::sharedState();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
     auto backgroundSprite = CCSprite::create("game_bg_14_001.png");
-    bool controllerConnected = CCApplication::sharedApplication()->getControllerConnected();
+    bool controllerConnected = BetterInfo::controllerConnected();
 
     backgroundSprite->setScale(winSize.width / backgroundSprite->getContentSize().width);
     backgroundSprite->setAnchorPoint({0, 0});
