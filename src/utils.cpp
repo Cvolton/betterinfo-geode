@@ -253,9 +253,7 @@ std::string BetterInfo::isoTimeToString(const std::string& input) {
 }
 
 void BetterInfo::copyToClipboard(const char* text){
-    #ifndef GEODE_IS_ANDROID
         clipboard::write(text);
-    #endif
 }
 
 void BetterInfo::copyToClipboard(const char* text, CCLayer* parent){
