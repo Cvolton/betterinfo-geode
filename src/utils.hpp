@@ -57,4 +57,6 @@ namespace BetterInfo {
     float timeForLevelString(const std::string& levelString);
 
     bool controllerConnected();
+
+    void loadImportantNotices(CCLayer* layer);
 }

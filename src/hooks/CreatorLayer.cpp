@@ -78,6 +78,7 @@ class $modify(BICreatorLayer, CreatorLayer) {
         this->addChild(menu);
 
         showQuestExclamationMark();
+        BetterInfo::loadImportantNotices(this);
 
         /*auto alert = CM->updateCompleteDialog();
         if(alert) {

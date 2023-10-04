@@ -7,6 +7,7 @@
 
 #include <Geode/cocos/support/base64.h>
 #include <Geode/cocos/support/zip_support/ZipUtils.h>
+#include <Geode/utils/web.hpp>
 
 CCSprite* BetterInfo::createWithBISpriteFrameName(const char* name){
     return createBISprite(name);
@@ -579,4 +580,26 @@ bool BetterInfo::controllerConnected() {
     #else
     return CCApplication::sharedApplication()->getControllerConnected();
     #endif
+}
+
+void BetterInfo::loadImportantNotices(CCLayer* layer) {
+    static bool hasBeenCalled = false;
+    if(hasBeenCalled) return;
+    hasBeenCalled = true;
+
+    layer->retain();
+
+    web::AsyncWebRequest().fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toString(false))).json().then([layer](const json::Value& info){
+        auto notice = info.try_get("notice");
+        if(notice == std::nullopt) return;
+        
+        if(info["notice"].is_string()) {
+            auto alert = FLAlertLayer::create("BetterInfo", info["notice"].as_string(), "OK");
+            alert->m_scene = layer;
+            alert->show();
+            layer->release();
+        }
+    }).expect([](const std::string& error){
+        log::warn("Fetching important notices failed: {}", error);
+    });
 }
