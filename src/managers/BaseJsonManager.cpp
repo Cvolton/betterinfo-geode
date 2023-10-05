@@ -38,7 +38,7 @@ Result<> BaseJsonManager::load() {
 }
 
 Result<> BaseJsonManager::save() {
-    std::string savedStr = m_json.dump();
+    std::string savedStr = m_json.dump(json::NO_INDENTATION);
 
     auto res2 = utils::file::writeString(Mod::get()->getSaveDir() / m_filename, savedStr);
     if (!res2) {
