@@ -3,6 +3,7 @@
 #include "PaginatedFLAlert.h"
 #include "../utils.hpp"
 #include "../managers/BetterInfoStats.h"
+#include "../managers/BetterInfoStatsV2.h"
 #include "../managers/BetterInfoCache.h"
 
 #include <deque>
@@ -416,6 +417,7 @@ void ExtendedLevelInfo::showProgressDialog(GJGameLevel* level){
 
     if(level->m_levelType != GJLevelType::Editor){
         auto stats = BetterInfoStats::sharedState();
+        auto statsV2 = BetterInfoStatsV2::sharedState();
 
         contentStream << "\n<cp>Normal</c>: " << level->m_normalPercent
         << "%\n<co>Practice</c>: " << level->m_practicePercent << "%";
@@ -424,6 +426,7 @@ void ExtendedLevelInfo::showProgressDialog(GJGameLevel* level){
 
         auto normalAttempts = stats->getAttempts(level, false);
         auto practiceAttempts = stats->getAttempts(level, true);
+        auto commonFail = statsV2->getCommonFail(level);
         secondStream << "<cp>Attempts (normal)</c>: " << normalAttempts << "\n";
         secondStream << "<co>Attempts (practice)</c>: " << practiceAttempts << "\n";
         if((normalAttempts + practiceAttempts) != level->m_attempts) secondStream << "<cy>Attempts (unknown)</c>: " << (level->m_attempts - practiceAttempts - normalAttempts) << "\n";
@@ -432,6 +435,7 @@ void ExtendedLevelInfo::showProgressDialog(GJGameLevel* level){
         if(stats->getPlay(level, true) != 0) secondStream << "<cl>Last played</c>: " << BetterInfo::timeToString(stats->getPlay(level, true)) << "\n";
         if(stats->getCompletion(level, false) > 0) secondStream << "<cp>Completed</c>: " << BetterInfo::timeToString(stats->getCompletion(level, false)) << "\n";
         if(stats->getCompletion(level, true) > 0) secondStream << "<co>Completed (practice)</c>: " << BetterInfo::timeToString(stats->getCompletion(level, true)) << "\n";
+        secondStream << "<co>Common fail:</c> " << commonFail.first << "% (" << commonFail.second << "x)\n";
     }else{
         contentStream << "\n<cp>Objects</c>: " << level->m_objectCount
             << "\n<cr>In Editor</c>: " << ExtendedLevelInfo::workingTime(level->m_workingTime) << "\n";

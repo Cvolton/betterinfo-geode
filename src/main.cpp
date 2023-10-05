@@ -1,5 +1,8 @@
 #include <Geode/Geode.hpp>
 
+#include "managers/BetterInfoStatsV2.h"
+#include "managers/BetterInfoCache.h"
+
 using namespace geode::prelude;
 
 void setupPageLimitBypassWindows() {
@@ -46,6 +49,17 @@ void setupPageLimitBypass() {
 
 }
 
+void loadManagers() {
+    std::thread([] {
+        BetterInfoStatsV2::sharedState();
+        BetterInfoCache::sharedState();
+    }).detach();
+}
+
 $execute {
     setupPageLimitBypass();
+}
+
+$on_mod(Loaded) {
+    loadManagers();
 }

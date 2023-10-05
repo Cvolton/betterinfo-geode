@@ -32,6 +32,7 @@ Result<> BaseJsonManager::load() {
     }
 
     validateLoadedData();
+    m_loaded = true;
 
     return Ok();
 }
@@ -49,10 +50,16 @@ Result<> BaseJsonManager::save() {
 }
 
 void BaseJsonManager::doSave() {
-    auto loadResult = save();
-    if(!loadResult) {
-        log::warn("Unable to load {}", m_filename);
-    }
+    std::thread([this] {
+        auto loadResult = save();
+        if(!loadResult) {
+            log::warn("Unable to save {}", m_filename);
+        }
+    }).detach();
+}
+
+void BaseJsonManager::waitForLoad() {
+    while(!m_loaded) {}
 }
 
 void BaseJsonManager::validateLoadedData() {
