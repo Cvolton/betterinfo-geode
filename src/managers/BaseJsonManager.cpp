@@ -2,6 +2,7 @@
 #include "../utils.hpp"
 
 #include <fstream>
+#include <thread>
 
 bool BaseJsonManager::init(const char* filename){
     m_filename = filename;
