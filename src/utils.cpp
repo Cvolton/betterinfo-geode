@@ -513,6 +513,7 @@ inline uint64_t timeInMs() {
 }
 
 float BetterInfo::timeForLevelString(const std::string& levelString) {
+        std::string epicString;
     try {
         //todo: checked portals
         auto a = timeInMs();
@@ -524,7 +525,7 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
         std::string currentKey;
         std::string keyID;
 
-        std::stringstream objectStream;
+        //std::stringstream objectStream;
         float prevPortalX = 0;
         int prevPortalId = 0;
 
@@ -536,13 +537,14 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
             int objID = 0;
             float xPos = 0;
 
+            /*objectStream.str("");
             objectStream.clear();
             objectStream << currentObject;
             objectStream.seekp(0);
-            objectStream.seekg(0);
-            //std::stringstream objectStream(currentObject);
+            objectStream.seekg(0);*/
+            std::stringstream objectStream(currentObject);
             while(getline(objectStream, currentKey, ',')) {
-
+                epicString += currentKey + "\n";
 
                 if(i % 2 == 0) keyID = currentKey;
                 else {
