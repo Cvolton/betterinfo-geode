@@ -3,7 +3,7 @@
 
 #include "../managers/BetterInfoScheduler.h"
 #include "../managers/BetterInfoStats.h"
-#include "../managers/BetterInfoStatsV2.h"
+//#include "../managers/BetterInfoStatsV2.h"
 #include "../managers/BetterInfoCache.h"
 
 using namespace geode::prelude;
@@ -45,7 +45,7 @@ class $modify(BIPlayLayer, PlayLayer) {
         if(!m_isDead || needsReset) return;
         needsReset = true;
 
-        log::info("death x: {}", player->m_position.x);
+        /*log::info("death x: {}", player->m_position.x);
         log::info("death y: {}", player->m_position.y);
         log::info("death rotation: {}", player->getRotation());
         log::info("percent: {}", m_lastDeathPercent);
@@ -54,7 +54,7 @@ class $modify(BIPlayLayer, PlayLayer) {
             .x = player->m_position.x,
             .y = player->m_position.y,
             .rotation = player->getRotation()
-        });
+        });*/
     }
 
     void resetLevel(){

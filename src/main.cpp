@@ -2,7 +2,7 @@
 
 #include <thread>
 
-#include "managers/BetterInfoStatsV2.h"
+//#include "managers/BetterInfoStatsV2.h"
 #include "managers/BetterInfoCache.h"
 
 using namespace geode::prelude;
@@ -53,7 +53,7 @@ void setupPageLimitBypass() {
 
 void loadManagers() {
     std::thread([] {
-        BetterInfoStatsV2::sharedState();
+        //BetterInfoStatsV2::sharedState();
         BetterInfoCache::sharedState();
     }).detach();
 }
