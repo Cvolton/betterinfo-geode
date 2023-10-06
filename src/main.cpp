@@ -1,5 +1,7 @@
 #include <Geode/Geode.hpp>
 
+#include <thread>
+
 #include "managers/BetterInfoStatsV2.h"
 #include "managers/BetterInfoCache.h"
 
