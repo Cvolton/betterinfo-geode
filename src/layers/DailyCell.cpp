@@ -146,6 +146,11 @@ void DailyCell::loadFromLevel(GJGameLevel* level) {
         this->m_mainLayer->addChild(coinSprite);
     }
 
+    //fix level data (deleted from saved)
+    level->m_levelName = biCache->getLevelName(level->m_levelID);
+    level->m_coins = biCache->getCoinCount(level->m_levelID);
+    level->m_coinsVerified = true;
+
     //buttons
     auto menu = CCMenu::create();
 
