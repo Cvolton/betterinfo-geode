@@ -605,3 +605,22 @@ void BetterInfo::loadImportantNotices(CCLayer* layer) {
         log::warn("Fetching important notices failed: {}", error);
     });
 }
+
+//from coloride on geode sdk discord
+bool BetterInfo::isHoveringNode(CCNode* target) {
+    CCPoint touchPos = getMousePos();
+
+    CCPoint targetWorldPos = target->getParent()->convertToWorldSpace(target->getPosition());
+    auto targetSize = target->getContentSize();
+    auto targetScale = target->getScale();
+    auto anchorPoint = target->getAnchorPoint();
+
+    CCRect bounds = CCRect(
+        targetWorldPos.x,// - targetSize.width * targetScale * anchorPoint.x,
+        targetWorldPos.y,// - targetSize.height * targetScale * anchorPoint.y,
+        targetSize.width * targetScale,
+        targetSize.height * targetScale
+    );
+
+    return bounds.containsPoint(touchPos);
+}

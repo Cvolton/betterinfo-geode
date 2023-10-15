@@ -59,4 +59,5 @@ namespace BetterInfo {
     bool controllerConnected();
 
     void loadImportantNotices(CCLayer* layer);
+    bool isHoveringNode(CCNode* target);
 }

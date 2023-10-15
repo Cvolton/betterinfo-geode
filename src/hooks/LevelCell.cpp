@@ -8,8 +8,92 @@
 using namespace geode::prelude;
 
 class $modify(BILevelCell, LevelCell) {
+    int m_hoverCount = 0;
+    CCPoint m_lastMousePos = {0,0};
+    CCNode* m_levelDesc = nullptr;
+
     static void onModify(auto& self) {
         auto res = self.setHookPriority("LevelCell::onViewProfile", 99999);
+    }
+
+    void showDesc() {
+        if(m_fields->m_levelDesc) return;
+
+        auto parent = CCSprite::create();
+        parent->setID("bi-leveldesc");
+
+        /*auto bg = CCScale9Sprite::create("square02b_small.png", { 0, 0, 40, 40 });
+        bg->setColor({ 0, 0, 0 });
+        parent->addChild(bg);
+
+        auto label = CCLabelBMFont::create(m_level->m_levelDesc.c_str(), "bigFont.fnt");
+        label->setScale(.6f);
+        parent->addChild(label);*/
+
+        cocos2d::extension::CCScale9Sprite* descBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
+        descBg->setContentSize({340,55});
+        descBg->setColor({130,64,33});
+        descBg->setColor({0,0,0});
+        descBg->setOpacity(230);
+        parent->addChild(descBg, -1);
+        descBg->setPosition({0,52});
+
+        auto descText = BetterInfo::fixNullByteCrash(BetterInfo::fixColorCrashes(m_level->getUnpackedLevelDescription()));
+        size_t descLength = descText.length();
+        float descDelimiter = 1;
+        if(descLength > 140) descLength = 140;
+        if(descLength > 70) descDelimiter = ((((140 - descLength) / 140) * 0.3f) + 0.7f);
+        auto description = TextArea::create(descText, "chatFont.fnt", 1, 295 / descDelimiter, {0.5f,0.5f}, 20, false);
+        description->setScale(descDelimiter);
+        description->setAnchorPoint({1,1});
+        description->setPosition( ( (description->getContentSize() / 2 ) * descDelimiter ) + (CCPoint(340,55) / 2) );
+        auto descSprite = CCSprite::create();
+        descSprite->addChild(description);
+        descSprite->setContentSize({340,55});
+        descSprite->setPosition({0,52});
+        parent->addChild(descSprite);
+
+        auto winSize = CCDirector::sharedDirector()->getWinSize();
+        CCScene::get()->addChild(parent);
+        parent->setPositionX(winSize.width / 2);
+        m_fields->m_levelDesc = parent;
+
+        description->setOpacity(0);
+        description->runAction(CCFadeTo::create(0.3f, 255));
+        description->setID("bi-leveldesc-area");
+
+        descBg->setOpacity(0);
+        descBg->runAction(CCFadeTo::create(0.3f, 230));
+        descBg->setID("bi-leveldesc-bg");
+    }
+
+    void hideDesc() {
+        if(!m_fields->m_levelDesc) return;
+
+        auto description = static_cast<TextArea*>(m_fields->m_levelDesc->getChildByIDRecursive("bi-leveldesc-area"));
+        auto descBg = static_cast<CCScale9Sprite*>(m_fields->m_levelDesc->getChildByIDRecursive("bi-leveldesc-bg"));
+
+        //m_fields->m_levelDesc->removeFromParentAndCleanup(true);
+        if(description) description->runAction(CCFadeTo::create(0.3f, 0));
+        if(descBg) descBg->runAction(CCFadeTo::create(0.3f, 0));
+
+        m_fields->m_levelDesc = nullptr;
+    }
+
+    void checkHover(float dt) {
+        if(getMousePos() == m_lastMousePos && BetterInfo::isHoveringNode(this) && typeinfo_cast<CCTransitionScene*>(CCScene::get()) == nullptr) {
+            m_hoverCount++;
+
+            if(m_hoverCount == 3) {
+                log::info("Hovering: {}", m_level->m_levelName);
+                showDesc();
+            }
+        } else {
+            m_hoverCount = 0;
+            hideDesc();
+        };
+
+        m_lastMousePos = getMousePos();
     }
 
     /*
@@ -32,6 +116,8 @@ class $modify(BILevelCell, LevelCell) {
         }
 
         LevelCell::loadCustomLevelCell();
+
+        this->getScheduler()->scheduleSelector(schedule_selector(BILevelCell::checkHover), this, 0.1f, false);
 
         auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(1));
 
