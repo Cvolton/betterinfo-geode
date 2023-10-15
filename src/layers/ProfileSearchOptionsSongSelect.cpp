@@ -39,6 +39,7 @@ bool ProfileSearchOptionsSongSelect::init(DialogCloseDelegate* delegate){
     textNode->setString(std::to_string(getOptionInt("user_search_song_id")).c_str());
     textNode->setAllowedChars("0123456789");
     textNode->setMaxLabelScale(0.7f);
+    textNode->setMaxLabelWidth(11);
     textNode->setPosition({0,-37});
     m_buttonMenu->addChild(textNode);
 

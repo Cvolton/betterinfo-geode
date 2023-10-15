@@ -47,6 +47,7 @@ bool LevelIDLayer::init(){
     m_textNode->setLabelPlaceholderColor({0x75, 0xAA, 0xF0});
     m_textNode->setAllowedChars("0123456789");
     m_textNode->setMaxLabelScale(0.7f);
+    m_textNode->setMaxLabelWidth(11);
     m_textNode->setPosition({0,6});
     m_buttonMenu->addChild(m_textNode);
 
