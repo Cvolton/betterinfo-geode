@@ -5,9 +5,17 @@ void RewardCell::loadFromReward(GJRewardItem* reward) {
     const float rowX = 48.f;
     const float rowY = 10.5f;
 
-    CCSprite* chest = CCSprite::createWithSpriteFrameName(reward->m_rewardType == GJRewardType::Large ? "chest_02_02_001.png" : "chest_01_02_001.png");
-    chest->setPosition({25, 21});
-    chest->setScale(0.35f);
+    const char* chestTexture = "chest_01_02_001.png";
+    float chestSize = 0.35f;
+    switch(reward->m_rewardType) {
+        case GJRewardType::Small: chestTexture = "chest_01_02_001.png"; break;
+        case GJRewardType::Large: chestTexture = "chest_02_02_001.png"; chestSize = 0.275f; break;
+        case GJRewardType::SmallTreasure: chestTexture = "chest_03_02_001.png"; chestSize = 0.275f; break;
+        case GJRewardType::LargeTreasure: chestTexture = "chest_04_02_001.png"; chestSize = 0.275f; break;
+    }
+    CCSprite* chest = CCSprite::createWithSpriteFrameName(chestTexture);
+    chest->setPosition({25, 22});
+    chest->setScale(chestSize);
     this->m_mainLayer->addChild(chest);
 
     auto title = CCLabelBMFont::create(CCString::createWithFormat(reward->m_chestID != 0 ? "%s Chest %i" : "%s Chest", Mod::get()->getSavedValue<std::string>("reward-cell-title").c_str(), reward->m_chestID)->getCString(), "bigFont.fnt");
