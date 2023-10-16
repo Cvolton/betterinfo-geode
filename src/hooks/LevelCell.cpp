@@ -16,7 +16,7 @@ class $modify(BILevelCell, LevelCell) {
         auto res = self.setHookPriority("LevelCell::onViewProfile", 99999);
     }
 
-    void showDesc() {
+    /*void showDesc() {
         if(m_fields->m_levelDesc) return;
 
         auto parent = CCSprite::create();
@@ -28,7 +28,7 @@ class $modify(BILevelCell, LevelCell) {
 
         auto label = CCLabelBMFont::create(m_level->m_levelDesc.c_str(), "bigFont.fnt");
         label->setScale(.6f);
-        parent->addChild(label);*/
+        parent->addChild(label);/
 
         cocos2d::extension::CCScale9Sprite* descBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
         descBg->setContentSize({340,55});
@@ -84,7 +84,7 @@ class $modify(BILevelCell, LevelCell) {
         if(getMousePos() == m_lastMousePos && BetterInfo::isHoveringNode(this) && typeinfo_cast<CCTransitionScene*>(CCScene::get()) == nullptr) {
             m_hoverCount++;
 
-            if(m_hoverCount == 3) {
+            if(m_hoverCount == 5) {
                 log::info("Hovering: {}", m_level->m_levelName);
                 showDesc();
             }
@@ -94,7 +94,7 @@ class $modify(BILevelCell, LevelCell) {
         };
 
         m_lastMousePos = getMousePos();
-    }
+    }*/
 
     /*
      * Hooks
@@ -117,7 +117,7 @@ class $modify(BILevelCell, LevelCell) {
 
         LevelCell::loadCustomLevelCell();
 
-        this->getScheduler()->scheduleSelector(schedule_selector(BILevelCell::checkHover), this, 0.1f, false);
+        //this->getScheduler()->scheduleSelector(schedule_selector(BILevelCell::checkHover), this, 0.1f, false);
 
         auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(1));
 
