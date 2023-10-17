@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v3.0.9</c> (2023-10-17)
+* Fixed a bug causing coins not to get submitted to leaderboards for old daily levels
+* Fixed chest icons in chest history
+* Fixed certain platform-specific issues on Windows, Mac and Android
+
 ## <cg>v3.0.8</c> (2023-10-06)
 * Initial Android release
 * Bugfixes & Improvements
