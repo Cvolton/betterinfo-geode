@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v3.0.10</c> (2023-11-19)
+* Added 2.2 profile info to user profiles (press 'i' button to show)
+
 ## <cg>v3.0.9</c> (2023-10-17)
 * Fixed a bug causing coins not to get submitted to leaderboards for old daily levels
 * Fixed chest icons in chest history
