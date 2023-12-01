@@ -44,6 +44,10 @@ class $modify(LevelInfoLayer) {
         retain();
 
         LevelInfoLayer::updateLabelValues();
+
+        auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("bi-exact-time"));
+        if(bmFont && m_lengthLabel) bmFont->setPosition({m_lengthLabel->getPositionX() + 1, m_lengthLabel->getPositionY() - 8.f});
+
         std::thread([this](){
             auto wt = ExtendedLevelInfo::workingTime(std::round(BetterInfo::timeForLevelString(m_level->m_levelString)));
             //since whatever is done by queueInMainThread is guaranteed to execute after init is finished, this shouldn't result in a race condition
