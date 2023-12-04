@@ -27,7 +27,7 @@ bool RewardViewLayer::init(CCDictionary* chests, const char* title) {
 
     this->title = title;
 
-    Mod::get()->getSavedValue<std::string>("reward-cell-title", title);;
+    Mod::get()->setSavedValue<std::string>("reward-cell-title", title);
 
     auto GSM = GameStatsManager::sharedState();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
