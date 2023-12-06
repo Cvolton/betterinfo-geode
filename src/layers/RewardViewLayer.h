@@ -1,8 +1,9 @@
 #pragma once
 
 #include "RewardListView.h"
+#include "../delegates/PageNumberDelegate.h"
 
-class RewardViewLayer : public cocos2d::CCLayer {
+class RewardViewLayer : public cocos2d::CCLayer, public PageNumberDelegate {
     RewardListView* rewardView = nullptr;
     GJListLayer* listLayer = nullptr;
     cocos2d::CCArray* sortedRewards = nullptr;
@@ -22,10 +23,10 @@ protected:
     void onRandom(cocos2d::CCObject*);
     int rewardsPerPage() const;
 public:
-    void loadPage(unsigned int page);
+    virtual void loadPage(unsigned int page);
     static RewardViewLayer* create(cocos2d::CCDictionary* chests, const char* title);
     static bool compareRewards(const void* l1, const void* l2);
     static cocos2d::CCScene* scene(cocos2d::CCDictionary* chests, const char* title);
-    int getPage() const;
+    virtual int getPage() const;
     void keyDown(cocos2d::enumKeyCodes key);
 };

@@ -13,9 +13,9 @@ JumpToPageLayer* JumpToPageLayer::create(InfoLayer* infoLayer){
     return ret;
 }
 
-JumpToPageLayer* JumpToPageLayer::create(DailyViewLayer* dailyViewLayer){
+JumpToPageLayer* JumpToPageLayer::create(PageNumberDelegate* pageNumberDelegate){
     auto ret = new JumpToPageLayer();
-    if (ret && ret->init(dailyViewLayer)) {
+    if (ret && ret->init(pageNumberDelegate)) {
         //robert 1 :D
         ret->autorelease();
     } else {
@@ -32,16 +32,16 @@ bool JumpToPageLayer::init(InfoLayer* infoLayer) {
     return init();
 }
 
-bool JumpToPageLayer::init(DailyViewLayer* dailyViewLayer) {
-    dailyViewLayer->retain();
-    m_dailyViewLayer = dailyViewLayer;
+bool JumpToPageLayer::init(PageNumberDelegate* pageNumberDelegate) {
+    //pageNumberDelegate->retain();
+    m_pageNumberDelegate = pageNumberDelegate;
     return init();
 }
 
 void JumpToPageLayer::onClose(cocos2d::CCObject* sender)
 {
     if(m_infoLayer != nullptr) m_infoLayer->release();
-    //if(dailyViewLayer != nullptr) dailyViewLayer->release();
+    //if(m_pageNumberDelegate != nullptr) m_pageNumberDelegate->release();
     setKeypadEnabled(false);
     removeFromParentAndCleanup(true);
 }
@@ -73,7 +73,7 @@ int JumpToPageLayer::pageNumber(){
 
 void JumpToPageLayer::onOK(cocos2d::CCObject* sender){
     if(m_infoLayer != nullptr) m_infoLayer->loadPage(pageNumber()-1, false);
-    //if(dailyViewLayer != nullptr) dailyViewLayer->loadPage(pageNumber()-1);
+    if(m_pageNumberDelegate != nullptr) m_pageNumberDelegate->loadPage(pageNumber()-1);
     onClose(sender);
 }
 
@@ -86,7 +86,7 @@ bool JumpToPageLayer::init(){
     m_textNode = CCTextInputNode::create(50, 30, "Num", "bigFont.fnt");
     m_textNode->setLabelPlaceholderColor({0x75, 0xAA, 0xF0});
     if(m_infoLayer != nullptr) m_textNode->setString(std::to_string(m_infoLayer->m_page+1).c_str());
-    //if(dailyViewLayer != nullptr) m_textNode->setString(std::to_string(dailyViewLayer->getPage()+1).c_str());
+    if(m_pageNumberDelegate != nullptr) m_textNode->setString(std::to_string(m_pageNumberDelegate->getPage()+1).c_str());
     m_textNode->setAllowedChars("0123456789");
     m_textNode->setMaxLabelScale(0.7f);
     m_textNode->setMaxLabelWidth(11);

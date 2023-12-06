@@ -191,7 +191,7 @@ void RewardViewLayer::onNext(CCObject* object) {
 }
 
 void RewardViewLayer::onJumpToPageLayer(CCObject* sender){
-    //JumpToPageLayer::create(this)->show();
+    JumpToPageLayer::create(this)->show();
 }
 
 void RewardViewLayer::onRandom(CCObject* sender){

@@ -4,13 +4,13 @@
 
 class JumpToPageLayer : public CvoltonAlertLayerStub {
     InfoLayer* m_infoLayer = nullptr;
-    DailyViewLayer* m_dailyViewLayer = nullptr;
+    PageNumberDelegate* m_pageNumberDelegate = nullptr;
     CCTextInputNode* m_textNode;
 public:
     static JumpToPageLayer* create(InfoLayer* infoLayer);
-    static JumpToPageLayer* create(DailyViewLayer* dailyViewLayer);
+    static JumpToPageLayer* create(PageNumberDelegate* pageNumberDelegate);
     bool init(InfoLayer* infoLayer);
-    bool init(DailyViewLayer* dailyViewLayer);
+    bool init(PageNumberDelegate* pageNumberDelegate);
     void onClose(cocos2d::CCObject* sender);
     void onOK(cocos2d::CCObject* sender);
     void onPrev(cocos2d::CCObject* sender);

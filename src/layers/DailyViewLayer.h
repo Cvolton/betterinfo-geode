@@ -1,8 +1,9 @@
 #pragma once
 
 #include "DailyListView.h"
+#include "../delegates/PageNumberDelegate.h"
 
-class DailyViewLayer : public cocos2d::CCLayer {
+class DailyViewLayer : public cocos2d::CCLayer, public PageNumberDelegate {
     DailyListView* dailyView = nullptr;
     GJListLayer* listLayer = nullptr;
     cocos2d::CCArray* sortedLevels = nullptr;
@@ -23,10 +24,10 @@ protected:
     void onMore(cocos2d::CCObject*);
     int levelsPerPage() const;
 public:
-    void loadPage(unsigned int page);
+    virtual void loadPage(unsigned int page);
     static DailyViewLayer* create(bool isWeekly);
     static bool compareDailies(const void* l1, const void* l2);
     static cocos2d::CCScene* scene(bool isWeekly);
-    int getPage() const;
+    virtual int getPage() const;
     void keyDown(cocos2d::enumKeyCodes key);
 };
