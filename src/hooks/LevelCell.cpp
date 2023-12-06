@@ -143,7 +143,6 @@ class $modify(BILevelCell, LevelCell) {
                 idTextNode->setColor({51,51,51});
                 idTextNode->setOpacity(152);
                 menu->addChild(idTextNode);
-                //TODO: CvoltonManager
                 if(this->m_level->m_dailyID > 0 || Mod::get()->getSettingValue<bool>("white-id")){
                     idTextNode->setColor({255,255,255});
                     idTextNode->setOpacity(200);
@@ -163,6 +162,7 @@ class $modify(BILevelCell, LevelCell) {
                     dailyTextNode->setOpacity(200);
                     menu->addChild(dailyTextNode);
 
+                    BetterInfoCache::sharedState()->cacheLevel(m_level);
                 }
 
                 menuDone = true;
