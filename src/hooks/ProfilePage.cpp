@@ -58,12 +58,13 @@ class $modify(BIProfilePage, ProfilePage) {
         contentStream << "Friend Requests: " << StaticStringHelper::getFriendRequestType(score->m_friendStatus)
             << "\nPrivate Messages: " << StaticStringHelper::getMessageType(score->m_messageState)
             << "\nComment History: " << StaticStringHelper::getMessageType(score->m_commentHistoryStatus)
-            << "\n"
+            << "\n";
+        if(score->m_userID == GM->m_playerUserID) contentStream << "\nBootups: " << GM->m_bootups;
+        else contentStream 
             << "\nGlow Color: #" << static_cast<BIGJUserScore*>(score)->m_fields->m_color3
             << "\nMoons: " << static_cast<BIGJUserScore*>(score)->m_fields->m_moons
             << "\nSwingcopter: #" << static_cast<BIGJUserScore*>(score)->m_fields->m_accSwing
             << "\nJetpack: #" << static_cast<BIGJUserScore*>(score)->m_fields->m_accJetpack;
-        if(score->m_userID == GM->m_playerUserID) contentStream << "\n\nBootups: " << GM->m_bootups;
 
         //if(score->m_userID == cvoltonID) contentStream << "\n\nThis user is epic!";
 
