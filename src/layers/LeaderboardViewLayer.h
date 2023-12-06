@@ -1,10 +1,9 @@
 #pragma once
 
-#include "LeaderboardListView.h"
 #include "../delegates/BILeaderboardDelegate.h"
 
 class LeaderboardViewLayer : public cocos2d::CCLayer, public BILeaderboardDelegate {
-    LeaderboardListView* m_leaderboardView = nullptr;
+    CustomListView* m_leaderboardView = nullptr;
     GJListLayer* m_listLayer = nullptr;
     cocos2d::CCArray* m_scores = nullptr;
     LoadingCircle* m_circle = nullptr;

@@ -89,8 +89,8 @@ void LeaderboardViewLayer::loadPage(){
     if(m_listLayer != nullptr) m_listLayer->removeFromParentAndCleanup(true);
 
     if(m_leaderboardView) m_leaderboardView->release();
-    m_leaderboardView = LeaderboardListView::create(m_scores, 356.f, 220.f);
-    m_listLayer = GJListLayer::create(m_leaderboardView, "Scores", {191, 114, 62, 255}, 356.f, 220.f);
+    m_leaderboardView = CustomListView::create(m_scores, BoomListType::Score, 220.f, 356.f);
+    m_listLayer = GJListLayer::create(m_leaderboardView, "Global Leaderboards", {191, 114, 62, 255}, 356.f, 220.f);
     m_listLayer->setPosition(winSize / 2 - m_listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
     addChild(m_listLayer);
 }

@@ -39,6 +39,7 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
 }
 
 void BetterInfoOnline::generateScores(const std::string& response, int accountID){
+    auto GM = GameManager::sharedState();
 
     if(m_scoreDict.contains(accountID)) { 
         m_scoreDict[accountID]->release();
@@ -55,15 +56,13 @@ void BetterInfoOnline::generateScores(const std::string& response, int accountID
     std::string current;
 
     while(getline(responseStream, current, '|')){
-        
-        //auto CM = CvoltonManager::sharedState();
-        auto GLM = GameLevelManager::sharedState();
 
         auto score = GJUserScore::create(
-            //CM->responseToDict(current)
-            //GLM->responseToDict(current, false)
             BetterInfo::responseToDict(current)
         );
+
+        // workaround for leaderboard highlighting
+        if(std::string(score->m_userUDID) != "") score->m_userUDID = GM->m_playerUDID;
 
         scores->addObject(score);
     }
