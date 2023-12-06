@@ -133,6 +133,21 @@ const char* ExtendedLevelInfo::getDifficultyIcon(int stars){
     }
 }
 
+const char* ExtendedLevelInfo::getDemonDifficultyIcon(int demonDifficulty){
+    switch(demonDifficulty){
+        case 3: 
+            return "difficulty_07_btn_001.png";
+        case 4:
+            return "difficulty_08_btn_001.png";
+        case 5:
+            return "difficulty_09_btn_001.png";
+        case 6:
+            return "difficulty_10_btn_001.png";
+        default:
+            return "difficulty_06_btn_001.png";
+    }
+}
+
 std::string ExtendedLevelInfo::passwordString(int password){
     if(password == 0) return "NA";
     if(password == 1) return "Free Copy";

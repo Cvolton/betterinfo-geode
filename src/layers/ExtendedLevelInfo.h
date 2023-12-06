@@ -34,6 +34,7 @@ public:
     static std::string stringDate(std::string date);
     static const char* boolString(bool value);
     static const char* getDifficultyIcon(int stars);
+    static const char* getDemonDifficultyIcon(int demonDifficulty);
     static std::string passwordString(int password);
     static std::string zeroIfNA(int value);
     static std::string workingTime(int value);

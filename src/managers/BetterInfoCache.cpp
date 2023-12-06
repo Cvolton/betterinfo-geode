@@ -13,6 +13,7 @@ bool BetterInfoCache::init(){
 void BetterInfoCache::validateLoadedData() {
     validateIsObject("level-name-dict");
     validateIsObject("coin-count-dict");
+    validateIsObject("demon-difficulty-dict");
     validateIsObject("username-dict");
     validateIsObject("upload-date-dict");
     validateIsObject("level-info-dict");
@@ -32,7 +33,7 @@ void BetterInfoCache::checkDailies() {
         if(currentLvl == nullptr) continue;
 
         auto idString = std::to_string(currentLvl->m_levelID);
-        if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString)) continue;
+        if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString) && objectExists("demon-difficulty-dict", idString)) continue;
 
         auto levelFromSaved = static_cast<GJGameLevel*>(GLM->m_onlineLevels->objectForKey(std::to_string(currentLvl->m_levelID).c_str()));
         if(levelFromSaved != nullptr) cacheLevel(levelFromSaved);
@@ -47,6 +48,7 @@ void BetterInfoCache::cacheLevel(GJGameLevel* level) {
     auto idString = std::to_string(level->m_levelID);
     m_json["level-name-dict"][idString] = std::string(level->m_levelName);
     m_json["coin-count-dict"][idString] = level->m_coins;
+    m_json["demon-difficulty-dict"][idString] = level->m_demonDifficulty;
 }
 
 void BetterInfoCache::cacheLevels(std::set<int> toDownload) {
@@ -87,6 +89,17 @@ std::string BetterInfoCache::getLevelName(int levelID) {
         return m_json["level-name-dict"][idString].as_string();
     } catch(std::exception) {
         return "Unknown (malformed JSON)";
+    }
+}
+
+int BetterInfoCache::getDemonDifficulty(int levelID) {
+    auto idString = std::to_string(levelID);
+    if(!objectExists("demon-difficulty-dict", idString)) return 0;
+
+    try {
+        return m_json["demon-difficulty-dict"][idString].as_int();
+    } catch(std::exception) {
+        return 0;
     }
 }
 

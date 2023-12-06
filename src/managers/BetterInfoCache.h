@@ -35,6 +35,7 @@ public:
 	void storeDatesForLevel(GJGameLevel* level);
 
 	std::string getLevelName(int levelID);
+	int getDemonDifficulty(int levelID);
 	std::string getUserName(int userID, bool download = true);
 	int getCoinCount(int levelID);
 	std::string getLevelInfo(int levelID, const std::string& field);

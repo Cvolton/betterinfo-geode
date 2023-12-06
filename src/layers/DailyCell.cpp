@@ -10,7 +10,7 @@ void DailyCell::loadFromLevel(GJGameLevel* level) {
     auto GSM = GameStatsManager::sharedState();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    auto diffSprite = CCSprite::createWithSpriteFrameName(ExtendedLevelInfo::getDifficultyIcon(level->m_stars));
+    auto diffSprite = CCSprite::createWithSpriteFrameName(level->m_stars == 10 ? ExtendedLevelInfo::getDemonDifficultyIcon(biCache->getDemonDifficulty(level->m_levelID)) : ExtendedLevelInfo::getDifficultyIcon(level->m_stars));
     diffSprite->setPosition({22.f, 32.f});
     diffSprite->setScale(0.8f);
     diffSprite->setZOrder(1);
