@@ -137,11 +137,12 @@ class $modify(BILevelCell, LevelCell) {
                 std::ostringstream idText;
                 idText << "#" << this->m_level->m_levelID;
                 auto idTextNode = CCLabelBMFont::create(idText.str().c_str(), "chatFont.fnt");
-                idTextNode->setPosition({33,33});
+                idTextNode->setPosition({33,33.f - (this->m_level->m_dailyID == 0 && Loader::get()->isModLoaded("n.level_pronouns") ? 9.f : 0.f)});
                 idTextNode->setAnchorPoint({1,0});
                 idTextNode->setScale(0.6f);
                 idTextNode->setColor({51,51,51});
                 idTextNode->setOpacity(152);
+                idTextNode->setID("bi-level-id-label");
                 menu->addChild(idTextNode);
                 if(this->m_level->m_dailyID > 0 || Mod::get()->getSettingValue<bool>("white-id")){
                     idTextNode->setColor({255,255,255});
@@ -160,6 +161,7 @@ class $modify(BILevelCell, LevelCell) {
                     dailyTextNode->setScale(0.6f);
                     dailyTextNode->setColor({255,255,255});
                     dailyTextNode->setOpacity(200);
+                    dailyTextNode->setID("bi-daily-id-label");
                     menu->addChild(dailyTextNode);
 
                     BetterInfoCache::sharedState()->cacheLevel(m_level);
