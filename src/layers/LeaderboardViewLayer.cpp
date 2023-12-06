@@ -75,6 +75,21 @@ bool LeaderboardViewLayer::init(int accountID) {
     m_circle->setParentLayer(this);
     m_circle->show();
 
+    //refresh btn
+    auto refreshBtn = CCMenuItemSpriteExtra::create(
+        CCSprite::createWithSpriteFrameName("GJ_updateBtn_001.png"),
+        this,
+        menu_selector(LeaderboardViewLayer::onRefresh)
+    );
+
+    auto menuRefresh = CCMenu::create();
+    menuRefresh->addChild(refreshBtn);
+    menuRefresh->setPosition({winSize.width - 26.75f, 26.75f});
+    menuRefresh->setZOrder(2);
+    menuRefresh->setID("bi-refresh-menu");
+
+    this->addChild(menuRefresh);
+
     loadPage();
     BetterInfoOnline::sharedState()->loadScores(m_accountID, false, this);
 
@@ -109,9 +124,22 @@ void LeaderboardViewLayer::keyBackClicked() {
     CCDirector::sharedDirector()->popSceneWithTransition(0.5f, PopTransition::kPopTransitionFade);
 }
 
-
 void LeaderboardViewLayer::onBack(CCObject* object) {
     keyBackClicked();
+}
+
+void LeaderboardViewLayer::onRefresh(CCObject* object) {
+    BetterInfoOnline::sharedState()->loadScores(m_accountID, true, this);
+
+    if(m_circle) {
+        m_circle->fadeAndRemove();
+        m_circle->release();
+    }
+
+    m_circle = LoadingCircle::create();
+    m_circle->retain();
+    m_circle->setParentLayer(this);
+    m_circle->show();
 }
 
 CCScene* LeaderboardViewLayer::scene(int accountID) {

@@ -12,6 +12,7 @@ protected:
     virtual bool init(int accountID);
     virtual void keyBackClicked();
     void onBack(cocos2d::CCObject*);
+    void onRefresh(cocos2d::CCObject*);
 public:
     void loadPage();
     static LeaderboardViewLayer* create(int accountID);
