@@ -29,7 +29,7 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
     web::AsyncWebRequest()
         .userAgent("")
         .postRequest()
-        .postFields(fmt::format("gameVersion=21&binaryVersion=35&gdw=0&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", accountID, GameManager::sharedState()->m_playerUDID))
+        .postFields(fmt::format("gameVersion=21&binaryVersion=35&gdw=0&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", accountID, std::string(GameManager::sharedState()->m_playerUDID)))
         .fetch("http://www.boomlings.com/database/getGJScores20.php")
         .text()
         .then([this, accountID](const std::string& response) {
