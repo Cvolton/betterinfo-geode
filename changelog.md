@@ -1,4 +1,13 @@
 # Changelog
+## <cg>v3.0.11</c> (2023-12-07)
+* Added demon difficulty to Weekly History
+* Added highlighting to View Leaderboard As
+* Added refresh button to View Leaderboard As
+* Fixed most blank cells in View Leaderboard As (fix backported from 2.2)
+* Fixed Jump to page on Daily and Reward Histories
+* Hidden 2.2 profile info on your own profile (it's always default)
+* Other bugfixes & improvements
+
 ## <cg>v3.0.10</c> (2023-11-19)
 * Added 2.2 profile info to user profiles (press 'i' button to show)
 
