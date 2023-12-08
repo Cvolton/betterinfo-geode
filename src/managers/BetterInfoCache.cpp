@@ -33,10 +33,10 @@ void BetterInfoCache::checkDailies() {
         if(currentLvl == nullptr) continue;
 
         auto idString = std::to_string(currentLvl->m_levelID);
-        if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString) && objectExists("demon-difficulty-dict", idString)) continue;
+        if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString) && objectExists("demon-difficulty-dict", idString) && getLevelName(currentLvl->m_levelID) != "") continue;
 
         auto levelFromSaved = static_cast<GJGameLevel*>(GLM->m_onlineLevels->objectForKey(std::to_string(currentLvl->m_levelID).c_str()));
-        if(levelFromSaved != nullptr) cacheLevel(levelFromSaved);
+        if(levelFromSaved != nullptr && std::string(levelFromSaved->m_levelName) != "") cacheLevel(levelFromSaved);
         else toDownload.insert(currentLvl->m_levelID);
     }
 
