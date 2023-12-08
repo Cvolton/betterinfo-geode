@@ -150,10 +150,23 @@ class $modify(BIProfilePage, ProfilePage) {
         this->m_buttons->addObject(infoButton);
 
         if(a2->m_userID != GameManager::sharedState()->m_playerUserID){
+            CCNode* usernameLabel = nullptr;
+            CCNode* modBadge = nullptr;
+
+            std::vector<CCNode*> possiblyModBadge;
+
             for(unsigned int i = 0; i < layer->getChildrenCount(); i++){
-                CCNode* node = dynamic_cast<CCNode*>(layer->getChildren()->objectAtIndex(i));
-                if(node != nullptr && node->getPositionX() == (winSize.width / 2) - 164 && node->getPositionY() == (winSize.height / 2) + 123) node->setVisible(false);
-                if(node != nullptr && node->getPositionX() == (winSize.width / 2) && node->getPositionY() == (winSize.height / 2) + 125) node->setVisible(false);
+                CCNode* node = typeinfo_cast<CCNode*>(layer->getChildren()->objectAtIndex(i));
+                if(node != nullptr && node->getPositionX() == (winSize.width / 2) - 164 && node->getPositionY() == (winSize.height / 2) + 123) node->setVisible(false); //rank icon
+                if(node != nullptr && node->getPositionX() == (winSize.width / 2) && node->getPositionY() == (winSize.height / 2) + 125) { //username label
+                    usernameLabel = node;
+                    node->setVisible(false); 
+                }
+                if(node != nullptr && node->getPositionY() == (winSize.height / 2) + 124) possiblyModBadge.push_back(node); //possibly mod badge
+            }
+
+            if(usernameLabel) for(auto& badge : possiblyModBadge) {
+                if( (usernameLabel->getPositionX() - (usernameLabel->getScaledContentSize().width / 2) - 16) == badge->getPositionX() ) modBadge = badge;
             }
 
             auto leaderboardButtonSprite = BetterInfo::createBISprite("BI_blankBtn_001.png");
@@ -234,6 +247,8 @@ class $modify(BIProfilePage, ProfilePage) {
             usernameBtn->setID("bi-username-button");
             menu->addChild(usernameBtn);
             this->m_buttons->addObject(usernameBtn);
+
+            if(modBadge) modBadge->setPositionX((winSize.width / 2) - (usernameNode->getScaledContentSize().width / 2) - 16);
         }
 
     }
