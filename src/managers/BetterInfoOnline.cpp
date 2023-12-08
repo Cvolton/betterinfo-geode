@@ -61,6 +61,8 @@ void BetterInfoOnline::generateScores(const std::string& response, int accountID
             BetterInfo::responseToDict(current)
         );
 
+        GameLevelManager::sharedState()->storeUserName(score->m_userID, score->m_accountID, score->m_userName);
+
         // workaround for leaderboard highlighting
         if(std::string(score->m_userUDID) != "") score->m_userUDID = GM->m_playerUDID;
 
