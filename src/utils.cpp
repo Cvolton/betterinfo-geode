@@ -420,20 +420,31 @@ void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
             auto playerName = static_cast<CCMenuItemSpriteExtra*>(menu->getChildren()->objectAtIndex(1));
             auto textNode = static_cast<CCLabelBMFont*>(playerName->getChildren()->objectAtIndex(0));
 
+            float oldXSize = textNode->getScaledContentSize().width;
+
             auto userName = GameLevelManager::sharedState()->userNameForUserID(levelCell->m_level->m_userID);
 
             auto oldString = std::string(textNode->getString());
             auto newString = fmt::format("By {}", std::string(userName));
 
-            size_t difference = newString.length() - oldString.length();
-
             textNode->setString(newString.c_str());
             playerName->setContentSize(textNode->getContentSize() * textNode->getScale());
-                        //playerName->setPositionX(playerName->getContentSize().width / 2);
             auto winSize = CCDirector::sharedDirector()->getWinSize();
-                        //playerName->setPositionX((-(winSize.width / 2) + 23.5) + (playerName->getContentSize().width / 2));
             playerName->setPositionX((-285.5 + 23.5) + (playerName->getContentSize().width / 2));
             textNode->setPositionX(playerName->getContentSize().width / 2);
+
+            float difference = textNode->getScaledContentSize().width - oldXSize;
+
+            for(unsigned int i = 0; i < layer->getChildrenCount(); i++){
+                CCSprite* node = typeinfo_cast<CCSprite*>(layer->getChildren()->objectAtIndex(i));
+                if(node == nullptr) continue;
+
+                if(isSprite(node, "collaborationIcon_001.png") || isSprite(node, "highObjectIcon_001.png")) {
+                    
+                    node->setPositionX(node->getPositionX() + difference);
+
+                }
+            }
 
             levelCell->m_level->m_creatorName = userName;
 
@@ -623,4 +634,11 @@ bool BetterInfo::isHoveringNode(CCNode* target) {
     );
 
     return bounds.containsPoint(touchPos);
+}
+
+bool BetterInfo::isSprite(CCSprite* sprite, const char* name) {
+    auto cache = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(name);
+    if(!cache) return false;
+
+    return cache->getTexture() == sprite->getTexture() && cache->getRect() == sprite->getTextureRect();
 }

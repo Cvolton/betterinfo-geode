@@ -60,4 +60,6 @@ namespace BetterInfo {
 
     void loadImportantNotices(CCLayer* layer);
     bool isHoveringNode(CCNode* target);
+
+    bool isSprite(CCSprite* sprite, const char* name);
 }
