@@ -147,9 +147,11 @@ void DailyCell::loadFromLevel(GJGameLevel* level) {
     }
 
     //fix level data (deleted from saved)
-    level->m_levelName = biCache->getLevelName(level->m_levelID);
-    level->m_coins = biCache->getCoinCount(level->m_levelID);
-    level->m_coinsVerified = true;
+    if(std::string(level->m_levelName) == "" && level->m_coins == 0 && level->m_coinsVerified == false) {
+        level->m_levelName = biCache->getLevelName(level->m_levelID);
+        level->m_coins = biCache->getCoinCount(level->m_levelID);
+        level->m_coinsVerified = true;
+    }
 
     //buttons
     auto menu = CCMenu::create();
