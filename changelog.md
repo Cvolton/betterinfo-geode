@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v3.0.12</c> (2023-12-09)
+* Fixed misaligned mod badges on profiles
+* Fixed level names in Daily History
+* Other bugfixes & improvements
+
 ## <cg>v3.0.11</c> (2023-12-07)
 * Added demon difficulty to Weekly History
 * Added highlighting to View Leaderboard As
