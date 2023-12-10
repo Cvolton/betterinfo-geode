@@ -234,6 +234,7 @@ void CustomCreatorLayer::onWeekly(CCObject* object) {
 }
 
 void CustomCreatorLayer::onSettings(CCObject* object) {
+    //open settings menu instead of the alert :)
     openSettingsPopup(Mod::get());
 }
 
