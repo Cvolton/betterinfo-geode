@@ -3,6 +3,7 @@
 #include "LevelSearchViewLayer.h"
 #include "LevelCategorySearchAlert.h"
 #include "../utils.hpp"
+#include <Geode/ui/GeodeUI.hpp>
 
 CustomCreatorLayer* CustomCreatorLayer::create() {
     auto ret = new CustomCreatorLayer();
@@ -233,7 +234,8 @@ void CustomCreatorLayer::onWeekly(CCObject* object) {
 }
 
 void CustomCreatorLayer::onSettings(CCObject* object) {
-    FLAlertLayer::create(Mod::get()->getName().c_str(), "Use the Geode settings to adjust settings related to the mod.", "OK")->show();
+    //open settings menu instead of the alert :)
+    openSettingsPopup(Mod::get());
 }
 
 CCScene* CustomCreatorLayer::scene() {
