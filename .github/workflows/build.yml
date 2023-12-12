@@ -17,6 +17,9 @@ jobs:
           
         - name: macOS
           os: macos-latest
+          
+        - name: android
+          os: ubuntu-latest
 
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
@@ -36,7 +39,7 @@ jobs:
     needs: ['build']
 
     steps:
-      - uses: geode-sdk/build-geode-mod@combine
+      - uses: cvolton/build-geode-mod@combine
         id: build
 
       - uses: actions/upload-artifact@v3
