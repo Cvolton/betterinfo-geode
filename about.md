@@ -16,3 +16,6 @@ The best epic modification ever made for Geometry Dash is here! BetterInfo, now 
  <cy></c>
 - Daily chest history
 - Daily/weekly level history
+
+## Special thanks
+- KontrollFreek for the logo
