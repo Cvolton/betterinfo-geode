@@ -182,7 +182,15 @@ void CustomCreatorLayer::onInfo(CCObject* object) {
     FLAlertLayer::create(
         nullptr, 
         Mod::get()->getName().c_str(), 
-        "This is the main menu for all features related to the mod.\n\n<cy>Featured:</c> Levels featured in Geometry Dash World\n<cg>Most liked:</c> \"Most Liked\" in Geometry Dash World,\nreal purpose unknown.\n<cj>Search (ID):</c> View comments of any level ID.\n\n<cl>Settings:</c> Opens the mod settings\n<cr>Update:</c> Opens the mod update menu",
+            "This is the main menu for all features related to the mod.\n"
+            "\n"
+            "<cy>Featured:</c> Levels featured in Geometry Dash World\n"
+            "<cr>Daily/Weekly:</c> Old dailies as reported by the GD servers\n"
+            "<cg>Most liked:</c> \"Most Liked\" in Geometry Dash World,\nreal purpose unknown.\n"
+            "<cj>Search (ID):</c> View comments of any level ID.\n"
+            "<cj>Level Search:</c> Show a list of levels based on your progress\n"
+            "\n"
+            "<cp>Settings:</c> Opens the mod settings",
         "OK", 
         nullptr,
         450
