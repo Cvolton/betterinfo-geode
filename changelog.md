@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v3.0.13</c> (2023-12-14)
+* Added Account ID search to "ID Search" in BetterInfo Menu
+* Settings button in BI Menu now actually opens settings
+
 ## <cg>v3.0.12</c> (2023-12-09)
 * Fixed misaligned mod badges on profiles
 * Fixed level names in Daily History
