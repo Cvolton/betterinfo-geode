@@ -2,7 +2,7 @@
 #include <Geode/modify/RewardsPage.hpp>
 
 #include "../utils.hpp"
-#include "../layers/RewardTypeSelectLayer.h"
+#include "../layers/RewardHistory/RewardTypeSelectLayer.h"
 
 using namespace geode::prelude;
 

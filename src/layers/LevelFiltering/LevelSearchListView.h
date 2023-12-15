@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CvoltonListView.h"
+#include "../_bases/CvoltonListView.h"
 #include <Geode/Bindings.hpp>
 
 using namespace geode::prelude;

@@ -1,7 +1,7 @@
 #include "DailyViewLayer.h"
 #include "DailyListView.h"
-#include "JumpToPageLayer.h"
-#include "../utils.hpp"
+#include "../JumpToPageLayer.h"
+#include "../../utils.hpp"
 
 DailyViewLayer* DailyViewLayer::create(bool isWeekly) {
     auto ret = new DailyViewLayer();

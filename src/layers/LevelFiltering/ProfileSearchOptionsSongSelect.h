@@ -1,6 +1,6 @@
 #pragma once
-#include "CvoltonOptionsLayer.h"
-#include "../delegates/DialogCloseDelegate.h"
+#include "../_bases/CvoltonOptionsLayer.h"
+#include "../../delegates/DialogCloseDelegate.h"
 
 class ProfileSearchOptionsSongSelect : public CvoltonOptionsLayer {
     DialogCloseDelegate* delegate;

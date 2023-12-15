@@ -1,6 +1,6 @@
 #include "RewardTypeSelectLayer.h"
 #include "RewardViewLayer.h"
-#include "../utils.hpp"
+#include "../../utils.hpp"
 
 RewardTypeSelectLayer* RewardTypeSelectLayer::create(){
     auto ret = new RewardTypeSelectLayer();

@@ -1,9 +1,9 @@
 #pragma once
-#include "CvoltonOptionsLayer.h"
-#include "../delegates/DialogCloseDelegate.h"
-#include "../delegates/IDRangeDelegate.h"
-#include "../delegates/BISearchObjectDelegate.h"
-#include "../objects/BISearchObject.h"
+#include "../_bases/CvoltonOptionsLayer.h"
+#include "../../delegates/DialogCloseDelegate.h"
+#include "../../delegates/IDRangeDelegate.h"
+#include "../../delegates/BISearchObjectDelegate.h"
+#include "../../objects/BISearchObject.h"
 
 #include <Geode/Bindings.hpp>
 

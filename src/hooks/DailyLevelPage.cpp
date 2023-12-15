@@ -2,7 +2,7 @@
 #include <Geode/modify/DailyLevelPage.hpp>
 
 #include "../utils.hpp"
-#include "../layers/DailyViewLayer.h"
+#include "../layers/DailyHistory/DailyViewLayer.h"
 
 using namespace geode::prelude;
 

@@ -1,7 +1,7 @@
 #include "CustomCreatorLayer.h"
 #include "LevelIDLayer.h"
-#include "LevelSearchViewLayer.h"
-#include "LevelCategorySearchAlert.h"
+#include "LevelFiltering/LevelSearchViewLayer.h"
+#include "LevelFiltering/LevelCategorySearchAlert.h"
 #include "../utils.hpp"
 #include <Geode/ui/GeodeUI.hpp>
 

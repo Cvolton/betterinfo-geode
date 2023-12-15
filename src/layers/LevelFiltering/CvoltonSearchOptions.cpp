@@ -1,6 +1,6 @@
 #include "CvoltonSearchOptions.h"
 #include "IDRangePopup.h"
-#include "../enums.hpp"
+#include "../../enums.hpp"
 
 const int completedMax = 7;
 

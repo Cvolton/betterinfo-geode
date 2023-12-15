@@ -1,5 +1,5 @@
 #pragma once
-#include "CvoltonAlertLayerStub.h"
+#include "_bases/CvoltonAlertLayerStub.h"
 
 class UnregisteredProfileLayer : public CvoltonAlertLayerStub {
     GJUserScore* m_score;

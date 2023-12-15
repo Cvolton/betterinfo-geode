@@ -1,7 +1,7 @@
 #include "LevelSearchViewLayer.h"
-#include "JumpToPageLayer.h"
+#include "../JumpToPageLayer.h"
 #include "ProfileSearchOptions.h"
-#include "../utils.hpp"
+#include "../../utils.hpp"
 
 #include <fmt/format.h>
 

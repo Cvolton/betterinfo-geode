@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DailyListView.h"
-#include "../delegates/PageNumberDelegate.h"
+#include "../../delegates/PageNumberDelegate.h"
 
 class DailyViewLayer : public cocos2d::CCLayer, public PageNumberDelegate {
     DailyListView* dailyView = nullptr;

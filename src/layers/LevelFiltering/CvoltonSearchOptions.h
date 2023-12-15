@@ -1,6 +1,6 @@
 #pragma once
-#include "CvoltonOptionsLayer.h"
-#include "../delegates/IDRangeDelegate.h"
+#include "../_bases/CvoltonOptionsLayer.h"
+#include "../../delegates/IDRangeDelegate.h"
 
 class CvoltonSearchOptions : public CvoltonOptionsLayer, public IDRangeDelegate {
 public:

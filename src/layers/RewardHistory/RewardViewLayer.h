@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RewardListView.h"
-#include "../delegates/PageNumberDelegate.h"
+#include "../../delegates/PageNumberDelegate.h"
 
 class RewardViewLayer : public cocos2d::CCLayer, public PageNumberDelegate {
     RewardListView* rewardView = nullptr;

@@ -1,5 +1,5 @@
 #pragma once
-#include "CvoltonAlertLayerStub.h"
+#include "../_bases/CvoltonAlertLayerStub.h"
 
 
 class RewardTypeSelectLayer : public CvoltonAlertLayerStub {

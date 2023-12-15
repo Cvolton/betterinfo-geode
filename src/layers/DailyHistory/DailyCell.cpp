@@ -1,6 +1,6 @@
 #include "DailyCell.h"
-#include "ExtendedLevelInfo.h"
-#include "../managers/BetterInfoCache.h"
+#include "../ExtendedLevelInfo.h"
+#include "../../managers/BetterInfoCache.h"
 
 void DailyCell::loadFromLevel(GJGameLevel* level) {
     this->m_level = level;

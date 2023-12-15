@@ -1,7 +1,7 @@
 #include <Geode/Bindings.hpp>
 #include <Geode/modify/MoreSearchLayer.hpp>
 
-#include "../layers/CvoltonSearchOptions.h"
+#include "../layers/LevelFiltering/CvoltonSearchOptions.h"
 
 using namespace geode::prelude;
 

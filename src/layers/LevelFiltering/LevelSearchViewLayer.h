@@ -1,8 +1,8 @@
 #pragma once
 #include <deque>
 #include "LevelSearchListView.h"
-#include "../delegates/BISearchObjectDelegate.h"
-#include "../objects/BISearchObject.h"
+#include "../../delegates/BISearchObjectDelegate.h"
+#include "../../objects/BISearchObject.h"
 #include <Geode/Bindings.hpp>
 
 using namespace geode::prelude;

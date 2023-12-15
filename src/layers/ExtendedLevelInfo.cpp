@@ -1,6 +1,6 @@
 #include "ExtendedLevelInfo.h"
 #include "UnregisteredProfileLayer.h"
-#include "PaginatedFLAlert.h"
+#include "_bases/PaginatedFLAlert.h"
 #include "../utils.hpp"
 #include "../managers/BetterInfoStats.h"
 //#include "../managers/BetterInfoStatsV2.h"

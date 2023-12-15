@@ -1,7 +1,7 @@
 #include "RewardViewLayer.h"
 #include "RewardListView.h"
-#include "JumpToPageLayer.h"
-#include "../utils.hpp"
+#include "../JumpToPageLayer.h"
+#include "../../utils.hpp"
 
 using namespace gd;
 using namespace cocos2d;

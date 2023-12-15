@@ -3,8 +3,8 @@
 
 #include "../utils.hpp"
 #include "../layers/LevelBrowserEndLayer.h"
-#include "../layers/LevelSearchViewLayer.h"
-#include "../layers/ProfileSearchOptions.h"
+#include "../layers/LevelFiltering/LevelSearchViewLayer.h"
+#include "../layers/LevelFiltering/ProfileSearchOptions.h"
 
 using namespace geode::prelude;
 

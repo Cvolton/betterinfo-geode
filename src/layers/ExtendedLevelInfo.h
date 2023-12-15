@@ -3,7 +3,7 @@
 
 using namespace geode::prelude;
 
-#include "CvoltonAlertLayerStub.h"
+#include "_bases/CvoltonAlertLayerStub.h"
 #include "../delegates/UploadDateDelegate.h"
 
 class ExtendedLevelInfo : public CvoltonAlertLayerStub, public UploadDateDelegate {

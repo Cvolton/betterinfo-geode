@@ -1,6 +1,6 @@
 #pragma once
-#include "CvoltonAlertLayerStub.h"
-#include "DailyViewLayer.h"
+#include "_bases/CvoltonAlertLayerStub.h"
+#include "DailyHistory/DailyViewLayer.h"
 
 class JumpToPageLayer : public CvoltonAlertLayerStub {
     InfoLayer* m_infoLayer = nullptr;
