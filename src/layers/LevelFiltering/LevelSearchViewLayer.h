@@ -1,6 +1,5 @@
 #pragma once
 #include <deque>
-#include "LevelSearchListView.h"
 #include "../../delegates/BISearchObjectDelegate.h"
 #include "../../objects/BISearchObject.h"
 #include <Geode/Bindings.hpp>
@@ -12,7 +11,7 @@ class LevelSearchViewLayer : public cocos2d::CCLayer, public OnlineListDelegate,
     GJSearchObject* m_gjSearchObj = nullptr;
     GJSearchObject* m_gjSearchObjOptimized = nullptr;
     GJSearchObject* m_gjSearchObjLoaded = nullptr;
-    LevelSearchListView* m_listView = nullptr;
+    CustomListView* m_listView = nullptr;
     GJListLayer* m_listLayer = nullptr;
     CCMenuItemSpriteExtra* m_prevBtn = nullptr;
     CCMenuItemSpriteExtra* m_nextBtn = nullptr;

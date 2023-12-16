@@ -261,7 +261,7 @@ void LevelSearchViewLayer::loadPage(bool reload){
 
     if(m_listLayer != nullptr) m_listLayer->removeFromParentAndCleanup(true);
 
-    m_listView = LevelSearchListView::create(currentPage, 356.f, 220.f);
+    m_listView = CustomListView::create(currentPage, BoomListType::Level, 220.f, 356.f);
     m_listLayer = GJListLayer::create(m_listView, "Levels", {191, 114, 62, 255}, 356.f, 220.f);
     m_listLayer->setPosition(winSize / 2 - m_listLayer->getScaledContentSize() / 2 - CCPoint(0,1));
     addChild(m_listLayer);
