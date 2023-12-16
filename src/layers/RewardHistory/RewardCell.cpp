@@ -1,5 +1,4 @@
 #include "RewardCell.h"
-#include "../utils.hpp"
 
 void RewardCell::loadFromData(CCObject* object) {
     auto reward = static_cast<GJRewardItem*>(object);
