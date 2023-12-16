@@ -22,7 +22,7 @@ void LevelCategorySearchAlert::onClose(cocos2d::CCObject* sender)
 }
 
 void LevelCategorySearchAlert::onPlayed(CCObject* sender) {
-    auto browserLayer = LevelSearchViewLayer::scene(BetterInfo::completedDeque());
+    auto browserLayer = LevelSearchViewLayer::scene(LevelUtils::completedDeque());
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
@@ -35,7 +35,7 @@ void LevelCategorySearchAlert::onCompleted(cocos2d::CCObject* sender) {
     BISearchObject searchObj;
     searchObj.completed = true;
 
-    auto browserLayer = LevelSearchViewLayer::scene(BetterInfo::completedDeque(), searchObj);
+    auto browserLayer = LevelSearchViewLayer::scene(LevelUtils::completedDeque(), searchObj);
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
@@ -44,7 +44,7 @@ void LevelCategorySearchAlert::onOrbs(cocos2d::CCObject* sender) {
     BISearchObject searchObj;
     searchObj.completedOrbs = true;
 
-    auto browserLayer = LevelSearchViewLayer::scene(BetterInfo::completedDeque(), searchObj);
+    auto browserLayer = LevelSearchViewLayer::scene(LevelUtils::completedDeque(), searchObj);
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
@@ -52,7 +52,7 @@ void LevelCategorySearchAlert::onLeaderboard(cocos2d::CCObject* sender) {
     BISearchObject searchObj;
     searchObj.completedLeaderboard = true;
 
-    auto browserLayer = LevelSearchViewLayer::scene(BetterInfo::completedDeque(), searchObj);
+    auto browserLayer = LevelSearchViewLayer::scene(LevelUtils::completedDeque(), searchObj);
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
@@ -62,7 +62,7 @@ void LevelCategorySearchAlert::onCoins(cocos2d::CCObject* sender) {
     searchObj.completedCoins = true;
     searchObj.completed = true;
 
-    auto browserLayer = LevelSearchViewLayer::scene(BetterInfo::completedDeque(), searchObj);
+    auto browserLayer = LevelSearchViewLayer::scene(LevelUtils::completedDeque(), searchObj);
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
@@ -72,7 +72,7 @@ void LevelCategorySearchAlert::onNoCoins(cocos2d::CCObject* sender) {
     searchObj.uncompletedCoins = true;
     searchObj.completed = true;
 
-    auto browserLayer = LevelSearchViewLayer::scene(BetterInfo::completedDeque(), searchObj);
+    auto browserLayer = LevelSearchViewLayer::scene(LevelUtils::completedDeque(), searchObj);
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }

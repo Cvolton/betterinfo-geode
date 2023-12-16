@@ -270,45 +270,6 @@ CCDictionary* BetterInfo::responseToDict(const std::string& response){
     return dict;
 }
 
-GJGameLevel* BetterInfo::getLevelFromSaved(int levelID) {
-    return static_cast<GJGameLevel*>(GameLevelManager::sharedState()->m_onlineLevels->objectForKey(std::to_string(levelID)));
-}
-
-std::deque<GJGameLevel*> BetterInfo::completedDeque() {
-    std::deque<GJGameLevel*> levelsDeque;
-    auto levels = GameLevelManager::sharedState()->m_onlineLevels;
-    CCDictElement* obj;
-    CCDICT_FOREACH(levels, obj){
-        auto currentLvl = static_cast<GJGameLevel*>(obj->getObject());
-        levelsDeque.push_back(currentLvl);
-    }
-    return levelsDeque;
-}
-
-int BetterInfo::levelDifficultyAsInt(GJGameLevel* level) {
-    if(level->m_demon != 0) return 6;
-    if(level->m_autoLevel) return -1;
-    return (level->m_ratings == 0) ? 0 : (level->m_ratingsSum / level->m_ratings);
-}
-
-int BetterInfo::levelDemonDifficultyAsInt(GJGameLevel* level) {
-    int demonDifficulty = 2;
-    if(level->m_demonDifficulty >= 5) demonDifficulty = level->m_demonDifficulty - 2;
-    else if(level->m_demonDifficulty >= 3) demonDifficulty = level->m_demonDifficulty - 3;
-    return demonDifficulty;
-}
-
-bool BetterInfo::levelHasCollectedCoins(GJGameLevel* level) {
-    auto coinDict = GameStatsManager::sharedState()->m_verifiedUserCoins;
-    auto coinDict2 = GameStatsManager::sharedState()->m_pendingUserCoins;
-    bool hasAllCoins = true;
-    for(int i = 0; i < level->m_coins; i++){
-        bool hasntCoin = coinDict->objectForKey(level->getCoinKey(i + 1)) == nullptr && coinDict2->objectForKey(level->getCoinKey(i + 1)) == nullptr;
-        if(hasntCoin) hasAllCoins = false;
-    }
-    return hasAllCoins;
-}
-
 bool BetterInfo::validateRangeItem(const BISearchObject::RangeItem& rangeItem, int value) {
     if(!rangeItem.enabled) return true;
     if(rangeItem.min != 0 && rangeItem.min > value) return false;
@@ -318,11 +279,11 @@ bool BetterInfo::validateRangeItem(const BISearchObject::RangeItem& rangeItem, i
 
 bool BetterInfo::levelMatchesObject(GJGameLevel* level, const BISearchObject& searchObj) {
 
-    if(!searchObj.difficulty.empty() && searchObj.difficulty.find(levelDifficultyAsInt(level)) == searchObj.difficulty.end()) return false;
+    if(!searchObj.difficulty.empty() && searchObj.difficulty.find(LevelUtils::levelDifficultyAsInt(level)) == searchObj.difficulty.end()) return false;
     if(!searchObj.length.empty() && searchObj.length.find(level->m_levelLength) == searchObj.length.end()) return false;
     if(!searchObj.demonDifficulty.empty() && level->m_demon != 0
         && searchObj.difficulty.find(6) != searchObj.difficulty.end()
-        && searchObj.demonDifficulty.find(levelDemonDifficultyAsInt(level)) == searchObj.demonDifficulty.end()
+        && searchObj.demonDifficulty.find(LevelUtils::levelDemonDifficultyAsInt(level)) == searchObj.demonDifficulty.end()
         ) return false;
 
         std::string query = searchObj.str;
@@ -358,7 +319,7 @@ bool BetterInfo::levelMatchesObject(GJGameLevel* level, const BISearchObject& se
 
     if(!levelProgressMatchesObject(level, searchObj)) return false;
 
-    bool hasAllCoins = levelHasCollectedCoins(level);
+    bool hasAllCoins = LevelUtils::levelHasCollectedCoins(level);
     if(searchObj.completedCoins && (!hasAllCoins || level->m_coins == 0)) return false;
     if(searchObj.uncompletedCoins && (hasAllCoins || level->m_coins == 0)) return false;
 
@@ -368,7 +329,7 @@ bool BetterInfo::levelMatchesObject(GJGameLevel* level, const BISearchObject& se
 bool BetterInfo::levelProgressMatchesObject(GJGameLevel* level, const BISearchObject& searchObj) {
     if(!validateRangeItem(searchObj.idRange, level->m_levelID)) return false;
 
-    auto levelFromSaved = getLevelFromSaved(level->m_levelID);
+    auto levelFromSaved = LevelUtils::getLevelFromSaved(level->m_levelID);
     if(searchObj.uncompleted && (levelFromSaved && levelFromSaved->m_normalPercent == 100)) return false;
     if(searchObj.uncompletedOrbs && (!levelFromSaved || levelFromSaved->m_orbCompletion == 100)) return false;
     if(searchObj.uncompletedLeaderboard && (!levelFromSaved || levelFromSaved->m_newNormalPercent2 == 100)) return false;

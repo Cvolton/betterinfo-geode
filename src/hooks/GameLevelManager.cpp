@@ -135,13 +135,13 @@ class $modify(GameLevelManager) {
             auto level = static_cast<GJGameLevel*>(obj);
 
             int password = level->m_password;
-            int difficulty = BetterInfo::levelDifficultyAsInt(level);
+            int difficulty = LevelUtils::levelDifficultyAsInt(level);
             if(!(diff.empty()) && std::find(diff.begin(), diff.end(), difficulty) == diff.end()) continue;
 
             if(!(len.empty()) && std::find(len.begin(), len.end(), level->m_levelLength) == len.end()) continue;
 
             if(Mod::get()->getSavedValue<bool>("user_search_diff_06") && level->m_demon != 0) {
-                int demonDifficulty = BetterInfo::levelDemonDifficultyAsInt(level);
+                int demonDifficulty = LevelUtils::levelDemonDifficultyAsInt(level);
 
                 if(!(demonDiff.empty()) && std::find(demonDiff.begin(), demonDiff.end(), demonDifficulty) == demonDiff.end()) continue;
             }
@@ -178,7 +178,7 @@ class $modify(GameLevelManager) {
             if(!validateRangeOption("user_search_percentageorbs", level->m_orbCompletion)) continue;
             if(!validateRangeOption("user_search_percentageleaderboard", level->m_newNormalPercent2)) continue;
 
-            bool hasAllCoins = BetterInfo::levelHasCollectedCoins(level);
+            bool hasAllCoins = LevelUtils::levelHasCollectedCoins(level);
             if(Mod::get()->getSavedValue<bool>("user_search_completedcoins") && (!hasAllCoins || level->m_coins == 0)) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_uncompletedcoins") && (hasAllCoins || level->m_coins == 0)) continue;
 

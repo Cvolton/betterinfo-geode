@@ -7,6 +7,7 @@ using namespace geode::prelude;
 
 #include "utils/LevelMetadata.h"
 #include "utils/LevelProgressDialog.h"
+#include "utils/LevelUtils.h"
 #include "utils/TimeUtils.h"
 
 namespace BetterInfo {
@@ -42,13 +43,6 @@ namespace BetterInfo {
     bool isNewGrounds(int audioID);
 
     cocos2d::CCDictionary* responseToDict(const std::string& response);
-
-    GJGameLevel* getLevelFromSaved(int levelID);
-    std::deque<GJGameLevel*> completedDeque();
-
-    int levelDifficultyAsInt(GJGameLevel* level);
-    int levelDemonDifficultyAsInt(GJGameLevel* level);
-    bool levelHasCollectedCoins(GJGameLevel* level);
 
     bool validateRangeItem(const BISearchObject::RangeItem& rangeItem, int value);
     bool levelMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
