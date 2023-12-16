@@ -77,132 +77,6 @@ void ExtendedLevelInfo::loadPage(int page) {
     } 
 }
 
-std::string ExtendedLevelInfo::getGameVersionName(int version){
-    if(version < 1 || version > 99) return std::string("NA");
-
-    switch(version){
-        case 10:
-            return std::string("1.7");
-        case 11:
-            return std::string("Early 1.8");
-    }
-
-    std::stringstream contentStream;
-
-    if(version > 17){
-        double newVersion = (double)version / 10.0;
-        contentStream << std::fixed << std::setprecision(1) << newVersion;
-    }else{
-        contentStream << "1." << (version-1);
-    }
-    return contentStream.str();
-}
-
-std::string ExtendedLevelInfo::stringDate(std::string date){
-    if(date == "") return "NA";
-    std::ostringstream stream;
-    stream << date << " ago";
-    return stream.str();
-}
-
-const char* ExtendedLevelInfo::boolString(bool value) {
-    return value ? "True" : "False";
-}
-
-const char* ExtendedLevelInfo::getDifficultyIcon(int stars){
-    switch(stars){
-        case 1: 
-            return "difficulty_auto_btn_001.png";
-        case 2:
-            return "difficulty_01_btn_001.png";
-        case 3:
-            return "difficulty_02_btn_001.png";
-        case 4:
-        case 5:
-            return "difficulty_03_btn_001.png";
-        case 6:
-        case 7:
-            return "difficulty_04_btn_001.png";
-        case 8:
-        case 9:
-            return "difficulty_05_btn_001.png";
-        case 10:
-            return "difficulty_06_btn_001.png";
-        default:
-            return "difficulty_00_btn_001.png";
-    }
-}
-
-const char* ExtendedLevelInfo::getDemonDifficultyIcon(int demonDifficulty){
-    switch(demonDifficulty){
-        case 3: 
-            return "difficulty_07_btn_001.png";
-        case 4:
-            return "difficulty_08_btn_001.png";
-        case 5:
-            return "difficulty_09_btn_001.png";
-        case 6:
-            return "difficulty_10_btn_001.png";
-        default:
-            return "difficulty_06_btn_001.png";
-    }
-}
-
-std::string ExtendedLevelInfo::passwordString(int password){
-    if(password == 0) return "NA";
-    if(password == 1) return "Free Copy";
-    if(password >= 10000 && password <= 19999) return std::to_string(password - 10000);
-    if(password >= 1000000 && password <= 1999999) return std::to_string(password - 1000000);
-    return "Invalid (" + std::to_string(password) + ")";
-}
-
-std::string ExtendedLevelInfo::zeroIfNA(int value){
-    if(value == 0) return "NA";
-    return std::to_string(value);
-}
-
-std::string ExtendedLevelInfo::workingTime(int value){
-    if(value <= 0) return "NA";
-
-    int hours = value / 3600;
-    int minutes = (value % 3600) / 60;
-    int seconds = value % 60;
-
-    std::ostringstream stream;
-    if(hours > 0) stream << hours << "h ";
-    if(minutes > 0) stream << minutes << "m ";
-    stream << seconds << "s";
-
-    return stream.str();
-}
-
-std::string ExtendedLevelInfo::printableProgress(std::string personalBests, int percentage){
-
-    std::stringstream bestsStream(personalBests);
-    std::string currentBest;
-    std::deque<int> progresses;
-    while(getline(bestsStream, currentBest, ',')){
-        try {
-            progresses.push_front(std::stoi(currentBest));
-            //contentStream << percentage << "% ";
-        }catch(...){}
-    }
-    std::string printable;
-    //std::reverse(std::begin(progresses), std::end(progresses));
-    for(auto i : progresses){
-        printable = std::to_string(percentage) + "% " + printable;
-        percentage -= i;
-    }
-
-    return printable;
-}
-
-std::string ExtendedLevelInfo::addPlus(std::string date) {
-    auto spaceIt = date.find_first_of(' ');
-    if(spaceIt != std::string::npos) date.insert(date.cbegin() + spaceIt, '+');
-    return date;
-}
-
 void ExtendedLevelInfo::refreshInfoTexts() {
     auto cache = BetterInfoCache::sharedState();
 
@@ -210,24 +84,24 @@ void ExtendedLevelInfo::refreshInfoTexts() {
     auto updateDateStd = std::string(m_level->m_updateDate);
     int levelPassword = m_level->m_password;
     std::ostringstream infoText;
-    infoText << "\n<cj>Uploaded</c>: " << stringDate(!uploadDateStd.empty() ? uploadDateStd : addPlus(cache->getLevelInfo(m_level->m_levelID, "upload-date")))
-        << "\n<cj>Updated</c>: " << stringDate(!updateDateStd.empty() ? updateDateStd :  addPlus(cache->getLevelInfo(m_level->m_levelID, "update-date")))
+    infoText << "\n<cj>Uploaded</c>: " << LevelMetadata::stringDate(!uploadDateStd.empty() ? uploadDateStd : LevelMetadata::addPlus(cache->getLevelInfo(m_level->m_levelID, "upload-date")))
+        << "\n<cj>Updated</c>: " << LevelMetadata::stringDate(!updateDateStd.empty() ? updateDateStd :  LevelMetadata::addPlus(cache->getLevelInfo(m_level->m_levelID, "update-date")))
         //<< "\n<cy>Stars Requested</c>: " << m_level->m_starsRequested
-        << "\n<cg>Original</c>: " << zeroIfNA(m_level->m_originalLevel)
-        //<< "\n<cg>Feature score</c>: " << zeroIfNA(m_level->m_featured)
-        << "\n<cy>Game Version</c>: " << getGameVersionName(m_level->m_gameVersion)
+        << "\n<cg>Original</c>: " << LevelMetadata::zeroIfNA(m_level->m_originalLevel)
+        //<< "\n<cg>Feature score</c>: " << LevelMetadata::zeroIfNA(m_level->m_featured)
+        << "\n<cy>Game Version</c>: " << LevelMetadata::getGameVersionName(m_level->m_gameVersion)
         //<< "\nFeature Score</c>: " << m_level->m_featured
-        << "\n<co>Password</c>: " << passwordString(levelPassword)
-        << "\n<cr>In Editor</c>: " << workingTime(m_level->m_workingTime)
-        << "\n<cr>Editor (C)</c>: " << workingTime(m_level->m_workingTime2);
+        << "\n<co>Password</c>: " << LevelMetadata::passwordString(levelPassword)
+        << "\n<cr>In Editor</c>: " << TimeUtils::workingTime(m_level->m_workingTime)
+        << "\n<cr>Editor (C)</c>: " << TimeUtils::workingTime(m_level->m_workingTime2);
 
     m_primary = infoText.str();
     infoText.str("");
-    infoText << "\n<cj>Uploaded</c>: " << BetterInfo::isoTimeToString(m_uploadDateEstimated)
-        << "\n<cg>Objects</c>: " << zeroIfNA(m_level->m_objectCount)
-        << "\n<cg>Objects (est.)</c>: " << zeroIfNA(m_objectsEstimated) //i have no idea what the 0 and 11 mean, i just copied them from PlayLayer::init
-        << "\n<cy>Feature Score</c>: " << zeroIfNA(m_level->m_featured)
-        << "\n<co>Two-player</c>: " << boolString(m_level->m_twoPlayerMode)
+    infoText << "\n<cj>Uploaded</c>: " << TimeUtils::isoTimeToString(m_uploadDateEstimated)
+        << "\n<cg>Objects</c>: " << LevelMetadata::zeroIfNA(m_level->m_objectCount)
+        << "\n<cg>Objects (est.)</c>: " << LevelMetadata::zeroIfNA(m_objectsEstimated) //i have no idea what the 0 and 11 mean, i just copied them from PlayLayer::init
+        << "\n<cy>Feature Score</c>: " << LevelMetadata::zeroIfNA(m_level->m_featured)
+        << "\n<co>Two-player</c>: " << LevelMetadata::boolString(m_level->m_twoPlayerMode)
         << "\n<cr>Size</c>: " << m_fileSizeCompressed << " / " << m_fileSizeUncompressed;
     ;
 
@@ -236,7 +110,7 @@ void ExtendedLevelInfo::refreshInfoTexts() {
     /*infoText << "<cg>Total Attempts</c>: " << m_level->attempts
         << "\n<cl>Total Jumps</c>: " << m_level->jumps
         << "\n<co>Clicks (best att.)</c>: " << m_level->clicks // the contents of this variable make no sense to me
-        << "\n<co>Time (best att.)</c>: " << ExtendedLevelInfo::workingTime(m_level->attemptTime) // the contents of this variable make no sense to me
+        << "\n<co>Time (best att.)</c>: " << TimeUtils::workingTime(m_level->attemptTime) // the contents of this variable make no sense to me
         //<< "\n<co>Is legit</c>: " << m_level->isCompletionLegitimate // the contents of this variable make no sense to me
         << "\n<cp>Normal</c>: " << m_level->normalPercent
         << "%\n<co>Practice</c>: " << m_level->practicePercent << "%";
@@ -347,7 +221,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
 
     createTextLabel("Requested Rate:", {88,-1}, 0.5f, m_buttonMenu);
 
-    auto diffSprite = CCSprite::createWithSpriteFrameName(getDifficultyIcon(m_level->m_starsRequested));
+    auto diffSprite = CCSprite::createWithSpriteFrameName(LevelMetadata::getDifficultyIcon(m_level->m_starsRequested));
     diffSprite->setPosition({88,-57});
     m_buttonMenu->addChild(diffSprite, 1);
 
@@ -412,64 +286,4 @@ CCLabelBMFont* ExtendedLevelInfo::createTextLabel(const std::string text, const 
     bmFont->setScale(scale);
     menu->addChild(bmFont);
     return bmFont;
-}
-
-void ExtendedLevelInfo::showProgressDialog(GJGameLevel* level){
-
-    if(level == nullptr) return;
-
-
-    if(level->m_levelID == -1){
-        FLAlertLayer::create(nullptr, "It's a secret...",  "The <cr>darkness</c> lingers. Be careful who you trust...\nThere might be an <c_>impostor</c> among us.", "OK", nullptr, 360)->show();
-        return;
-    }
-
-    std::ostringstream contentStream, secondStream;
-    contentStream << "<cg>Total Attempts</c>: " << level->m_attempts
-        << "\n<cl>Total Jumps</c>: " << level->m_jumps
-        << "\n<cy>Clicks (best att.)</c>: " << level->m_clicks
-        << "\n<cr>Time (best att.)</c>: " << ExtendedLevelInfo::workingTime(level->m_attemptTime);
-
-    if(level->m_levelType != GJLevelType::Editor){
-        auto stats = BetterInfoStats::sharedState();
-        //auto statsV2 = BetterInfoStatsV2::sharedState();
-
-        contentStream << "\n<cp>Normal</c>: " << level->m_normalPercent
-        << "%\n<co>Practice</c>: " << level->m_practicePercent << "%";
-        if(level->m_orbCompletion != level->m_normalPercent) contentStream << "\n<cj>Orbs</c>: " << level->m_orbCompletion << "%";
-        if(level->m_newNormalPercent2 != level->m_orbCompletion) contentStream << "\n<cr>Leaderboard</c>: " << level->m_newNormalPercent2 << "%";
-
-        auto normalAttempts = stats->getAttempts(level, false);
-        auto practiceAttempts = stats->getAttempts(level, true);
-        //auto commonFail = statsV2->getCommonFail(level);
-        secondStream << "<cp>Attempts (normal)</c>: " << normalAttempts << "\n";
-        secondStream << "<co>Attempts (practice)</c>: " << practiceAttempts << "\n";
-        if((normalAttempts + practiceAttempts) != level->m_attempts) secondStream << "<cy>Attempts (unknown)</c>: " << (level->m_attempts - practiceAttempts - normalAttempts) << "\n";
-        secondStream << "\n";
-        if(stats->getPlay(level, false) != 0) secondStream << "<cg>First played</c>: " << BetterInfo::timeToString(stats->getPlay(level, false)) << "\n";
-        if(stats->getPlay(level, true) != 0) secondStream << "<cl>Last played</c>: " << BetterInfo::timeToString(stats->getPlay(level, true)) << "\n";
-        if(stats->getCompletion(level, false) > 0) secondStream << "<cp>Completed</c>: " << BetterInfo::timeToString(stats->getCompletion(level, false)) << "\n";
-        if(stats->getCompletion(level, true) > 0) secondStream << "<co>Completed (practice)</c>: " << BetterInfo::timeToString(stats->getCompletion(level, true)) << "\n";
-        //secondStream << "<co>Common fail:</c> " << commonFail.first << "% (" << commonFail.second << "x)\n";
-    }else{
-        contentStream << "\n<cp>Objects</c>: " << level->m_objectCount
-            << "\n<cr>In Editor</c>: " << ExtendedLevelInfo::workingTime(level->m_workingTime) << "\n";
-        if(level->m_workingTime2) contentStream << "<cr>Editor (C)</c>: " << ExtendedLevelInfo::workingTime(level->m_workingTime2) << "\n";
-        ;
-    }
-
-    std::string progresses;
-    if(std::string(level->m_personalBests) != ""){
-        progresses = ExtendedLevelInfo::printableProgress(level->m_personalBests, level->m_newNormalPercent2);
-        contentStream << "\n\n<cy>Progresses</c>: " << progresses;
-    }
-
-    std::vector<std::string> contents;
-    contents.push_back(contentStream.str());
-    if(!(secondStream.str().empty())) contents.push_back(secondStream.str());
-
-    /*float dialogWidth = 350;
-    if(contentStream.str().length() > 250) dialogWidth = 400;*/
-    //FLAlertLayer::create(nullptr, level->m_levelName.c_str(), "OK", nullptr, dialogWidth, contentStream.str().length() > 250, 300, contentStream.str())->m_show();
-    PaginatedFLAlert::create(level->m_levelName, contents)->show();
 }

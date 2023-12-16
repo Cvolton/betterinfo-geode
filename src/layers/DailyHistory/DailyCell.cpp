@@ -1,5 +1,5 @@
 #include "DailyCell.h"
-#include "../ExtendedLevelInfo.h"
+#include "../../utils.hpp"
 #include "../../managers/BetterInfoCache.h"
 
 void DailyCell::loadFromLevel(GJGameLevel* level) {
@@ -10,7 +10,7 @@ void DailyCell::loadFromLevel(GJGameLevel* level) {
     auto GSM = GameStatsManager::sharedState();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    auto diffSprite = CCSprite::createWithSpriteFrameName(level->m_stars == 10 ? ExtendedLevelInfo::getDemonDifficultyIcon(biCache->getDemonDifficulty(level->m_levelID)) : ExtendedLevelInfo::getDifficultyIcon(level->m_stars));
+    auto diffSprite = CCSprite::createWithSpriteFrameName(level->m_stars == 10 ? LevelMetadata::getDemonDifficultyIcon(biCache->getDemonDifficulty(level->m_levelID)) : LevelMetadata::getDifficultyIcon(level->m_stars));
     diffSprite->setPosition({22.f, 32.f});
     diffSprite->setScale(0.8f);
     diffSprite->setZOrder(1);
@@ -228,7 +228,7 @@ void DailyCell::onLeaderboards(CCObject* sender){
 }
 
 void DailyCell::onInfo(CCObject* sender){
-    ExtendedLevelInfo::showProgressDialog(m_level);
+    LevelProgressDialog::show(m_level);
 }
 
 int DailyCell::getTotalDiamonds(){

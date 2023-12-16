@@ -1,7 +1,7 @@
 #include <Geode/Bindings.hpp>
 #include <Geode/modify/LevelPage.hpp>
 
-#include "../layers/ExtendedLevelInfo.h"
+#include "../utils/LevelProgressDialog.h"
 
 using namespace geode::prelude;
 
@@ -11,6 +11,6 @@ class $modify(LevelPage) {
     }
 
     void onInfo(CCObject* sender) {
-        ExtendedLevelInfo::showProgressDialog(this->m_level);
+        LevelProgressDialog::show(this->m_level);
     }
 };

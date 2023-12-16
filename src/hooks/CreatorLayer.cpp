@@ -3,9 +3,6 @@
 
 #include "../utils.hpp"
 #include "../layers/CustomCreatorLayer.h"
-#include "../layers/LevelBrowserEndLayer.h"
-#include "../layers/LevelSearchViewLayer.h"
-#include "../layers/ProfileSearchOptions.h"
 
 using namespace geode::prelude;
 

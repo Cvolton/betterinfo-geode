@@ -226,19 +226,6 @@ std::string BetterInfo::fixNullByteCrash(std::string input) {
     return input;
 }
 
-std::string BetterInfo::timeToString(time_t input) {
-    char dateString[255];
-    strftime(dateString, sizeof(dateString), "%F %H:%M", localtime(&input));
-    return dateString;
-}
-
-std::string BetterInfo::isoTimeToString(const std::string& input) {
-    if(input.empty()) return "NA";
-    int y,M,d;
-    sscanf(input.c_str(), "%d-%d-%dT", &y, &M, &d);
-    return fmt::format("{}-{:02}-{:02}", y, M, d);
-}
-
 void BetterInfo::copyToClipboard(const char* text){
     clipboard::write(text);
 }

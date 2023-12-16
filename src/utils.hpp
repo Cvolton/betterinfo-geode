@@ -5,6 +5,10 @@ using namespace geode::prelude;
 
 #include "objects/BISearchObject.h"
 
+#include "utils/LevelMetadata.h"
+#include "utils/LevelProgressDialog.h"
+#include "utils/TimeUtils.h"
+
 namespace BetterInfo {
     CCSprite* createWithBISpriteFrameName(const char* name);
     CCSprite* createBISprite(const char* name);
@@ -30,8 +34,6 @@ namespace BetterInfo {
     std::string fileSize(size_t bytes);
     std::string fixColorCrashes(std::string input);
     std::string fixNullByteCrash(std::string input);
-    std::string timeToString(time_t input);
-    std::string isoTimeToString(const std::string& input);
     
     void copyToClipboard(const char* text);
     void copyToClipboard(const char* text, CCLayer* parent);
