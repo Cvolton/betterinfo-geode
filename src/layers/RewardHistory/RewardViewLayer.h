@@ -1,18 +1,18 @@
 #pragma once
 
-#include "RewardListView.h"
+#include "../_bases/CvoltonListView.h"
+#include "RewardCell.h"
 #include "../../delegates/PageNumberDelegate.h"
 
 class RewardViewLayer : public cocos2d::CCLayer, public PageNumberDelegate {
-    RewardListView* rewardView = nullptr;
-    GJListLayer* listLayer = nullptr;
-    cocos2d::CCArray* sortedRewards = nullptr;
-    CCMenuItemSpriteExtra* prevBtn = nullptr;
-    CCMenuItemSpriteExtra* nextBtn = nullptr;
-    cocos2d::CCLabelBMFont* counter = nullptr;
-    ButtonSprite* pageBtnSprite = nullptr;
-    const char* title = nullptr;
-    unsigned int page = 0;
+    GJListLayer* m_listLayer = nullptr;
+    cocos2d::CCArray* m_sortedRewards = nullptr;
+    CCMenuItemSpriteExtra* m_prevBtn = nullptr;
+    CCMenuItemSpriteExtra* m_nextBtn = nullptr;
+    cocos2d::CCLabelBMFont* m_counter = nullptr;
+    ButtonSprite* m_pageBtnSprite = nullptr;
+    const char* m_title = nullptr;
+    unsigned int m_page = 0;
 protected:
     virtual bool init(cocos2d::CCDictionary* chests, const char* title);
     virtual void keyBackClicked();

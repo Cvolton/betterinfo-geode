@@ -1,5 +1,4 @@
 #include "RewardViewLayer.h"
-#include "RewardListView.h"
 #include "../JumpToPageLayer.h"
 #include "../../utils.hpp"
 
@@ -25,7 +24,7 @@ bool RewardViewLayer::compareRewards(const void* i1, const void* i2){
 
 bool RewardViewLayer::init(CCDictionary* chests, const char* title) {
 
-    this->title = title;
+    m_title = title;
 
     Mod::get()->setSavedValue<std::string>("reward-cell-title", title);
 
@@ -62,39 +61,39 @@ bool RewardViewLayer::init(CCDictionary* chests, const char* title) {
     setTouchEnabled(true);
     setKeypadEnabled(true);
 
-    sortedRewards = CCArray::create();
-    sortedRewards->retain();
+    m_sortedRewards = CCArray::create();
+    m_sortedRewards->retain();
     CCDictElement* obj;
     CCDICT_FOREACH(chests, obj){
         auto currentReward = static_cast<GJRewardItem*>(obj->getObject());
-        if(currentReward != nullptr) sortedRewards->addObject(currentReward);
+        if(currentReward != nullptr) m_sortedRewards->addObject(currentReward);
     }
-    std::sort(sortedRewards->data->arr, sortedRewards->data->arr + sortedRewards->data->num, RewardViewLayer::compareRewards);
+    std::sort(m_sortedRewards->data->arr, m_sortedRewards->data->arr + m_sortedRewards->data->num, RewardViewLayer::compareRewards);
 
     auto prevSprite = CCSprite::createWithSpriteFrameName(controllerConnected ? "controllerBtn_DPad_Left_001.png" : "GJ_arrow_03_001.png");
-    prevBtn = CCMenuItemSpriteExtra::create(
+    m_prevBtn = CCMenuItemSpriteExtra::create(
         prevSprite,
         this,
         menu_selector(RewardViewLayer::onPrev)
     );
-    prevBtn->setPosition({- (winSize.width / 2) + 25, 0});
-    menu->addChild(prevBtn);
+    m_prevBtn->setPosition({- (winSize.width / 2) + 25, 0});
+    menu->addChild(m_prevBtn);
 
     auto nextSprite = CCSprite::createWithSpriteFrameName(controllerConnected ? "controllerBtn_DPad_Right_001.png" : "GJ_arrow_03_001.png");
     if(!controllerConnected) nextSprite->setFlipX(true);
-    nextBtn = CCMenuItemSpriteExtra::create(
+    m_nextBtn = CCMenuItemSpriteExtra::create(
         nextSprite,
         this,
         menu_selector(RewardViewLayer::onNext)
     );
-    nextBtn->setPosition({+ (winSize.width / 2) - 25, 0});
-    menu->addChild(nextBtn);
+    m_nextBtn->setPosition({+ (winSize.width / 2) - 25, 0});
+    menu->addChild(m_nextBtn);
 
-    counter = CCLabelBMFont::create("0 to 0 of 0", "goldFont.fnt");
-    counter->setAnchorPoint({ 1.f, 1.f });
-    counter->setPosition(winSize - CCPoint(7,3));
-    counter->setScale(0.5f);
-    addChild(counter);
+    m_counter = CCLabelBMFont::create("0 to 0 of 0", "goldFont.fnt");
+    m_counter->setAnchorPoint({ 1.f, 1.f });
+    m_counter->setPosition(winSize - CCPoint(7,3));
+    m_counter->setScale(0.5f);
+    addChild(m_counter);
 
     //corners
     auto cornerBL = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
@@ -109,10 +108,10 @@ bool RewardViewLayer::init(CCDictionary* chests, const char* title) {
     addChild(cornerBR, -1);
 
     //navigation buttons
-    pageBtnSprite = ButtonSprite::create("1", 23, true, "bigFont.fnt", "GJ_button_02.png", 40, .7f);
-    pageBtnSprite->setScale(0.7f);
+    m_pageBtnSprite = ButtonSprite::create("1", 23, true, "bigFont.fnt", "GJ_button_02.png", 40, .7f);
+    m_pageBtnSprite->setScale(0.7f);
     auto pageBtn = CCMenuItemSpriteExtra::create(
-        pageBtnSprite,
+        m_pageBtnSprite,
         this,
         menu_selector(RewardViewLayer::onJumpToPageLayer)
     );
@@ -138,9 +137,9 @@ void RewardViewLayer::loadPage(unsigned int page){
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    if(listLayer != nullptr) listLayer->removeFromParentAndCleanup(true);
+    if(m_listLayer != nullptr) m_listLayer->removeFromParentAndCleanup(true);
 
-    this->page = page;
+    m_page = page;
     CCArray* displayedLevels = CCArray::create();
     //TODO: can we clone this by passing an iterator or something like that
     const unsigned int levelCount = rewardsPerPage();
@@ -148,32 +147,32 @@ void RewardViewLayer::loadPage(unsigned int page){
     unsigned int lastIndex = (page+1) * levelCount;
 
     for(unsigned int i = firstIndex; i < lastIndex; i++){
-        auto levelObject = sortedRewards->objectAtIndex(i);
-        if(i >= sortedRewards->count() || levelObject == nullptr) break;
+        auto levelObject = m_sortedRewards->objectAtIndex(i);
+        if(i >= m_sortedRewards->count() || levelObject == nullptr) break;
 
         displayedLevels->addObject(levelObject);
     }
 
-    rewardView = RewardListView::create(displayedLevels, 356.f, 220.f);
-    listLayer = GJListLayer::create(rewardView, CCString::createWithFormat("%s Chests", title)->getCString(), {191, 114, 62, 255}, 356.f, 220.f);
-    listLayer->setPosition(winSize / 2 - listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
-    addChild(listLayer);
+    auto rewardView = CvoltonListView<RewardCell>::create(displayedLevels, 356.f, 220.f, 45.f);
+    m_listLayer = GJListLayer::create(rewardView, CCString::createWithFormat("%s Chests", m_title)->getCString(), {191, 114, 62, 255}, 356.f, 220.f);
+    m_listLayer->setPosition(winSize / 2 - m_listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
+    addChild(m_listLayer);
 
-    if(page == 0) prevBtn->setVisible(false);
-    else prevBtn->setVisible(true);
+    if(page == 0) m_prevBtn->setVisible(false);
+    else m_prevBtn->setVisible(true);
 
-    if(sortedRewards->count() > lastIndex) nextBtn->setVisible(true);
-    else nextBtn->setVisible(false);
+    if(m_sortedRewards->count() > lastIndex) m_nextBtn->setVisible(true);
+    else m_nextBtn->setVisible(false);
 
-    pageBtnSprite->setString(std::to_string(page+1).c_str());
+    m_pageBtnSprite->setString(std::to_string(page+1).c_str());
 
-    counter->setCString(CCString::createWithFormat("%i to %i of %i", firstIndex+1, (sortedRewards->count() >= lastIndex) ? lastIndex : sortedRewards->count(), sortedRewards->count())->getCString());
+    m_counter->setCString(CCString::createWithFormat("%i to %i of %i", firstIndex+1, (m_sortedRewards->count() >= lastIndex) ? lastIndex : m_sortedRewards->count(), m_sortedRewards->count())->getCString());
 }
 
 void RewardViewLayer::keyBackClicked() {
     setTouchEnabled(false);
     setKeypadEnabled(false);
-    sortedRewards->release();
+    m_sortedRewards->release();
     CCDirector::sharedDirector()->popSceneWithTransition(0.5f, PopTransition::kPopTransitionFade);
 }
 
@@ -183,11 +182,11 @@ void RewardViewLayer::onBack(CCObject* object) {
 }
 
 void RewardViewLayer::onPrev(CCObject* object) {
-    loadPage(--page);
+    loadPage(--m_page);
 }
 
 void RewardViewLayer::onNext(CCObject* object) {
-    loadPage(++page);
+    loadPage(++m_page);
 }
 
 void RewardViewLayer::onJumpToPageLayer(CCObject* sender){
@@ -195,7 +194,7 @@ void RewardViewLayer::onJumpToPageLayer(CCObject* sender){
 }
 
 void RewardViewLayer::onRandom(CCObject* sender){
-    loadPage(BetterInfo::randomNumber(0, sortedRewards->count() / rewardsPerPage()));
+    loadPage(BetterInfo::randomNumber(0, m_sortedRewards->count() / rewardsPerPage()));
 }
 
 CCScene* RewardViewLayer::scene(CCDictionary* chests, const char* title) {
@@ -206,7 +205,7 @@ CCScene* RewardViewLayer::scene(CCDictionary* chests, const char* title) {
 }
 
 int RewardViewLayer::getPage() const{
-    return page;
+    return m_page;
 }
 
 int RewardViewLayer::rewardsPerPage() const{
@@ -217,11 +216,11 @@ void RewardViewLayer::keyDown(enumKeyCodes key){
     switch(key){
         case KEY_Left:
         case CONTROLLER_Left:
-            if(prevBtn->isVisible() == true) onPrev(nullptr);
+            if(m_prevBtn->isVisible() == true) onPrev(nullptr);
             break;
         case KEY_Right:
         case CONTROLLER_Right:
-            if(nextBtn->isVisible() == true) onNext(nullptr);
+            if(m_nextBtn->isVisible() == true) onNext(nullptr);
             break;
         default:
             CCLayer::keyDown(key);

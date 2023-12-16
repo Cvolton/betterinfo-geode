@@ -1,7 +1,9 @@
 #include "RewardCell.h"
 #include "../utils.hpp"
 
-void RewardCell::loadFromReward(GJRewardItem* reward) {
+void RewardCell::loadFromData(CCObject* object) {
+    auto reward = static_cast<GJRewardItem*>(object);
+
     const float rowX = 48.f;
     const float rowY = 10.5f;
 

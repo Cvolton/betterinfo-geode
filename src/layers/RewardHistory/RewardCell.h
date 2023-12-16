@@ -9,6 +9,6 @@ class RewardCell : public GenericListCell {
     
     public:
         RewardCell(const char* name, cocos2d::CCSize size);
-        void loadFromReward(GJRewardItem* reward);
+        void loadFromData(CCObject* object);
         static RewardCell* create(const char* key, cocos2d::CCSize size);
 };

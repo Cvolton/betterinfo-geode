@@ -2,7 +2,8 @@
 #include "../../utils.hpp"
 #include "../../managers/BetterInfoCache.h"
 
-void DailyCell::loadFromLevel(GJGameLevel* level) {
+void DailyCell::loadFromData(CCObject* object) {
+    auto level = static_cast<GJGameLevel*>(object);
     this->m_level = level;
 
     auto biCache = BetterInfoCache::sharedState();

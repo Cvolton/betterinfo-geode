@@ -16,6 +16,6 @@ class DailyCell : public GenericListCell {
     
     public:
         DailyCell(const char* name, cocos2d::CCSize size);
-        void loadFromLevel(GJGameLevel* level);
+        void loadFromData(CCObject* object);
         static DailyCell* create(const char* key, cocos2d::CCSize size);
 };

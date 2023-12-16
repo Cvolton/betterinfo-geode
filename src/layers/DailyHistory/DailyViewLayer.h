@@ -1,18 +1,18 @@
 #pragma once
 
-#include "DailyListView.h"
+#include "../_bases/CvoltonListView.h"
+#include "DailyCell.h"
 #include "../../delegates/PageNumberDelegate.h"
 
 class DailyViewLayer : public cocos2d::CCLayer, public PageNumberDelegate {
-    DailyListView* dailyView = nullptr;
-    GJListLayer* listLayer = nullptr;
-    cocos2d::CCArray* sortedLevels = nullptr;
-    CCMenuItemSpriteExtra* prevBtn = nullptr;
-    CCMenuItemSpriteExtra* nextBtn = nullptr;
-    cocos2d::CCLabelBMFont* counter = nullptr;
-    ButtonSprite* pageBtnSprite = nullptr;
-    unsigned int page = 0;
-    bool isWeekly = false;
+    GJListLayer* m_listLayer = nullptr;
+    cocos2d::CCArray* m_sortedLevels = nullptr;
+    CCMenuItemSpriteExtra* m_prevBtn = nullptr;
+    CCMenuItemSpriteExtra* m_nextBtn = nullptr;
+    cocos2d::CCLabelBMFont* m_counter = nullptr;
+    ButtonSprite* m_pageBtnSprite = nullptr;
+    unsigned int m_page = 0;
+    bool m_isWeekly = false;
 protected:
     virtual bool init(bool isWeekly);
     virtual void keyBackClicked();

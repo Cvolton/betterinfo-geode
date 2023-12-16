@@ -1,5 +1,4 @@
 #include "DailyViewLayer.h"
-#include "DailyListView.h"
 #include "../JumpToPageLayer.h"
 #include "../../utils.hpp"
 
@@ -21,7 +20,7 @@ bool DailyViewLayer::compareDailies(const void* l1, const void* l2){
 }
 
 bool DailyViewLayer::init(bool isWeekly) {
-    this->isWeekly = isWeekly;
+    m_isWeekly = isWeekly;
 
     auto GLM = GameLevelManager::sharedState();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
@@ -51,8 +50,8 @@ bool DailyViewLayer::init(bool isWeekly) {
     setKeypadEnabled(true);
 
     auto dailyLevels = GLM->m_dailyLevels;
-    sortedLevels = CCArray::create();
-    sortedLevels->retain();
+    m_sortedLevels = CCArray::create();
+    m_sortedLevels->retain();
     CCDictElement* obj;
     CCDICT_FOREACH(dailyLevels, obj){
         auto currentLvl = static_cast<GJGameLevel*>(obj->getObject());
@@ -60,35 +59,35 @@ bool DailyViewLayer::init(bool isWeekly) {
             currentLvl != nullptr &&
             ((isWeekly && currentLvl->m_dailyID >= 100000) || (!isWeekly && currentLvl->m_dailyID < 100000))
         ){
-            sortedLevels->addObject(currentLvl);
+            m_sortedLevels->addObject(currentLvl);
         }
     }
-    std::sort(sortedLevels->data->arr, sortedLevels->data->arr + sortedLevels->data->num, DailyViewLayer::compareDailies);
+    std::sort(m_sortedLevels->data->arr, m_sortedLevels->data->arr + m_sortedLevels->data->num, DailyViewLayer::compareDailies);
 
     auto prevSprite = CCSprite::createWithSpriteFrameName(controllerConnected ? "controllerBtn_DPad_Left_001.png" : "GJ_arrow_03_001.png");
-    prevBtn = CCMenuItemSpriteExtra::create(
+    m_prevBtn = CCMenuItemSpriteExtra::create(
         prevSprite,
         this,
         menu_selector(DailyViewLayer::onPrev)
     );
-    prevBtn->setPosition({- (winSize.width / 2) + 25, 0});
-    menu->addChild(prevBtn);
+    m_prevBtn->setPosition({- (winSize.width / 2) + 25, 0});
+    menu->addChild(m_prevBtn);
 
     auto nextSprite = CCSprite::createWithSpriteFrameName(controllerConnected ? "controllerBtn_DPad_Right_001.png" : "GJ_arrow_03_001.png");
     if(!controllerConnected) nextSprite->setFlipX(true);
-    nextBtn = CCMenuItemSpriteExtra::create(
+    m_nextBtn = CCMenuItemSpriteExtra::create(
         nextSprite,
         this,
         menu_selector(DailyViewLayer::onNext)
     );
-    nextBtn->setPosition({+ (winSize.width / 2) - 25, 0});
-    menu->addChild(nextBtn);
+    m_nextBtn->setPosition({+ (winSize.width / 2) - 25, 0});
+    menu->addChild(m_nextBtn);
 
-    counter = CCLabelBMFont::create("0 to 0 of 0", "goldFont.fnt");
-    counter->setAnchorPoint({ 1.f, 1.f });
-    counter->setPosition(winSize - CCPoint(7,3));
-    counter->setScale(0.5f);
-    addChild(counter);
+    m_counter = CCLabelBMFont::create("0 to 0 of 0", "goldFont.fnt");
+    m_counter->setAnchorPoint({ 1.f, 1.f });
+    m_counter->setPosition(winSize - CCPoint(7,3));
+    m_counter->setScale(0.5f);
+    addChild(m_counter);
 
     //corners
     auto cornerBL = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
@@ -103,10 +102,10 @@ bool DailyViewLayer::init(bool isWeekly) {
     addChild(cornerBR, -1);
 
     //navigation buttons
-    pageBtnSprite = ButtonSprite::create("1", 23, true, "bigFont.fnt", "GJ_button_02.png", 40, .7f);
-    pageBtnSprite->setScale(0.7f);
+    m_pageBtnSprite = ButtonSprite::create("1", 23, true, "bigFont.fnt", "GJ_button_02.png", 40, .7f);
+    m_pageBtnSprite->setScale(0.7f);
     auto pageBtn = CCMenuItemSpriteExtra::create(
-        pageBtnSprite,
+        m_pageBtnSprite,
         this,
         menu_selector(DailyViewLayer::onJumpToPageLayer)
     );
@@ -143,9 +142,9 @@ void DailyViewLayer::loadPage(unsigned int page){
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    if(listLayer != nullptr) listLayer->removeFromParentAndCleanup(true);
+    if(m_listLayer != nullptr) m_listLayer->removeFromParentAndCleanup(true);
 
-    this->page = page;
+    m_page = page;
     CCArray* displayedLevels = CCArray::create();
     //TODO: can we clone this by passing an iterator or something like that
     const unsigned int levelCount = levelsPerPage();
@@ -153,32 +152,32 @@ void DailyViewLayer::loadPage(unsigned int page){
     unsigned int lastIndex = (page+1) * levelCount;
 
     for(unsigned int i = firstIndex; i < lastIndex; i++){
-        auto levelObject = sortedLevels->objectAtIndex(i);
-        if(i >= sortedLevels->count() || levelObject == nullptr) break;
+        auto levelObject = m_sortedLevels->objectAtIndex(i);
+        if(i >= m_sortedLevels->count() || levelObject == nullptr) break;
 
         displayedLevels->addObject(levelObject);
     }
 
-    dailyView = DailyListView::create(displayedLevels, 356.f, 220.f);
-    listLayer = GJListLayer::create(dailyView, isWeekly ? "Weekly Demons" : "Daily Levels", {191, 114, 62, 255}, 356.f, 220.f);
-    listLayer->setPosition(winSize / 2 - listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
-    addChild(listLayer);
+    auto listView = CvoltonListView<DailyCell>::create(displayedLevels, 356.f, 220.f);
+    m_listLayer = GJListLayer::create(listView, m_isWeekly ? "Weekly Demons" : "Daily Levels", {191, 114, 62, 255}, 356.f, 220.f);
+    m_listLayer->setPosition(winSize / 2 - m_listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
+    addChild(m_listLayer);
 
-    if(page == 0) prevBtn->setVisible(false);
-    else prevBtn->setVisible(true);
+    if(page == 0) m_prevBtn->setVisible(false);
+    else m_prevBtn->setVisible(true);
 
-    if(sortedLevels->count() > lastIndex) nextBtn->setVisible(true);
-    else nextBtn->setVisible(false);
+    if(m_sortedLevels->count() > lastIndex) m_nextBtn->setVisible(true);
+    else m_nextBtn->setVisible(false);
 
-    pageBtnSprite->setString(std::to_string(page+1).c_str());
+    m_pageBtnSprite->setString(std::to_string(page+1).c_str());
 
-    counter->setCString(CCString::createWithFormat("%i to %i of %i", firstIndex+1, (sortedLevels->count() >= lastIndex) ? lastIndex : sortedLevels->count(), sortedLevels->count())->getCString());
+    m_counter->setCString(CCString::createWithFormat("%i to %i of %i", firstIndex+1, (m_sortedLevels->count() >= lastIndex) ? lastIndex : m_sortedLevels->count(), m_sortedLevels->count())->getCString());
 }
 
 void DailyViewLayer::keyBackClicked() {
     setTouchEnabled(false);
     setKeypadEnabled(false);
-    sortedLevels->release();
+    m_sortedLevels->release();
     CCDirector::sharedDirector()->popSceneWithTransition(0.5f, PopTransition::kPopTransitionFade);
 }
 
@@ -188,11 +187,11 @@ void DailyViewLayer::onBack(CCObject* object) {
 }
 
 void DailyViewLayer::onPrev(CCObject* object) {
-    loadPage(--page);
+    loadPage(--m_page);
 }
 
 void DailyViewLayer::onNext(CCObject* object) {
-    loadPage(++page);
+    loadPage(++m_page);
 }
 
 void DailyViewLayer::onJumpToPageLayer(CCObject* sender){
@@ -200,11 +199,11 @@ void DailyViewLayer::onJumpToPageLayer(CCObject* sender){
 }
 
 void DailyViewLayer::onRandom(CCObject* sender){
-    loadPage(BetterInfo::randomNumber(0, sortedLevels->count() / levelsPerPage()));
+    loadPage(BetterInfo::randomNumber(0, m_sortedLevels->count() / levelsPerPage()));
 }
 
 void DailyViewLayer::onMore(CCObject* object) {
-    auto searchObject = GJSearchObject::create(isWeekly ? SearchType::WeeklyVault : SearchType::DailyVault);
+    auto searchObject = GJSearchObject::create(m_isWeekly ? SearchType::WeeklyVault : SearchType::DailyVault);
     auto browserLayer = LevelBrowserLayer::scene(searchObject);
 
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
@@ -220,7 +219,7 @@ CCScene* DailyViewLayer::scene(bool isWeekly) {
 }
 
 int DailyViewLayer::getPage() const{
-    return page;
+    return m_page;
 }
 
 int DailyViewLayer::levelsPerPage() const{
@@ -231,11 +230,11 @@ void DailyViewLayer::keyDown(enumKeyCodes key){
     switch(key){
         case KEY_Left:
         case CONTROLLER_Left:
-            if(prevBtn->isVisible() == true) onPrev(nullptr);
+            if(m_prevBtn->isVisible() == true) onPrev(nullptr);
             break;
         case KEY_Right:
         case CONTROLLER_Right:
-            if(nextBtn->isVisible() == true) onNext(nullptr);
+            if(m_nextBtn->isVisible() == true) onNext(nullptr);
             break;
         default:
             CCLayer::keyDown(key);

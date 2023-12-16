@@ -2,11 +2,16 @@
 
 #include <Geode/Geode.hpp>
 
-/**
- * @brief      This class only exists as a bugfix to CustomListView
- */
+template <class Cell>
 class CvoltonListView : public CustomListView {
 protected:
-    bool init(cocos2d::CCArray* entries, int btype, float width, float height);
+    bool init(cocos2d::CCArray* entries, float width, float height, float separation);
     virtual ~CvoltonListView();
+
+    void setupList() override;
+    TableViewCell* getListCell(const char* key) override;
+    void loadCell(TableViewCell* cell, int index) override;
+    
+public:
+    static CvoltonListView<Cell>* create(cocos2d::CCArray* data, float width, float height, float separation = 55.0f);
 };
