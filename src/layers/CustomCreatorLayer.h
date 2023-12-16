@@ -2,12 +2,13 @@
 
 #include <Geode/Bindings.hpp>
 
+#include "_bases/BIBaseLayer.h"
+
 using namespace geode::prelude;
 
-class CustomCreatorLayer : public cocos2d::CCLayer {
+class CustomCreatorLayer : public BIBaseLayer {
 protected:
     virtual bool init();
-    virtual void keyBackClicked();
     void onBack(cocos2d::CCObject*);
     void onFeatured(cocos2d::CCObject*);
     void onMostLiked(cocos2d::CCObject*);
