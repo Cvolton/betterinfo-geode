@@ -22,7 +22,7 @@ class $modify(BILevelCell, LevelCell) {
         auto parent = CCSprite::create();
         parent->setID("bi-leveldesc");
 
-        /*auto bg = CCScale9Sprite::create("square02b_small.png", { 0, 0, 40, 40 });
+        / *auto bg = CCScale9Sprite::create("square02b_small.png", { 0, 0, 40, 40 });
         bg->setColor({ 0, 0, 0 });
         parent->addChild(bg);
 

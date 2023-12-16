@@ -9,6 +9,7 @@ void RewardCell::loadFromData(CCObject* object) {
     const char* chestTexture = "chest_01_02_001.png";
     float chestSize = 0.35f;
     switch(reward->m_rewardType) {
+        default: break;
         case GJRewardType::Small: chestTexture = "chest_01_02_001.png"; break;
         case GJRewardType::Large: chestTexture = "chest_02_02_001.png"; chestSize = 0.275f; break;
         case GJRewardType::SmallTreasure: chestTexture = "chest_03_02_001.png"; chestSize = 0.275f; break;
