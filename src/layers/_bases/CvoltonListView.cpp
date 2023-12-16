@@ -60,5 +60,5 @@ TableViewCell* CvoltonListView<Cell>::getListCell(const char* key) {
     return new Cell(key, { this->m_width, m_itemSeparation });
 }
 
-template CvoltonListView<DailyCell>;
-template CvoltonListView<RewardCell>;
+template class CvoltonListView<DailyCell>;
+template class CvoltonListView<RewardCell>;
