@@ -2,7 +2,7 @@
 #include "TimeUtils.h"
 
 #include "../managers/BetterInfoStats.h"
-#include "../layers/_bases/PaginatedFLAlert.h"
+#include "../layers/PaginatedFLAlert.h"
 
 std::string LevelProgressDialog::printableProgress(std::string personalBests, int percentage){
 
