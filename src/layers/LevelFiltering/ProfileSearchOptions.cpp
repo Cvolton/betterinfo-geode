@@ -21,7 +21,7 @@ void ProfileSearchOptions::onClose(cocos2d::CCObject* sender)
 {
     destroyToggles();
     if(m_searchObjDelegate != nullptr) m_searchObjDelegate->onSearchObjectFinished(getSearchObject());
-    if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
+    reloadBrowser();
     if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->release();
     setKeypadEnabled(false);
     removeFromParentAndCleanup(true);
@@ -134,6 +134,11 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
     return true;
 }
 
+void ProfileSearchOptions::reloadBrowser(){
+    Mod::get()->setSavedValue<bool>("user_search_dirty", true);
+    if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
+}
+
 void ProfileSearchOptions::createToggle(const char* option, const char* name, float x, float y){
     auto buttonSprite = CCSprite::createWithSpriteFrameName(getOption(option) ? "GJ_checkOn_001.png" : "GJ_checkOff_001.png");
     buttonSprite->setScale(0.8f);
@@ -203,7 +208,7 @@ void ProfileSearchOptions::drawToggles(){
             break;
     }
 
-    if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
+    reloadBrowser();
 }
 
 void ProfileSearchOptions::drawTogglesPrimary(){
@@ -308,7 +313,7 @@ void ProfileSearchOptions::drawTogglesTerciary(){
 }
 
 void ProfileSearchOptions::onDialogClosed(){
-    if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
+    reloadBrowser();
 }
 
 void ProfileSearchOptions::onIDRangeFinished(int min, int max, int additional) {
@@ -330,7 +335,8 @@ void ProfileSearchOptions::onIDRangeFinished(int min, int max, int additional) {
 
     setOptionInt(fmt::format("{}_min", option), min);
     setOptionInt(fmt::format("{}_max", option), max);
-    if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
+    
+    reloadBrowser();
 }
 
 bool ProfileSearchOptions::getOption(const std::string& option) const {

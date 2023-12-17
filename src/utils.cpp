@@ -135,7 +135,6 @@ bool BetterInfo::isAdvancedEnabled(GJSearchObject* searchObject) {
     || searchObject->m_searchType == SearchType::Friends;
 }
 
-
 bool BetterInfo::isSavedFiltered() {
     for(unsigned int i = 0; i <= 4; i++){
         if(

@@ -34,6 +34,7 @@ public:
     void onNext(cocos2d::CCObject* sender);
     void onSecondaryInfo(cocos2d::CCObject* sender);
     bool init(LevelBrowserLayer* levelBrowserLayer = nullptr, const std::string& prefix = "", BISearchObjectDelegate* searchObjDelegate = nullptr);
+    void reloadBrowser();
     void destroyToggles();
     void drawToggles();
     void drawTogglesPrimary();
