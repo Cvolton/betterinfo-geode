@@ -1,8 +1,10 @@
 #include <Geode/Geode.hpp>
+#include <Geode/modify/MenuLayer.hpp>
 
 #include <thread>
 
 //#include "managers/BetterInfoStatsV2.h"
+#include "managers/BetterInfoStats.h"
 #include "managers/BetterInfoCache.h"
 
 using namespace geode::prelude;
@@ -52,6 +54,8 @@ void setupPageLimitBypass() {
 }
 
 void loadManagers() {
+    BetterInfoStats::sharedState();
+
     std::thread([] {
         //BetterInfoStatsV2::sharedState();
         BetterInfoCache::sharedState();
@@ -62,6 +66,12 @@ $execute {
     setupPageLimitBypass();
 }
 
-$on_mod(Loaded) {
-    loadManagers();
-}
+class $modify(MenuLayer) {
+    bool init() {
+        if(!MenuLayer::init()) return false;
+
+        loadManagers();
+
+        return true;
+    }
+};
