@@ -165,9 +165,6 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
 
         auto randomBtn = createRandomBtn();
         if(m_searchObject->m_searchType != SearchType::MyLevels) menu->addChild(randomBtn);
-        else {
-            log::info("pageMenu");
-        }
 
         if(!isLocal){
             auto doubleArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
