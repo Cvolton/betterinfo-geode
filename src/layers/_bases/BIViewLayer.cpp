@@ -86,6 +86,20 @@ void BIViewLayer::loadPage(){
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
+    m_pageBtnSprite->setString(std::to_string(m_page+1).c_str());
+
+    if(m_listLayer != nullptr) m_listLayer->removeFromParentAndCleanup(true);
+    
+    m_listLayer = GJListLayer::create(m_listView, m_title.c_str(), {191, 114, 62, 255}, 356.f, 220.f);
+    m_listLayer->setPosition(winSize / 2 - m_listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
+    addChild(m_listLayer);
+
+    updateCounter();
+}
+
+void BIViewLayer::updateCounter(){
+    if(!m_data) return;
+
     const unsigned int count = resultsPerPage();
     unsigned int firstIndex = m_page * count;
     unsigned int lastIndex = (m_page+1) * count;
@@ -95,14 +109,6 @@ void BIViewLayer::loadPage(){
 
     if(m_data->count() > lastIndex) m_nextBtn->setVisible(true);
     else m_nextBtn->setVisible(false);
-
-    m_pageBtnSprite->setString(std::to_string(m_page+1).c_str());
-
-    if(m_listLayer != nullptr) m_listLayer->removeFromParentAndCleanup(true);
-    
-    m_listLayer = GJListLayer::create(m_listView, m_title.c_str(), {191, 114, 62, 255}, 356.f, 220.f);
-    m_listLayer->setPosition(winSize / 2 - m_listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
-    addChild(m_listLayer);
 
     m_counter->setCString(CCString::createWithFormat("%i to %i of %i", firstIndex+1, (m_data->count() >= lastIndex) ? lastIndex : m_data->count(), m_data->count())->getCString());
 }
@@ -116,7 +122,7 @@ void BIViewLayer::keyBackClicked() {
     setTouchEnabled(false);
     setKeypadEnabled(false);
 
-    m_data->release();
+    if(m_data) m_data->release();
     if(m_circle) m_circle->release();
     m_circle = nullptr;
     

@@ -22,6 +22,7 @@ protected:
 
     virtual bool init(bool paginated = true);
     virtual void keyBackClicked();
+    virtual void updateCounter();
     void onBack(cocos2d::CCObject*);
     void onPrev(cocos2d::CCObject*);
     void onNext(cocos2d::CCObject*);
