@@ -45,22 +45,23 @@ bool BIBaseLayer::init(bool BL, bool BR, bool TL, bool TR) {
 
     m_cornerTL = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     m_cornerTL->setPosition({0,winSize.height});
-    m_cornerTL->setAnchorPoint({0,0});
-    m_cornerTL->setRotation(90);
+    m_cornerTL->setAnchorPoint({0,1});
+    m_cornerTL->setFlipY(true);
     m_cornerTL->setID("bi-corner-ul");
     addChild(m_cornerTL, -1);
 
     m_cornerTR = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     m_cornerTR->setPosition({winSize.width,winSize.height});
-    m_cornerTR->setAnchorPoint({0,0});
-    m_cornerTR->setRotation(180);
+    m_cornerTR->setAnchorPoint({1,1});
+    m_cornerTR->setFlipX(true);
+    m_cornerTR->setFlipY(true);
     m_cornerTR->setID("bi-corner-ur");
     addChild(m_cornerTR, -1);
 
     m_cornerBR = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     m_cornerBR->setPosition({winSize.width,0});
-    m_cornerBR->setAnchorPoint({0,0});
-    m_cornerBR->setRotation(270);
+    m_cornerBR->setAnchorPoint({1,0});
+    m_cornerBR->setFlipX(true);
     m_cornerBR->setID("bi-corner-br");
     addChild(m_cornerBR, -1);
 
