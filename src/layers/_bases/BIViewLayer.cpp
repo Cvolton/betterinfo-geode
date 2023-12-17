@@ -48,24 +48,24 @@ bool BIViewLayer::init() {
     //navigation buttons
     m_pageBtnSprite = ButtonSprite::create("1", 23, true, "bigFont.fnt", "GJ_button_02.png", 40, .7f);
     m_pageBtnSprite->setScale(0.7f);
-    auto pageBtn = CCMenuItemSpriteExtra::create(
+    m_pageBtn = CCMenuItemSpriteExtra::create(
         m_pageBtnSprite,
         this,
         menu_selector(BIViewLayer::onJumpToPageLayer)
     );
-    pageBtn->setSizeMult(1.2f);
-    pageBtn->setPosition({+ (winSize.width / 2) - 23, (winSize.height / 2) - 37});
-    menu->addChild(pageBtn);
+    m_pageBtn->setSizeMult(1.2f);
+    m_pageBtn->setPosition({+ (winSize.width / 2) - 23, (winSize.height / 2) - 37});
+    menu->addChild(m_pageBtn);
 
     auto randomSprite = BetterInfo::createWithBISpriteFrameName("BI_randomBtn_001.png");
     randomSprite->setScale(0.9f);
-    auto randomBtn = CCMenuItemSpriteExtra::create(
+    m_randomBtn = CCMenuItemSpriteExtra::create(
         randomSprite,
         this,
         menu_selector(BIViewLayer::onRandom)
     );
-    randomBtn->setPosition({ (winSize.width / 2) - 23, (winSize.height / 2) - 72});
-    menu->addChild(randomBtn);
+    m_randomBtn->setPosition({ (winSize.width / 2) - 23, (winSize.height / 2) - 72});
+    menu->addChild(m_randomBtn);
 
     addChild(menu);
 
@@ -87,6 +87,12 @@ void BIViewLayer::loadPage(unsigned int page){
 
     if(m_data->count() > lastIndex) m_nextBtn->setVisible(true);
     else m_nextBtn->setVisible(false);
+
+    if(m_data->count() > resultsPerPage()) m_pageBtn->setVisible(true);
+    else m_pageBtn->setVisible(false);
+
+    if(m_data->count() > resultsPerPage()) m_randomBtn->setVisible(true);
+    else m_randomBtn->setVisible(false);
 
     m_pageBtnSprite->setString(std::to_string(page+1).c_str());
 

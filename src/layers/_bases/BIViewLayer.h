@@ -12,6 +12,8 @@ protected:
     cocos2d::CCArray* m_data = nullptr;
     CCMenuItemSpriteExtra* m_prevBtn = nullptr;
     CCMenuItemSpriteExtra* m_nextBtn = nullptr;
+    CCMenuItemSpriteExtra* m_pageBtn = nullptr;
+    CCMenuItemSpriteExtra* m_randomBtn = nullptr;
     cocos2d::CCLabelBMFont* m_counter = nullptr;
     ButtonSprite* m_pageBtnSprite = nullptr;
     unsigned int m_page = 0;
