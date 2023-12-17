@@ -69,10 +69,42 @@ bool BIViewLayer::init(bool paginated) {
     m_randomBtn->setPosition({ (winSize.width / 2) - 23, (winSize.height / 2) - 72});
     menu->addChild(m_randomBtn);
 
+    auto doubleArrowLeft = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
+    auto arrowLeft = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
+    arrowLeft->setPosition({0,20});
+    doubleArrowLeft->addChild(arrowLeft);
+    doubleArrowLeft->setScale(0.5f);
+    m_firstBtn = CCMenuItemSpriteExtra::create(
+        doubleArrowLeft,
+        this,
+        menu_selector(BIViewLayer::onFirst)
+    );
+    m_firstBtn->setID("bi-first-button");
+    m_firstBtn->setPosition({ - (winSize.width / 2) + 26, 60});
+    menu->addChild(m_firstBtn);
+
+    auto doubleArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
+    auto arrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
+    arrow->setPosition({31.5,20});
+    doubleArrow->addChild(arrow);
+    doubleArrow->setScale(0.5f);
+    doubleArrow->setFlipX(true);
+    arrow->setFlipX(true);
+    m_lastBtn = CCMenuItemSpriteExtra::create(
+        doubleArrow,
+        this,
+        menu_selector(BIViewLayer::onLast)
+    );
+    m_lastBtn->setPosition({ (winSize.width / 2) - 26, 60});
+    m_lastBtn->setID("bi-last-button");
+    menu->addChild(m_lastBtn);
+
     if(!paginated) {
         m_pageBtn->setVisible(false);
         m_randomBtn->setVisible(false);
         m_counter->setVisible(false);
+        m_lastBtn->setVisible(false);
+        m_firstBtn->setVisible(false);
     }
 
     addChild(menu);
@@ -104,11 +136,21 @@ void BIViewLayer::updateCounter(){
     unsigned int firstIndex = m_page * count;
     unsigned int lastIndex = (m_page+1) * count;
 
-    if(m_page == 0) m_prevBtn->setVisible(false);
-    else m_prevBtn->setVisible(true);
-
-    if(m_data->count() > lastIndex) m_nextBtn->setVisible(true);
-    else m_nextBtn->setVisible(false);
+    if(m_page == 0) {
+        m_prevBtn->setVisible(false);
+        m_firstBtn->setVisible(false);
+    } else {
+        m_prevBtn->setVisible(true);
+        m_firstBtn->setVisible(true);
+    }
+    
+    if(m_data->count() > lastIndex) {
+        m_nextBtn->setVisible(true);
+        m_lastBtn->setVisible(true);
+    } else {
+        m_nextBtn->setVisible(false);
+        m_lastBtn->setVisible(false);
+    }
 
     m_counter->setCString(CCString::createWithFormat("%i to %i of %i", firstIndex+1, (m_data->count() >= lastIndex) ? lastIndex : m_data->count(), m_data->count())->getCString());
 }
@@ -156,6 +198,14 @@ void BIViewLayer::onPrev(CCObject* object) {
 
 void BIViewLayer::onNext(CCObject* object) {
     loadPage(++m_page);
+}
+
+void BIViewLayer::onFirst(CCObject* object) {
+    loadPage(0);
+}
+
+void BIViewLayer::onLast(CCObject* object) {
+    loadPage((m_data->count() - 1) / resultsPerPage());
 }
 
 void BIViewLayer::onJumpToPageLayer(CCObject* sender){

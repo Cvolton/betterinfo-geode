@@ -14,6 +14,8 @@ protected:
     CCMenuItemSpriteExtra* m_nextBtn = nullptr;
     CCMenuItemSpriteExtra* m_pageBtn = nullptr;
     CCMenuItemSpriteExtra* m_randomBtn = nullptr;
+    CCMenuItemSpriteExtra* m_firstBtn = nullptr;
+    CCMenuItemSpriteExtra* m_lastBtn = nullptr;
     cocos2d::CCLabelBMFont* m_counter = nullptr;
     ButtonSprite* m_pageBtnSprite = nullptr;
     LoadingCircle* m_circle = nullptr;
@@ -26,6 +28,8 @@ protected:
     void onBack(cocos2d::CCObject*);
     void onPrev(cocos2d::CCObject*);
     void onNext(cocos2d::CCObject*);
+    void onFirst(cocos2d::CCObject*);
+    void onLast(cocos2d::CCObject*);
     void onJumpToPageLayer(cocos2d::CCObject*);
     void onRandom(cocos2d::CCObject*);
     virtual int resultsPerPage() const;
