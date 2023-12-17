@@ -25,9 +25,8 @@ bool RewardViewLayer::compareRewards(const void* i1, const void* i2){
 bool RewardViewLayer::init(CCDictionary* chests, const char* title) {
     Mod::get()->setSavedValue<std::string>("reward-cell-title", title);
     m_title = fmt::format("{} Chests", title);
+    setData(CCArray::create());
 
-    m_data = CCArray::create();
-    m_data->retain();
     CCDictElement* obj;
     CCDICT_FOREACH(chests, obj){
         auto currentReward = static_cast<GJRewardItem*>(obj->getObject());

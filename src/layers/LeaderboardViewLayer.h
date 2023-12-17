@@ -4,7 +4,6 @@
 #include "_bases/BIViewLayer.h"
 
 class LeaderboardViewLayer : public BIViewLayer, public BILeaderboardDelegate {
-    LoadingCircle* m_circle = nullptr;
     int m_accountID = 0;
 protected:
     virtual bool init(int accountID);

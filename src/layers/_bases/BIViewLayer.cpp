@@ -82,6 +82,8 @@ bool BIViewLayer::init(bool paginated) {
 }
 
 void BIViewLayer::loadPage(){
+    if(!m_data) return;
+
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
     const unsigned int count = resultsPerPage();
@@ -113,7 +115,11 @@ void BIViewLayer::loadPage(unsigned int page){
 void BIViewLayer::keyBackClicked() {
     setTouchEnabled(false);
     setKeypadEnabled(false);
+
     m_data->release();
+    if(m_circle) m_circle->release();
+    m_circle = nullptr;
+    
     CCDirector::sharedDirector()->popSceneWithTransition(0.5f, PopTransition::kPopTransitionFade);
 }
 
@@ -181,5 +187,28 @@ void BIViewLayer::keyDown(enumKeyCodes key){
             break;
         default:
             CCLayer::keyDown(key);
+    }
+}
+
+void BIViewLayer::setData(CCArray* data){
+    if(m_data) m_data->release();
+    m_data = data;
+    m_data->retain();
+}
+
+void BIViewLayer::showCircle(){
+    hideCircle();
+
+    m_circle = LoadingCircle::create();
+    m_circle->retain();
+    m_circle->setParentLayer(this);
+    m_circle->show();
+}
+
+void BIViewLayer::hideCircle(){
+    if(m_circle) {
+        m_circle->fadeAndRemove();
+        m_circle->release();
+        m_circle = nullptr;
     }
 }

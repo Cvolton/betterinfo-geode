@@ -23,13 +23,7 @@ bool LeaderboardViewLayer::init(int accountID) {
     m_accountID = accountID;
     m_title = "Global Leaderboards";
 
-    m_data = CCArray::create();
-    m_data->retain();
-
-    m_circle = LoadingCircle::create();
-    m_circle->retain();
-    m_circle->setParentLayer(this);
-    m_circle->show();
+    showCircle();
 
     //refresh btn
     auto refreshBtn = CCMenuItemSpriteExtra::create(
@@ -46,6 +40,8 @@ bool LeaderboardViewLayer::init(int accountID) {
 
     this->addChild(menuRefresh);
 
+    setData(CCArray::create());
+
     loadPage();
     BetterInfoOnline::sharedState()->loadScores(m_accountID, false, this);
 
@@ -61,9 +57,6 @@ void LeaderboardViewLayer::loadPage(){
 
 void LeaderboardViewLayer::keyBackClicked() {
     BetterInfoOnline::sharedState()->m_scoreDelegate = nullptr;
-    
-    if(m_circle) m_circle->release();
-    m_circle = nullptr;
 
     BIViewLayer::keyBackClicked();
 }
@@ -71,15 +64,7 @@ void LeaderboardViewLayer::keyBackClicked() {
 void LeaderboardViewLayer::onRefresh(CCObject* object) {
     BetterInfoOnline::sharedState()->loadScores(m_accountID, true, this);
 
-    if(m_circle) {
-        m_circle->fadeAndRemove();
-        m_circle->release();
-    }
-
-    m_circle = LoadingCircle::create();
-    m_circle->retain();
-    m_circle->setParentLayer(this);
-    m_circle->show();
+    showCircle();
 }
 
 CCScene* LeaderboardViewLayer::scene(int accountID) {
@@ -90,8 +75,7 @@ CCScene* LeaderboardViewLayer::scene(int accountID) {
 }
 
 void LeaderboardViewLayer::onLeaderboardFinished(cocos2d::CCArray* scores) {
-    m_data = scores;
-    m_data->retain();
+    setData(scores);
     loadPage();
-    if(m_circle) m_circle->fadeAndRemove();
+    hideCircle();
 }

@@ -23,10 +23,9 @@ bool DailyViewLayer::init(bool isWeekly) {
     // initialize data
     auto GLM = GameLevelManager::sharedState();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
+    setData(CCArray::create());
 
     auto dailyLevels = GLM->m_dailyLevels;
-    m_data = CCArray::create();
-    m_data->retain();
     CCDictElement* obj;
     CCDICT_FOREACH(dailyLevels, obj){
         auto currentLvl = static_cast<GJGameLevel*>(obj->getObject());

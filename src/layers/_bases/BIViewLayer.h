@@ -16,6 +16,7 @@ protected:
     CCMenuItemSpriteExtra* m_randomBtn = nullptr;
     cocos2d::CCLabelBMFont* m_counter = nullptr;
     ButtonSprite* m_pageBtnSprite = nullptr;
+    LoadingCircle* m_circle = nullptr;
     unsigned int m_page = 0;
     bool m_paginated = true;
 
@@ -35,4 +36,8 @@ public:
     static cocos2d::CCScene* scene(bool paginated = true);
     virtual int getPage() const;
     virtual void keyDown(cocos2d::enumKeyCodes key);
+    void setData(cocos2d::CCArray* data);
+
+    void showCircle();
+    void hideCircle();
 };
