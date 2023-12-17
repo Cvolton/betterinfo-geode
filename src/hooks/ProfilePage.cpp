@@ -123,7 +123,6 @@ class $modify(BIProfilePage, ProfilePage) {
      */
 
     void loadPageFromUserInfo(GJUserScore* a2){
-        //TODO: fix mod badge positioning for empty profiles
         GameLevelManager::sharedState()->storeUserName(a2->m_userID, a2->m_accountID, a2->m_userName);
 
         ProfilePage::loadPageFromUserInfo(a2);

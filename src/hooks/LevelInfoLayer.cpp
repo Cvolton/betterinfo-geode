@@ -18,13 +18,21 @@ class $modify(LevelInfoLayer) {
     bool init(GJGameLevel* level) {
         if (!LevelInfoLayer::init(level)) return false;
 
+        /**
+         * Clickable green username
+         */
         auto playerName = static_cast<CCMenuItemSpriteExtra*>(this->getChildByID("creator-info-menu")->getChildByID("creator-name"));
         playerName->setEnabled(true);
 
+        /**
+         * Store date for InfoLayer
+        */
         auto cache = BetterInfoCache::sharedState();
         cache->storeDatesForLevel(this->m_level);
 
-        //auto label = typeinfo_cast<CCLabelBMFont*>(getChildByID("length-label"));
+        /**
+         * Add exact time label
+        */
         auto label = m_lengthLabel;
         if(label) {
             auto bmFont = CCLabelBMFont::create("Loading", "bigFont.fnt");
@@ -40,9 +48,12 @@ class $modify(LevelInfoLayer) {
     }
 
     void updateLabelValues() {
-        retain();
-
         LevelInfoLayer::updateLabelValues();
+
+        /**
+         * Update exact time label
+        */
+        retain();
 
         auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("bi-exact-time"));
         if(bmFont && m_lengthLabel) bmFont->setPosition({m_lengthLabel->getPositionX() + 1, m_lengthLabel->getPositionY() - 8.f});

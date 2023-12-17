@@ -6,6 +6,7 @@
 //#include "managers/BetterInfoStatsV2.h"
 #include "managers/BetterInfoStats.h"
 #include "managers/BetterInfoCache.h"
+#include "utils.hpp"
 
 using namespace geode::prelude;
 
@@ -71,6 +72,7 @@ class $modify(MenuLayer) {
         if(!MenuLayer::init()) return false;
 
         loadManagers();
+        BetterInfo::loadImportantNotices(this);
 
         return true;
     }

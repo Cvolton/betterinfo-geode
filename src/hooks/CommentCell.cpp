@@ -17,23 +17,17 @@ class $modify(BICommentCell, CommentCell) {
      * Callbacks
      */
     void onProfilePage(CCObject* sender){
-        //FLAlertLayer::create("meow", this->m_comment->);
-        //return
         this->m_comment->m_userScore->m_userID = this->m_comment->m_userID;
         UnregisteredProfileLayer::create(this->m_comment->m_userScore, this->getParent()->getParent()->getParent()->getParent()->getParent()->getParent())->show();
     }
 
     void onLevelInfoNoLoad(CCObject* sender){
         auto level = GJGameLevel::create();
-        //level->levelID_rand = this->m_comment->m_levelID;
-        //level->levelID_seed = 0;
         level->m_levelID = this->m_comment->m_levelID;
 
         InfoLayer* infoLayer = InfoLayer::create(level, nullptr);
         infoLayer->m_scene = this->getParent()->getParent()->getParent()->getParent()->getParent()->getParent();
         infoLayer->show();
-
-        //FLAlertLayer::create(nullptr, "Level Stats", "OK", nullptr, std::to_string(layer->comment->m_levelID))->show();
     }
 
     /*
@@ -50,7 +44,6 @@ class $modify(BICommentCell, CommentCell) {
         CCMenu* menu = nullptr;
 
         auto winSize = CCDirector::sharedDirector()->getWinSize();
-        //bool smallCommentsMode = GameManager::sharedState()->getGameVariable("0088");
         bool smallCommentsMode = this->m_height == 36; //this is how robtop does the check
 
         auto idText = CCLabelBMFont::create(fmt::format("#{}", b->m_commentID).c_str(), "chatFont.fnt");
