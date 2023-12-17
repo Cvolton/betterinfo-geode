@@ -2,7 +2,7 @@
 
 const int completedMax = 6;
 
-ProfileSearchOptionsSongSelect* ProfileSearchOptionsSongSelect::create(DialogCloseDelegate* delegate){
+ProfileSearchOptionsSongSelect* ProfileSearchOptionsSongSelect::create(SongDialogCloseDelegate* delegate){
     auto ret = new ProfileSearchOptionsSongSelect();
     if (ret && ret->init(delegate)) {
         //robert 1 :D
@@ -17,31 +17,30 @@ ProfileSearchOptionsSongSelect* ProfileSearchOptionsSongSelect::create(DialogClo
 
 void ProfileSearchOptionsSongSelect::onClose(cocos2d::CCObject* sender)
 {
-    setOptionInt("user_search_song_id", songID());
     destroyToggles();
-    delegate->onDialogClosed();
+    m_delegate->onSongDialogClosed(getOption("user_search_song_custom"), songID());
     setKeypadEnabled(false);
     removeFromParentAndCleanup(true);
 }
 
-bool ProfileSearchOptionsSongSelect::init(DialogCloseDelegate* delegate){
+bool ProfileSearchOptionsSongSelect::init(SongDialogCloseDelegate* delegate){
     bool init = createBasics({240.0f, 150.0f}, menu_selector(ProfileSearchOptionsSongSelect::onClose), .8f, {0x00, 0x00, 0x00, 0x96});
     if(!init) return false;
 
-    this->delegate = delegate;
+    m_delegate = delegate;
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
     createTitle("Song Filter", .45f, .9f);
 
-    textNode = CCTextInputNode::create(100, 30, "Num", "bigFont.fnt");
-    textNode->setLabelPlaceholderColor({0x75, 0xAA, 0xF0});
-    textNode->setString(std::to_string(getOptionInt("user_search_song_id")).c_str());
-    textNode->setAllowedChars("0123456789");
-    textNode->setMaxLabelScale(0.7f);
-    textNode->setMaxLabelWidth(11);
-    textNode->setPosition({0,-37});
-    m_buttonMenu->addChild(textNode);
+    m_textNode = CCTextInputNode::create(100, 30, "Num", "bigFont.fnt");
+    m_textNode->setLabelPlaceholderColor({0x75, 0xAA, 0xF0});
+    m_textNode->setString(std::to_string(getOptionInt("user_search_song_id")).c_str());
+    m_textNode->setAllowedChars("0123456789");
+    m_textNode->setMaxLabelScale(0.7f);
+    m_textNode->setMaxLabelWidth(11);
+    m_textNode->setPosition({0,-37});
+    m_buttonMenu->addChild(m_textNode);
 
     auto infoBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
     infoBg->setContentSize({200,60});
@@ -99,7 +98,7 @@ void ProfileSearchOptionsSongSelect::drawToggles(){
 int ProfileSearchOptionsSongSelect::songID(){
     int songID = 0;
     try{
-        songID = std::stoi(textNode->getString());
+        songID = std::stoi(m_textNode->getString());
     }catch(...){}
     return songID;
 }

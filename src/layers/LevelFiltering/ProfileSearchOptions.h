@@ -1,6 +1,6 @@
 #pragma once
 #include "../_bases/CvoltonOptionsLayer.h"
-#include "../../delegates/DialogCloseDelegate.h"
+#include "../../delegates/SongDialogCloseDelegate.h"
 #include "../../delegates/IDRangeDelegate.h"
 #include "../../delegates/BISearchObjectDelegate.h"
 #include "../../objects/BISearchObject.h"
@@ -9,7 +9,7 @@
 
 using namespace geode::prelude;
 
-class ProfileSearchOptions : public CvoltonOptionsLayer, public DialogCloseDelegate, public IDRangeDelegate {
+class ProfileSearchOptions : public CvoltonOptionsLayer, public SongDialogCloseDelegate, public IDRangeDelegate {
     std::map<std::string, bool> m_options;
     std::map<std::string, int> m_optionInts;
     LevelBrowserLayer* m_levelBrowserLayer = nullptr;
@@ -42,7 +42,7 @@ public:
     void drawTogglesTerciary();
     void createToggle(const char* option, const char* name, float x, float y);
     void createToggle(const char* option, const char* name, float x, float y, cocos2d::SEL_MenuHandler additional);
-    void onDialogClosed();
+    void onSongDialogClosed(bool custom, int songID);
     void onIDRangeFinished(int min, int max, int additional);
     bool getOption(const std::string& option) const;
     int getOptionInt(const std::string& option) const;

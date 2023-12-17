@@ -1,14 +1,14 @@
 #pragma once
 #include "../_bases/CvoltonOptionsLayer.h"
-#include "../../delegates/DialogCloseDelegate.h"
+#include "../../delegates/SongDialogCloseDelegate.h"
 
 class ProfileSearchOptionsSongSelect : public CvoltonOptionsLayer {
-    DialogCloseDelegate* delegate;
-    CCTextInputNode* textNode = nullptr;
+    SongDialogCloseDelegate* m_delegate;
+    CCTextInputNode* m_textNode = nullptr;
 public:
-    static ProfileSearchOptionsSongSelect* create(DialogCloseDelegate* delegate);
+    static ProfileSearchOptionsSongSelect* create(SongDialogCloseDelegate* delegate);
     void onClose(cocos2d::CCObject* sender);
-    bool init(DialogCloseDelegate* delegate);
+    bool init(SongDialogCloseDelegate* delegate);
     void destroyToggles();
     void drawToggles();
     int songID();

@@ -248,7 +248,7 @@ void ProfileSearchOptions::drawTogglesPrimary(){
     createToggle("featured", "Featured", 90, 80);
     createToggle("original", "Original", -170, 35);
     createToggle("epic", "Epic", -40, 35);
-    if(!m_prefix.empty()) createToggle("song", "Song", 90, 35, menu_selector(ProfileSearchOptions::onSong));
+    createToggle("song", "Song", 90, 35, menu_selector(ProfileSearchOptions::onSong));
     createToggle("nostar", "No Star", -170, -10);
     createToggle("coins", "Coins", -40, -10);
     createToggle("nocoins", "No Coins", 90, -10);
@@ -312,7 +312,10 @@ void ProfileSearchOptions::drawTogglesTerciary(){
     createToggle("uncompletedcoins", "Uc. Coins", -40, -50);
 }
 
-void ProfileSearchOptions::onDialogClosed(){
+void ProfileSearchOptions::onSongDialogClosed(bool custom, int songID){
+    setOption("song_custom", custom);
+    setOptionInt("song_id", songID);
+
     reloadBrowser();
 }
 
@@ -418,8 +421,8 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
     searchObj.epic = getOption("epic");
     searchObj.folder = 0;
     searchObj.song = getOption("song");
-    searchObj.songCustom = false;
-    searchObj.songID = 0;
+    searchObj.songCustom = getOption("song_custom");
+    searchObj.songID = getOptionInt("song_id");
     searchObj.copied = getOption("copied");
     searchObj.downloaded = getOption("downloaded");
     searchObj.ldm = getOption("ldm");
@@ -481,8 +484,8 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
     setOption("epic", searchObj.epic);
     //searchObj.folder = 0;
     setOption("song", searchObj.song);
-    //searchObj.songCustom = false;
-    //searchObj.songID = 0;
+    setOption("song_custom", searchObj.songCustom);
+    setOptionInt("song_id", searchObj.songID);
     setOption("copied", searchObj.copied);
     setOption("downloaded", searchObj.downloaded);
     setOption("ldm", searchObj.ldm);
