@@ -114,33 +114,6 @@ bool CustomCreatorLayer::init() {
     infoBtn->setSizeMult(1.2f);
     infoBtn->setID("bi-info-button");
 
-    auto cornerBL = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
-    cornerBL->setPosition({0,0});
-    cornerBL->setAnchorPoint({0,0});
-    addChild(cornerBL, -1);
-    cornerBL->setID("bi-corner-bl");
-
-    auto cornerUL = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
-    cornerUL->setPosition({0,winSize.height});
-    cornerUL->setAnchorPoint({0,0});
-    cornerUL->setRotation(90);
-    cornerUL->setID("bi-corner-ul");
-    addChild(cornerUL, -1);
-
-    auto cornerUR = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
-    cornerUR->setPosition({winSize.width,winSize.height});
-    cornerUR->setAnchorPoint({0,0});
-    cornerUR->setRotation(180);
-    cornerUR->setID("bi-corner-ur");
-    addChild(cornerUR, -1);
-
-    auto cornerBR = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
-    cornerBR->setPosition({winSize.width,0});
-    cornerBR->setAnchorPoint({0,0});
-    cornerBR->setRotation(270);
-    cornerBR->setID("bi-corner-br");
-    addChild(cornerBR, -1);
-
     return true;
 }
 

@@ -14,7 +14,7 @@ BIViewLayer* BIViewLayer::create(bool paginated) {
 }
 
 bool BIViewLayer::init(bool paginated) {
-    BIBaseLayer::init();
+    BIBaseLayer::init(true, true, false, false);
 
     m_paginated = paginated;
 
