@@ -6,7 +6,9 @@
 
 bool BetterInfoCache::init(){
     if(!BaseJsonManager::init("cache.json")) return false;
-    checkDailies();
+    Loader::get()->queueInMainThread([this]() {
+        checkDailies();
+    });
     return true;
 }
 
