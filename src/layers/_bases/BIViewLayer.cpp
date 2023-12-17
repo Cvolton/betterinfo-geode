@@ -2,9 +2,9 @@
 #include "../JumpToPageLayer.h"
 #include "../../utils.hpp"
 
-BIViewLayer* BIViewLayer::create() {
+BIViewLayer* BIViewLayer::create(bool paginated) {
     auto ret = new BIViewLayer();
-    if (ret && ret->init()) {
+    if (ret && ret->init(paginated)) {
         ret->autorelease();
     } else {
         delete ret;
@@ -13,8 +13,10 @@ BIViewLayer* BIViewLayer::create() {
     return ret;
 }
 
-bool BIViewLayer::init() {
+bool BIViewLayer::init(bool paginated) {
     BIBaseLayer::init();
+
+    m_paginated = paginated;
 
     auto controllerConnected = BetterInfo::controllerConnected();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
@@ -67,34 +69,32 @@ bool BIViewLayer::init() {
     m_randomBtn->setPosition({ (winSize.width / 2) - 23, (winSize.height / 2) - 72});
     menu->addChild(m_randomBtn);
 
+    if(!paginated) {
+        m_pageBtn->setVisible(false);
+        m_randomBtn->setVisible(false);
+        m_counter->setVisible(false);
+    }
+
     addChild(menu);
 
     loadPage(0);
     return true;
 }
 
-void BIViewLayer::loadPage(unsigned int page){
+void BIViewLayer::loadPage(){
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
     const unsigned int count = resultsPerPage();
-    unsigned int firstIndex = page * count;
-    unsigned int lastIndex = (page+1) * count;
+    unsigned int firstIndex = m_page * count;
+    unsigned int lastIndex = (m_page+1) * count;
 
-    m_page = page;
-
-    if(page == 0) m_prevBtn->setVisible(false);
+    if(m_page == 0) m_prevBtn->setVisible(false);
     else m_prevBtn->setVisible(true);
 
     if(m_data->count() > lastIndex) m_nextBtn->setVisible(true);
     else m_nextBtn->setVisible(false);
 
-    if(m_data->count() > resultsPerPage()) m_pageBtn->setVisible(true);
-    else m_pageBtn->setVisible(false);
-
-    if(m_data->count() > resultsPerPage()) m_randomBtn->setVisible(true);
-    else m_randomBtn->setVisible(false);
-
-    m_pageBtnSprite->setString(std::to_string(page+1).c_str());
+    m_pageBtnSprite->setString(std::to_string(m_page+1).c_str());
 
     if(m_listLayer != nullptr) m_listLayer->removeFromParentAndCleanup(true);
     
@@ -103,6 +103,11 @@ void BIViewLayer::loadPage(unsigned int page){
     addChild(m_listLayer);
 
     m_counter->setCString(CCString::createWithFormat("%i to %i of %i", firstIndex+1, (m_data->count() >= lastIndex) ? lastIndex : m_data->count(), m_data->count())->getCString());
+}
+
+void BIViewLayer::loadPage(unsigned int page){
+    m_page = page;
+    loadPage();
 }
 
 void BIViewLayer::keyBackClicked() {
@@ -149,8 +154,8 @@ void BIViewLayer::onRandom(CCObject* sender){
     loadPage(BetterInfo::randomNumber(0, m_data->count() / resultsPerPage()));
 }
 
-CCScene* BIViewLayer::scene() {
-    auto layer = BIViewLayer::create();
+CCScene* BIViewLayer::scene(bool paginated) {
+    auto layer = BIViewLayer::create(paginated);
     auto scene = CCScene::create();
     scene->addChild(layer);
     return scene;
@@ -161,7 +166,7 @@ int BIViewLayer::getPage() const{
 }
 
 int BIViewLayer::resultsPerPage() const{
-    return (GameManager::sharedState()->getGameVariable("0093")) ? 20 : 10;
+    return !m_paginated ? m_data->count() : ((GameManager::sharedState()->getGameVariable("0093")) ? 20 : 10);
 }
 
 void BIViewLayer::keyDown(enumKeyCodes key){

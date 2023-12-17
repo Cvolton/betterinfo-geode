@@ -40,15 +40,12 @@ bool RewardViewLayer::init(CCDictionary* chests, const char* title) {
     return true;
 }
 
-void RewardViewLayer::loadPage(unsigned int page){
-
-    m_page = page;
+void RewardViewLayer::loadPage(){
     auto displayedLevels = trimData();
 
     m_listView = CvoltonListView<RewardCell>::create(displayedLevels, 356.f, 220.f, 45.f);
 
-    BIViewLayer::loadPage(page);
-
+    BIViewLayer::loadPage();
 }
 
 CCScene* RewardViewLayer::scene(CCDictionary* chests, const char* title) {

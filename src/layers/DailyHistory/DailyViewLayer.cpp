@@ -61,15 +61,13 @@ bool DailyViewLayer::init(bool isWeekly) {
     return true;
 }
 
-void DailyViewLayer::loadPage(unsigned int page){
-
-    m_page = page;
+void DailyViewLayer::loadPage(){
     auto displayedLevels = trimData();
 
     m_listView = CvoltonListView<DailyCell>::create(displayedLevels, 356.f, 220.f);
     m_title = m_isWeekly ? "Weekly Demons" : "Daily Levels";
 
-    BIViewLayer::loadPage(page);
+    BIViewLayer::loadPage();
 }
 
 void DailyViewLayer::onMore(CCObject* object) {

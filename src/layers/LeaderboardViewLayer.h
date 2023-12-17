@@ -1,20 +1,17 @@
 #pragma once
 
 #include "../delegates/BILeaderboardDelegate.h"
+#include "_bases/BIViewLayer.h"
 
-class LeaderboardViewLayer : public cocos2d::CCLayer, public BILeaderboardDelegate {
-    CustomListView* m_leaderboardView = nullptr;
-    GJListLayer* m_listLayer = nullptr;
-    cocos2d::CCArray* m_scores = nullptr;
+class LeaderboardViewLayer : public BIViewLayer, public BILeaderboardDelegate {
     LoadingCircle* m_circle = nullptr;
     int m_accountID = 0;
 protected:
     virtual bool init(int accountID);
     virtual void keyBackClicked();
-    void onBack(cocos2d::CCObject*);
     void onRefresh(cocos2d::CCObject*);
 public:
-    void loadPage();
+    virtual void loadPage();
     static LeaderboardViewLayer* create(int accountID);
     static cocos2d::CCScene* scene(int accountID);
 

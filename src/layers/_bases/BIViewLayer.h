@@ -17,8 +17,9 @@ protected:
     cocos2d::CCLabelBMFont* m_counter = nullptr;
     ButtonSprite* m_pageBtnSprite = nullptr;
     unsigned int m_page = 0;
+    bool m_paginated = true;
 
-    virtual bool init();
+    virtual bool init(bool paginated = true);
     virtual void keyBackClicked();
     void onBack(cocos2d::CCObject*);
     void onPrev(cocos2d::CCObject*);
@@ -28,9 +29,10 @@ protected:
     virtual int resultsPerPage() const;
     CCArray* trimData();
 public:
-    virtual void loadPage(unsigned int page);
-    static BIViewLayer* create();
-    static cocos2d::CCScene* scene();
+    virtual void loadPage();
+    void loadPage(unsigned int page);
+    static BIViewLayer* create(bool paginated = true);
+    static cocos2d::CCScene* scene(bool paginated = true);
     virtual int getPage() const;
     virtual void keyDown(cocos2d::enumKeyCodes key);
 };

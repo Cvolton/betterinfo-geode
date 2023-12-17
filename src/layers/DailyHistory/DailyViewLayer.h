@@ -10,7 +10,7 @@ protected:
     virtual bool init(bool isWeekly);
     void onMore(cocos2d::CCObject*);
 public:
-    virtual void loadPage(unsigned int page);
+    virtual void loadPage();
     static DailyViewLayer* create(bool isWeekly);
     static bool compareDailies(const void* l1, const void* l2);
     static cocos2d::CCScene* scene(bool isWeekly);

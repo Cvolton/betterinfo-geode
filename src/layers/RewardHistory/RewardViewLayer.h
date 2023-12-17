@@ -10,6 +10,6 @@ protected:
 public:
     static RewardViewLayer* create(cocos2d::CCDictionary* chests, const char* title);
     static cocos2d::CCScene* scene(cocos2d::CCDictionary* chests, const char* title);
-    virtual void loadPage(unsigned int page);
+    virtual void loadPage();
     static bool compareRewards(const void* l1, const void* l2);
 };
