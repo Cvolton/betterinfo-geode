@@ -58,36 +58,18 @@ bool DailyViewLayer::init(bool isWeekly) {
 
     addChild(menu);
 
-    loadPage(0);
     return true;
 }
 
 void DailyViewLayer::loadPage(unsigned int page){
 
-    auto winSize = CCDirector::sharedDirector()->getWinSize();
-
-    CCArray* displayedLevels = CCArray::create();
-
-    const unsigned int levelCount = resultsPerPage();
-    unsigned int firstIndex = page * levelCount;
-    unsigned int lastIndex = (page+1) * levelCount;
-
-    for(unsigned int i = firstIndex; i < lastIndex; i++){
-        auto levelObject = m_data->objectAtIndex(i);
-        if(i >= m_data->count() || levelObject == nullptr) break;
-
-        displayedLevels->addObject(levelObject);
-    }
+    m_page = page;
+    auto displayedLevels = trimData();
 
     m_listView = CvoltonListView<DailyCell>::create(displayedLevels, 356.f, 220.f);
     m_title = m_isWeekly ? "Weekly Demons" : "Daily Levels";
 
     BIViewLayer::loadPage(page);
-}
-
-void DailyViewLayer::keyBackClicked() {
-    BIViewLayer::keyBackClicked();
-    m_data->release();
 }
 
 void DailyViewLayer::onMore(CCObject* object) {

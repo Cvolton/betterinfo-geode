@@ -92,7 +92,7 @@ void BIViewLayer::loadPage(unsigned int page){
 
     if(m_listLayer != nullptr) m_listLayer->removeFromParentAndCleanup(true);
     
-    m_listLayer = GJListLayer::create(m_listView, m_title, {191, 114, 62, 255}, 356.f, 220.f);
+    m_listLayer = GJListLayer::create(m_listView, m_title.c_str(), {191, 114, 62, 255}, 356.f, 220.f);
     m_listLayer->setPosition(winSize / 2 - m_listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
     addChild(m_listLayer);
 
@@ -106,6 +106,22 @@ void BIViewLayer::keyBackClicked() {
     CCDirector::sharedDirector()->popSceneWithTransition(0.5f, PopTransition::kPopTransitionFade);
 }
 
+CCArray* BIViewLayer::trimData(){
+    CCArray* displayedLevels = CCArray::create();
+
+    const unsigned int levelCount = resultsPerPage();
+    unsigned int firstIndex = m_page * levelCount;
+    unsigned int lastIndex = (m_page+1) * levelCount;
+
+    for(unsigned int i = firstIndex; i < lastIndex; i++){
+        auto levelObject = m_data->objectAtIndex(i);
+        if(i >= m_data->count() || levelObject == nullptr) break;
+
+        displayedLevels->addObject(levelObject);
+    }
+
+    return displayedLevels;
+}
 
 void BIViewLayer::onBack(CCObject* object) {
     keyBackClicked();

@@ -6,7 +6,7 @@
 
 class BIViewLayer : public BIBaseLayer, public PageNumberDelegate {
 protected:
-    const char* m_title = nullptr;
+    std::string m_title;
     BoomListView* m_listView = nullptr;
     GJListLayer* m_listLayer = nullptr;
     cocos2d::CCArray* m_data = nullptr;
@@ -24,6 +24,7 @@ protected:
     void onJumpToPageLayer(cocos2d::CCObject*);
     void onRandom(cocos2d::CCObject*);
     virtual int resultsPerPage() const;
+    CCArray* trimData();
 public:
     virtual void loadPage(unsigned int page);
     static BIViewLayer* create();

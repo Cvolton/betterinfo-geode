@@ -8,7 +8,6 @@ class DailyViewLayer : public BIViewLayer {
     bool m_isWeekly = false;
 protected:
     virtual bool init(bool isWeekly);
-    virtual void keyBackClicked();
     void onMore(cocos2d::CCObject*);
 public:
     virtual void loadPage(unsigned int page);
