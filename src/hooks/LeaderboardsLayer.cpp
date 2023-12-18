@@ -38,12 +38,13 @@ class $modify(BILeaderboardsLayer, LeaderboardsLayer) {
             this,
             menu_selector(BILeaderboardsLayer::onLeaderboardRefresh)
         );
+        refreshBtn->setID("refresh-button"_spr);
 
         auto menuRefresh = CCMenu::create();
         menuRefresh->addChild(refreshBtn);
         menuRefresh->setPosition({winSize.width - 26.75f, 26.75f});
         menuRefresh->setZOrder(2);
-        menuRefresh->setID("bi-refresh-menu");
+        menuRefresh->setID("refresh-menu"_spr);
 
         this->addChild(menuRefresh);
 

@@ -40,6 +40,7 @@ bool PaginatedFLAlert::init(const std::string& title, const std::vector<std::str
     prevBtn->setPosition({-220, y});
     m_buttonMenu->addChild(prevBtn);
     prevBtn->setVisible(m_page > 0);
+    prevBtn->setID("prev-button"_spr);
 
     auto nextSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png");
     nextSprite->setFlipX(true);
@@ -51,6 +52,7 @@ bool PaginatedFLAlert::init(const std::string& title, const std::vector<std::str
     );
     nextBtn->setPosition({220, y});
     nextBtn->setVisible(m_page < (m_content.size() - 1));
+    nextBtn->setID("next-button"_spr);
     m_buttonMenu->addChild(nextBtn);
 
     return true;

@@ -22,6 +22,7 @@ bool BIViewLayer::init(bool paginated) {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
     auto menu = CCMenu::create();
+    menu->setID("view-layer-menu"_spr);
     auto prevSprite = CCSprite::createWithSpriteFrameName(controllerConnected ? "controllerBtn_DPad_Left_001.png" : "GJ_arrow_03_001.png");
     m_prevBtn = CCMenuItemSpriteExtra::create(
         prevSprite,
@@ -29,6 +30,7 @@ bool BIViewLayer::init(bool paginated) {
         menu_selector(BIViewLayer::onPrev)
     );
     m_prevBtn->setPosition({- (winSize.width / 2) + 25, 0});
+    m_prevBtn->setID("prev-button"_spr);
     menu->addChild(m_prevBtn);
 
     auto nextSprite = CCSprite::createWithSpriteFrameName(controllerConnected ? "controllerBtn_DPad_Right_001.png" : "GJ_arrow_03_001.png");
@@ -39,12 +41,14 @@ bool BIViewLayer::init(bool paginated) {
         menu_selector(BIViewLayer::onNext)
     );
     m_nextBtn->setPosition({+ (winSize.width / 2) - 25, 0});
+    m_nextBtn->setID("next-button"_spr);
     menu->addChild(m_nextBtn);
 
     m_counter = CCLabelBMFont::create("0 to 0 of 0", "goldFont.fnt");
     m_counter->setAnchorPoint({ 1.f, 1.f });
     m_counter->setPosition(winSize - CCPoint(7,3));
     m_counter->setScale(0.5f);
+    m_counter->setID("counter"_spr);
     addChild(m_counter);
 
     //navigation buttons
@@ -57,6 +61,7 @@ bool BIViewLayer::init(bool paginated) {
     );
     m_pageBtn->setSizeMult(1.2f);
     m_pageBtn->setPosition({+ (winSize.width / 2) - 23, (winSize.height / 2) - 37});
+    m_pageBtn->setID("page-button"_spr);
     menu->addChild(m_pageBtn);
 
     auto randomSprite = BetterInfo::createWithBISpriteFrameName("BI_randomBtn_001.png");
@@ -67,6 +72,7 @@ bool BIViewLayer::init(bool paginated) {
         menu_selector(BIViewLayer::onRandom)
     );
     m_randomBtn->setPosition({ (winSize.width / 2) - 23, (winSize.height / 2) - 72});
+    m_randomBtn->setID("random-button"_spr);
     menu->addChild(m_randomBtn);
 
     auto doubleArrowLeft = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
@@ -79,8 +85,9 @@ bool BIViewLayer::init(bool paginated) {
         this,
         menu_selector(BIViewLayer::onFirst)
     );
-    m_firstBtn->setID("bi-first-button");
+    m_firstBtn->setID("first-button"_spr);
     m_firstBtn->setPosition({ - (winSize.width / 2) + 26, 60});
+    m_firstBtn->setID("first-button"_spr);
     menu->addChild(m_firstBtn);
 
     auto doubleArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
@@ -96,7 +103,7 @@ bool BIViewLayer::init(bool paginated) {
         menu_selector(BIViewLayer::onLast)
     );
     m_lastBtn->setPosition({ (winSize.width / 2) - 26, 60});
-    m_lastBtn->setID("bi-last-button");
+    m_lastBtn->setID("last-button"_spr);
     menu->addChild(m_lastBtn);
 
     if(!paginated) {
@@ -124,6 +131,7 @@ void BIViewLayer::loadPage(){
     
     m_listLayer = GJListLayer::create(m_listView, m_title.c_str(), {191, 114, 62, 255}, 356.f, 220.f);
     m_listLayer->setPosition(winSize / 2 - m_listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
+    m_listLayer->setID("list-layer"_spr);
     addChild(m_listLayer);
 
     updateCounter();
@@ -256,6 +264,7 @@ void BIViewLayer::showCircle(){
     hideCircle();
 
     m_circle = LoadingCircle::create();
+    m_circle->setID("loading-circle"_spr);
     m_circle->retain();
     m_circle->setParentLayer(this);
     m_circle->show();

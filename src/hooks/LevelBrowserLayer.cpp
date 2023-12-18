@@ -72,7 +72,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             menu_selector(BILevelBrowserLayer::onLevelBrowserRandom)
         );
         randomBtn->setPosition({ (winSize.width / 2) - 23, 88});
-        randomBtn->setID("bi-random-button");
+        randomBtn->setID("random-button"_spr);
         if(isLocal) randomBtn->setPosition({(winSize.width / 2) - 58, 122});
         return randomBtn;
     }
@@ -97,7 +97,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         }
 
         bool isScreenWithoutFilterBtn = this->m_searchObject->m_searchType == SearchType::Users || this->m_searchObject->m_searchType == SearchType::MapPack || this->m_searchObject->m_searchType == SearchType::MyLevels;
-        if(menu->getChildByID("bi-filter-button") == nullptr && !isScreenWithoutFilterBtn) {
+        if(menu->getChildByID("filter-button"_spr) == nullptr && !isScreenWithoutFilterBtn) {
             auto filterSprite = CCSprite::createWithSpriteFrameName("GJ_plusBtn_001.png");
             filterSprite->setScale(0.7f);
             auto filterButton = CCMenuItemSpriteExtra::create(
@@ -108,10 +108,10 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             menu->addChild(filterButton);
             filterButton->setPosition({- (winSize.width / 2) + (isSavedWithPlus ? 64 : 26), 92});
             filterButton->setSizeMult(1.2f);
-            filterButton->setID("bi-filter-button");
+            filterButton->setID("filter-button"_spr);
         }
 
-        if(menu->getChildByID("bi-star-button")) return;
+        if(menu->getChildByID("star-button"_spr)) return;
 
         if(!BetterInfo::isStarUseless(this->m_searchObject)) {
             auto starButton = CCMenuItemSpriteExtra::create(
@@ -123,12 +123,12 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             starButton->setPosition({- (winSize.width / 2) + 30, - (winSize.height / 2) + 58});
             if(!(this->m_searchObject->m_starFilter)) starButton->setColor({125,125,125});
             starButton->setSizeMult(1.2f);
-            starButton->setID("bi-star-button");
+            starButton->setID("star-button"_spr);
         }
 
         CCMenu* searchMenu = static_cast<CCMenu*>(this->getChildByID("search-menu"));
-        auto firstBtn = static_cast<CCNode*>(menu->getChildByID("bi-first-button"));
-        if(!firstBtn && searchMenu) firstBtn = static_cast<CCNode*>(searchMenu->getChildByID("bi-first-button"));
+        auto firstBtn = static_cast<CCNode*>(menu->getChildByID("first-button"_spr));
+        if(!firstBtn && searchMenu) firstBtn = static_cast<CCNode*>(searchMenu->getChildByID("first-button"_spr));
 
         if(firstBtn) {
             if(this->m_searchObject->m_page == 0) firstBtn->setVisible(false);
@@ -146,7 +146,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             this,
             menu_selector(BILevelBrowserLayer::onLevelBrowserFirst)
         );
-        firstBtn->setID("bi-first-button");
+        firstBtn->setID("first-button"_spr);
         //259 60
         firstBtn->setPosition({ - (winSize.width / 2) + 26, 60});
         if(isLocal) firstBtn->setPosition({ - (winSize.width / 2) + 67, 60});
@@ -161,7 +161,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         if(this->m_itemCount <= BetterInfo::levelsPerPage(this->m_searchObject)) return;
 
         CCMenu* pageMenu = static_cast<CCMenu*>(this->getChildByID("page-menu"));
-        if(menu->getChildByID("bi-random-button") || (pageMenu && pageMenu->getChildByID("bi-random-button"))) return;
+        if(menu->getChildByID("random-button"_spr) || (pageMenu && pageMenu->getChildByID("random-button"_spr))) return;
 
         auto randomBtn = createRandomBtn();
         if(m_searchObject->m_searchType != SearchType::MyLevels) menu->addChild(randomBtn);
@@ -181,7 +181,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             );
             //259 60
             lastBtn->setPosition({ (winSize.width / 2) - 26, 60});
-            lastBtn->setID("bi-last-button");
+            lastBtn->setID("last-button"_spr);
             menu->addChild(lastBtn);
         }
     }

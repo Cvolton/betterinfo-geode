@@ -45,7 +45,8 @@ bool LevelIDLayer::init(){
     bool init = createBasics({220.0f, 150.0f}, menu_selector(LevelIDLayer::onClose), 0.8f);
     if(!init) return false;
 
-    createTextLabel("ID Search", {0,57}, 0.7f, m_buttonMenu, "goldFont.fnt");
+    auto title = createTextLabel("ID Search", {0,57}, 0.7f, m_buttonMenu, "goldFont.fnt");
+    title->setID("title-label"_spr);
 
     m_textNode = CCTextInputNode::create(150, 30, "ID", "bigFont.fnt");
     m_textNode->setLabelPlaceholderColor({0x75, 0xAA, 0xF0});
@@ -53,6 +54,7 @@ bool LevelIDLayer::init(){
     m_textNode->setMaxLabelScale(0.7f);
     m_textNode->setMaxLabelWidth(11);
     m_textNode->setPosition({0,6});
+    m_textNode->setID("id-input"_spr);
     m_buttonMenu->addChild(m_textNode);
 
     cocos2d::extension::CCScale9Sprite* infoBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
@@ -61,6 +63,7 @@ bool LevelIDLayer::init(){
     m_buttonMenu->addChild(infoBg, -1);
     infoBg->setPosition({0,6});
     infoBg->setScale(0.6f);
+    infoBg->setID("id-background"_spr);
 
     auto buttonSprite = ButtonSprite::create("Lv. Comments", 80, true, "goldFont.fnt", "GJ_button_01.png", 30, 0.8f);
     auto buttonButton = CCMenuItemSpriteExtra::create(
@@ -70,6 +73,7 @@ bool LevelIDLayer::init(){
     );
     buttonButton->setSizeMult(1.2f);
     buttonButton->setPosition({-52,-45});
+    buttonButton->setID("comments-button"_spr);
     m_buttonMenu->addChild(buttonButton);
 
     auto profileSprite = ButtonSprite::create("Acc. Profile", 80, true, "goldFont.fnt", "GJ_button_01.png", 30, 0.8f);
@@ -80,6 +84,7 @@ bool LevelIDLayer::init(){
     );
     profileButton->setSizeMult(1.2f);
     profileButton->setPosition({52,-45});
+    profileButton->setID("profile-button"_spr);
     m_buttonMenu->addChild(profileButton);
 
     return true;

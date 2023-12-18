@@ -31,7 +31,7 @@ class $modify(BIRewardsPage, RewardsPage) {
         );
         historyBtn->setPosition({-147,-88});
         this->m_buttonMenu->addChild(historyBtn);
-        historyBtn->setID("bi-history-button");
+        historyBtn->setID("history-button"_spr);
 
         return true;
     }

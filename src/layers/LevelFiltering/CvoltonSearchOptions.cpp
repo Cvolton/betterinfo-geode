@@ -42,9 +42,12 @@ bool CvoltonSearchOptions::init(){
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    createTextLabel("Advanced Options", {(winSize.width / 2), (winSize.height / 2) + 125}, 1.f, m_mainLayer, "bigFont.fnt");
-    createButton("GJ_arrow_03_001.png", {- (winSize.width / 2) + 30, 0}, menu_selector(CvoltonSearchOptions::onPrev));
-    createButton("GJ_infoIcon_001.png", {203, 128}, menu_selector(CvoltonSearchOptions::onInfo));
+    auto label = createTextLabel("Advanced Options", {(winSize.width / 2), (winSize.height / 2) + 125}, 1.f, m_mainLayer, "bigFont.fnt");
+    label->setID("title"_spr);
+    auto prevBtn = createButton("GJ_arrow_03_001.png", {- (winSize.width / 2) + 30, 0}, menu_selector(CvoltonSearchOptions::onPrev));
+    prevBtn->setID("prev-button"_spr);
+    auto infoBtn = createButton("GJ_infoIcon_001.png", {203, 128}, menu_selector(CvoltonSearchOptions::onInfo));
+    infoBtn->setID("info-button"_spr);
 
     drawToggles();
 
@@ -60,6 +63,7 @@ void CvoltonSearchOptions::createToggle(const char* option, const char* name, fl
         this,
         menu_selector(CvoltonSearchOptions::onToggle)
     );
+    button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
     m_buttonMenu->addChild(button);
     button->setPosition({x, y});
     auto optionString = CCString::create(option);
@@ -70,6 +74,7 @@ void CvoltonSearchOptions::createToggle(const char* option, const char* name, fl
     auto label = createTextLabel(name, {x + 20, y}, 0.5f, m_buttonMenu);
     label->setAnchorPoint({0,0.5f});
     label->limitLabelWidth(80, 0.5f, 0);
+    label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
 }
 
 void CvoltonSearchOptions::destroyToggles(){
@@ -94,13 +99,18 @@ void CvoltonSearchOptions::drawToggles(){
     //createToggle("search_surround_percent", "No Forced Star", 90, 75);
     createToggle("search_trim", "Trim Spaces", -170, 75);
 
-    createTextLabel("Completed Mode:", {0, -95}, 0.5f, m_buttonMenu, "goldFont.fnt");
-    createButton("edit_leftBtn_001.png", {-120, -120}, menu_selector(CvoltonSearchOptions::onCompletedPrev), 1.2f);
+    auto completedMode = createTextLabel("Completed Mode:", {0, -95}, 0.5f, m_buttonMenu, "goldFont.fnt");
+    completedMode->setID("completed-mode"_spr);
+    auto completedLeft = createButton("edit_leftBtn_001.png", {-120, -120}, menu_selector(CvoltonSearchOptions::onCompletedPrev), 1.2f);
+    completedLeft->setID("completed-left-button"_spr);
     auto label = createTextLabel(getCompletedString(), {0, -120}, 1, m_buttonMenu, "bigFont.fnt");
     label->limitLabelWidth(200, 0.8f, 0);
-    createButton("edit_rightBtn_001.png", {120, -120}, menu_selector(CvoltonSearchOptions::onCompletedNext), 1.2f);
+    label->setID("completed-mode-label"_spr);
+    auto completedRight = createButton("edit_rightBtn_001.png", {120, -120}, menu_selector(CvoltonSearchOptions::onCompletedNext), 1.2f);
+    completedRight->setID("completed-right-button"_spr);
     if(static_cast<CompleteMode>(getOptionInt("search_completed")) == CompleteMode::percentage) {
-        createButton("GJ_plusBtn_001.png", {196, -120}, menu_selector(CvoltonSearchOptions::onPercentageRange), .75f);
+        auto plus = createButton("GJ_plusBtn_001.png", {196, -120}, menu_selector(CvoltonSearchOptions::onPercentageRange), .75f);
+        plus->setID("percentage-plus-button"_spr);
     }
 }
 

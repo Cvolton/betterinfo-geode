@@ -151,6 +151,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
     );
     m_buttonMenu->addChild(levelNameBtn);
     levelNameBtn->setPosition({0,125});
+    levelNameBtn->setID("level-name-button"_spr);
 
     std::ostringstream userNameText;
     userNameText << "By " << std::string(m_level->m_creatorName);
@@ -162,6 +163,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
         menu_selector(ExtendedLevelInfo::onCopyAuthor)
     );
     userNameBtn->setPosition({0,99});
+    userNameBtn->setID("username-button"_spr);
     m_buttonMenu->addChild(userNameBtn);
 
     cocos2d::extension::CCScale9Sprite* descBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
@@ -169,6 +171,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
     descBg->setColor({130,64,33});
     m_buttonMenu->addChild(descBg, -1);
     descBg->setPosition({0,52});
+    descBg->setID("description-background"_spr);
 
     auto descText = BetterInfo::fixNullByteCrash(BetterInfo::fixColorCrashes(m_level->getUnpackedLevelDescription()));
     size_t descLength = descText.length();
@@ -188,6 +191,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
         menu_selector(ExtendedLevelInfo::onCopyDesc)
     );
     descBtn->setPosition({0,52});
+    descBtn->setID("description-button"_spr);
     m_buttonMenu->addChild(descBtn);
 
     cocos2d::extension::CCScale9Sprite* infoBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
@@ -197,6 +201,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
     infoBg->setColor({123,60,31});
     m_buttonMenu->addChild(infoBg, -1);
     infoBg->setPosition({0,-57});
+    infoBg->setID("info-background"_spr);
 
     refreshInfoTexts();
     setupAdditionalInfo();
@@ -206,6 +211,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
     //m_info->setPosition({-160.5,10});
     m_info->setAnchorPoint({0,1});
     m_info->setScale(0.925f);
+    m_info->setID("info-text"_spr);
     m_buttonMenu->addChild(m_info);
 
     /*std::ostringstream progressText;
@@ -219,23 +225,28 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
     uploadedText << "Uploaded: " << m_level->uploadDate << " ago";
     createTextLabel(uploadedText.str(), {0,0}, 0.5f, m_buttonMenu);*/
 
-    createTextLabel("Requested Rate:", {88,-1}, 0.5f, m_buttonMenu);
+    auto requestedRate = createTextLabel("Requested Rate:", {88,-1}, 0.5f, m_buttonMenu);
+    requestedRate->setID("requested-rate-label"_spr);
 
     auto diffSprite = CCSprite::createWithSpriteFrameName(LevelMetadata::getDifficultyIcon(m_level->m_starsRequested));
     diffSprite->setPosition({88,-57});
+    diffSprite->setID("difficulty-sprite"_spr);
     m_buttonMenu->addChild(diffSprite, 1);
 
     if(m_level->m_starsRequested > 0){
         auto featureSprite = CCSprite::createWithSpriteFrameName("GJ_featuredCoin_001.png");
         featureSprite->setPosition({88,-57});
+        featureSprite->setID("featured-sprite"_spr);
         m_buttonMenu->addChild(featureSprite);
         //infoSprite->setScale(0.7f);
 
         auto starsLabel = createTextLabel(std::to_string(m_level->m_starsRequested), {88, -87}, 0.4f, m_buttonMenu);
         starsLabel->setAnchorPoint({1,0.5});
+        starsLabel->setID("stars-label"_spr);
 
         auto diffSprite = CCSprite::createWithSpriteFrameName("star_small01_001.png");
         diffSprite->setPosition({95,-87});
+        diffSprite->setID("stars-sprite"_spr);
         m_buttonMenu->addChild(diffSprite);
     }
 
@@ -249,6 +260,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
     separator->setScaleY(1);
     separator->setOpacity(100);
     separator->setRotation(90);
+    separator->setID("separator-sprite"_spr);
     m_buttonMenu->addChild(separator);
 
     /*
@@ -262,6 +274,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
         menu_selector(ExtendedLevelInfo::onPrev)
     );
     m_prevBtn->setPosition({-195,-53});
+    m_prevBtn->setID("prev-button"_spr);
     m_buttonMenu->addChild(m_prevBtn);
 
     auto nextSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png");
@@ -273,6 +286,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
         menu_selector(ExtendedLevelInfo::onNext)
     );
     m_nextBtn->setPosition({195,-53});
+    m_nextBtn->setID("next-button"_spr);
     m_buttonMenu->addChild(m_nextBtn);
 
     loadPage(0);

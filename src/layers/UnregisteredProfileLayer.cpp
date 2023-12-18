@@ -82,6 +82,7 @@ bool UnregisteredProfileLayer::init(GJUserScore* score, CCNode* invoker){
         menu_selector(UnregisteredProfileLayer::onCopyPlayerName)
     );
     userNameBtn->setPosition({0, (m_alertSize.y/2) - 22});
+    userNameBtn->setID("username-button"_spr);
     m_buttonMenu->addChild(userNameBtn);
 
     auto GM = GameManager::sharedState();
@@ -94,26 +95,30 @@ bool UnregisteredProfileLayer::init(GJUserScore* score, CCNode* invoker){
 
     //icon->setPosition({440,224});
     icon->setPosition({155, (m_alertSize.y/2) - 24});
+    icon->setID("simpleplayer"_spr);
     m_buttonMenu->addChild(icon);
 
-    createButton(
+    auto myLevelsBtn = createButton(
         "accountBtn_myLevels_001.png",
         {154, -62},
         menu_selector(UnregisteredProfileLayer::onMyLevels),
         0.8f
     );
+    myLevelsBtn->setID("my-levels-button"_spr);
 
     auto levelsText = CCSprite::createWithSpriteFrameName("GJ_myLevelsTxt_001.png");
     levelsText->setScale(0.8f);
     levelsText->setPosition({104, -62});
+    levelsText->setID("my-levels-text"_spr);
     m_buttonMenu->addChild(levelsText);
 
-    createButton(
+    auto commentBtn = createButton(
         "GJ_chatBtn_001.png",
         {154, 0},
         menu_selector(UnregisteredProfileLayer::onCommentHistory),
         0.8f
     );
+    commentBtn->setID("comment-button"_spr);
 
     std::ostringstream userIDText;
     userIDText << "User ID: " << m_score->m_userID << "\nAccount ID: None";
@@ -121,12 +126,14 @@ bool UnregisteredProfileLayer::init(GJUserScore* score, CCNode* invoker){
     auto userIDTextNode = CCLabelBMFont::create(userIDText.str().c_str(), "bigFont.fnt");
     userIDTextNode->setAnchorPoint({0,0});
     userIDTextNode->setScale(0.45f);
+    userIDTextNode->setID("userid-text-node"_spr);
     auto userIDBtn = CCMenuItemSpriteExtra::create(
         userIDTextNode,
         this,
         menu_selector(UnregisteredProfileLayer::onCopyUserID)
     );
     userIDBtn->setPosition({-104, -66.5f});
+    userIDBtn->setID("userid-button"_spr);
     //userIDBtn->setPosition({-168, -75.5f});
     m_buttonMenu->addChild(userIDBtn);
 

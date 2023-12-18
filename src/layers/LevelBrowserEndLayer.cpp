@@ -52,11 +52,13 @@ bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer){
     levelBrowserLayer->retain();
     m_levelBrowserLayer = levelBrowserLayer;
 
-    createTextLabel("Finding Last Page", {0,63}, 0.7f, m_buttonMenu, "goldFont.fnt");
+    auto title = createTextLabel("Finding Last Page", {0,63}, 0.7f, m_buttonMenu, "goldFont.fnt");
+    title->setID("title-label"_spr);
 
     m_textLabel = TextArea::create("Press <cg>Go</c> to start searching.\nThis might take several\nminutes with certain\nfilter combinations.", "chatFont.fnt", 1, 295, {0,1}, 20, false);
     m_textLabel->setAnchorPoint({0,1});
     m_textLabel->setPosition({-90,44});
+    m_textLabel->setID("text-label"_spr);
     m_buttonMenu->addChild(m_textLabel);
 
     cocos2d::extension::CCScale9Sprite* infoBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
@@ -65,6 +67,7 @@ bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer){
     m_buttonMenu->addChild(infoBg, -1);
     infoBg->setPosition({0,6});
     infoBg->setScale(0.6f);
+    infoBg->setID("info-background"_spr);
 
     auto buttonSprite = ButtonSprite::create("Go", 40, true, "goldFont.fnt", "GJ_button_01.png", 30, 0.8f);
     m_goBtn = CCMenuItemSpriteExtra::create(
@@ -74,6 +77,7 @@ bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer){
     );
     m_goBtn->setSizeMult(1.2f);
     m_goBtn->setPosition({0,-55});
+    m_goBtn->setID("go-button"_spr);
     m_buttonMenu->addChild(m_goBtn);
 
     m_timer = CCLabelBMFont::create("99", "bigFont.fnt");
@@ -82,6 +86,7 @@ bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer){
     m_timer->setScale(.5f);
     m_buttonMenu->addChild(m_timer);
     m_timer->setVisible(false);
+    m_timer->setID("timer-label"_spr);
 
     return true;
 }

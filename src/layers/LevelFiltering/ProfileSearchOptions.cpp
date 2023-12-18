@@ -94,7 +94,8 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    createTextLabel("Level Filters", {(winSize.width / 2), (winSize.height / 2) + 125}, 1.f, m_mainLayer, "bigFont.fnt");
+    auto title = createTextLabel("Level Filters", {(winSize.width / 2), (winSize.height / 2) + 125}, 1.f, m_mainLayer, "bigFont.fnt");
+    title->setID("title-label"_spr);
 
     m_lengthBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
     m_lengthBg->setContentSize({700,55});
@@ -102,6 +103,7 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
     m_buttonMenu->addChild(m_lengthBg, -1);
     m_lengthBg->setPosition({0,-120});
     m_lengthBg->setScale(0.6f);
+    m_lengthBg->setID("length-background"_spr);
 
     m_diffBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
     m_diffBg->setContentSize({700,92});
@@ -109,6 +111,7 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
     m_buttonMenu->addChild(m_diffBg, -1);
     m_diffBg->setPosition({0,-70});
     m_diffBg->setScale(0.6f);
+    m_diffBg->setID("difficulty-background"_spr);
 
     m_demonDiffBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
     m_demonDiffBg->setContentSize({700,93});
@@ -116,17 +119,20 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
     m_buttonMenu->addChild(m_demonDiffBg, -1);
     m_demonDiffBg->setPosition({0,-105.5});
     m_demonDiffBg->setScale(0.6f);
+    m_demonDiffBg->setID("demon-difficulty-background"_spr);
 
     auto sprite = CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png");
     sprite->setFlipX(true);
 
     m_prevBtn = createButton("GJ_arrow_01_001.png", {- (winSize.width / 2) + 30, 0}, menu_selector(ProfileSearchOptions::onPrev));
+    m_prevBtn->setID("prev-button"_spr);
     m_nextBtn = CCMenuItemSpriteExtra::create(
         sprite,
         this,
         menu_selector(ProfileSearchOptions::onNext)
     );
     m_nextBtn->setPosition({(winSize.width / 2) - 30, 0});
+    m_nextBtn->setID("next-button"_spr);
     m_buttonMenu->addChild(m_nextBtn);
 
     drawToggles();
@@ -147,6 +153,7 @@ void ProfileSearchOptions::createToggle(const char* option, const char* name, fl
         this,
         menu_selector(ProfileSearchOptions::onToggle)
     );
+    button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
     m_buttonMenu->addChild(button);
     button->setPosition({x, y});
     auto optionString = CCString::create(option);
@@ -157,6 +164,7 @@ void ProfileSearchOptions::createToggle(const char* option, const char* name, fl
     auto label = createTextLabel(name, {x + 20, y}, 0.5f, m_buttonMenu);
     label->setAnchorPoint({0,0.5f});
     label->limitLabelWidth(80, 0.5f, 0);
+    label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
 }
 
 void ProfileSearchOptions::createToggle(const char* option, const char* name, float x, float y, SEL_MenuHandler additional){
@@ -167,6 +175,7 @@ void ProfileSearchOptions::createToggle(const char* option, const char* name, fl
         this,
         menu_selector(ProfileSearchOptions::onToggle)
     );
+    button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
     m_buttonMenu->addChild(button);
     button->setPosition({x, y});
     auto optionString = CCString::create(option);
@@ -177,6 +186,7 @@ void ProfileSearchOptions::createToggle(const char* option, const char* name, fl
     auto label = createTextLabel(name, {x + 20, y}, 0.5f, m_buttonMenu);
     label->setAnchorPoint({0,0.5f});
     label->limitLabelWidth(60, 0.5f, 0);
+    label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
 
     if(getOption(option)) createButton("GJ_plusBtn_001.png", {x + 98, y}, additional, .65f);
 }
@@ -222,6 +232,7 @@ void ProfileSearchOptions::drawTogglesPrimary(){
 
 
     auto timeIcon = CCSprite::createWithSpriteFrameName("GJ_timeIcon_001.png");
+    timeIcon->setID("time-icon"_spr);
     m_buttonMenu->addChild(timeIcon);
     timeIcon->setPosition({-193, -120});
     createButtonToggle("len_00", CCLabelBMFont::create("Tiny", "bigFont.fnt"), -142, -119, 0.6f);
@@ -276,7 +287,8 @@ void ProfileSearchOptions::drawTogglesSecondary(){
         );
     }
 
-    createButton("GJ_infoIcon_001.png", {203, 128}, menu_selector(ProfileSearchOptions::onSecondaryInfo));
+    auto infoBtn = createButton("GJ_infoIcon_001.png", {203, 128}, menu_selector(ProfileSearchOptions::onSecondaryInfo));
+    infoBtn->setID("info-button"_spr);
 
     createToggle("copied", "Copied", -170, 80);
     createToggle("downloaded", "Downloaded", -40, 80);

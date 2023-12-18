@@ -47,7 +47,7 @@ class $modify(BIEditLevelLayer, EditLevelLayer) {
             auto newMenu = CCMenu::create();
             newMenu->addChild(newBMFontBtn);
             this->addChild(newMenu);
-            newMenu->setID("bi-level-id-menu");
+            newMenu->setID("level-id-menu"_spr);
         }
 
         return true;

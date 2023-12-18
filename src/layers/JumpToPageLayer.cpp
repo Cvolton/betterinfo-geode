@@ -81,7 +81,7 @@ bool JumpToPageLayer::init(){
     bool init = createBasics({220.0f, 150.0f}, menu_selector(JumpToPageLayer::onClose), 0.8f);
     if(!init) return false;
 
-    createTextLabel("Go to Page", {0,57}, 0.7f, m_buttonMenu, "goldFont.fnt")->setID("header-text");
+    createTextLabel("Go to Page", {0,57}, 0.7f, m_buttonMenu, "goldFont.fnt")->setID("header-text"_spr);
 
     m_textNode = CCTextInputNode::create(50, 30, "Num", "bigFont.fnt");
     m_textNode->setLabelPlaceholderColor({0x75, 0xAA, 0xF0});
@@ -91,7 +91,7 @@ bool JumpToPageLayer::init(){
     m_textNode->setMaxLabelScale(0.7f);
     m_textNode->setMaxLabelWidth(11);
     m_textNode->setPosition({0,6});
-    m_textNode->setID("text-input");
+    m_textNode->setID("text-input"_spr);
     m_buttonMenu->addChild(m_textNode);
 
     cocos2d::extension::CCScale9Sprite* infoBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
@@ -100,7 +100,7 @@ bool JumpToPageLayer::init(){
     m_buttonMenu->addChild(infoBg, -1);
     infoBg->setPosition({0,6});
     infoBg->setScale(0.6f);
-    infoBg->setID("text-input-bg");
+    infoBg->setID("text-input-bg"_spr);
 
     auto buttonSprite = ButtonSprite::create("Go", 40, true, "goldFont.fnt", "GJ_button_01.png", 30, 0.8f);
     auto buttonButton = CCMenuItemSpriteExtra::create(
@@ -110,12 +110,12 @@ bool JumpToPageLayer::init(){
     );
     buttonButton->setSizeMult(1.2f);
     buttonButton->setPosition({0,-50});
-    buttonButton->setID("go-button");
+    buttonButton->setID("go-button"_spr);
     m_buttonMenu->addChild(buttonButton);
 
-    createButton("edit_leftBtn_001.png", {-50, 6}, menu_selector(JumpToPageLayer::onPrev), 1.1f)->setID("left-arrow");
-    createButton("edit_rightBtn_001.png", {50, 6}, menu_selector(JumpToPageLayer::onNext), 1.1f)->setID("right-arrow");
-    createButton("GJ_resetBtn_001.png", {93, 57}, menu_selector(JumpToPageLayer::onReset))->setID("reset-button");
+    createButton("edit_leftBtn_001.png", {-50, 6}, menu_selector(JumpToPageLayer::onPrev), 1.1f)->setID("left-arrow"_spr);
+    createButton("edit_rightBtn_001.png", {50, 6}, menu_selector(JumpToPageLayer::onNext), 1.1f)->setID("right-arrow"_spr);
+    createButton("GJ_resetBtn_001.png", {93, 57}, menu_selector(JumpToPageLayer::onReset))->setID("reset-button"_spr);
 
     return true;
 }

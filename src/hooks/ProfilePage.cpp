@@ -144,7 +144,7 @@ class $modify(BIProfilePage, ProfilePage) {
         menu->addChild(infoButton);
         infoButton->setPosition({16, -135});
         infoButton->setSizeMult(1.2f);
-        infoButton->setID("bi-info-button");
+        infoButton->setID("info-button"_spr);
 
         this->m_buttons->addObject(infoButton);
 
@@ -186,7 +186,7 @@ class $modify(BIProfilePage, ProfilePage) {
                 this,
                 menu_selector(BIProfilePage::onProfilePageLeaderboard)
             );
-            leaderboardButton->setID("bi-leaderboard-button");
+            leaderboardButton->setID("leaderboard-button"_spr);
             menu->addChild(leaderboardButton);
             leaderboardButton->setPosition({46, -12});
             leaderboardButton->setSizeMult(1.2f);
@@ -198,7 +198,7 @@ class $modify(BIProfilePage, ProfilePage) {
                 this,
                 menu_selector(BIProfilePage::onProfilePageReload)
             );
-            refreshButton->setID("bi-refresh-button");
+            refreshButton->setID("refresh-button"_spr);
             menu->addChild(refreshButton);
             refreshButton->setPosition({0, -269});
             refreshButton->setSizeMult(1.2f);
@@ -216,7 +216,7 @@ class $modify(BIProfilePage, ProfilePage) {
             );
             userIDBtn->setPosition({38,-248});
             userIDBtn->setAnchorPoint({0,1});
-            userIDBtn->setID("bi-userid-button");
+            userIDBtn->setID("userid-button"_spr);
             menu->addChild(userIDBtn);
             this->m_buttons->addObject(userIDBtn);
 
@@ -231,7 +231,7 @@ class $modify(BIProfilePage, ProfilePage) {
             );
             accountIDBtn->setPosition({38,-258});
             accountIDBtn->setAnchorPoint({0,1});
-            accountIDBtn->setID("bi-accountid-button");
+            accountIDBtn->setID("accountid-button"_spr);
             menu->addChild(accountIDBtn);
             this->m_buttons->addObject(accountIDBtn);
 
@@ -243,7 +243,7 @@ class $modify(BIProfilePage, ProfilePage) {
                 menu_selector(BIProfilePage::onProfilePageCopyPlayerName)
             );
             usernameBtn->setPosition({210,-10});
-            usernameBtn->setID("bi-username-button");
+            usernameBtn->setID("username-button"_spr);
             menu->addChild(usernameBtn);
             this->m_buttons->addObject(usernameBtn);
 

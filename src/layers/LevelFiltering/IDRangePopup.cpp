@@ -37,6 +37,7 @@ bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char*
     m_minNode->setMaxLabelScale(0.7f);
     m_minNode->setMaxLabelWidth(11);
     m_minNode->setPosition({0,6});
+    m_minNode->setID("min-input"_spr);
     m_buttonMenu->addChild(m_minNode);
 
     m_maxNode = CCTextInputNode::create(100, 30, "Max", "bigFont.fnt");
@@ -46,6 +47,7 @@ bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char*
     m_maxNode->setMaxLabelScale(0.7f);
     m_maxNode->setMaxLabelWidth(11);
     m_maxNode->setPosition({0,-37});
+    m_maxNode->setID("max-input"_spr);
     m_buttonMenu->addChild(m_maxNode);
 
     auto minBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
@@ -53,6 +55,7 @@ bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char*
     minBg->setColor({123,60,31});
     m_buttonMenu->addChild(minBg, -1);
     minBg->setPosition({0,6});
+    minBg->setID("min-background"_spr);
     minBg->setScale(0.6f);
 
     auto maxBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
@@ -60,6 +63,7 @@ bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char*
     maxBg->setColor({123,60,31});
     m_buttonMenu->addChild(maxBg, -1);
     maxBg->setPosition({0,-37});
+    maxBg->setID("max-background"_spr);
     maxBg->setScale(0.6f);
     //createTextLabel("Advanced Options", {(winSize.width / 2), (winSize.height / 2) + 125}, 1.f, m_pLayer, "bigFont.fnt");
     this->m_additional = additional;

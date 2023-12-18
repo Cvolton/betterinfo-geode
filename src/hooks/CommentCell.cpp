@@ -52,7 +52,7 @@ class $modify(BICommentCell, CommentCell) {
         idText->setScale(smallCommentsMode ? .325f : .425f);
         idText->setOpacity(110);
         idText->setColor({0,0,0});
-        idText->setID("bi-comment-id");
+        idText->setID("comment-id"_spr);
         if(Mod::get()->getSettingValue<bool>("show-comment-ids")) layer->addChild(idText);
 
         for(unsigned int i = 0; i < layer->getChildrenCount(); i++){
@@ -84,7 +84,7 @@ class $modify(BICommentCell, CommentCell) {
             buttonButton->setPosition(37 - (winSize.width / 2), smallCommentsMode ? 18.5f - (winSize.height / 2) : 50.5f - (winSize.height / 2) );
             buttonButton->setAnchorPoint({0.1f,0});
             buttonButton->setEnabled(true);
-            buttonButton->setID("bi-profile-button");
+            buttonButton->setID("profile-button"_spr);
             menu->addChild(buttonButton);
 
         }else{
@@ -101,7 +101,7 @@ class $modify(BICommentCell, CommentCell) {
             CCPoint largePosition(154 - (winSize.width / 2), 60 - (winSize.height / 2));
             commentsButton->setPosition(smallCommentsMode ? smallPosition : largePosition);
             commentsButton->setSizeMult(1.2f);
-            commentsButton->setID("bi-comments-button");
+            commentsButton->setID("comments-button"_spr);
 
         }
 

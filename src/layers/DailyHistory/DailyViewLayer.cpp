@@ -43,6 +43,7 @@ bool DailyViewLayer::init(bool isWeekly) {
 
     // add more btn
     auto menu = CCMenu::create();
+    menu->setID("more-menu"_spr);
 
     auto buttonSprite = ButtonSprite::create("More", (int)(90*0.5), true, "bigFont.fnt", "GJ_button_01.png", 44*0.5f, 0.5f);
     auto buttonButton = CCMenuItemSpriteExtra::create(
@@ -53,6 +54,7 @@ bool DailyViewLayer::init(bool isWeekly) {
     buttonButton->setSizeMult(1.2f);
     buttonButton->setPosition({- winSize.width / 2, - winSize.height / 2});
     buttonButton->setAnchorPoint({0,0});
+    buttonButton->setID("more-button"_spr);
     menu->addChild(buttonButton);
 
     addChild(menu);

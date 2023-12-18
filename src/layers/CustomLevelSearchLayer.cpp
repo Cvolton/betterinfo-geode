@@ -84,7 +84,7 @@ bool CustomLevelSearchLayer::init(GJGameLevel* level){
     cocos2d::extension::CCScale9Sprite* bg = cocos2d::extension::CCScale9Sprite::create("GJ_square01.png", { 0.0f, 0.0f, 80.0f, 80.0f });
     bg->setContentSize({ 360.0f, 180.0f });
     m_mainLayer->addChild(bg, -1);
-    m_mainLayer->setID("main-layer");
+    m_mainLayer->setID("main-layer"_spr);
     bg->setPosition({ winSize.width / 2, winSize.height / 2 });
 
     auto closeButton = CCMenuItemSpriteExtra::create(
@@ -94,16 +94,16 @@ bool CustomLevelSearchLayer::init(GJGameLevel* level){
     );
 
     m_buttonMenu = CCMenu::create();
-    m_buttonMenu->setID("button-menu");
+    m_buttonMenu->setID("button-menu"_spr);
     m_mainLayer->addChild(m_buttonMenu, 10);
     m_buttonMenu->addChild(closeButton);
     closeButton->setPosition({-170.5f, 79});
     closeButton->setSizeMult(1.2f);
-    closeButton->setID("close-button");
+    closeButton->setID("close-button"_spr);
 
     auto searchTitle = CCLabelBMFont::create("Search", "bigFont.fnt");
     searchTitle->setPosition({0,66});
-    searchTitle->setID("search-title");
+    searchTitle->setID("search-title"_spr);
 
     m_buttonMenu->addChild(searchTitle);
 
@@ -111,7 +111,7 @@ bool CustomLevelSearchLayer::init(GJGameLevel* level){
     separator->setPosition({285,202});
     separator->setScaleX(0.75f);
     separator->setOpacity(100);
-    separator->setID("separator");
+    separator->setID("separator"_spr);
     m_mainLayer->addChild(separator);
 
     /*auto buttonSprite = ButtonSprite::create("Neighbors", (int)(120*0.6), true, "bigFont.fnt", "GJ_button_01.png", 44*0.6f, 0.6f);
@@ -128,11 +128,11 @@ bool CustomLevelSearchLayer::init(GJGameLevel* level){
     auto similarButton = createButton(m_buttonMenu, "Similar", menu_selector(CustomLevelSearchLayer::onSimilar), 0, -48, (int)(120*0.6), 44*0.6f, 0.6f);*/
 
     auto similarButton = createButton(m_buttonMenu, "Similar", menu_selector(CustomLevelSearchLayer::onSimilar), -75, 8, (int)(120*0.6), 44*0.6f, 0.6f);
-    similarButton->setID("similar-button");
+    similarButton->setID("similar-button"_spr);
     auto neighborButton = createButton(m_buttonMenu, "Neighbors", menu_selector(CustomLevelSearchLayer::onNeighbors), 75, 8, (int)(120*0.6), 44*0.6f, 0.6f);
-    neighborButton->setID("neighbor-button");
+    neighborButton->setID("neighbor-button"_spr);
     auto songButton = createButton(m_buttonMenu, "Same song", menu_selector(CustomLevelSearchLayer::onSong), 0, -48, (int)(120*0.6), 44*0.6f, 0.6f);
-    songButton->setID("song-button");
+    songButton->setID("song-button"_spr);
 
     return true;
 }

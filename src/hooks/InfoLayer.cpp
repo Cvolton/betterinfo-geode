@@ -80,7 +80,7 @@ class $modify(BIInfoLayer, InfoLayer) {
         );
         buttonButton->setSizeMult(1.2f);
         buttonButton->setPosition({195,34});
-        buttonButton->setID("bi-comment-page-btn");
+        buttonButton->setID("comment-page-btn"_spr);
         //buttonButton->setTag(commentPageBtnTag);
         menu->addChild(buttonButton);
 
@@ -96,7 +96,7 @@ class $modify(BIInfoLayer, InfoLayer) {
         menu->addChild(searchButton);
         searchButton->setPosition({195, 68});
         searchButton->setSizeMult(1.2f);
-        searchButton->setID("bi-search-btn");
+        searchButton->setID("search-btn"_spr);
 
         auto scheduleOffSprite = CCSprite::createWithSpriteFrameName("GJ_playEditorBtn_001.png");
         scheduleOffSprite->setScale(.625f);
@@ -111,7 +111,7 @@ class $modify(BIInfoLayer, InfoLayer) {
         scheduleBtn->setUserData(reinterpret_cast<void*>(false));
         scheduleBtn->setPosition({202.5, 100});
         menu->addChild(scheduleBtn);
-        scheduleBtn->setID("bi-schedule-btn");
+        scheduleBtn->setID("schedule-btn"_spr);
 
         if(level->m_originalLevel != 0) {
             auto originalBtn = typeinfo_cast<CCNode*>(menu->getChildren()->objectAtIndex(1));
@@ -153,7 +153,7 @@ class $modify(BIInfoLayer, InfoLayer) {
 
         CCMenu* menu = static_cast<CCMenu*>(this->m_commentsBtn->getParent());
 
-        auto commentBtn = static_cast<CCMenuItemSpriteExtra*>(menu->getChildByID("bi-comment-page-btn"));
+        auto commentBtn = static_cast<CCMenuItemSpriteExtra*>(menu->getChildByID("comment-page-btn"_spr));
         if(commentBtn == nullptr) return;
 
         auto commentBtnSprite = static_cast<ButtonSprite*>(commentBtn->getChildren()->objectAtIndex(0));

@@ -63,7 +63,7 @@ class $modify(BIMoreSearchLayer, MoreSearchLayer) {
             menu_selector(BIMoreSearchLayer::onMoreSearchNext)
         );
         nextBtn->setPosition({(winSize.width / 2) + 185, - (winSize.height / 2) + 25});
-        nextBtn->setID("bi-next-button");
+        nextBtn->setID("next-button"_spr);
         m_buttonMenu->addChild(nextBtn);
 
         auto savedSprite = CCSprite::createWithSpriteFrameName("GJ_savedSongsBtn_001.png");
@@ -74,7 +74,7 @@ class $modify(BIMoreSearchLayer, MoreSearchLayer) {
             menu_selector(BIMoreSearchLayer::onSaved)
         );
         m_fields->m_savedBtn->setPosition({333, -247});
-        m_fields->m_savedBtn->setID("bi-saved-button");
+        m_fields->m_savedBtn->setID("saved-button"_spr);
         m_fields->m_savedBtn->setVisible(shouldSavedBtnBeVisible());
         m_buttonMenu->addChild(m_fields->m_savedBtn);
 

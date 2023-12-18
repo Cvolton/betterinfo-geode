@@ -96,14 +96,17 @@ bool LevelCategorySearchAlert::init(){
     bg->setContentSize({ 360.0f, 190.0f });
     m_mainLayer->addChild(bg, -1);
     bg->setPosition({ winSize.width / 2, winSize.height / 2 });
+    bg->setID("background-square"_spr);
 
     auto closeButton = CCMenuItemSpriteExtra::create(
         CCSprite::createWithSpriteFrameName("GJ_closeBtn_001.png"),
         this,
         menu_selector(LevelCategorySearchAlert::onClose)
     );
+    closeButton->setID("close-button"_spr);
 
     m_buttonMenu = CCMenu::create();
+    m_buttonMenu->setID("button-menu"_spr);
     m_mainLayer->addChild(m_buttonMenu, 10);
     m_buttonMenu->addChild(closeButton);
     closeButton->setPosition({-170.5f, 79});
@@ -111,6 +114,7 @@ bool LevelCategorySearchAlert::init(){
 
     auto searchTitle = CCLabelBMFont::create("Search", "bigFont.fnt");
     searchTitle->setPosition({0,71});
+    searchTitle->setID("title-label"_spr);
 
     m_buttonMenu->addChild(searchTitle);
 
@@ -118,18 +122,25 @@ bool LevelCategorySearchAlert::init(){
     separator->setPosition({285,207});
     separator->setScaleX(0.75f);
     separator->setOpacity(100);
+    separator->setID("separator"_spr);
     m_mainLayer->addChild(separator);
 
     /*auto neighborButton = createButton(m_buttonMenu, "Neighbors", menu_selector(LevelCategorySearchAlert::onNeighbors), 0, 4, (int)(120*0.6), 44*0.6f, 0.6f);
     auto similarButton = createButton(m_buttonMenu, "Similar", menu_selector(LevelCategorySearchAlert::onSimilar), 0, -48, (int)(120*0.6), 44*0.6f, 0.6f);*/
 
     auto similarButton = createButton(m_buttonMenu, "Played", menu_selector(LevelCategorySearchAlert::onPlayed), 0, 18, (int)(120*0.6), 44*0.6f, 0.6f);
+    similarButton->setID("similar-button"_spr);
     //auto percentageButton = createButton(m_buttonMenu, "Percentage", menu_selector(LevelCategorySearchAlert::onPercentage), 57, 18, (int)(120*0.6), 44*0.6f, 0.6f);
     auto completedButton = createButton(m_buttonMenu, "Completed", menu_selector(LevelCategorySearchAlert::onCompleted), -114, -22, (int)(120*0.6), 44*0.6f, 0.6f);
+    completedButton->setID("completed-button"_spr);
     auto orbsButton = createButton(m_buttonMenu, "C. With Orbs", menu_selector(LevelCategorySearchAlert::onOrbs), 0, -22, (int)(120*0.6), 44*0.6f, 0.6f);
+    orbsButton->setID("orbs-button"_spr);
     auto leaderboardButton = createButton(m_buttonMenu, "C. Leaderboard", menu_selector(LevelCategorySearchAlert::onLeaderboard), 114, -22, (int)(120*0.6), 44*0.6f, 0.6f);
+    leaderboardButton->setID("leaderboard-button"_spr);
     auto coinsButton = createButton(m_buttonMenu, "C. With Coins", menu_selector(LevelCategorySearchAlert::onCoins), -57, -64, (int)(120*0.6), 44*0.6f, 0.6f);
+    coinsButton->setID("coins-button"_spr);
     auto noCoinsButton = createButton(m_buttonMenu, "C. Without Coins", menu_selector(LevelCategorySearchAlert::onNoCoins), 57, -64, (int)(120*0.6), 44*0.6f, 0.6f);
+    noCoinsButton->setID("no-coins-button"_spr);
     /*auto songButton = createButton(m_buttonMenu, "Leaderboard", menu_selector(LevelCategorySearchAlert::onLeaderboard), 0, -48, (int)(120*0.6), 44*0.6f, 0.6f);*/
 
     return true;

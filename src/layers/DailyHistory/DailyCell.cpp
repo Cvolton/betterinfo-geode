@@ -15,11 +15,13 @@ void DailyCell::loadFromData(CCObject* object) {
     diffSprite->setPosition({22.f, 32.f});
     diffSprite->setScale(0.8f);
     diffSprite->setZOrder(1);
+    diffSprite->setID("difficulty-sprite"_spr);
     this->m_mainLayer->addChild(diffSprite);
 
     auto featureSprite = CCSprite::createWithSpriteFrameName("GJ_featuredCoin_001.png");
     featureSprite->setPosition({22.f, 32.f});
     featureSprite->setScale(0.8f);
+    featureSprite->setID("featured-sprite"_spr);
     this->m_mainLayer->addChild(featureSprite);
     //infoSprite->setScale(0.7f);
 
@@ -27,18 +29,21 @@ void DailyCell::loadFromData(CCObject* object) {
     starsLabel->setPosition({22, 8});
     starsLabel->setScale(.34f);
     starsLabel->setAnchorPoint({1, 0.5f});
+    starsLabel->setID("stars-label"_spr);
     this->m_mainLayer->addChild(starsLabel);
 
     auto starsSprite = CCSprite::createWithSpriteFrameName("star_small01_001.png");
     starsSprite->setPosition({23, 8});
     starsSprite->setAnchorPoint({0, 0.5f});
     starsSprite->setScale(0.8f);
+    starsSprite->setID("stars-sprite"_spr);
     this->m_mainLayer->addChild(starsSprite);
 
     auto title = CCLabelBMFont::create(biCache->getLevelName(level->m_levelID).c_str(), "bigFont.fnt");
     title->setAnchorPoint({ 0.0f, .5f });
     title->setPosition(43.0f, 42.f);
     title->limitLabelWidth(170, .7f, .4f);
+    title->setID("title-label"_spr);
     this->m_mainLayer->addChild(title);
 
     /*CCNode* percentage = CCLabelBMFont::create(CCString::createWithFormat("%i%%", level->m_normalPercent)->getCString(), "goldFont.fnt");
@@ -53,24 +58,28 @@ void DailyCell::loadFromData(CCObject* object) {
     numberSprite->setPosition({44, 9});
     numberSprite->setAnchorPoint({0, 0.5f});
     numberSprite->setScale(0.7f);
+    numberSprite->setID("number-sprite"_spr);
     this->m_mainLayer->addChild(numberSprite);
 
     auto number = CCLabelBMFont::create(CCString::createWithFormat("%i", level->m_dailyID % 100000)->getCString(), "bigFont.fnt");
     number->setAnchorPoint({ 0.0f, 0.5f });
     number->setPosition(57.5f, 10.0f);
     number->setScale(.325f);
+    number->setID("number-label"_spr);
     this->m_mainLayer->addChild(number);
 
     auto diamondSprite = CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
     diamondSprite->setPosition({number->getPositionX() + ((number->getContentSize().width) * number->getScaleX()) + 5, 9});
     diamondSprite->setAnchorPoint({0, 0.5f});
     diamondSprite->setScale(0.7f);
+    diamondSprite->setID("diamond-sprite"_spr);
     this->m_mainLayer->addChild(diamondSprite);
 
     auto diamond = CCLabelBMFont::create(CCString::createWithFormat("%i/%i", getAwardedDiamonds(), getTotalDiamonds())->getCString(), "bigFont.fnt");
     diamond->setAnchorPoint({ 0.0f, 0.5f });
     diamond->setPosition(diamondSprite->getPositionX() + 11.f, 10.0f);
     diamond->setScale(.325f);
+    diamond->setID("diamond-label"_spr);
     if(getAwardedDiamonds() == getTotalDiamonds()) diamond->setColor({100,255,255});
     this->m_mainLayer->addChild(diamond);
 
@@ -78,6 +87,7 @@ void DailyCell::loadFromData(CCObject* object) {
     orbSprite->setPosition({diamond->getPositionX() + ((diamond->getContentSize().width) * diamond->getScaleX()) + 5, 9});
     orbSprite->setAnchorPoint({0, 0.5f});
     orbSprite->setScale(0.5f);
+    orbSprite->setID("orb-sprite"_spr);
     this->m_mainLayer->addChild(orbSprite);
 
     int orbsMax = (GSM->getAwardedCurrencyForLevel(level) * 125) / 100;
@@ -90,6 +100,7 @@ void DailyCell::loadFromData(CCObject* object) {
     orb->setAnchorPoint({ 0.0f, 0.5f });
     orb->setPosition(orbSprite->getPositionX() + 11.5f, 10.0f);
     orb->setScale(.325f);
+    orb->setID("orb-label"_spr);
     this->m_mainLayer->addChild(orb);
 
     //row 1
@@ -98,12 +109,14 @@ void DailyCell::loadFromData(CCObject* object) {
     percentSprite->setPosition({44, 23});
     percentSprite->setAnchorPoint({0, 0.5f});
     percentSprite->setScale(0.35f);
+    percentSprite->setID("percent-sprite"_spr);
     this->m_mainLayer->addChild(percentSprite);
 
     auto percent = CCLabelBMFont::create(CCString::createWithFormat("%i%%", level->m_normalPercent.value())->getCString(), "bigFont.fnt");
     percent->setAnchorPoint({ 0.0f, 0.5f });
     percent->setPosition(57.5f, 24.0f);
     percent->setScale(.325f);
+    percent->setID("percent-label"_spr);
     if(level->m_normalPercent == 100) percent->setColor({255,255,128});
     this->m_mainLayer->addChild(percent);
 
@@ -111,27 +124,16 @@ void DailyCell::loadFromData(CCObject* object) {
     practiceSprite->setPosition({percent->getPositionX() + ((percent->getContentSize().width) * percent->getScaleX()) + 5, 23});
     practiceSprite->setAnchorPoint({0, 0.5f});
     practiceSprite->setScale(0.35f);
+    practiceSprite->setID("practice-sprite"_spr);
     this->m_mainLayer->addChild(practiceSprite);
 
     auto practice = CCLabelBMFont::create(CCString::createWithFormat("%i%%", level->m_practicePercent)->getCString(), "bigFont.fnt");
     practice->setAnchorPoint({ 0.0f, 0.5f });
     practice->setPosition(practiceSprite->getPositionX() + 8.f, 24.0f);
     practice->setScale(.325f);
+    practice->setID("practice-label"_spr);
     if(level->m_practicePercent == 100) practice->setColor({255,255,128});
     this->m_mainLayer->addChild(practice);
-
-    /*auto coinSprite = CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
-    coinSprite->setPosition({practice->getPositionX() + ((practice->getContentSize().width) * practice->getScaleX()) + 5, 23});
-    coinSprite->setAnchorPoint({0, 0.5f});
-    coinSprite->setScale(0.35f);
-    this->m_mainLayer->addChild(coinSprite);
-
-    int coinsCollected = level->firstCoinVerified + level->secondCoinVerified + level->thirdCoinVerified;
-    auto coin = CCLabelBMFont::create(CCString::createWithFormat("%i", coinsCollected)->getCString(), "bigFont.fnt");
-    coin->setAnchorPoint({ 0.0f, 0.5f });
-    coin->setPosition(coinSprite->getPositionX() + 8.f, 24.0f);
-    coin->setScale(.325f);
-    this->m_mainLayer->addChild(coin);*/
 
     auto coinDict = GameStatsManager::sharedState()->m_verifiedUserCoins;
 
@@ -143,6 +145,7 @@ void DailyCell::loadFromData(CCObject* object) {
         coinSprite->setPosition({coinX += 6, 23});
         coinSprite->setAnchorPoint({0, 0.5f});
         coinSprite->setScale(0.7f);
+        coinSprite->setID(Mod::get()->expandSpriteName(fmt::format("coin-sprite-{}", i).c_str()));
         //coinSprite->setScale(0.35f);
         this->m_mainLayer->addChild(coinSprite);
     }
@@ -156,6 +159,7 @@ void DailyCell::loadFromData(CCObject* object) {
 
     //buttons
     auto menu = CCMenu::create();
+    menu->setID("menu"_spr);
 
     auto viewSprite = CCSprite::createWithSpriteFrameName("GJ_playBtn2_001.png");
     viewSprite->setScale(.5f);
@@ -166,6 +170,7 @@ void DailyCell::loadFromData(CCObject* object) {
     );
     //viewBtn->setPosition({42, -132});
     viewBtn->setPosition(CCPoint(327, 28) - (winSize / 2));
+    viewBtn->setID("view-button"_spr);
     menu->addChild(viewBtn);
 
     auto leaderboardSprite = CCSprite::createWithSpriteFrameName("GJ_levelLeaderboardBtn_001.png");
@@ -176,6 +181,7 @@ void DailyCell::loadFromData(CCObject* object) {
         menu_selector(DailyCell::onLeaderboards)
     );
     leaderboardBtn->setPosition(viewBtn->getPosition() - CCPoint(40, 0));
+    leaderboardBtn->setID("leaderboard-button"_spr);
     menu->addChild(leaderboardBtn);
 
     auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoBtn_001.png");
@@ -186,6 +192,7 @@ void DailyCell::loadFromData(CCObject* object) {
         menu_selector(DailyCell::onInfo)
     );
     infoBtn->setPosition(leaderboardBtn->getPosition() - CCPoint(40, 0));
+    infoBtn->setID("info-button"_spr);
     menu->addChild(infoBtn);
 
     this->m_mainLayer->addChild(menu);

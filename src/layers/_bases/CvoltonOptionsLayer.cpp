@@ -61,6 +61,7 @@ void CvoltonOptionsLayer::createToggle(const char* option, const char* name){
         this,
         menu_selector(CvoltonOptionsLayer::onToggle)
     );
+    button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
     m_buttonMenu->addChild(button);
     float y = 85.f - (m_toggleCount++ * 40.f);
     button->setPosition({-157, y});
@@ -71,6 +72,7 @@ void CvoltonOptionsLayer::createToggle(const char* option, const char* name){
 
     auto label = createTextLabel(name, {-137, y}, 0.5f, m_buttonMenu);
     label->setAnchorPoint({0,0.5f});
+    label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
 }
 
 void CvoltonOptionsLayer::createButtonToggle(const char* option, CCNode* sprite, float x, float y, float scale){
@@ -81,6 +83,7 @@ void CvoltonOptionsLayer::createButtonToggle(const char* option, CCNode* sprite,
         this,
         menu_selector(CvoltonOptionsLayer::onToggle)
     );
+    button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
     m_buttonMenu->addChild(button);
     button->setPosition({x, y});
     if(!getOption(option)) button->setColor({125,125,125});

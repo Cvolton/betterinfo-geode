@@ -20,7 +20,7 @@ class $modify(BILevelCell, LevelCell) {
         if(m_fields->m_levelDesc) return;
 
         auto parent = CCSprite::create();
-        parent->setID("bi-leveldesc");
+        parent->setID("leveldesc"_spr);
 
         / *auto bg = CCScale9Sprite::create("square02b_small.png", { 0, 0, 40, 40 });
         bg->setColor({ 0, 0, 0 });
@@ -60,18 +60,18 @@ class $modify(BILevelCell, LevelCell) {
 
         description->setOpacity(0);
         description->runAction(CCFadeTo::create(0.3f, 255));
-        description->setID("bi-leveldesc-area");
+        description->setID("leveldesc-area"_spr);
 
         descBg->setOpacity(0);
         descBg->runAction(CCFadeTo::create(0.3f, 230));
-        descBg->setID("bi-leveldesc-bg");
+        descBg->setID("leveldesc-bg"_spr);
     }
 
     void hideDesc() {
         if(!m_fields->m_levelDesc) return;
 
-        auto description = static_cast<TextArea*>(m_fields->m_levelDesc->getChildByIDRecursive("bi-leveldesc-area"));
-        auto descBg = static_cast<CCScale9Sprite*>(m_fields->m_levelDesc->getChildByIDRecursive("bi-leveldesc-bg"));
+        auto description = static_cast<TextArea*>(m_fields->m_levelDesc->getChildByIDRecursive("leveldesc-area"_spr));
+        auto descBg = static_cast<CCScale9Sprite*>(m_fields->m_levelDesc->getChildByIDRecursive("leveldesc-bg"_spr));
 
         //m_fields->m_levelDesc->removeFromParentAndCleanup(true);
         if(description) description->runAction(CCFadeTo::create(0.3f, 0));
@@ -125,7 +125,7 @@ class $modify(BILevelCell, LevelCell) {
         idTextNode->setScale(0.6f);
         idTextNode->setColor({51,51,51});
         idTextNode->setOpacity(152);
-        idTextNode->setID("bi-level-id-label");
+        idTextNode->setID("level-id-label"_spr);
         m_mainLayer->addChild(idTextNode);
         if(this->m_level->m_dailyID > 0 || Mod::get()->getSettingValue<bool>("white-id")){
             idTextNode->setColor({255,255,255});
@@ -145,7 +145,7 @@ class $modify(BILevelCell, LevelCell) {
             dailyTextNode->setScale(0.6f);
             dailyTextNode->setColor({255,255,255});
             dailyTextNode->setOpacity(200);
-            dailyTextNode->setID("bi-daily-id-label");
+            dailyTextNode->setID("daily-id-label"_spr);
             m_mainLayer->addChild(dailyTextNode);
 
             BetterInfoCache::sharedState()->cacheLevel(m_level);

@@ -34,7 +34,7 @@ class $modify(BICreatorLayer, CreatorLayer) {
         auto questBtn = static_cast<CCMenuItemSpriteExtra*>(menu->getChildByID("quests-button"));
         if(questBtn == nullptr) return;
 
-        auto existingNode = questBtn->getChildByID("bi-exclamation-mark");
+        auto existingNode = questBtn->getChildByID("exclamation-mark"_spr);
         if(existingNode != nullptr){
             existingNode->setVisible(true);
             return;
@@ -43,7 +43,7 @@ class $modify(BICreatorLayer, CreatorLayer) {
         auto exMark = CCSprite::createWithSpriteFrameName("exMark_001.png");
         exMark->setPosition({16.5,75});
         exMark->setScale(0.7f);
-        exMark->setID("bi-exclamation-mark");
+        exMark->setID("exclamation-mark"_spr);
         questBtn->addChild(exMark);
     }
 
@@ -58,7 +58,7 @@ class $modify(BICreatorLayer, CreatorLayer) {
         auto winSize = CCDirector::sharedDirector()->getWinSize();
         auto menu = CCMenu::create();
         menu->setPositionX(winSize.width - 22);
-        menu->setID("bi-center-right-menu");
+        menu->setID("center-right-menu"_spr);
 
         auto buttonSprite = BetterInfo::createBISprite(Mod::get()->getSettingValue<bool>("alt-button") ? "BI_altBtn_001.png" : "BI_mainButton_001.png");
         buttonSprite->setScale(.9f);
@@ -70,7 +70,7 @@ class $modify(BICreatorLayer, CreatorLayer) {
         buttonButton->setSizeMult(1.2f);
         //buttonButton->setPosition({door->getPositionX() - 1,0});
         menu->addChild(buttonButton);
-        buttonButton->setID("bi-main-button");
+        buttonButton->setID("main-button"_spr);
 
         this->addChild(menu);
 
@@ -80,7 +80,7 @@ class $modify(BICreatorLayer, CreatorLayer) {
     }
 
     void onChallenge(CCObject* sender) {
-        auto child = static_cast<CCNode*>(static_cast<CCNode*>(sender)->getChildByID("bi-exclamation-mark"));
+        auto child = static_cast<CCNode*>(static_cast<CCNode*>(sender)->getChildByID("exclamation-mark"_spr));
         if(child) {
             child->setVisible(false);
         }

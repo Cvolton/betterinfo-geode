@@ -37,7 +37,7 @@ class $modify(BILevelLeaderboard, LevelLeaderboard) {
         buttonButton->setSizeMult(1.2f);
         buttonButton->setPosition({196,-87});
         m_buttonMenu->addChild(buttonButton);
-        buttonButton->setID("bi-daily-button");
+        buttonButton->setID("daily-button"_spr);
 
         return true;
     }

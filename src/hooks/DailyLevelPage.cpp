@@ -24,7 +24,7 @@ class $modify(BIDailyLevelPage, DailyLevelPage) {
 
         CCLayer* layer = this->m_mainLayer;
 
-        if(layer->getChildByID("bi-current-daily-text")) return;
+        if(layer->getChildByID("current-daily-text"_spr)) return;
 
         auto GM = GameLevelManager::sharedState();
         auto winSize = CCDirector::sharedDirector()->getWinSize();
@@ -38,7 +38,7 @@ class $modify(BIDailyLevelPage, DailyLevelPage) {
         currentDailyNode->setColor({255,255,255});
         currentDailyNode->setOpacity(200);
         layer->addChild(currentDailyNode);
-        currentDailyNode->setID("bi-current-daily-text");
+        currentDailyNode->setID("current-daily-text"_spr);
     }
 
     bool init(bool isWeekly) {
@@ -55,7 +55,7 @@ class $modify(BIDailyLevelPage, DailyLevelPage) {
         );
         historyBtn->setPosition({13, -247});
         menu->addChild(historyBtn);
-        historyBtn->setID("bi-history-button");
+        historyBtn->setID("history-button"_spr);
 
         return true;
     }
