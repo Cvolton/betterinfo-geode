@@ -25,8 +25,6 @@ class $modify(BIMoreSearchLayer, MoreSearchLayer) {
     }
 
     void onSaved(CCObject* sender){
-        log::info("{}", m_fields->m_settings);
-
         auto browser = GJSongBrowser::create(m_fields->m_settings);
         CCScene::get()->addChild(browser);
         browser->setZOrder(CCScene::get()->getHighestChildZ() + 1);
@@ -36,12 +34,8 @@ class $modify(BIMoreSearchLayer, MoreSearchLayer) {
     void onSongIDCheck(float dt){
         if(m_fields->m_settings->m_level->m_songID != m_fields->m_songID){
             m_fields->m_songID = m_fields->m_settings->m_level->m_songID;
-
-            log::info("Song ID changed: {}", m_fields->m_songID);
             GameLevelManager::sharedState()->setIntForKey(m_fields->m_songID, "song_filter");
             m_enterSongID->setString(std::to_string(m_fields->m_songID));
-            
-            log::info("CCTextInputNode* m_enterSongID; {}", m_enterSongID);
         }
     }
 

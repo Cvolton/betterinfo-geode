@@ -11,6 +11,7 @@ class BetterInfoCache : public BaseJsonManager, public OnlineListDelegate {
 
 public:
 	UploadDateDelegate* m_uploadDateDelegate = nullptr;
+	std::unordered_map<int, bool> m_downloadedSongs;
 
 	bool init();
 
@@ -45,4 +46,6 @@ public:
 	void loadListFinished(cocos2d::CCArray*, const char*);
     void loadListFailed(const char*);
     void setupPageInfo(std::string, const char*);
+
+	void populateDownloadedSongsFast();
 };

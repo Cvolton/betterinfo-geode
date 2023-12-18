@@ -8,6 +8,7 @@ bool BetterInfoCache::init(){
     if(!BaseJsonManager::init("cache.json")) return false;
     Loader::get()->queueInMainThread([this]() {
         checkDailies();
+        populateDownloadedSongsFast();
     });
     return true;
 }
@@ -254,3 +255,26 @@ void BetterInfoCache::loadListFinished(cocos2d::CCArray* levels, const char*) {
 
 void BetterInfoCache::loadListFailed(const char*) {}
 void BetterInfoCache::setupPageInfo(std::string, const char*) {}
+
+void BetterInfoCache::populateDownloadedSongsFast() {
+    auto MDM = MusicDownloadManager::sharedState();
+    std::vector<int> knownSongs;
+    auto dict = CCDictionaryExt<std::string, CCString>(MDM->m_songsDict);
+    try {
+        for(auto [id, song] : dict) {
+            knownSongs.push_back(std::stoi(id));
+        }
+    } catch(std::exception) {
+        log::error("Exception in populateDownloadedSongsFast loop");
+        return;
+    }
+
+    auto songPath = GameManager::sharedState()->getGameVariable("0033") ? CCFileUtils::sharedFileUtils()->getWritablePath2() : CCFileUtils::sharedFileUtils()->getWritablePath();
+    std::thread([this, knownSongs, songPath]() {
+        for(auto song : knownSongs) {
+            if(ghc::filesystem::exists(fmt::format("{}/{}.mp3", songPath, song))) {
+                m_downloadedSongs[song] = true;
+            }
+        }
+    }).detach();
+}
