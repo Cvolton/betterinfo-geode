@@ -119,53 +119,49 @@ class $modify(BILevelCell, LevelCell) {
 
         //this->getScheduler()->scheduleSelector(schedule_selector(BILevelCell::checkHover), this, 0.1f, false);
 
-        auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(1));
+        auto idTextNode = CCLabelBMFont::create(fmt::format("#{}", m_level->m_levelID.value()).c_str(), "chatFont.fnt");
+        idTextNode->setPosition({346,79 - (this->m_level->m_dailyID == 0 && Loader::get()->isModLoaded("n.level_pronouns") ? 9.f : 0.f)});
+        idTextNode->setAnchorPoint({1,0});
+        idTextNode->setScale(0.6f);
+        idTextNode->setColor({51,51,51});
+        idTextNode->setOpacity(152);
+        idTextNode->setID("bi-level-id-label");
+        m_mainLayer->addChild(idTextNode);
+        if(this->m_level->m_dailyID > 0 || Mod::get()->getSettingValue<bool>("white-id")){
+            idTextNode->setColor({255,255,255});
+            idTextNode->setOpacity(200);
+        }
+
+        if(this->m_level->m_dailyID > 0){
+            idTextNode->setPosition(363,79);
+
+            const int maxDaily = 100000;
+
+            std::ostringstream dailyText;
+            dailyText << ((this->m_level->m_dailyID >= maxDaily) ? "Weekly" : "Daily") << " #" << (this->m_level->m_dailyID % maxDaily);
+            auto dailyTextNode = CCLabelBMFont::create(dailyText.str().c_str(), "chatFont.fnt");
+            dailyTextNode->setPosition({363,89});
+            dailyTextNode->setAnchorPoint({1,0});
+            dailyTextNode->setScale(0.6f);
+            dailyTextNode->setColor({255,255,255});
+            dailyTextNode->setOpacity(200);
+            dailyTextNode->setID("bi-daily-id-label");
+            m_mainLayer->addChild(dailyTextNode);
+
+            BetterInfoCache::sharedState()->cacheLevel(m_level);
+        }
 
         bool menuDone = false;
-        for(unsigned int i = 0; i < layer->getChildrenCount(); i++){
+        for(unsigned int i = 0; i < m_mainLayer->getChildrenCount(); i++){
             if(this->m_level->m_songID){
-                auto bmFont = typeinfo_cast<CCLabelBMFont*>(layer->getChildren()->objectAtIndex(i));
+                auto bmFont = typeinfo_cast<CCLabelBMFont*>(m_mainLayer->getChildren()->objectAtIndex(i));
                 if(bmFont && bmFont->getPositionX() == 52 && bmFont->getPositionY() == 33 && !BetterInfo::isNewGrounds(this->m_level->m_songID)) bmFont->setColor({249,170,190});
             }
 
-
-            auto menu = typeinfo_cast<CCMenu*>(layer->getChildren()->objectAtIndex(i));
+            auto menu = typeinfo_cast<CCMenu*>(m_mainLayer->getChildren()->objectAtIndex(i));
             if(!menuDone && menu != nullptr){
                 auto playerName = static_cast<CCMenuItemSpriteExtra*>(menu->getChildren()->objectAtIndex(1));
                 playerName->setEnabled(true);
-
-                std::ostringstream idText;
-                idText << "#" << this->m_level->m_levelID;
-                auto idTextNode = CCLabelBMFont::create(idText.str().c_str(), "chatFont.fnt");
-                idTextNode->setPosition({33,33.f - (this->m_level->m_dailyID == 0 && Loader::get()->isModLoaded("n.level_pronouns") ? 9.f : 0.f)});
-                idTextNode->setAnchorPoint({1,0});
-                idTextNode->setScale(0.6f);
-                idTextNode->setColor({51,51,51});
-                idTextNode->setOpacity(152);
-                idTextNode->setID("bi-level-id-label");
-                menu->addChild(idTextNode);
-                if(this->m_level->m_dailyID > 0 || Mod::get()->getSettingValue<bool>("white-id")){
-                    idTextNode->setColor({255,255,255});
-                    idTextNode->setOpacity(200);
-                }
-
-                if(this->m_level->m_dailyID > 0){
-
-                    const int maxDaily = 100000;
-
-                    std::ostringstream dailyText;
-                    dailyText << ((this->m_level->m_dailyID >= maxDaily) ? "Weekly" : "Daily") << " #" << (this->m_level->m_dailyID % maxDaily);
-                    auto dailyTextNode = CCLabelBMFont::create(dailyText.str().c_str(), "chatFont.fnt");
-                    dailyTextNode->setPosition({33,43});
-                    dailyTextNode->setAnchorPoint({1,0});
-                    dailyTextNode->setScale(0.6f);
-                    dailyTextNode->setColor({255,255,255});
-                    dailyTextNode->setOpacity(200);
-                    dailyTextNode->setID("bi-daily-id-label");
-                    menu->addChild(dailyTextNode);
-
-                    BetterInfoCache::sharedState()->cacheLevel(m_level);
-                }
 
                 menuDone = true;
             }
