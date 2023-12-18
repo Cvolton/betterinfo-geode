@@ -273,7 +273,7 @@ void BetterInfoCache::populateDownloadedSongsFast() {
     auto songPath = GameManager::sharedState()->getGameVariable("0033") ? CCFileUtils::sharedFileUtils()->getWritablePath2() : CCFileUtils::sharedFileUtils()->getWritablePath();
     std::thread([this, knownSongs, songPath]() {
         for(auto song : knownSongs) {
-            if(ghc::filesystem::exists(fmt::format("{}/{}.mp3", songPath, song))) {
+            if(ghc::filesystem::exists(fmt::format("{}/{}.mp3", std::string(songPath), song))) {
                 m_downloadedSongs[song] = true;
             }
         }
