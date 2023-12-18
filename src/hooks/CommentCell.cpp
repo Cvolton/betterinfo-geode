@@ -39,7 +39,7 @@ class $modify(BICommentCell, CommentCell) {
 
         auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(1));
 
-        if(!Mod::get()->setSavedValue("comment-id-alert-shown", true)) FLAlertLayer::create(FLAlertResultHandler::create(), Mod::get()->getName().c_str(), "Would you like to show comment IDs next to comments?", "No", "Yes")->show();
+        if(!Mod::get()->setSavedValue("comment-id-alert-shown", true)) FLAlertLayer::create(FLAlertResultHandler::create("show-comment-ids", true), Mod::get()->getName().c_str(), "Would you like to show comment IDs next to comments?", "No", "Yes")->show();
 
         CCMenu* menu = nullptr;
 
