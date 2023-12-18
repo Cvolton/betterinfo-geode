@@ -40,6 +40,7 @@ bool ProfileSearchOptionsSongSelect::init(SongDialogCloseDelegate* delegate){
     m_textNode->setMaxLabelScale(0.7f);
     m_textNode->setMaxLabelWidth(11);
     m_textNode->setPosition({0,-37});
+    m_textNode->setID("song-id-input"_spr);
     m_buttonMenu->addChild(m_textNode);
 
     auto infoBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
@@ -48,6 +49,7 @@ bool ProfileSearchOptionsSongSelect::init(SongDialogCloseDelegate* delegate){
     m_buttonMenu->addChild(infoBg, -1);
     infoBg->setPosition({0,-37});
     infoBg->setScale(0.6f);
+    infoBg->setID("song-id-bg"_spr);
     //createTextLabel("Advanced Options", {(winSize.width / 2), (winSize.height / 2) + 125}, 1.f, m_pLayer, "bigFont.fnt");
 
     m_settings = LevelSettingsObject::create();
@@ -56,17 +58,7 @@ bool ProfileSearchOptionsSongSelect::init(SongDialogCloseDelegate* delegate){
     m_settings->m_level = GJGameLevel::create();
     m_settings->m_level->retain();
 
-    auto savedSprite = CCSprite::createWithSpriteFrameName("GJ_savedSongsBtn_001.png");
-    savedSprite->setScale(0.8f);
-    m_savedBtn = CCMenuItemSpriteExtra::create(
-        savedSprite,
-        this,
-        menu_selector(ProfileSearchOptionsSongSelect::onSaved)
-    );
-    m_savedBtn->setPosition({88, -39});
-    m_savedBtn->setID("bi-saved-button");
-    m_savedBtn->setVisible(getOption("user_search_song_custom"));
-    m_buttonMenu->addChild(m_savedBtn);
+    this->getScheduler()->scheduleSelector(schedule_selector(ProfileSearchOptionsSongSelect::onSongIDCheck), this, 0, false);
 
     drawToggles();
 
@@ -81,6 +73,7 @@ void ProfileSearchOptionsSongSelect::createToggle(const char* option, const char
         this,
         menu_selector(ProfileSearchOptionsSongSelect::onToggle)
     );
+    button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
     m_buttonMenu->addChild(button);
     button->setPosition({x, y});
     auto optionString = CCString::create(option);
@@ -91,8 +84,7 @@ void ProfileSearchOptionsSongSelect::createToggle(const char* option, const char
     auto label = createTextLabel(name, {x + 20, y}, 0.5f, m_buttonMenu);
     label->setAnchorPoint({0,0.5f});
     label->limitLabelWidth(80, 0.5f, 0);
-
-    this->getScheduler()->scheduleSelector(schedule_selector(ProfileSearchOptionsSongSelect::onSongIDCheck), this, 0, false);
+    label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
 }
 
 void ProfileSearchOptionsSongSelect::destroyToggles(){
@@ -113,7 +105,19 @@ void ProfileSearchOptionsSongSelect::drawToggles(){
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
     createToggle("user_search_song_custom", "Custom", -40, 6);
+    
+    auto savedSprite = CCSprite::createWithSpriteFrameName("GJ_savedSongsBtn_001.png");
+    savedSprite->setScale(0.8f);
+    m_savedBtn = CCMenuItemSpriteExtra::create(
+        savedSprite,
+        this,
+        menu_selector(ProfileSearchOptionsSongSelect::onSaved)
+    );
+    m_savedBtn->setPosition({88, -39});
+    m_savedBtn->setID("saved-button"_spr);
     m_savedBtn->setVisible(getOption("user_search_song_custom"));
+    m_savedBtn->setVisible(getOption("user_search_song_custom"));
+    m_buttonMenu->addChild(m_savedBtn);
 }
 
 int ProfileSearchOptionsSongSelect::songID(){
