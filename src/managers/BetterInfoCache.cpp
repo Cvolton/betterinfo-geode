@@ -1,6 +1,7 @@
 #include "BetterInfoCache.h"
 #include "../utils.hpp"
 
+#include <thread>
 #include <fstream>
 #include <Geode/utils/web.hpp>
 

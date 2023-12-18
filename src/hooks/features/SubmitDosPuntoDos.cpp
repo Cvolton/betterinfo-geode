@@ -4,6 +4,8 @@
 #include <Geode/utils/web.hpp>
 #include "../../objects/FLAlertResultHandler.h"
 
+#include <thread>
+
 using namespace geode::prelude;
 
 class $modify(MenuLayer) {
