@@ -1,6 +1,7 @@
 #include <Geode/Bindings.hpp>
 #include <Geode/modify/MusicDownloadManager.hpp>
 #include <Geode/modify/LevelInfoLayer.hpp>
+#include <Geode/modify/CustomSongWidget.hpp>
 
 #include "../../managers/BetterInfoCache.h"
 
@@ -31,5 +32,14 @@ class $modify(BISBLLevelInfoLayer, LevelInfoLayer) {
         if(BICache->m_downloadedSongs.contains(level->m_songID)) BICache->m_downloadedSongs.erase(level->m_songID);
 
         return LevelInfoLayer::init(level);
+    }
+};
+
+class $modify(CustomSongWidget) {
+    void updateSongObject(SongInfoObject* song) {
+        auto BICache = BetterInfoCache::sharedState();
+        if(BICache->m_downloadedSongs.contains(song->m_songID)) BICache->m_downloadedSongs.erase(song->m_songID);
+
+        CustomSongWidget::updateSongObject(song);
     }
 };
