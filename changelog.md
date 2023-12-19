@@ -1,4 +1,15 @@
 # Changelog
+## <cg>v3.1.0</c> (2023-12-19)
+* Added saved songs button to level search filters
+* Added Platformer length marking
+* Added 2.2 level submission
+* Minor improvements to BI list layers
+* Fixed corners
+* Fixed level ID positioning for NA levels
+* Fixed Song Browser lag (RobTop bug)
+* Internal structure changes, bugfixes & improvements
+(if you're a mod developer who depends on BetterInfo's node IDs, this update changes all of them, so make sure to update your mods accordingly)
+
 ## <cg>v3.0.13</c> (2023-12-14)
 * Added Account ID search to "ID Search" in BetterInfo Menu
 * Settings button in BI Menu now actually opens settings
