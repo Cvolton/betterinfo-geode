@@ -1,6 +1,7 @@
 #include "BetterInfoOnline.h"
 #include "../utils.hpp"
 #include <Geode/utils/web.hpp>
+#include <Geode/cocos/support/base64.h>
 
 bool BetterInfoOnline::init(){
     return true;
@@ -26,11 +27,20 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
         return;
     }
 
+    unsigned char* getGJScores;
+
+    #ifdef GEODE_IS_WINDOWS
+        unsigned char* originalUrl = (unsigned char*)(base::get() + 0x29BF30);
+        int getGJScoresSize = cocos2d::base64Decode(originalUrl, strlen((const char*) originalUrl), &getGJScores);
+    #else
+        getGJScores = (unsigned char*) "http://www.boomlings.com/database/getGJScores20.php";
+    #endif
+
     web::AsyncWebRequest()
         .userAgent("")
         .postRequest()
         .postFields(fmt::format("gameVersion=21&binaryVersion=35&gdw=0&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", accountID, std::string(GameManager::sharedState()->m_playerUDID)))
-        .fetch("http://www.boomlings.com/database/getGJScores20.php")
+        .fetch((const char*) getGJScores)
         .text()
         .then([this, accountID](const std::string& response) {
             generateScores(response, accountID);
