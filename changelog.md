@@ -1,4 +1,11 @@
 # Changelog
+## <cg>v3.1.1</c> (2023-12-21)
+This is the last update for 2.1. It changes defaults to better align with what people would want on private servers, since it is assumed that most people on real GD would be on 2.2 by now.
+
+* Removed 2.2 level submission
+* Disabled green username restoration by default
+* Enabled View Leaderboard As for GDPS (Windows Only)
+
 ## <cg>v3.1.0</c> (2023-12-19)
 * Added saved songs button to level search filters
 * Added Platformer length marking
