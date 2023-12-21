@@ -37,12 +37,6 @@
             "type": "bool",
             "default": false
         },
-        "submit-22-levels": {
-            "name": "Submit 2.2 level IDs to GDHistory",
-            "description": "Whether level IDs of 2.2 levels should be automatically submitted to BI servers, so any 2.2 levels uploaded early can be automatically copied in time",
-            "type": "bool",
-            "default": false
-        },
         "white-id": {
             "name": "White Level ID text",
             "description": "Displays level IDs in level search white instead of grey. Useful if you have transparent lists",
