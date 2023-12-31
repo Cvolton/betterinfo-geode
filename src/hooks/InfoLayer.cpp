@@ -28,8 +28,19 @@ class $modify(BIInfoLayer, InfoLayer) {
         bool nextVisible = this->m_rightArrow->isVisible();
 
         auto GLM = GameLevelManager::sharedState();
-        if(this->m_commentHistory) GLM->resetCommentTimersForLevelID(this->m_score->m_userID, this->m_commentHistory);
-        else GLM->resetCommentTimersForLevelID(this->m_level->m_levelID, this->m_commentHistory);
+        switch(m_mode) {
+            case CommentKeyType::Level:
+                GLM->resetCommentTimersForLevelID(this->m_level->m_levelID, m_mode);
+                break;
+            case CommentKeyType::User:
+                GLM->resetCommentTimersForLevelID(this->m_score->m_userID, m_mode);
+                break;
+            case CommentKeyType::LevelList:
+                //GLM->resetCommentTimersForLevelID(this->m_level->m_levelID, m_mode);
+                //TODO: need levellist class members
+                break;                
+        }
+
         this->loadPage(this->m_page, true);
 
         this->m_loadingCircle->setVisible(false);
@@ -54,11 +65,12 @@ class $modify(BIInfoLayer, InfoLayer) {
             this->getScheduler()->unscheduleSelector(schedule_selector(BIInfoLayer::onInfoLayerSchedule), this);
         }
 
-        this->addChild(TextAlertPopup::create(text, 0.5f, 0.6f), 100);
+        //this->addChild(TextAlertPopup::create(text, 0.5f, 0.6f), 100);
+        Notification::create(text, NotificationIcon::None, .1f)->show();
     }
 
-    bool init(GJGameLevel* level, GJUserScore* score) {
-        if (!InfoLayer::init(level, score)) return false;
+    bool init(GJGameLevel* level, GJUserScore* score, GJLevelList* list) {
+        if (!InfoLayer::init(level, score, list)) return false;
 
         if(level) {
             auto cache = BetterInfoCache::sharedState();

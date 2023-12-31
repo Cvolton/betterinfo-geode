@@ -7,7 +7,7 @@ bool CvoltonAlertLayerStub::createBasics(CCPoint contentSize, SEL_MenuHandler on
     m_alertSize = contentSize;
 
     CCDirector* director = CCDirector::sharedDirector();
-    director->getTouchDispatcher()->incrementForcePrio(2);
+    //director->getTouchDispatcher()->incrementForcePrio(2);
 
     setTouchEnabled(true);
     setKeypadEnabled(true);

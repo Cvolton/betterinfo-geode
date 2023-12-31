@@ -7,7 +7,7 @@
 
 using namespace geode::prelude;
 
-class LevelSearchViewLayer : public BIViewLayer, public OnlineListDelegate, public BISearchObjectDelegate {
+class LevelSearchViewLayer : public BIViewLayer, public LevelManagerDelegate, public BISearchObjectDelegate {
     BISearchObject m_searchObj;
     GJSearchObject* m_gjSearchObj = nullptr;
     GJSearchObject* m_gjSearchObjOptimized = nullptr;
@@ -42,8 +42,8 @@ public:
     void onFilters(cocos2d::CCObject*);
     void onInfo(cocos2d::CCObject*);
 
-    void loadListFinished(cocos2d::CCArray*, const char*);
-    void loadListFailed(const char*);
+    void loadLevelsFinished(cocos2d::CCArray*, const char*);
+    void loadLevelsFailed(const char*);
     void setupPageInfo(gd::string, const char*);
 
     void onSearchObjectFinished(const BISearchObject& searchObj);

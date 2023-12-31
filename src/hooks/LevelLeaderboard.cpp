@@ -1,15 +1,17 @@
-#include <Geode/Bindings.hpp>
+//TODO: reverse LevelLeaderboard
+
+/*#include <Geode/Bindings.hpp>
 #include <Geode/modify/LevelLeaderboard.hpp>
 
 using namespace geode::prelude;
 
-class $modify(BILevelLeaderboard, LevelLeaderboard) {
+class $modify(BILevelLeaderboard, LevelLeaderboard) {*/
 
     /*
      * Callbacks
      */
 
-    void onLeaderboardDaily(CCObject* sender){
+    /*void onLeaderboardDaily(CCObject* sender){
         auto level = GJGameLevel::create();
         level->m_levelID = this->m_level->m_levelID;
         level->m_levelName = this->m_level->m_levelName;
@@ -19,13 +21,13 @@ class $modify(BILevelLeaderboard, LevelLeaderboard) {
         newLeaderboard->onUpdate(sender);
         CCDirector::sharedDirector()->getRunningScene()->addChild(newLeaderboard);
         this->onClose(sender);
-    }
+    }*/
 
     /*
      * Hooks
      */
 
-    bool init(GJGameLevel* level, LevelLeaderboardType type) { //type is usually an enum but i dont have that rn
+    /*bool init(GJGameLevel* level, LevelLeaderboardType type) { //type is usually an enum but i dont have that rn
         if(!LevelLeaderboard::init(level, type)) return false;
 
         auto buttonSprite = ButtonSprite::create((level->m_dailyID ? "Daily" : "Normal"), 20, true, "bigFont.fnt", "GJ_button_01.png", 30, 0.5);
@@ -41,4 +43,4 @@ class $modify(BILevelLeaderboard, LevelLeaderboard) {
 
         return true;
     }
-};
+};*/

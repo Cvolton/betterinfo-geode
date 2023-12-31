@@ -72,7 +72,7 @@ void DailyViewLayer::loadPage(){
 }
 
 void DailyViewLayer::onMore(CCObject* object) {
-    auto searchObject = GJSearchObject::create(m_isWeekly ? SearchType::WeeklyVault : SearchType::DailyVault);
+    auto searchObject = GJSearchObject::create(m_isWeekly ? SearchType::WeeklySafe : SearchType::DailySafe);
     auto browserLayer = LevelBrowserLayer::scene(searchObject);
 
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);

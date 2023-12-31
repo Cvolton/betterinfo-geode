@@ -1,4 +1,4 @@
-#include <Geode/Bindings.hpp>
+/*#include <Geode/Bindings.hpp>
 #include <Geode/modify/ProfilePage.hpp>
 
 #include "../utils.hpp"
@@ -46,7 +46,7 @@ class $modify(BIProfilePage, ProfilePage) {
     /*
      * Callbacks
      */
-
+/*
     void onProfilePageInfo(CCObject* sender){
         auto score = this->m_score;
         auto GM = GameManager::sharedState();
@@ -105,7 +105,7 @@ class $modify(BIProfilePage, ProfilePage) {
      * Helper funcs
      */
 
-    inline void fixProfilePagePositions(){
+   /* inline void fixProfilePagePositions(){
         auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(0));
         auto winSize = CCDirector::sharedDirector()->getWinSize();
 
@@ -117,12 +117,12 @@ class $modify(BIProfilePage, ProfilePage) {
         CCNode* followTxt = typeinfo_cast<CCNode*>(layer->getChildren()->objectAtIndex(6));
         if(followTxt->getPositionY() == (winSize.height / 2) - 125) followTxt->setVisible(false); //followTxt->setPositionX(followTxt->getPositionX() + 40);
     }
-
+*/
     /*
      * Hooks
      */
 
-    void loadPageFromUserInfo(GJUserScore* a2){
+    /*void loadPageFromUserInfo(GJUserScore* a2){
         GameLevelManager::sharedState()->storeUserName(a2->m_userID, a2->m_accountID, a2->m_userName);
 
         ProfilePage::loadPageFromUserInfo(a2);
@@ -277,4 +277,4 @@ class $modify(BIProfilePage, ProfilePage) {
 
         ProfilePage::keyBackClicked();
     }
-};
+};*/

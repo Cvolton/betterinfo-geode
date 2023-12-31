@@ -1,4 +1,6 @@
-#include <Geode/Bindings.hpp>
+//TODO: reverse MoreSearchLayer
+
+/*#include <Geode/Bindings.hpp>
 #include <Geode/modify/MoreSearchLayer.hpp>
 
 #include "../layers/LevelFiltering/CvoltonSearchOptions.h"
@@ -12,13 +14,13 @@ class $modify(BIMoreSearchLayer, MoreSearchLayer) {
 
     bool shouldSavedBtnBeVisible(){
         return GameLevelManager::sharedState()->getBoolForKey("customsong_filter") && GameLevelManager::sharedState()->getBoolForKey("enable_songFilter");
-    }
+    }*/
 
     /*
      * Callbacks
      */
 
-    void onMoreSearchNext(CCObject* sender){
+    /*void onMoreSearchNext(CCObject* sender){
         auto layer = CvoltonSearchOptions::create();
         CCDirector::sharedDirector()->getRunningScene()->addChild(layer);
         this->onClose(sender);
@@ -37,13 +39,13 @@ class $modify(BIMoreSearchLayer, MoreSearchLayer) {
             GameLevelManager::sharedState()->setIntForKey(m_fields->m_songID, "song_filter");
             m_enterSongID->setString(std::to_string(m_fields->m_songID));
         }
-    }
+    }*/
 
     /*
      * Hooks
      */
 
-    void onClose(CCObject* sender){
+    /*void onClose(CCObject* sender){
         if(m_fields->m_settings) m_fields->m_settings->release();
 
         MoreSearchLayer::onClose(sender);
@@ -103,4 +105,4 @@ class $modify(BIMoreSearchLayer, MoreSearchLayer) {
 
         if(m_fields->m_savedBtn) m_fields->m_savedBtn->setVisible(shouldSavedBtnBeVisible());
     }
-};
+};*/

@@ -29,7 +29,7 @@ void UnregisteredProfileLayer::onCopyUserID(CCObject* sender)
 
 void UnregisteredProfileLayer::onCopyPlayerName(CCObject* sender)
 {
-    BetterInfo::copyToClipboard(m_score->getPlayerName().c_str(), this);
+    BetterInfo::copyToClipboard(m_score->m_userName.c_str(), this);
 }
 
 void UnregisteredProfileLayer::displayProfile(int userID, gd::string userName, CCNode* invoker){
@@ -58,7 +58,7 @@ void UnregisteredProfileLayer::onMyLevels(CCObject* sender) {
 }
 
 void UnregisteredProfileLayer::onCommentHistory(CCObject* sender) {
-    InfoLayer* infoLayer = InfoLayer::create(nullptr, m_score);
+    InfoLayer* infoLayer = InfoLayer::create(nullptr, m_score, nullptr);
     infoLayer->m_scene = m_invoker;
     infoLayer->show();
     onClose(sender);
@@ -75,7 +75,7 @@ bool UnregisteredProfileLayer::init(GJUserScore* score, CCNode* invoker){
 
     createTitle("");
 
-    auto userNameText = CCLabelBMFont::create(m_score->getPlayerName().c_str(), "bigFont.fnt");
+    auto userNameText = CCLabelBMFont::create(m_score->m_userName.c_str(), "bigFont.fnt");
     auto userNameBtn = CCMenuItemSpriteExtra::create(
         userNameText,
         this,
@@ -89,8 +89,8 @@ bool UnregisteredProfileLayer::init(GJUserScore* score, CCNode* invoker){
 
     SimplePlayer* icon = SimplePlayer::create(m_score->m_iconID);
     icon->updatePlayerFrame(m_score->m_iconID, m_score->m_iconType);
-    icon->setColor(GM->colorForIdx(m_score->getPlayerColor1()));
-    icon->setSecondColor(GM->colorForIdx(m_score->getPlayerColor2()));
+    icon->setColor(GM->colorForIdx(m_score->m_color1));
+    icon->setSecondColor(GM->colorForIdx(m_score->m_color2));
     icon->updateColors();
 
     //icon->setPosition({440,224});

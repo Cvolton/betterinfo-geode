@@ -164,7 +164,7 @@ void CustomCreatorLayer::onMostLiked(CCObject* object) {
 }
 
 void CustomCreatorLayer::onDaily(CCObject* object) {
-    auto searchObject = GJSearchObject::create(SearchType::DailyVault);
+    auto searchObject = GJSearchObject::create(SearchType::DailySafe);
     auto browserLayer = LevelBrowserLayer::scene(searchObject);
 
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
@@ -173,7 +173,7 @@ void CustomCreatorLayer::onDaily(CCObject* object) {
 }
 
 void CustomCreatorLayer::onWeekly(CCObject* object) {
-    auto searchObject = GJSearchObject::create(SearchType::WeeklyVault);
+    auto searchObject = GJSearchObject::create(SearchType::WeeklySafe);
     auto browserLayer = LevelBrowserLayer::scene(searchObject);
 
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);

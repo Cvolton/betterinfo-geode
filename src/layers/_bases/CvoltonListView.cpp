@@ -34,7 +34,7 @@ CvoltonListView<Cell>* CvoltonListView<Cell>::create(cocos2d::CCArray* data, flo
 }
 
 template <class Cell>
-void CvoltonListView<Cell>::setupList() {
+void CvoltonListView<Cell>::setupList(float) {
     this->m_tableView->reloadData();
 
     auto coverage = calculateNodeCoverage(m_tableView->m_contentLayer->getChildren());

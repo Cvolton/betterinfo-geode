@@ -15,7 +15,7 @@ class $modify(GameLevelManager) {
      * Helpers
      */
 
-    bool validateRangeOption(const std::string& option, int value) {
+    /*bool validateRangeOption(const std::string& option, int value) {
         if(Mod::get()->getSavedValue<bool>(option)) {
             int min = Mod::get()->getSavedValue<int>(fmt::format("{}_min", option));
             int max = Mod::get()->getSavedValue<int>(fmt::format("{}_max", option));
@@ -23,7 +23,7 @@ class $modify(GameLevelManager) {
             if(max != 0 && value > max) return false;
         }
         return true;
-    }
+    }*/
 
     /*
      * Hooks
@@ -43,7 +43,7 @@ class $modify(GameLevelManager) {
         return userName;
     }
 
-    CCArray* getCompletedLevels(bool newFilter){
+    /*CCArray* getCompletedLevels(bool newFilter){
         CompleteMode mode = static_cast<CompleteMode>(Mod::get()->getSavedValue<int>("search_completed"));
         if(mode == CompleteMode::modeDefault) return GameLevelManager::getCompletedLevels(newFilter);
 
@@ -206,5 +206,5 @@ class $modify(GameLevelManager) {
         GameLevelManager::limitSavedLevels();
 
         m_fields->skipSavedFilter = false;
-    }
+    }*/
 };

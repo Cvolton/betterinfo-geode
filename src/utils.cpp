@@ -104,7 +104,7 @@ bool BetterInfo::isLocal(GJSearchObject* searchObject){
 }
 
 bool BetterInfo::isFalseTotal(GJSearchObject* searchObject){
-    return searchObject->m_searchType == SearchType::ListsOnClick
+    return searchObject->m_searchType == SearchType::Type19
     || searchObject->m_searchType == SearchType::Featured
     || searchObject->m_searchType == SearchType::HallOfFame;
 }
@@ -119,8 +119,8 @@ bool BetterInfo::isStarUseless(GJSearchObject* searchObject){
     || searchObject->m_searchType == SearchType::HallOfFame
     || searchObject->m_searchType == SearchType::FeaturedGDW
     || searchObject->m_searchType == SearchType::Similar
-    || searchObject->m_searchType == SearchType::DailyVault
-    || searchObject->m_searchType == SearchType::WeeklyVault
+    || searchObject->m_searchType == SearchType::DailySafe
+    || searchObject->m_searchType == SearchType::WeeklySafe
     || isLocal(searchObject);
 }
 
@@ -232,13 +232,16 @@ void BetterInfo::copyToClipboard(const char* text){
 void BetterInfo::copyToClipboard(const char* text, CCLayer* parent){
     copyToClipboard(text);
 
-    parent->addChild(TextAlertPopup::create("Copied to clipboard", 0.5f, 0.6f), 100);
+    Notification::create("Copied to clipboard", NotificationIcon::None, .1f);
+    //parent->addChild(TextAlertPopup::create("Copied to clipboard", 0.5f, 0.6f), 100);
 }
 
 std::string BetterInfo::getSongUrl(int audioID) {
-    auto songInfo = static_cast<SongInfoObject*>(MusicDownloadManager::sharedState()->m_songsDict->objectForKey(std::to_string(audioID)));
+    //TODO: reverse MusicDownloadManager
+    return "";
+    /*auto songInfo = static_cast<SongInfoObject*>(MusicDownloadManager::sharedState()->m_songsDict->objectForKey(std::to_string(audioID)));
     if(!songInfo) return "";
-    return songInfo->m_songURL;
+    return songInfo->m_songURL;*/
 }
 
 bool BetterInfo::isNewGrounds(int audioID) {
@@ -347,9 +350,9 @@ bool BetterInfo::levelProgressMatchesObject(GJGameLevel* level, const BISearchOb
 }
 
 void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
-        //auto newLayer 
+    //TODO: reverse LevelCell
 
-    auto listLayer = getChildOfType<GJListLayer>(levelBrowserLayer, 0);
+    /*auto listLayer = getChildOfType<GJListLayer>(levelBrowserLayer, 0);
     if(!listLayer) return;
     auto listView = getChildOfType<CustomListView>(listLayer, 0);
     if(!listView) return;
@@ -396,7 +399,7 @@ void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
             levelCell->m_level->m_creatorName = userName;
 
         }
-    }
+    }*/
 }
 
 inline bool objectIDIsSpeedPortal(int id) {

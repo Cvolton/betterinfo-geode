@@ -19,7 +19,8 @@ void BetterInfoScheduler::onLevelSubmit(float dt){
         auto level = m_levelsToSubmit.front();
         m_levelsToSubmit.pop();
 
-        GameLevelManager::sharedState()->getLevelLeaderboard(level, LevelLeaderboardType::Friends);
+        //TODO: handle LevelLeaderboardMode properly
+        GameLevelManager::sharedState()->getLevelLeaderboard(level, LevelLeaderboardType::Friends, (LevelLeaderboardMode) 0);
         level->release();
     }
 }

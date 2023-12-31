@@ -57,7 +57,7 @@ void CustomLevelSearchLayer::onNeighbors(CCObject* sender) {
         addSeparator = true;
     }
 
-    auto searchObject = GJSearchObject::create(SearchType::ListsOnClick, query.str());
+    auto searchObject = GJSearchObject::create(SearchType::Type19, query.str());
     auto browserLayer = LevelBrowserLayer::scene(searchObject);
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
     CCDirector::sharedDirector()->pushScene(transitionFade);
@@ -71,7 +71,7 @@ bool CustomLevelSearchLayer::init(GJGameLevel* level){
     this->m_level = level;
 
     cocos2d::CCDirector* director = cocos2d::CCDirector::sharedDirector();
-    director->getTouchDispatcher()->incrementForcePrio(2);
+    /*director->getTouchDispatcher()->incrementForcePrio(2);*/
 
     setTouchEnabled(true);
     setKeypadEnabled(true);

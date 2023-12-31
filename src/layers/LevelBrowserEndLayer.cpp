@@ -21,7 +21,7 @@ void LevelBrowserEndLayer::onClose(cocos2d::CCObject* sender)
     if(m_circle != nullptr) m_circle->fadeAndRemove();
 
     auto GLM = GameLevelManager::sharedState();
-    GLM->m_onlineListDelegate = nullptr;
+    GLM->m_levelManagerDelegate = nullptr;
 
     setKeypadEnabled(false);
     removeFromParentAndCleanup(true);
@@ -99,7 +99,7 @@ CCLabelBMFont* LevelBrowserEndLayer::createTextLabel(const std::string text, con
     return bmFont;
 }
 
-void LevelBrowserEndLayer::loadListFinished(cocos2d::CCArray*, const char* test){
+void LevelBrowserEndLayer::loadLevelsFinished(cocos2d::CCArray*, const char* test){
     m_min = m_levelBrowserLayer->m_searchObject->m_page;
 
     if(m_max == 0) {
@@ -122,7 +122,7 @@ void LevelBrowserEndLayer::loadListFinished(cocos2d::CCArray*, const char* test)
 
     updateDisplay();
 }
-void LevelBrowserEndLayer::loadListFailed(const char* test){
+void LevelBrowserEndLayer::loadLevelsFailed(const char* test){
     m_max = m_levelBrowserLayer->m_searchObject->m_page;
     if(m_requestsToMax == 0) {
         m_requestsToMax = m_requests;
@@ -170,11 +170,11 @@ void LevelBrowserEndLayer::onTimer(float dt) {
 
 void LevelBrowserEndLayer::getOnlineLevels(GJSearchObject* searchObj) {
     auto GLM = GameLevelManager::sharedState();
-    GLM->m_onlineListDelegate = this;
+    GLM->m_levelManagerDelegate = this;
     auto storedLevels = GLM->getStoredOnlineLevels(searchObj->getKey());
     if(storedLevels) {
         m_updateLabel = false;
-        loadListFinished(storedLevels, "");
+        loadLevelsFinished(storedLevels, "");
     } else {
         m_updateLabel = true;
         this->getScheduler()->scheduleSelector(schedule_selector(LevelBrowserEndLayer::onQueueDownload), this, 1, 0, 0.25f, false);
@@ -183,6 +183,6 @@ void LevelBrowserEndLayer::getOnlineLevels(GJSearchObject* searchObj) {
 
 void LevelBrowserEndLayer::onQueueDownload(float dt) {
     auto GLM = GameLevelManager::sharedState();
-    GLM->m_onlineListDelegate = this;
+    GLM->m_levelManagerDelegate = this;
     GLM->getOnlineLevels(m_levelBrowserLayer->m_searchObject);
 }

@@ -1,4 +1,6 @@
-#include <Geode/Bindings.hpp>
+//TODO: reverse PlayLayer and GJBaseGameLayer
+
+/*#include <Geode/Bindings.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 
 #include "../managers/BetterInfoScheduler.h"
@@ -55,7 +57,7 @@ class $modify(BIPlayLayer, PlayLayer) {
             .y = player->m_position.y,
             .rotation = player->getRotation()
         });*/
-    }
+    /*}
 
     void resetLevel(){
         needsReset = false;
@@ -65,4 +67,4 @@ class $modify(BIPlayLayer, PlayLayer) {
         auto stats = BetterInfoStats::sharedState();
         stats->logAttempt(this->m_level, this->m_isPracticeMode);
     }
-};
+};*/

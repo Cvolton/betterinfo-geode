@@ -82,7 +82,7 @@ bool LevelCategorySearchAlert::init(){
     if(!init) return false;
 
     cocos2d::CCDirector* director = cocos2d::CCDirector::sharedDirector();
-    director->getTouchDispatcher()->incrementForcePrio(2);
+    //director->getTouchDispatcher()->incrementForcePrio(2);
 
     setTouchEnabled(true);
     setKeypadEnabled(true);

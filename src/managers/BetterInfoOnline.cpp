@@ -36,10 +36,12 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
         getGJScores = (unsigned char*) "http://www.boomlings.com/database/getGJScores20.php";
     #endif
 
+    //TODO: reverse GameManager for UDID
     web::AsyncWebRequest()
         .userAgent("")
         .postRequest()
-        .postFields(fmt::format("gameVersion=21&binaryVersion=35&gdw=0&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", accountID, std::string(GameManager::sharedState()->m_playerUDID)))
+        //.postFields(fmt::format("gameVersion=21&binaryVersion=35&gdw=0&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", accountID, std::string(GameManager::sharedState()->m_playerUDID)))
+        .postFields(fmt::format("gameVersion=21&binaryVersion=35&gdw=0&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", accountID, "betterinfo"))
         .fetch((const char*) getGJScores)
         .text()
         .then([this, accountID](const std::string& response) {
@@ -74,7 +76,8 @@ void BetterInfoOnline::generateScores(const std::string& response, int accountID
         GameLevelManager::sharedState()->storeUserName(score->m_userID, score->m_accountID, score->m_userName);
 
         // workaround for leaderboard highlighting
-        if(std::string(score->m_userUDID) != "") score->m_userUDID = GM->m_playerUDID;
+        //TODO: reverse GM for UDID
+        //if(std::string(score->m_userUDID) != "") score->m_userUDID = GM->m_playerUDID;
 
         scores->addObject(score);
     }

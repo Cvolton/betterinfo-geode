@@ -230,9 +230,12 @@ void DailyCell::onView(CCObject* sender){
 }
 
 void DailyCell::onLeaderboards(CCObject* sender){
-    auto GM = GameManager::sharedState();
+    //TODO: reverse LevelLeaderboard
+    //TODO: find the replacement for getIntGameVariableDefault
+
+    /*auto GM = GameManager::sharedState();
     auto newLeaderboard = LevelLeaderboard::create(m_level, (LevelLeaderboardType) GM->getIntGameVariableDefault("0098", 1));
-    newLeaderboard->show();
+    newLeaderboard->show();*/
 }
 
 void DailyCell::onInfo(CCObject* sender){

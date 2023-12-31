@@ -8,7 +8,7 @@ protected:
     bool init(cocos2d::CCArray* entries, float width, float height, float separation);
     virtual ~CvoltonListView();
 
-    void setupList() override;
+    void setupList(float) override;
     TableViewCell* getListCell(const char* key) override;
     void loadCell(TableViewCell* cell, int index) override;
     

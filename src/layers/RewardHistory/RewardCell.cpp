@@ -50,7 +50,8 @@ void RewardCell::loadFromData(CCObject* object) {
 
         lastSprite = CCSprite::createWithSpriteFrameName(textureName);
         if(rewardObj->m_specialRewardItem == SpecialRewardItem::CustomItem) {
-            lastSprite = GJItemIcon::createBrowserIcon(rewardObj->m_unlockType, rewardObj->m_itemID);
+            //TODO: reverse GJItemIcon
+            //lastSprite = GJItemIcon::createBrowserIcon(rewardObj->m_unlockType, rewardObj->m_itemID);
         }
         if(lastText == nullptr) lastSprite->setPosition({rowX + 1, rowY});
         else lastSprite->setPosition({lastText->getPositionX() + (lastText->getContentSize().width * lastText->getScaleX()) + 11.f, rowY});

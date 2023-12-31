@@ -89,7 +89,7 @@ void LevelSearchViewLayer::unload() {
     m_totalAmount = 0;
 
     auto GLM = GameLevelManager::sharedState();
-    GLM->m_onlineListDelegate = nullptr;
+    GLM->m_levelManagerDelegate = nullptr;
 
     if(m_gjSearchObjOptimized) {
         m_gjSearchObjOptimized->release();
@@ -157,7 +157,7 @@ void LevelSearchViewLayer::startLoading(){
     auto storedLevels = GLM->getStoredOnlineLevels(searchObj->getKey());
     if(storedLevels) {
         searchObj->m_page += 1;
-        loadListFinished(storedLevels, "");
+        loadLevelsFinished(storedLevels, "");
     } else {
         m_gjSearchObjLoaded = searchObj;
         searchObj->retain();
@@ -167,7 +167,7 @@ void LevelSearchViewLayer::startLoading(){
 
 void LevelSearchViewLayer::queueLoad(float dt) {
     auto GLM = GameLevelManager::sharedState();
-    GLM->m_onlineListDelegate = this;
+    GLM->m_levelManagerDelegate = this;
     GLM->getOnlineLevels(m_gjSearchObjLoaded);
     m_gjSearchObjLoaded->m_page += 1;
     m_gjSearchObjLoaded->release();
@@ -232,7 +232,7 @@ CCScene* LevelSearchViewLayer::scene(GJSearchObject* gjSearchObj, BISearchObject
     return scene;
 }
 
-void LevelSearchViewLayer::loadListFinished(cocos2d::CCArray* levels, const char*) {
+void LevelSearchViewLayer::loadLevelsFinished(cocos2d::CCArray* levels, const char*) {
     if(!m_data) return;
 
     for(size_t i = 0; i < levels->count(); i++) {
@@ -247,7 +247,7 @@ void LevelSearchViewLayer::loadListFinished(cocos2d::CCArray* levels, const char
     startLoading();
 }
 
-void LevelSearchViewLayer::loadListFailed(const char*) {
+void LevelSearchViewLayer::loadLevelsFailed(const char*) {
     if(!m_gjSearchObj) startLoading();
     else {
         setTextStatus(true);

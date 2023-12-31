@@ -1,4 +1,6 @@
-#include <Geode/Bindings.hpp>
+//TODO: reverse LevelCell
+
+/*#include <Geode/Bindings.hpp>
 #include <Geode/modify/LevelCell.hpp>
 
 #include "../managers/BetterInfoCache.h"
@@ -14,7 +16,7 @@ class $modify(BILevelCell, LevelCell) {
 
     static void onModify(auto& self) {
         auto res = self.setHookPriority("LevelCell::onViewProfile", 99999);
-    }
+    }*/
 
     /*void showDesc() {
         if(m_fields->m_levelDesc) return;
@@ -100,7 +102,7 @@ class $modify(BILevelCell, LevelCell) {
      * Hooks
      */
 
-    void onViewProfile(CCObject* sender) {
+    /*void onViewProfile(CCObject* sender) {
 
         if(this->m_level->m_accountID == 0) {
             UnregisteredProfileLayer::displayProfile(this->m_level->m_userID, this->m_level->m_creatorName);
@@ -167,4 +169,4 @@ class $modify(BILevelCell, LevelCell) {
             }
         }
     }
-};
+};*/

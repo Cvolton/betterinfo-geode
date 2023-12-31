@@ -31,7 +31,7 @@ void LevelIDLayer::onLevelComments(cocos2d::CCObject* sender){
     auto level = GJGameLevel::create();
     level->m_levelID = getNumber();
 
-    InfoLayer* infoLayer = InfoLayer::create(level, nullptr);
+    InfoLayer* infoLayer = InfoLayer::create(level, nullptr, nullptr);
     infoLayer->show();
 
     onClose(sender);

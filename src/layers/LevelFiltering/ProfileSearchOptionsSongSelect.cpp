@@ -52,13 +52,14 @@ bool ProfileSearchOptionsSongSelect::init(SongDialogCloseDelegate* delegate){
     infoBg->setID("song-id-bg"_spr);
     //createTextLabel("Advanced Options", {(winSize.width / 2), (winSize.height / 2) + 125}, 1.f, m_pLayer, "bigFont.fnt");
 
-    m_settings = LevelSettingsObject::create();
+    //TODO: reverse LevelSettingsObject
+    /*m_settings = LevelSettingsObject::create();
     m_settings->retain();
 
     m_settings->m_level = GJGameLevel::create();
     m_settings->m_level->retain();
 
-    this->getScheduler()->scheduleSelector(schedule_selector(ProfileSearchOptionsSongSelect::onSongIDCheck), this, 0, false);
+    this->getScheduler()->scheduleSelector(schedule_selector(ProfileSearchOptionsSongSelect::onSongIDCheck), this, 0, false);*/
 
     drawToggles();
 
@@ -129,16 +130,16 @@ int ProfileSearchOptionsSongSelect::songID(){
 }
 
 void ProfileSearchOptionsSongSelect::onSongIDCheck(float dt){
-    if(m_settings->m_level->m_songID != m_songID){
+    /*if(m_settings->m_level->m_songID != m_songID){
         m_songID = m_settings->m_level->m_songID;
         m_textNode->setString(std::to_string(m_songID));
-    }
+    }*/
 }
 
 void ProfileSearchOptionsSongSelect::onSaved(CCObject* sender){
-    m_songID = m_settings->m_level->m_songID = songID();
+    /*m_songID = m_settings->m_level->m_songID = songID();
     auto browser = GJSongBrowser::create(m_settings);
     CCScene::get()->addChild(browser);
     browser->setZOrder(CCScene::get()->getHighestChildZ() + 1);
-    browser->showLayer(false);
+    browser->showLayer(false);*/
 }

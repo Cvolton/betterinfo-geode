@@ -15,8 +15,8 @@ class $modify(LevelInfoLayer) {
         res = self.setHookPriority("LevelInfoLayer::onLevelInfo", 99999);
     }
 
-    bool init(GJGameLevel* level) {
-        if (!LevelInfoLayer::init(level)) return false;
+    bool init(GJGameLevel* level, bool challenge) {
+        if (!LevelInfoLayer::init(level, challenge)) return false;
 
         /**
          * Clickable green username

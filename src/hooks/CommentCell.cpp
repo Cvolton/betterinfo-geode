@@ -25,7 +25,7 @@ class $modify(BICommentCell, CommentCell) {
         auto level = GJGameLevel::create();
         level->m_levelID = this->m_comment->m_levelID;
 
-        InfoLayer* infoLayer = InfoLayer::create(level, nullptr);
+        InfoLayer* infoLayer = InfoLayer::create(level, nullptr, nullptr);
         infoLayer->m_scene = this->getParent()->getParent()->getParent()->getParent()->getParent()->getParent();
         infoLayer->show();
     }
@@ -136,8 +136,9 @@ class $modify(BICommentCell, CommentCell) {
         bool liked = GameLevelManager::sharedState()->hasLikedItemFullCheck(type, this->m_comment->m_commentID, special);
         if(liked) return;
 
-        auto GM = GameManager::sharedState();
-        if (this->m_comment->m_userID == GM->m_playerUserID) return;
+        //TODO: missing game manager members
+        /*auto GM = GameManager::sharedState();
+        if (this->m_comment->m_userID == GM->m_playerUserID) return;*/
         
         auto AM = GJAccountManager::sharedState();
         if (this->m_comment->m_accountID && this->m_comment->m_accountID == AM->m_accountID) return;

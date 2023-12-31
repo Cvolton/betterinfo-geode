@@ -19,7 +19,7 @@ class $modify(BICreatorLayer, CreatorLayer) {
     /*
      * Helpers
      */
-    void showQuestExclamationMark(){
+    /*void showQuestExclamationMark(){
         auto menu = static_cast<CCMenu*>(this->getChildByID("creator-buttons-menu"));
         auto GSM = GameStatsManager::sharedState();
 
@@ -45,7 +45,7 @@ class $modify(BICreatorLayer, CreatorLayer) {
         exMark->setScale(0.7f);
         exMark->setID("exclamation-mark"_spr);
         questBtn->addChild(exMark);
-    }
+    }*/
 
     /*
      * Hooks
@@ -74,7 +74,7 @@ class $modify(BICreatorLayer, CreatorLayer) {
 
         this->addChild(menu);
 
-        showQuestExclamationMark();
+        //showQuestExclamationMark();
 
         return true;
     }
@@ -88,9 +88,9 @@ class $modify(BICreatorLayer, CreatorLayer) {
         CreatorLayer::onChallenge(sender);
     }
 
-    void sceneWillResume(){
+    /*void sceneWillResume(){
         CreatorLayer::sceneWillResume();
 
         showQuestExclamationMark();
-    }
+    }*/
 };

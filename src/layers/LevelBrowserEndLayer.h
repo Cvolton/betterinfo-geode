@@ -4,7 +4,7 @@
 
 using namespace geode::prelude;
 
-class LevelBrowserEndLayer : public CvoltonAlertLayerStub, public OnlineListDelegate {
+class LevelBrowserEndLayer : public CvoltonAlertLayerStub, public LevelManagerDelegate {
     LevelBrowserLayer* m_levelBrowserLayer = nullptr;
     TextArea* m_textLabel = nullptr;
     CCMenuItemSpriteExtra* m_goBtn = nullptr;
@@ -27,8 +27,8 @@ public:
     bool init(LevelBrowserLayer* levelBrowserLayer);
     static cocos2d::CCLabelBMFont* createTextLabel(const std::string text, const cocos2d::CCPoint& position, const float scale, cocos2d::CCNode* menu, const char* font = "bigFont.fnt");
 
-    void loadListFinished(cocos2d::CCArray*, const char*);
-    void loadListFailed(const char*);
+    void loadLevelsFinished(cocos2d::CCArray*, const char*);
+    void loadLevelsFailed(const char*);
     void setupPageInfo(gd::string, const char*);
 
     void updateDisplay();

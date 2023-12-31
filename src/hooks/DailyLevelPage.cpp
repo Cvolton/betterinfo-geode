@@ -11,7 +11,8 @@ class $modify(BIDailyLevelPage, DailyLevelPage) {
      * Callbacks
      */
     void onDailyHistory(CCObject* sender){
-        auto layer = DailyViewLayer::scene(this->m_weekly);
+        //TODO: support event levels
+        auto layer = DailyViewLayer::scene(m_type == GJTimedLevelType::Weekly);
         auto transitionFade = CCTransitionFade::create(0.5, layer);
         CCDirector::sharedDirector()->pushScene(transitionFade);
     }
@@ -30,7 +31,7 @@ class $modify(BIDailyLevelPage, DailyLevelPage) {
         auto winSize = CCDirector::sharedDirector()->getWinSize();
 
         std::ostringstream currentDaily;
-        currentDaily << "Current: #" << ((this->m_weekly) ? GM->m_weeklyID % 100000 : GM->m_dailyID);
+        currentDaily << "Current: #" << ((m_type == GJTimedLevelType::Weekly) ? GM->m_weeklyID % 100000 : GM->m_dailyID);
         auto currentDailyNode = CCLabelBMFont::create(currentDaily.str().c_str(), "chatFont.fnt");
         currentDailyNode->setPosition({(winSize.width / 2) + 183, (winSize.height / 2) + 51});
         currentDailyNode->setAnchorPoint({1,0});
@@ -41,8 +42,8 @@ class $modify(BIDailyLevelPage, DailyLevelPage) {
         currentDailyNode->setID("current-daily-text"_spr);
     }
 
-    bool init(bool isWeekly) {
-        if(!DailyLevelPage::init(isWeekly)) return false;
+    bool init(GJTimedLevelType type) {
+        if(!DailyLevelPage::init(type)) return false;
 
         CCMenu* menu = this->m_buttonMenu;
 

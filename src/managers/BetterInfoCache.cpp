@@ -79,7 +79,7 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload) {
     for(const auto& set : levelSets) {
         auto searchObj = GJSearchObject::create(SearchType::MapPackOnClick, set);
         auto GLM = GameLevelManager::sharedState();
-        GLM->m_onlineListDelegate = this;
+        GLM->m_levelManagerDelegate = this;
         GLM->getOnlineLevels(searchObj);
     }
 
@@ -243,7 +243,7 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
     }
 }
 
-void BetterInfoCache::loadListFinished(cocos2d::CCArray* levels, const char*) {
+void BetterInfoCache::loadLevelsFinished(cocos2d::CCArray* levels, const char*) {
     for(size_t i = 0; i < levels->count(); i++) {
         auto level = static_cast<GJGameLevel*>(levels->objectAtIndex(i));
         if(level == nullptr) continue;
@@ -254,11 +254,12 @@ void BetterInfoCache::loadListFinished(cocos2d::CCArray* levels, const char*) {
     doSave();
 }
 
-void BetterInfoCache::loadListFailed(const char*) {}
+void BetterInfoCache::loadLevelsFailed(const char*) {}
 void BetterInfoCache::setupPageInfo(std::string, const char*) {}
 
 void BetterInfoCache::populateDownloadedSongsFast() {
-    auto MDM = MusicDownloadManager::sharedState();
+    //TODO: reverse MusicDownloadManager
+    /*auto MDM = MusicDownloadManager::sharedState();
     std::vector<int> knownSongs;
     auto dict = CCDictionaryExt<std::string, CCString>(MDM->m_songsDict);
     try {
@@ -277,5 +278,5 @@ void BetterInfoCache::populateDownloadedSongsFast() {
                 m_downloadedSongs[song] = true;
             }
         }
-    }).detach();
+    }).detach();*/
 }
