@@ -1,6 +1,6 @@
 {
 	"geode": "2.0.0",
-	"version": "v3.1.1",
+	"version": "v4.0.0-alpha.1",
 	"id": "cvolton.betterinfo",
 	"name": "BetterInfo",
 	"developer": "Cvolton",
@@ -23,7 +23,7 @@
             "name": "Fix broken usernames",
             "description": "Whether destroyed green usernames no longer returned by the servers should be fixed using data from the GDHistory project",
             "type": "bool",
-            "default": false
+            "default": true
         },
         "alt-button": {
             "name": "Alternative button texture",
