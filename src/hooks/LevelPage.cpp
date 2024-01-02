@@ -11,7 +11,6 @@ class $modify(LevelPage) {
     }
 
     void onInfo(CCObject* sender) {
-        //TODO: reverse LevelPage
         LevelProgressDialog::show(this->m_level);
     }
 };

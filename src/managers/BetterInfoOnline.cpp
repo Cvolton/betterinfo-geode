@@ -29,20 +29,18 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
 
     unsigned char* getGJScores;
 
-    #ifdef GEODE_IS_WINDOWS
+    /*#ifdef GEODE_IS_WINDOWS
         unsigned char* originalUrl = (unsigned char*)(base::get() + 0x29BF30);
         int getGJScoresSize = cocos2d::base64Decode(originalUrl, strlen((const char*) originalUrl), &getGJScores);
     #else
         getGJScores = (unsigned char*) "http://www.boomlings.com/database/getGJScores20.php";
-    #endif
+    #endif*/
 
-    //TODO: reverse GameManager for UDID
     web::AsyncWebRequest()
         .userAgent("")
         .postRequest()
-        //.postFields(fmt::format("gameVersion=21&binaryVersion=35&gdw=0&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", accountID, std::string(GameManager::sharedState()->m_playerUDID)))
-        .postFields(fmt::format("gameVersion=21&binaryVersion=35&gdw=0&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", accountID, "betterinfo"))
-        .fetch((const char*) getGJScores)
+        .postFields(fmt::format("gameVersion=21&binaryVersion=35&gdw=0&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", accountID, std::string(GameManager::sharedState()->m_playerUDID)))
+        .fetch("https://www.boomlings.com/database/getGJScores20.php")
         .text()
         .then([this, accountID](const std::string& response) {
             generateScores(response, accountID);

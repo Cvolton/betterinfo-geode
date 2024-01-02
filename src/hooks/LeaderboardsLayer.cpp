@@ -30,23 +30,18 @@ class $modify(BILeaderboardsLayer, LeaderboardsLayer) {
     bool init(LeaderboardState state){
         if(!LeaderboardsLayer::init(state)) return false;
 
-        auto winSize = CCDirector::sharedDirector()->getWinSize();
-        auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(0));
-
-        auto refreshBtn = CCMenuItemSpriteExtra::create(
-            CCSprite::createWithSpriteFrameName("GJ_updateBtn_001.png"),
-            this,
-            menu_selector(BILeaderboardsLayer::onLeaderboardRefresh)
-        );
-        refreshBtn->setID("refresh-button"_spr);
-
-        auto menuRefresh = CCMenu::create();
-        menuRefresh->addChild(refreshBtn);
-        menuRefresh->setPosition({winSize.width - 26.75f, 26.75f});
-        menuRefresh->setZOrder(2);
-        menuRefresh->setID("refresh-menu"_spr);
-
-        this->addChild(menuRefresh);
+        if(auto menu = getChildByID("bottom-right-menu")) { 
+            auto refreshBtn = CCMenuItemSpriteExtra::create(
+                CCSprite::createWithSpriteFrameName("GJ_updateBtn_001.png"),
+                this,
+                menu_selector(BILeaderboardsLayer::onLeaderboardRefresh)
+            );
+            refreshBtn->setID("refresh-button"_spr);
+            refreshBtn->setZOrder(-2); //this should ensure we stay at the bottom
+            
+            menu->addChild(refreshBtn);
+            menu->updateLayout();
+        }
 
         return true;
     }

@@ -1,6 +1,4 @@
-//TODO: reverse PlayLayer and GJBaseGameLayer
-
-/*#include <Geode/Bindings.hpp>
+#include <Geode/Bindings.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 
 #include "../managers/BetterInfoScheduler.h"
@@ -21,8 +19,8 @@ class $modify(BIPlayLayer, PlayLayer) {
         stats->logCompletion(this->m_level, this->m_isPracticeMode);
     }
 
-    bool init(GJGameLevel* level){
-        if(!PlayLayer::init(level)) return false;
+    bool init(GJGameLevel* level, bool a, bool b){
+        if(!PlayLayer::init(level, a, b)) return false;
 
         auto stats = BetterInfoStats::sharedState();
         stats->logPlay(this->m_level);
@@ -44,8 +42,8 @@ class $modify(BIPlayLayer, PlayLayer) {
     void destroyPlayer(PlayerObject* player, GameObject* spike) {
         PlayLayer::destroyPlayer(player, spike);
 
-        if(!m_isDead || needsReset) return;
-        needsReset = true;
+        /*if(!m_isDead || needsReset) return;
+        needsReset = true;*/
 
         /*log::info("death x: {}", player->m_position.x);
         log::info("death y: {}", player->m_position.y);
@@ -57,7 +55,7 @@ class $modify(BIPlayLayer, PlayLayer) {
             .y = player->m_position.y,
             .rotation = player->getRotation()
         });*/
-    /*}
+    }
 
     void resetLevel(){
         needsReset = false;
@@ -67,4 +65,4 @@ class $modify(BIPlayLayer, PlayLayer) {
         auto stats = BetterInfoStats::sharedState();
         stats->logAttempt(this->m_level, this->m_isPracticeMode);
     }
-};*/
+};

@@ -1,6 +1,6 @@
 //TODO: reverse LevelCell
 
-/*#include <Geode/Bindings.hpp>
+#include <Geode/Bindings.hpp>
 #include <Geode/modify/LevelCell.hpp>
 
 #include "../managers/BetterInfoCache.h"
@@ -16,7 +16,7 @@ class $modify(BILevelCell, LevelCell) {
 
     static void onModify(auto& self) {
         auto res = self.setHookPriority("LevelCell::onViewProfile", 99999);
-    }*/
+    }
 
     /*void showDesc() {
         if(m_fields->m_levelDesc) return;
@@ -102,7 +102,7 @@ class $modify(BILevelCell, LevelCell) {
      * Hooks
      */
 
-    /*void onViewProfile(CCObject* sender) {
+    void onViewProfile(CCObject* sender) {
 
         if(this->m_level->m_accountID == 0) {
             UnregisteredProfileLayer::displayProfile(this->m_level->m_userID, this->m_level->m_creatorName);
@@ -112,35 +112,39 @@ class $modify(BILevelCell, LevelCell) {
         LevelCell::onViewProfile(sender);
     }
 
-    void loadCustomLevelCell() {
-        if(std::string(m_level->m_creatorName).empty()) {
-            m_level->m_creatorName = BetterInfoCache::sharedState()->getUserName(m_level->m_userID, false);
+    void loadFromLevel(GJGameLevel* level) {
+        if(std::string(level->m_creatorName).empty() && m_level->m_levelType != GJLevelType::Editor) {
+            level->m_creatorName = BetterInfoCache::sharedState()->getUserName(level->m_userID, false);
         }
 
-        LevelCell::loadCustomLevelCell();
+        LevelCell::loadFromLevel(level);
+
+        if(m_level->m_levelType == GJLevelType::Editor) return;
 
         //this->getScheduler()->scheduleSelector(schedule_selector(BILevelCell::checkHover), this, 0.1f, false);
 
+        //TODO: layout for ID node in Node ID mod
+
         auto idTextNode = CCLabelBMFont::create(fmt::format("#{}", m_level->m_levelID.value()).c_str(), "chatFont.fnt");
-        idTextNode->setPosition({346,79 - (this->m_level->m_dailyID == 0 && Loader::get()->isModLoaded("n.level_pronouns") ? 9.f : 0.f)});
+        idTextNode->setPosition({346,79 - (m_level->m_dailyID == 0 && Loader::get()->isModLoaded("n.level_pronouns") ? 9.f : 0.f)});
         idTextNode->setAnchorPoint({1,0});
         idTextNode->setScale(0.6f);
         idTextNode->setColor({51,51,51});
         idTextNode->setOpacity(152);
         idTextNode->setID("level-id-label"_spr);
         m_mainLayer->addChild(idTextNode);
-        if(this->m_level->m_dailyID > 0 || Mod::get()->getSettingValue<bool>("white-id")){
+        if(m_level->m_dailyID > 0 || Mod::get()->getSettingValue<bool>("white-id")){
             idTextNode->setColor({255,255,255});
             idTextNode->setOpacity(200);
         }
 
-        if(this->m_level->m_dailyID > 0){
+        if(m_level->m_dailyID > 0){
             idTextNode->setPosition(363,79);
 
             const int maxDaily = 100000;
 
             std::ostringstream dailyText;
-            dailyText << ((this->m_level->m_dailyID >= maxDaily) ? "Weekly" : "Daily") << " #" << (this->m_level->m_dailyID % maxDaily);
+            dailyText << ((m_level->m_dailyID >= maxDaily) ? "Weekly" : "Daily") << " #" << (m_level->m_dailyID % maxDaily);
             auto dailyTextNode = CCLabelBMFont::create(dailyText.str().c_str(), "chatFont.fnt");
             dailyTextNode->setPosition({363,89});
             dailyTextNode->setAnchorPoint({1,0});
@@ -153,20 +157,12 @@ class $modify(BILevelCell, LevelCell) {
             BetterInfoCache::sharedState()->cacheLevel(m_level);
         }
 
-        bool menuDone = false;
-        for(unsigned int i = 0; i < m_mainLayer->getChildrenCount(); i++){
-            if(this->m_level->m_songID){
-                auto bmFont = typeinfo_cast<CCLabelBMFont*>(m_mainLayer->getChildren()->objectAtIndex(i));
-                if(bmFont && bmFont->getPositionX() == 52 && bmFont->getPositionY() == 33 && !BetterInfo::isNewGrounds(this->m_level->m_songID)) bmFont->setColor({249,170,190});
-            }
+        if(auto songLabel = m_mainLayer->getChildByID("song-name")) {
+            if(!BetterInfo::isNewGrounds(m_level->m_songID)) static_cast<CCLabelBMFont*>(songLabel)->setColor({249,170,190});
+        }
 
-            auto menu = typeinfo_cast<CCMenu*>(m_mainLayer->getChildren()->objectAtIndex(i));
-            if(!menuDone && menu != nullptr){
-                auto playerName = static_cast<CCMenuItemSpriteExtra*>(menu->getChildren()->objectAtIndex(1));
-                playerName->setEnabled(true);
-
-                menuDone = true;
-            }
+        if(auto playerName = m_mainLayer->getChildByID("player-name")) {
+            static_cast<CCMenuItemSpriteExtra*>(playerName)->setEnabled(true);
         }
     }
-};*/
+};

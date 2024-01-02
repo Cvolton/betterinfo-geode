@@ -7,8 +7,8 @@ class $modify(BIDailyLevelNode, DailyLevelNode) {
     bool init(GJGameLevel* level, DailyLevelPage* page, bool weekly) {
         if(!DailyLevelNode::init(level, page, weekly)) return false;
 
-        for(auto node : CCArrayExt<CCNode>(this->getChildren())) {
-            if(node->getPosition() == CCPoint(182, 53)) node->setPositionX(130);
+        if(auto newNode = getChildByID("new-label")) {
+            if(newNode->getPositionX() == 182) newNode->setPositionX(130);
         }
 
         return true;

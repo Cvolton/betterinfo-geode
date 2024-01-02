@@ -136,9 +136,8 @@ class $modify(BICommentCell, CommentCell) {
         bool liked = GameLevelManager::sharedState()->hasLikedItemFullCheck(type, this->m_comment->m_commentID, special);
         if(liked) return;
 
-        //TODO: missing game manager members
-        /*auto GM = GameManager::sharedState();
-        if (this->m_comment->m_userID == GM->m_playerUserID) return;*/
+        auto GM = GameManager::sharedState();
+        if (this->m_comment->m_userID == GM->m_playerUserID) return;
         
         auto AM = GJAccountManager::sharedState();
         if (this->m_comment->m_accountID && this->m_comment->m_accountID == AM->m_accountID) return;

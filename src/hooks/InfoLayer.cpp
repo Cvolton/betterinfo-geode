@@ -77,38 +77,42 @@ class $modify(BIInfoLayer, InfoLayer) {
             cache->storeDatesForLevel(this->m_level);
         }
 
-        //geode doesn't have ids defined for this so i have to resort to objectAtIndex
-        auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(0));
-        CCMenu* menu = static_cast<CCMenu*>(layer->getChildren()->objectAtIndex(1));
+        if(auto playerName = static_cast<CCMenuItemSpriteExtra*>(m_buttonMenu->getChildByID("creator-button"))) {
+            playerName->setEnabled(true);
+        }
 
-        CCMenuItemSpriteExtra* playerName = static_cast<CCMenuItemSpriteExtra*>(menu->getChildren()->objectAtIndex(0));
-        playerName->setEnabled(true);
-
-        auto buttonSprite = ButtonSprite::create("1", 12, true, "bigFont.fnt", "GJ_button_02.png", 25, 0.4f);
-        auto buttonButton = CCMenuItemSpriteExtra::create(
-            buttonSprite,
-            this,
-            menu_selector(BIInfoLayer::onJumpToPageLayer)
-        );
-        buttonButton->setSizeMult(1.2f);
-        buttonButton->setPosition({195,34});
-        buttonButton->setID("comment-page-btn"_spr);
-        //buttonButton->setTag(commentPageBtnTag);
-        menu->addChild(buttonButton);
+        if(auto menu = m_mainLayer->getChildByID("refresh-menu")) {
+            auto buttonSprite = ButtonSprite::create("1", 12, true, "bigFont.fnt", "GJ_button_02.png", 25, 0.4f);
+            auto buttonButton = CCMenuItemSpriteExtra::create(
+                buttonSprite,
+                this,
+                menu_selector(BIInfoLayer::onJumpToPageLayer)
+            );
+            buttonButton->setSizeMult(1.2f);
+            buttonButton->setPosition({195,34});
+            buttonButton->setID("comment-page-btn"_spr);
+            //buttonButton->setTag(commentPageBtnTag);
+            menu->addChild(buttonButton);
+            menu->updateLayout();
+        }
 
         if(level == nullptr) return true;
+        //end of level stuff
 
-        auto searchSprite = CCSprite::createWithSpriteFrameName("gj_findBtn_001.png");
-        searchSprite->setScale(0.8f);
-        auto searchButton = CCMenuItemSpriteExtra::create(
-            searchSprite,
-            this,
-            menu_selector(BIInfoLayer::onCustomSearch)
-        );
-        menu->addChild(searchButton);
-        searchButton->setPosition({195, 68});
-        searchButton->setSizeMult(1.2f);
-        searchButton->setID("search-btn"_spr);
+        if(auto menu = m_mainLayer->getChildByID("refresh-menu")) {
+            auto searchSprite = CCSprite::createWithSpriteFrameName("gj_findBtn_001.png");
+            searchSprite->setScale(0.8f);
+            auto searchButton = CCMenuItemSpriteExtra::create(
+                searchSprite,
+                this,
+                menu_selector(BIInfoLayer::onCustomSearch)
+            );
+            menu->addChild(searchButton);
+            searchButton->setSizeMult(1.2f);
+            searchButton->setID("search-btn"_spr);
+
+            menu->updateLayout();
+        }
 
         auto scheduleOffSprite = CCSprite::createWithSpriteFrameName("GJ_playEditorBtn_001.png");
         scheduleOffSprite->setScale(.625f);
@@ -122,13 +126,10 @@ class $modify(BIInfoLayer, InfoLayer) {
         );
         scheduleBtn->setUserData(reinterpret_cast<void*>(false));
         scheduleBtn->setPosition({202.5, 100});
-        menu->addChild(scheduleBtn);
+        m_buttonMenu->addChild(scheduleBtn);
         scheduleBtn->setID("schedule-btn"_spr);
 
-        if(level->m_originalLevel != 0) {
-            auto originalBtn = typeinfo_cast<CCNode*>(menu->getChildren()->objectAtIndex(1));
-            if(!originalBtn || originalBtn->getPositionY() != 99) return true;
-
+        if(auto originalBtn = m_buttonMenu->getChildByID("original-level-button")) {
             if(originalBtn->getPositionX() > 155.4f) originalBtn->setPosition({155.4f, originalBtn->getPositionY()});
         }
 
