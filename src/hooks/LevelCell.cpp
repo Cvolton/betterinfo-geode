@@ -112,14 +112,12 @@ class $modify(BILevelCell, LevelCell) {
         LevelCell::onViewProfile(sender);
     }
 
-    void loadFromLevel(GJGameLevel* level) {
-        if(std::string(level->m_creatorName).empty() && m_level->m_levelType != GJLevelType::Editor) {
-            level->m_creatorName = BetterInfoCache::sharedState()->getUserName(level->m_userID, false);
+    void loadCustomLevelCell() {
+        if(std::string(m_level->m_creatorName).empty()) {
+            m_level->m_creatorName = BetterInfoCache::sharedState()->getUserName(m_level->m_userID, false);
         }
 
-        LevelCell::loadFromLevel(level);
-
-        if(m_level->m_levelType == GJLevelType::Editor) return;
+        LevelCell::loadCustomLevelCell();
 
         //this->getScheduler()->scheduleSelector(schedule_selector(BILevelCell::checkHover), this, 0.1f, false);
 
@@ -161,7 +159,7 @@ class $modify(BILevelCell, LevelCell) {
             if(!BetterInfo::isNewGrounds(m_level->m_songID)) static_cast<CCLabelBMFont*>(songLabel)->setColor({249,170,190});
         }
 
-        if(auto playerName = m_mainLayer->getChildByID("player-name")) {
+        if(auto playerName = m_mainMenu->getChildByID("creator-name")) {
             static_cast<CCMenuItemSpriteExtra*>(playerName)->setEnabled(true);
         }
     }
