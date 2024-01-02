@@ -71,7 +71,7 @@ bool CustomCreatorLayer::init() {
     searchIDBtn->setSizeMult(1.2f);
     searchIDBtn->setID("search-id-button"_spr);
 
-    auto dailyBtn = CCMenuItemSpriteExtra::create(
+    /*auto dailyBtn = CCMenuItemSpriteExtra::create(
         CCSprite::createWithSpriteFrameName("GJ_dailyBtn_001.png"),
         this,
         menu_selector(CustomCreatorLayer::onDaily)
@@ -91,7 +91,17 @@ bool CustomCreatorLayer::init() {
     menu->addChild(weeklyBtn);
     weeklyBtn->setPosition({-2.5,-55});
     weeklyBtn->setSizeMult(1.2f);
-    weeklyBtn->setID("weekly-button"_spr);
+    weeklyBtn->setID("weekly-button"_spr);*/
+
+    auto fameBtn = CCMenuItemSpriteExtra::create(
+        BetterInfo::createBISprite("GJ_fameBtn_001.png"),
+        this,
+        menu_selector(CustomCreatorLayer::onFame)
+    );
+    menu->addChild(fameBtn);
+    fameBtn->setPosition({-2.5,-55});
+    fameBtn->setSizeMult(1.2f);
+    fameBtn->setID("weekly-button"_spr);
 
     auto settingsSprite = CCSprite::createWithSpriteFrameName("GJ_optionsBtn_001.png");
     settingsSprite->setScale(0.775f);
@@ -174,6 +184,15 @@ void CustomCreatorLayer::onDaily(CCObject* object) {
 
 void CustomCreatorLayer::onWeekly(CCObject* object) {
     auto searchObject = GJSearchObject::create(SearchType::WeeklySafe);
+    auto browserLayer = LevelBrowserLayer::scene(searchObject);
+
+    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
+
+    CCDirector::sharedDirector()->pushScene(transitionFade);
+}
+
+void CustomCreatorLayer::onFame(CCObject* object) {
+    auto searchObject = GJSearchObject::create(SearchType::HallOfFame);
     auto browserLayer = LevelBrowserLayer::scene(searchObject);
 
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
