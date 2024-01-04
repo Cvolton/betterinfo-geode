@@ -151,6 +151,10 @@ class $modify(BIProfilePage, ProfilePage) {
             m_buttons->addObject(shipBtn);
         }
 
+        if(auto usernameLabel = m_mainLayer->getChildByID("username-label")) {
+            usernameLabel->setVisible(false);
+        }
+
         auto usernameNode = CCLabelBMFont::create(a2->m_userName.c_str(), "bigFont.fnt");
         usernameNode->limitLabelWidth(a2->m_modBadge > 0 ? 140.f : 185.0f, 0.9f, 0.0f);
         auto usernameBtn = CCMenuItemSpriteExtra::create(
@@ -165,7 +169,6 @@ class $modify(BIProfilePage, ProfilePage) {
 
         if(a2->m_userID != GameManager::sharedState()->m_playerUserID){
             if(auto rankIcon = m_mainLayer->getChildByID("global-rank-icon")) {
-                log::debug("hiding rank");
                 rankIcon->setVisible(false);
             }
 
@@ -250,11 +253,6 @@ class $modify(BIProfilePage, ProfilePage) {
 
         if(auto followHint = m_mainLayer->getChildByID("follow-hint")) {
             followHint->setVisible(false);
-        }
-
-        if(auto usernameLabel = m_mainLayer->getChildByID("username-label")) {
-            log::debug("hiding username");
-            usernameLabel->setVisible(false);
         }
 
         return true;
