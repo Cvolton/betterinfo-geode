@@ -1,11 +1,9 @@
-/*#include <Geode/Bindings.hpp>
+#include <Geode/Bindings.hpp>
 #include <Geode/modify/ProfilePage.hpp>
 
 #include "../utils.hpp"
 #include "../managers/BetterInfoOnline.h"
 #include "../layers/LeaderboardViewLayer.h"
-
-#include "GJUserScore.hpp"
 
 using namespace geode::prelude;
 
@@ -46,7 +44,7 @@ class $modify(BIProfilePage, ProfilePage) {
     /*
      * Callbacks
      */
-/*
+
     void onProfilePageInfo(CCObject* sender){
         auto score = this->m_score;
         auto GM = GameManager::sharedState();
@@ -60,11 +58,6 @@ class $modify(BIProfilePage, ProfilePage) {
             << "\nComment History: " << StaticStringHelper::getMessageType(score->m_commentHistoryStatus)
             << "\n";
         if(score->m_userID == GM->m_playerUserID) contentStream << "\nBootups: " << GM->m_bootups;
-        else contentStream 
-            << "\nGlow Color: #" << static_cast<BIGJUserScore*>(score)->m_fields->m_color3
-            << "\nMoons: " << static_cast<BIGJUserScore*>(score)->m_fields->m_moons
-            << "\nSwingcopter: #" << static_cast<BIGJUserScore*>(score)->m_fields->m_accSwing
-            << "\nJetpack: #" << static_cast<BIGJUserScore*>(score)->m_fields->m_accJetpack;
 
         //if(score->m_userID == cvoltonID) contentStream << "\n\nThis user is epic!";
 
@@ -98,41 +91,20 @@ class $modify(BIProfilePage, ProfilePage) {
     }
 
     void onProfilePageCopyPlayerName(CCObject* sender){
-        BetterInfo::copyToClipboard(this->m_score->getPlayerName().c_str(), this);
+        BetterInfo::copyToClipboard(this->m_score->m_userName.c_str(), this);
     }
 
-    /*
-     * Helper funcs
-     */
-
-   /* inline void fixProfilePagePositions(){
-        auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(0));
-        auto winSize = CCDirector::sharedDirector()->getWinSize();
-
-        for(unsigned int i = 0; i < this->m_buttonMenu->getChildrenCount(); i++){
-            CCNode* node = typeinfo_cast<CCNode*>(this->m_buttonMenu->getChildren()->objectAtIndex(i));
-            if(node != nullptr && node->getPositionX() == 12 && node->getPositionY() == -258) node->setPosition(16, -224); //node->setPosition({52, -258}); // //
-        }
-
-        CCNode* followTxt = typeinfo_cast<CCNode*>(layer->getChildren()->objectAtIndex(6));
-        if(followTxt->getPositionY() == (winSize.height / 2) - 125) followTxt->setVisible(false); //followTxt->setPositionX(followTxt->getPositionX() + 40);
-    }
-*/
     /*
      * Hooks
      */
 
-    /*void loadPageFromUserInfo(GJUserScore* a2){
+    void loadPageFromUserInfo(GJUserScore* a2){
         GameLevelManager::sharedState()->storeUserName(a2->m_userID, a2->m_accountID, a2->m_userName);
 
         ProfilePage::loadPageFromUserInfo(a2);
 
-        //fixProfilePagePositions(this);
-
-        auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(0));
+        auto GM = GameManager::sharedState();
         auto winSize = CCDirector::sharedDirector()->getWinSize();
-
-        auto menu = this->m_buttonMenu;
 
         auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoBtn_001.png");
         infoSprite->setScale(0.7f);
@@ -141,34 +113,53 @@ class $modify(BIProfilePage, ProfilePage) {
             this,
             menu_selector(BIProfilePage::onProfilePageInfo)
         );
-        menu->addChild(infoButton);
         infoButton->setPosition({16, -135});
-        infoButton->setSizeMult(1.2f);
         infoButton->setID("info-button"_spr);
+        m_buttonMenu->addChild(infoButton);
 
         this->m_buttons->addObject(infoButton);
 
+        if(auto playerShip = m_mainLayer->getChildByID("player-ship")) {
+            CCPoint position = m_buttonMenu->convertToNodeSpace(playerShip->getPosition());
+            m_mainLayer->removeChild(playerShip);
+
+            auto shipContainer = CCNode::create();
+            shipContainer->setContentSize({50,50});
+            shipContainer->addChild(playerShip);
+            playerShip->setPosition(shipContainer->getContentSize() / 2);
+
+            SimplePlayer* playerJetpack = SimplePlayer::create(m_score->m_playerJetpack);
+            playerJetpack->updatePlayerFrame(m_score->m_playerJetpack, IconType::Jetpack);
+            playerJetpack->setColor(GM->colorForIdx(m_score->m_color1));
+            playerJetpack->setSecondColor(GM->colorForIdx(m_score->m_color2));
+            if(m_score->m_special != 0) playerJetpack->enableCustomGlowColor(GM->colorForIdx(m_score->m_color3));
+            playerJetpack->updateColors();
+
+            auto jetpackContainer = CCNode::create();
+            jetpackContainer->setContentSize({50,50});
+            jetpackContainer->addChild(playerJetpack);
+            playerJetpack->setPosition(jetpackContainer->getContentSize() / 2);
+
+            auto shipBtn = CCMenuItemToggler::create(
+                shipContainer, 
+                jetpackContainer, 
+                this,
+                nullptr
+            );
+            shipBtn->setPosition(position);
+            m_buttonMenu->addChild(shipBtn);
+            m_buttons->addObject(shipBtn);
+        }
+
         if(a2->m_userID != GameManager::sharedState()->m_playerUserID){
-            CCNode* usernameLabel = nullptr;
-            CCNode* modBadge = nullptr;
-
-            std::vector<CCNode*> possiblyModBadge;
-
-            for(unsigned int i = 0; i < layer->getChildrenCount(); i++){
-                CCNode* node = typeinfo_cast<CCNode*>(layer->getChildren()->objectAtIndex(i));
-                if(node != nullptr && node->getPositionX() == (winSize.width / 2) - 164 && node->getPositionY() == (winSize.height / 2) + 123) node->setVisible(false); //rank icon
-                if(node != nullptr && node->getPositionX() == (winSize.width / 2) && node->getPositionY() == (winSize.height / 2) + 125) { //username label
-                    usernameLabel = node;
-                    node->setVisible(false); 
-                }
-                if(node != nullptr && node->getPositionY() == (winSize.height / 2) + 124) possiblyModBadge.push_back(node); //possibly mod badge
+            if(auto rankIcon = m_mainLayer->getChildByID("global-rank-icon")) {
+                rankIcon->setVisible(false);
+            }
+            if(auto usernameLabel = m_mainLayer->getChildByID("username-label")) {
+                usernameLabel->setVisible(false);
             }
 
-            if(usernameLabel) for(auto& badge : possiblyModBadge) {
-                if( (usernameLabel->getPositionX() - (usernameLabel->getScaledContentSize().width / 2) - 16) == badge->getPositionX() ) modBadge = badge;
-            }
-
-            auto leaderboardButtonSprite = BetterInfo::createBISprite("BI_blankBtn_001.png");
+            auto leaderboardButtonSprite = CCSprite::createWithSpriteFrameName("GJ_plainBtn_001.png");
             auto leaderboardSprite = CCSprite::createWithSpriteFrameName(BetterInfo::rankIcon(a2->m_globalRank));
             leaderboardSprite->setZOrder(1);
             leaderboardSprite->setScale(1 / 0.6f);
@@ -187,9 +178,8 @@ class $modify(BIProfilePage, ProfilePage) {
                 menu_selector(BIProfilePage::onProfilePageLeaderboard)
             );
             leaderboardButton->setID("leaderboard-button"_spr);
-            menu->addChild(leaderboardButton);
             leaderboardButton->setPosition({46, -12});
-            leaderboardButton->setSizeMult(1.2f);
+            m_buttonMenu->addChild(leaderboardButton);
             this->m_buttons->addObject(leaderboardButton);
 
             auto refreshSprite = CCSprite::createWithSpriteFrameName("GJ_updateBtn_001.png");
@@ -199,10 +189,9 @@ class $modify(BIProfilePage, ProfilePage) {
                 menu_selector(BIProfilePage::onProfilePageReload)
             );
             refreshButton->setID("refresh-button"_spr);
-            menu->addChild(refreshButton);
+            m_buttonMenu->addChild(refreshButton);
             refreshButton->setPosition({0, -269});
             refreshButton->setSizeMult(1.2f);
-
             this->m_buttons->addObject(refreshButton);
 
             auto userIDNode = CCLabelBMFont::create(CCString::createWithFormat("User ID: %i", a2->m_userID)->getCString(), "chatFont.fnt");
@@ -217,7 +206,7 @@ class $modify(BIProfilePage, ProfilePage) {
             userIDBtn->setPosition({38,-248});
             userIDBtn->setAnchorPoint({0,1});
             userIDBtn->setID("userid-button"_spr);
-            menu->addChild(userIDBtn);
+            m_buttonMenu->addChild(userIDBtn);
             this->m_buttons->addObject(userIDBtn);
 
             auto accountIDNode = CCLabelBMFont::create(CCString::createWithFormat("Account ID: %i", a2->m_accountID)->getCString(), "chatFont.fnt");
@@ -232,7 +221,7 @@ class $modify(BIProfilePage, ProfilePage) {
             accountIDBtn->setPosition({38,-258});
             accountIDBtn->setAnchorPoint({0,1});
             accountIDBtn->setID("accountid-button"_spr);
-            menu->addChild(accountIDBtn);
+            m_buttonMenu->addChild(accountIDBtn);
             this->m_buttons->addObject(accountIDBtn);
 
             auto usernameNode = CCLabelBMFont::create(a2->m_userName.c_str(), "bigFont.fnt");
@@ -244,10 +233,12 @@ class $modify(BIProfilePage, ProfilePage) {
             );
             usernameBtn->setPosition({210,-10});
             usernameBtn->setID("username-button"_spr);
-            menu->addChild(usernameBtn);
+            m_buttonMenu->addChild(usernameBtn);
             this->m_buttons->addObject(usernameBtn);
 
-            if(modBadge) modBadge->setPositionX((winSize.width / 2) - (usernameNode->getScaledContentSize().width / 2) - 16);
+            if(auto modBadge = m_mainLayer->getChildByID("mod-badge")) {
+                modBadge->setPositionX((winSize.width / 2) - (usernameNode->getScaledContentSize().width / 2) - 16);
+            }
         }
 
     }
@@ -255,7 +246,13 @@ class $modify(BIProfilePage, ProfilePage) {
     bool init(int id, bool a2){
         if(!ProfilePage::init(id, a2)) return false;
 
-        fixProfilePagePositions();
+        if(auto followBtn = m_buttonMenu->getChildByID("follow-button")) {
+            followBtn->setPosition({16, -224});
+        }
+
+        if(auto followHint = m_mainLayer->getChildByID("follow-hint")) {
+            followHint->setVisible(false);
+        }
 
         return true;
     }
@@ -277,4 +274,4 @@ class $modify(BIProfilePage, ProfilePage) {
 
         ProfilePage::keyBackClicked();
     }
-};*/
+};
