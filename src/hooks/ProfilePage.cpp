@@ -151,6 +151,18 @@ class $modify(BIProfilePage, ProfilePage) {
             m_buttons->addObject(shipBtn);
         }
 
+        auto usernameNode = CCLabelBMFont::create(a2->m_userName.c_str(), "bigFont.fnt");
+        usernameNode->limitLabelWidth(a2->m_modBadge > 0 ? 140.f : 185.0f, 0.9f, 0.0f);
+        auto usernameBtn = CCMenuItemSpriteExtra::create(
+            usernameNode,
+            this,
+            menu_selector(BIProfilePage::onProfilePageCopyPlayerName)
+        );
+        usernameBtn->setPosition({210,-10});
+        usernameBtn->setID("username-button"_spr);
+        m_buttonMenu->addChild(usernameBtn);
+        this->m_buttons->addObject(usernameBtn);
+
         if(a2->m_userID != GameManager::sharedState()->m_playerUserID){
             if(auto rankIcon = m_mainLayer->getChildByID("global-rank-icon")) {
                 log::debug("hiding rank");
@@ -222,18 +234,6 @@ class $modify(BIProfilePage, ProfilePage) {
             m_buttonMenu->addChild(accountIDBtn);
             this->m_buttons->addObject(accountIDBtn);
 
-            auto usernameNode = CCLabelBMFont::create(a2->m_userName.c_str(), "bigFont.fnt");
-            usernameNode->limitLabelWidth(a2->m_modBadge > 0 ? 140.f : 185.0f, 0.9f, 0.0f);
-            auto usernameBtn = CCMenuItemSpriteExtra::create(
-                usernameNode,
-                this,
-                menu_selector(BIProfilePage::onProfilePageCopyPlayerName)
-            );
-            usernameBtn->setPosition({210,-10});
-            usernameBtn->setID("username-button"_spr);
-            m_buttonMenu->addChild(usernameBtn);
-            this->m_buttons->addObject(usernameBtn);
-
             if(auto modBadge = m_mainLayer->getChildByID("mod-badge")) {
                 modBadge->setPositionX((winSize.width / 2) - (usernameNode->getScaledContentSize().width / 2) - 16);
             }
@@ -251,7 +251,7 @@ class $modify(BIProfilePage, ProfilePage) {
         if(auto followHint = m_mainLayer->getChildByID("follow-hint")) {
             followHint->setVisible(false);
         }
-        
+
         if(auto usernameLabel = m_mainLayer->getChildByID("username-label")) {
             log::debug("hiding username");
             usernameLabel->setVisible(false);
