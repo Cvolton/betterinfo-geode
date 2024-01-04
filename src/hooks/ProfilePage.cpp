@@ -153,10 +153,8 @@ class $modify(BIProfilePage, ProfilePage) {
 
         if(a2->m_userID != GameManager::sharedState()->m_playerUserID){
             if(auto rankIcon = m_mainLayer->getChildByID("global-rank-icon")) {
+                log::debug("hiding rank");
                 rankIcon->setVisible(false);
-            }
-            if(auto usernameLabel = m_mainLayer->getChildByID("username-label")) {
-                usernameLabel->setVisible(false);
             }
 
             auto leaderboardButtonSprite = CCSprite::createWithSpriteFrameName("GJ_plainBtn_001.png");
@@ -252,6 +250,11 @@ class $modify(BIProfilePage, ProfilePage) {
 
         if(auto followHint = m_mainLayer->getChildByID("follow-hint")) {
             followHint->setVisible(false);
+        }
+        
+        if(auto usernameLabel = m_mainLayer->getChildByID("username-label")) {
+            log::debug("hiding username");
+            usernameLabel->setVisible(false);
         }
 
         return true;
