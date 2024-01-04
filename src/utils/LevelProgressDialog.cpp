@@ -31,7 +31,12 @@ void LevelProgressDialog::show(GJGameLevel* level){
 
 
     if(level->m_levelID == -1){
-        FLAlertLayer::create(nullptr, "It's a secret...",  "The <cr>darkness</c> lingers. Be careful who you trust...\nThere might be an <c_>impostor</c> among us.", "OK", nullptr, 360)->show();
+        FLAlertLayer::create(nullptr, "It's a secret...",  "<cr>Roses are red</c>\n<cl>Violets are blue</c>\n<cg>Welcome to</c>\n<cy>2.2</c>", "OK", nullptr, 360)->show();
+        return;
+    }
+
+    if(level->m_levelID == -2){
+        FLAlertLayer::create(nullptr, "The Tower",  "The path leads to an <cr>old tower</c>. It's been left alone for <cg>years</c>, with little reason to <co>explore</c>.", "OK", nullptr, 360)->show();
         return;
     }
 
@@ -45,10 +50,17 @@ void LevelProgressDialog::show(GJGameLevel* level){
         auto stats = BetterInfoStats::sharedState();
         //auto statsV2 = BetterInfoStatsV2::sharedState();
 
-        contentStream << "\n<cp>Normal</c>: " << level->m_normalPercent
-        << "%\n<co>Practice</c>: " << level->m_practicePercent << "%";
-        if(level->m_orbCompletion != level->m_normalPercent) contentStream << "\n<cj>Orbs</c>: " << level->m_orbCompletion << "%";
-        if(level->m_newNormalPercent2 != level->m_orbCompletion) contentStream << "\n<cr>Leaderboard</c>: " << level->m_newNormalPercent2 << "%";
+        if(level->isPlatformer()) {
+            //TODO: better platformer formatting
+            contentStream << "\n<cp>Best Time</c>: " << TimeUtils::platformerTime(level->m_bestTime)
+            << "\n<co>Best Points</c>: " << level->m_bestPoints;
+        } else {
+            contentStream << "\n<cp>Normal</c>: " << level->m_normalPercent
+            << "%\n<co>Practice</c>: " << level->m_practicePercent << "%";
+            if(level->m_orbCompletion != level->m_normalPercent) contentStream << "\n<cj>Orbs</c>: " << level->m_orbCompletion << "%";
+            if(level->m_newNormalPercent2 != level->m_orbCompletion) contentStream << "\n<cr>Leaderboard</c>: " << level->m_newNormalPercent2 << "%";
+
+        }
 
         auto normalAttempts = stats->getAttempts(level, false);
         auto practiceAttempts = stats->getAttempts(level, true);
