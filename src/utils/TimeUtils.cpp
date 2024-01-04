@@ -29,3 +29,14 @@ std::string TimeUtils::workingTime(int value){
 
     return stream.str();
 }
+
+std::string TimeUtils::platformerTime(int value){
+    int milliseconds = value % 1000;
+    int seconds = (value / 1000) % 60;
+    int minutes = (value / 60000) % 60;
+    int hours = (value / 3600000);
+
+    if(hours > 0) return fmt::format("{}:{}:{}.{}", hours, minutes, seconds, milliseconds);
+    if(minutes > 0) return fmt::format("{}:{}.{}", minutes, seconds, milliseconds);
+    return fmt::format("{}.{}", seconds, milliseconds);
+}

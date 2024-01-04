@@ -6,6 +6,7 @@
 #include "../utils.hpp"
 
 #include <thread>
+#include <locale>
 
 using namespace geode::prelude;
 
@@ -59,7 +60,9 @@ class $modify(LevelInfoLayer) {
         if(bmFont && m_lengthLabel) bmFont->setPosition({m_lengthLabel->getPositionX() + 1, m_lengthLabel->getPositionY() - 8.f});
 
         std::thread([this](){
-            auto wt = TimeUtils::workingTime(std::round(BetterInfo::timeForLevelString(m_level->m_levelString)));
+            auto wt = m_level->m_timestamp
+                ? TimeUtils::workingTime(m_level->m_timestamp / 240)
+                : TimeUtils::workingTime(std::round(BetterInfo::timeForLevelString(m_level->m_levelString)));
             //since whatever is done by queueInMainThread is guaranteed to execute after init is finished, this shouldn't result in a race condition
             Loader::get()->queueInMainThread([this, wt]() {
                 auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("exact-time"_spr));
@@ -69,6 +72,16 @@ class $modify(LevelInfoLayer) {
                 release();
             });
         }).detach();
+
+        /**
+         * Update download and like labels
+        */
+        m_downloadsLabel->setString(fmt::format(std::locale("en_US.UTF-8"), "{:L}", m_level->m_downloads).c_str());
+        m_likesLabel->setString(fmt::format(std::locale("en_US.UTF-8"), "{:L}", m_level->m_likes).c_str());
+        m_downloadsLabel->limitLabelWidth(60.f, .5f, 0.f);
+        m_likesLabel->limitLabelWidth(60.f, .5f, 0.f);
+
+        log::info("m_songIDs: {}", m_level->m_songIDs);
     }
 
     void onViewProfile(CCObject* sender) {
