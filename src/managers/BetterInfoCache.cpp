@@ -129,7 +129,7 @@ void BetterInfoCache::storeLevelInfo(int levelID, const std::string& field, cons
     }
 
     auto idString = std::to_string(levelID);
-    if(!m_json["level-info-dict"][idString].is_object()) m_json["level-info-dict"][idString] = json::Object();
+    if(!m_json["level-info-dict"][idString].is_object()) m_json["level-info-dict"][idString] = matjson::Object();
 
     log::info("Storing {} : {} for level ID {}", field, value, idString);
     m_json["level-info-dict"][idString][field] = value;
@@ -138,7 +138,7 @@ void BetterInfoCache::storeLevelInfo(int levelID, const std::string& field, cons
 
 std::string BetterInfoCache::getLevelInfo(int levelID, const std::string& field) {
     auto idString = std::to_string(levelID);
-    if(!m_json["level-info-dict"][idString].is_object()) m_json["level-info-dict"][idString] = json::Object();
+    if(!m_json["level-info-dict"][idString].is_object()) m_json["level-info-dict"][idString] = matjson::Object();
     if(!m_json["level-info-dict"][idString][field].is_string()) return "";
 
     return m_json["level-info-dict"][idString][field].as_string();
@@ -162,7 +162,7 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
             web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).text().then([userID](const std::string& userData){
                 log::info("{}", userData);
                 //GEODE_UNWRAP_INTO(auto data, userData);
-                auto data = json::parse(userData);
+                auto data = matjson::parse(userData);
                 std::string username;
 
                 if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
@@ -221,7 +221,7 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
         if(m_attemptedLevelDates.find(levelID) == m_attemptedLevelDates.end()) {
             web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).text().then([levelID](const std::string& userData){
                 log::info("{}", userData);
-                auto data = json::parse(userData);
+                auto data = matjson::parse(userData);
 
                 if(!data["approx"].is_object()) return;
                 if(!data["approx"]["estimation"].is_string()) return;

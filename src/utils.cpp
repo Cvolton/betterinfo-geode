@@ -232,7 +232,7 @@ void BetterInfo::copyToClipboard(const char* text){
 void BetterInfo::copyToClipboard(const char* text, CCLayer* parent){
     copyToClipboard(text);
 
-    Notification::create("Copied to clipboard", NotificationIcon::None, .1f);
+    Notification::create("Copied to clipboard", NotificationIcon::None)->show();
     //parent->addChild(TextAlertPopup::create("Copied to clipboard", 0.5f, 0.6f), 100);
 }
 
@@ -552,7 +552,7 @@ void BetterInfo::loadImportantNotices(CCLayer* layer) {
 
     layer->retain();
 
-    web::AsyncWebRequest().fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toString(false))).json().then([layer](const json::Value& info){
+    web::AsyncWebRequest().fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toString(false))).json().then([layer](const matjson::Value& info){
         auto notice = info.try_get("notice");
         if(notice == std::nullopt) return;
         

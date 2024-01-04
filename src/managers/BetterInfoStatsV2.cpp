@@ -26,9 +26,9 @@ auto& BetterInfoStatsV2::levelObject(GJGameLevel* gjLevel) {
 
     auto idStr = std::to_string(gjLevel->m_levelID.value());
     auto& levels = m_json[key];
-    if(!levels[idStr].is_object()) levels[idStr] = json::Object();
+    if(!levels[idStr].is_object()) levels[idStr] = matjson::Object();
     auto& level = levels[idStr];
-    if(!level["attempts"].is_array()) level["attempts"] = json::Array();
+    if(!level["attempts"].is_array()) level["attempts"] = matjson::Array();
     return level;
 }
 

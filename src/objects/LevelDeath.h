@@ -10,8 +10,8 @@ struct LevelDeath {
 };
 
 template <>
-struct json::Serialize<LevelDeath> {
-    static LevelDeath from_json(const json::Value& value) {
+struct matjson::Serialize<LevelDeath> {
+    static LevelDeath from_json(const matjson::Value& value) {
         return LevelDeath {
             .percentage = value["percentage"].as_int(),
             .x = (float) value["x"].as_double(),
@@ -20,8 +20,8 @@ struct json::Serialize<LevelDeath> {
             .time = value["time"].as_int()
         };
     }
-    static json::Value to_json(const LevelDeath& death) {
-        return json::Object {
+    static matjson::Value to_json(const LevelDeath& death) {
+        return matjson::Object {
             { "percentage", death.percentage },
             { "x", death.x },
             { "y", death.y },

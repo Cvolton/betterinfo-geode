@@ -22,13 +22,13 @@ Result<> BaseJsonManager::load() {
         GEODE_UNWRAP_INTO(auto data, utils::file::readString(savedPath));
 
         try {
-            this->m_json = json::parse(data);
+            this->m_json = matjson::parse(data);
         } catch (std::exception& err) {
             return Err(std::string("Unable to parse cache: ") + err.what());
         }
         if (!m_json.is_object()) {
             log::warn("{} was somehow not an object, forcing it to one", m_filename);
-            m_json = json::Object();
+            m_json = matjson::Object();
         }
     }
 
@@ -39,7 +39,7 @@ Result<> BaseJsonManager::load() {
 }
 
 Result<> BaseJsonManager::save() {
-    std::string savedStr = m_json.dump(json::NO_INDENTATION);
+    std::string savedStr = m_json.dump(matjson::NO_INDENTATION);
 
     auto res2 = utils::file::writeString(Mod::get()->getSaveDir() / m_filename, savedStr);
     if (!res2) {
@@ -68,7 +68,7 @@ void BaseJsonManager::validateLoadedData() {
 }
 
 void BaseJsonManager::validateIsObject(const char* key) {
-    if(!m_json[key].is_object()) m_json[key] = json::Object();
+    if(!m_json[key].is_object()) m_json[key] = matjson::Object();
 }
 
 BaseJsonManager::BaseJsonManager(){}

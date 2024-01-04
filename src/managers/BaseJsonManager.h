@@ -12,7 +12,7 @@ protected:
 
 public:
 	std::string m_filename;
-	json::Value m_json = json::Object();
+	matjson::Value m_json = matjson::Object();
 
 	bool init(const char* filename);
 	Result<> load();
