@@ -1,55 +1,56 @@
-//TODO: reverse MoreSearchLayer
-
-/*#include <Geode/Bindings.hpp>
+#include <Geode/Bindings.hpp>
 #include <Geode/modify/MoreSearchLayer.hpp>
 
 #include "../layers/LevelFiltering/CvoltonSearchOptions.h"
 
 using namespace geode::prelude;
 
+class DropDownDelegateHelper : public GJDropDownLayerDelegate {
+public:
+    CCTextInputNode* m_input = nullptr;
+
+    virtual void dropDownLayerWillClose(GJDropDownLayer* layer) {
+        auto browser = static_cast<GJSongBrowser*>(layer);
+        browser->m_delegate = nullptr;
+
+        if(m_input) m_input->setString(std::to_string(browser->m_songID).c_str());
+
+        delete this;
+    }
+};
+
 class $modify(BIMoreSearchLayer, MoreSearchLayer) {
     CCMenuItemSpriteExtra* m_savedBtn = nullptr;
-    LevelSettingsObject* m_settings = nullptr;
     int m_songID = 0;
 
     bool shouldSavedBtnBeVisible(){
         return GameLevelManager::sharedState()->getBoolForKey("customsong_filter") && GameLevelManager::sharedState()->getBoolForKey("enable_songFilter");
-    }*/
+    }
 
     /*
      * Callbacks
      */
 
-    /*void onMoreSearchNext(CCObject* sender){
+    void onMoreSearchNext(CCObject* sender){
         auto layer = CvoltonSearchOptions::create();
         CCDirector::sharedDirector()->getRunningScene()->addChild(layer);
         this->onClose(sender);
     }
 
     void onSaved(CCObject* sender){
-        auto browser = GJSongBrowser::create(m_fields->m_settings);
+        auto delegate = new DropDownDelegateHelper();
+        delegate->m_input = m_enterSongID;
+
+        auto browser = GJSongBrowser::create();
         CCScene::get()->addChild(browser);
         browser->setZOrder(CCScene::get()->getHighestChildZ() + 1);
         browser->showLayer(false);
+        browser->m_delegate = delegate;
     }
-
-    void onSongIDCheck(float dt){
-        if(m_fields->m_settings->m_level->m_songID != m_fields->m_songID){
-            m_fields->m_songID = m_fields->m_settings->m_level->m_songID;
-            GameLevelManager::sharedState()->setIntForKey(m_fields->m_songID, "song_filter");
-            m_enterSongID->setString(std::to_string(m_fields->m_songID));
-        }
-    }*/
 
     /*
      * Hooks
      */
-
-    /*void onClose(CCObject* sender){
-        if(m_fields->m_settings) m_fields->m_settings->release();
-
-        MoreSearchLayer::onClose(sender);
-    }
 
     bool init(){
         if(!MoreSearchLayer::init()) return false;
@@ -80,17 +81,6 @@ class $modify(BIMoreSearchLayer, MoreSearchLayer) {
         m_fields->m_savedBtn->setVisible(shouldSavedBtnBeVisible());
         m_buttonMenu->addChild(m_fields->m_savedBtn);
 
-        m_fields->m_settings = LevelSettingsObject::create();
-        m_fields->m_settings->retain();
-
-        m_fields->m_settings->m_level = GJGameLevel::create();
-        m_fields->m_settings->m_level->retain();
-        m_fields->m_settings->m_level->m_songID = GameLevelManager::sharedState()->getIntForKey("song_filter");
-        m_fields->m_songID = m_fields->m_settings->m_level->m_songID;
-        log::info("Song ID: {}", m_fields->m_settings->m_level->m_songID);
-
-        this->getScheduler()->scheduleSelector(schedule_selector(BIMoreSearchLayer::onSongIDCheck), this, 0, false);
-
         return true;
     }
 
@@ -105,4 +95,4 @@ class $modify(BIMoreSearchLayer, MoreSearchLayer) {
 
         if(m_fields->m_savedBtn) m_fields->m_savedBtn->setVisible(shouldSavedBtnBeVisible());
     }
-};*/
+};
