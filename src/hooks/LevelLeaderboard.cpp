@@ -1,5 +1,3 @@
-//TODO: reverse LevelLeaderboard
-
 #include <Geode/Bindings.hpp>
 #include <Geode/modify/LevelLeaderboard.hpp>
 

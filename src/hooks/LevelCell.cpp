@@ -1,5 +1,3 @@
-//TODO: reverse LevelCell
-
 #include <Geode/Bindings.hpp>
 #include <Geode/modify/LevelCell.hpp>
 

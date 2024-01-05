@@ -263,12 +263,11 @@ void BIViewLayer::setData(CCArray* data){
 void BIViewLayer::showCircle(){
     hideCircle();
 
-    //TODO: reverse LoadingCircle
-    /*m_circle = LoadingCircle::create();
+    m_circle = LoadingCircle::create();
     m_circle->setID("loading-circle"_spr);
     m_circle->retain();
     m_circle->setParentLayer(this);
-    m_circle->show();*/
+    m_circle->show();
 }
 
 void BIViewLayer::hideCircle(){
