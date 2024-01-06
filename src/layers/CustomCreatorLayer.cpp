@@ -49,7 +49,7 @@ bool CustomCreatorLayer::init() {
     menu->addChild(mostLikedBtn);
     mostLikedBtn->setPosition({0,55});
     mostLikedBtn->setSizeMult(1.2f);
-    mostLikedBtn->setID("most-liked-button");_spr*/
+    mostLikedBtn->setID("most-liked-button"_spr);*/
 
     auto searchBtn = CCMenuItemSpriteExtra::create(
         BetterInfo::createBISprite("BI_searchLevel_001.png"),
@@ -57,7 +57,7 @@ bool CustomCreatorLayer::init() {
         menu_selector(CustomCreatorLayer::onSearch)
     );
     menu->addChild(searchBtn);
-    searchBtn->setPosition({60,55});
+    searchBtn->setPosition({60,-55});
     searchBtn->setSizeMult(1.2f);
     searchBtn->setID("search-button"_spr);
 
@@ -67,7 +67,7 @@ bool CustomCreatorLayer::init() {
         menu_selector(CustomCreatorLayer::onSearchID)
     );
     menu->addChild(searchIDBtn);
-    searchIDBtn->setPosition({120,-57.5f});
+    searchIDBtn->setPosition({-60,-55});
     searchIDBtn->setSizeMult(1.2f);
     searchIDBtn->setID("search-id-button"_spr);
 
@@ -99,7 +99,7 @@ bool CustomCreatorLayer::init() {
         menu_selector(CustomCreatorLayer::onFame)
     );
     menu->addChild(fameBtn);
-    fameBtn->setPosition({-2.5,-55});
+    fameBtn->setPosition({60,55});
     fameBtn->setSizeMult(1.2f);
     fameBtn->setID("weekly-button"_spr);
 
