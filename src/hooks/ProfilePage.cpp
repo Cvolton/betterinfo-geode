@@ -122,7 +122,7 @@ class $modify(BIProfilePage, ProfilePage) {
         }
 
 
-        if(auto playerShip = m_mainLayer->getChildByID("player-ship")) {
+        /*if(auto playerShip = m_mainLayer->getChildByID("player-ship")) {
             CCPoint position = m_buttonMenu->convertToNodeSpace(playerShip->getPosition());
             m_mainLayer->removeChild(playerShip);
 
@@ -152,7 +152,7 @@ class $modify(BIProfilePage, ProfilePage) {
             shipBtn->setPosition(position);
             m_buttonMenu->addChild(shipBtn);
             m_buttons->addObject(shipBtn);
-        }
+        }*/
 
         if(auto usernameLabel = m_mainLayer->getChildByID("username-label")) {
             usernameLabel->setVisible(false);
