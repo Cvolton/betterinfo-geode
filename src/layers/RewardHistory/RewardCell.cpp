@@ -8,7 +8,7 @@ void RewardCell::loadFromData(CCObject* object) {
 
     const char* chestTexture = "chest_01_02_001.png";
     float chestSize = 0.35f;
-    const char* chestTitle = Mod::get()->getSavedValue<std::string>("reward-cell-title").c_str();
+    std::string chestTitle = Mod::get()->getSavedValue<std::string>("reward-cell-title");
     switch(reward->m_rewardType) {
         default: break;
         case GJRewardType::Small: chestTexture = "chest_01_02_001.png"; break;
@@ -25,7 +25,7 @@ void RewardCell::loadFromData(CCObject* object) {
     chest->setScale(chestSize);
     this->m_mainLayer->addChild(chest);
 
-    auto title = CCLabelBMFont::create(CCString::createWithFormat(reward->m_chestID != 0 ? "%s Chest %i" : "%s Chest", chestTitle, reward->m_chestID)->getCString(), "bigFont.fnt");
+    auto title = CCLabelBMFont::create(CCString::createWithFormat(reward->m_chestID != 0 ? "%s Chest %i" : "%s Chest", chestTitle.c_str(), reward->m_chestID)->getCString(), "bigFont.fnt");
     title->setAnchorPoint({ 0.0f, .5f });
     title->setPosition(rowX, 31.5f);
     title->limitLabelWidth(356-rowX, .65f, .4f);
