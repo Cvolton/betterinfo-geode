@@ -106,18 +106,21 @@ class $modify(BIProfilePage, ProfilePage) {
         auto GM = GameManager::sharedState();
         auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-        auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoBtn_001.png");
-        infoSprite->setScale(0.7f);
-        auto infoButton = CCMenuItemSpriteExtra::create(
-            infoSprite,
-            this,
-            menu_selector(BIProfilePage::onProfilePageInfo)
-        );
-        infoButton->setPosition({16, -135});
-        infoButton->setID("info-button"_spr);
-        m_buttonMenu->addChild(infoButton);
+        if(auto leftMenu = m_mainLayer->getChildByID("left-menu")) {
+            auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoBtn_001.png");
+            infoSprite->setScale(0.7f);
+            auto infoButton = CCMenuItemSpriteExtra::create(
+                infoSprite,
+                this,
+                menu_selector(BIProfilePage::onProfilePageInfo)
+            );
+            infoButton->setID("info-button"_spr);
+            leftMenu->addChild(infoButton);
+            this->m_buttons->addObject(infoButton);
 
-        this->m_buttons->addObject(infoButton);
+            leftMenu->updateLayout();
+        }
+
 
         if(auto playerShip = m_mainLayer->getChildByID("player-ship")) {
             CCPoint position = m_buttonMenu->convertToNodeSpace(playerShip->getPosition());
