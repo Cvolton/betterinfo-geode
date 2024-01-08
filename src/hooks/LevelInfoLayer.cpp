@@ -76,12 +76,12 @@ class $modify(LevelInfoLayer) {
         /**
          * Update download and like labels
         */
-        m_downloadsLabel->setString(fmt::format(std::locale("en_US.UTF-8"), "{:L}", m_level->m_downloads).c_str());
+        /*m_downloadsLabel->setString(fmt::format(std::locale("en_US.UTF-8"), "{:L}", m_level->m_downloads).c_str());
         m_likesLabel->setString(fmt::format(std::locale("en_US.UTF-8"), "{:L}", m_level->m_likes).c_str());
         m_downloadsLabel->limitLabelWidth(60.f, .5f, 0.f);
         m_likesLabel->limitLabelWidth(60.f, .5f, 0.f);
 
-        log::info("m_songIDs: {}", m_level->m_songIDs);
+        log::info("m_songIDs: {}", m_level->m_songIDs);*/
     }
 
     void onViewProfile(CCObject* sender) {

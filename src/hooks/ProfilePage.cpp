@@ -121,6 +121,26 @@ class $modify(BIProfilePage, ProfilePage) {
             leftMenu->updateLayout();
         }
 
+        /*if(auto playerMenu = m_mainLayer->getChildByID("player-menu")) {
+            SimplePlayer* playerJetpack = SimplePlayer::create(m_score->m_playerJetpack);
+            playerJetpack->updatePlayerFrame(m_score->m_playerJetpack, IconType::Jetpack);
+            playerJetpack->setColor(GM->colorForIdx(m_score->m_color1));
+            playerJetpack->setSecondColor(GM->colorForIdx(m_score->m_color2));
+            if(m_score->m_special != 0) playerJetpack->enableCustomGlowColor(GM->colorForIdx(m_score->m_color3));
+            playerJetpack->updateColors();
+            playerJetpack->setScale(.95f);
+
+            auto jetpackContainer = CCNode::create();
+            jetpackContainer->setContentSize({40.6f, 42.6f});
+            jetpackContainer->addChild(playerJetpack);
+            playerJetpack->setPosition((jetpackContainer->getContentSize() / 2) - CCPoint(5,0));
+
+            playerMenu->addChild(jetpackContainer);
+            playerMenu->updateLayout();
+
+            this->m_buttons->addObject(jetpackContainer);
+        }*/
+
 
         /*if(auto playerShip = m_mainLayer->getChildByID("player-ship")) {
             CCPoint position = m_buttonMenu->convertToNodeSpace(playerShip->getPosition());

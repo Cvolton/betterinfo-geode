@@ -231,7 +231,7 @@ void DailyCell::onView(CCObject* sender){
 
 void DailyCell::onLeaderboards(CCObject* sender){
     auto GM = GameManager::sharedState();
-    auto newLeaderboard = LevelLeaderboard::create(m_level, (LevelLeaderboardType) GM->getIntGameVariableDefault("0098", 1), (LevelLeaderboardMode) GM->getIntGameVariableDefault("0164", 0));
+    auto newLeaderboard = LevelLeaderboard::create(m_level, (LevelLeaderboardType) GM->getIntGameVariable("0098"), (LevelLeaderboardMode) GM->getIntGameVariable("0164"));
     newLeaderboard->show();
 }
 
