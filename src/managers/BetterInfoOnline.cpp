@@ -73,9 +73,7 @@ void BetterInfoOnline::generateScores(const std::string& response, int accountID
 
         GameLevelManager::sharedState()->storeUserName(score->m_userID, score->m_accountID, score->m_userName);
 
-        // workaround for leaderboard highlighting
-        //TODO: reverse GM for UDID
-        //if(std::string(score->m_userUDID) != "") score->m_userUDID = GM->m_playerUDID;
+        if(std::string(score->m_userUDID) != "") score->m_userUDID = GM->m_playerUDID;
 
         scores->addObject(score);
     }
