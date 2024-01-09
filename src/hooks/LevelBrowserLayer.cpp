@@ -70,6 +70,9 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             if(auto lastButton = pageMenu->getChildByID("last-button"_spr)) {
                 lastButton->setVisible(this->m_itemCount > BetterInfo::levelsPerPage(this->m_searchObject));
             }
+            if(auto randomButton = pageMenu->getChildByID("random-button"_spr)) {
+                randomButton->setVisible(this->m_itemCount > BetterInfo::levelsPerPage(this->m_searchObject));
+            }
         }
    }
 
