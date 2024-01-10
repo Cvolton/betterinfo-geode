@@ -58,4 +58,6 @@ namespace BetterInfo {
     bool isHoveringNode(CCNode* target);
 
     bool isSprite(CCSprite* sprite, const char* name);
+
+    UnlockType iconTypeToUnlockType(IconType type);
 }

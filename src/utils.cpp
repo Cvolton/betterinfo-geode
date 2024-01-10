@@ -592,3 +592,56 @@ bool BetterInfo::isSprite(CCSprite* sprite, const char* name) {
 
     return cache->getTexture() == sprite->getTexture() && cache->getRect() == sprite->getTextureRect();
 }
+
+UnlockType BetterInfo::iconTypeToUnlockType(IconType type)
+    {
+        //the actual func doesnt work for an unknown reason
+        int result = 0;
+
+        switch ((int) type)
+        {
+            case 0:
+                result = 1;
+                break;
+            case 1:
+                result = 4;
+                break;
+            case 2:
+                result = 5;
+                break;
+            case 3:
+                result = 6;
+                break;
+            case 4:
+                result = 7;
+                break;
+            case 5:
+                result = 8;
+                break;
+            case 6:
+                result = 9;
+                break;
+            case 7:
+                result = 13;
+                break;
+            case 8:
+                result = 14;
+                break;
+            case 9:
+                result = 11;
+                break;
+            case 0xA:
+                result = 10;
+                break;
+            case 0xB:
+                result = 12;
+                break;
+            case 0xC:
+                result = 15;
+                break;
+            default:
+                result = 0;
+                break;
+        }
+        return (UnlockType) result;
+    }
