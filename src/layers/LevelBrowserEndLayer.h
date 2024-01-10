@@ -28,7 +28,9 @@ public:
     static cocos2d::CCLabelBMFont* createTextLabel(const std::string text, const cocos2d::CCPoint& position, const float scale, cocos2d::CCNode* menu, const char* font = "bigFont.fnt");
 
     void loadLevelsFinished(cocos2d::CCArray*, const char*);
+    void loadLevelsFinished(cocos2d::CCArray*, const char*, int);
     void loadLevelsFailed(const char*);
+    void loadLevelsFailed(const char*, int);
     void setupPageInfo(gd::string, const char*);
 
     void updateDisplay();

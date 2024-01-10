@@ -122,6 +122,10 @@ void LevelBrowserEndLayer::loadLevelsFinished(cocos2d::CCArray*, const char* tes
 
     updateDisplay();
 }
+void LevelBrowserEndLayer::loadLevelsFinished(cocos2d::CCArray* result, const char* test, int){
+    //lists overload
+    loadLevelsFinished(result, test);
+}
 void LevelBrowserEndLayer::loadLevelsFailed(const char* test){
     m_max = m_levelBrowserLayer->m_searchObject->m_page;
     if(m_requestsToMax == 0) {
@@ -140,6 +144,10 @@ void LevelBrowserEndLayer::loadLevelsFailed(const char* test){
     getOnlineLevels(m_levelBrowserLayer->m_searchObject);
 
     updateDisplay();
+}
+void LevelBrowserEndLayer::loadLevelsFailed(const char* test, int){
+    //lists overload
+    loadLevelsFailed(test);
 }
 void LevelBrowserEndLayer::setupPageInfo(gd::string, const char*){
     
@@ -184,5 +192,5 @@ void LevelBrowserEndLayer::getOnlineLevels(GJSearchObject* searchObj) {
 void LevelBrowserEndLayer::onQueueDownload(float dt) {
     auto GLM = GameLevelManager::sharedState();
     GLM->m_levelManagerDelegate = this;
-    GLM->getOnlineLevels(m_levelBrowserLayer->m_searchObject);
+    m_levelBrowserLayer->m_searchObject->m_searchMode == 1 ? GLM->getLevelLists(m_levelBrowserLayer->m_searchObject) : GLM->getOnlineLevels(m_levelBrowserLayer->m_searchObject);
 }
