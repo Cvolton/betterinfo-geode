@@ -36,8 +36,7 @@ class $modify(BIInfoLayer, InfoLayer) {
                 GLM->resetCommentTimersForLevelID(this->m_score->m_userID, m_mode);
                 break;
             case CommentKeyType::LevelList:
-                //GLM->resetCommentTimersForLevelID(this->m_level->m_levelID, m_mode);
-                //TODO: need levellist class members
+                GLM->resetCommentTimersForLevelID(- this->m_levelList->m_listID, m_mode);
                 break;                
         }
 
@@ -96,23 +95,8 @@ class $modify(BIInfoLayer, InfoLayer) {
             menu->updateLayout();
         }
 
-        if(level == nullptr) return true;
-        //end of level stuff
-
-        if(auto menu = m_mainLayer->getChildByID("refresh-menu")) {
-            auto searchSprite = CCSprite::createWithSpriteFrameName("gj_findBtn_001.png");
-            searchSprite->setScale(0.8f);
-            auto searchButton = CCMenuItemSpriteExtra::create(
-                searchSprite,
-                this,
-                menu_selector(BIInfoLayer::onCustomSearch)
-            );
-            menu->addChild(searchButton);
-            searchButton->setSizeMult(1.2f);
-            searchButton->setID("search-btn"_spr);
-
-            menu->updateLayout();
-        }
+        if(level == nullptr && list == nullptr) return true;
+        //end of profile stuff
 
         auto scheduleOffSprite = CCSprite::createWithSpriteFrameName("GJ_playEditorBtn_001.png");
         scheduleOffSprite->setScale(.625f);
@@ -131,6 +115,24 @@ class $modify(BIInfoLayer, InfoLayer) {
 
         if(auto originalBtn = m_buttonMenu->getChildByID("original-level-button")) {
             if(originalBtn->getPositionX() > 155.4f) originalBtn->setPosition({155.4f, originalBtn->getPositionY()});
+        }
+
+        if(level == nullptr) return true;
+        //end of list stuff
+
+        if(auto menu = m_mainLayer->getChildByID("refresh-menu")) {
+            auto searchSprite = CCSprite::createWithSpriteFrameName("gj_findBtn_001.png");
+            searchSprite->setScale(0.8f);
+            auto searchButton = CCMenuItemSpriteExtra::create(
+                searchSprite,
+                this,
+                menu_selector(BIInfoLayer::onCustomSearch)
+            );
+            menu->addChild(searchButton);
+            searchButton->setSizeMult(1.2f);
+            searchButton->setID("search-btn"_spr);
+
+            menu->updateLayout();
         }
 
         return true;
