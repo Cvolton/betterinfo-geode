@@ -80,28 +80,11 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
      * Hooks
      */
     void setupPageInfo(gd::string a1, const char* a2) {
-        //TODO: utilize geode layout system (needs modifications in loader to make the layout in the first place)
         LevelBrowserLayer::setupPageInfo(a1, a2);
 
         if(this->m_itemCount == 9999 || BetterInfo::isFalseTotal(this->m_searchObject)) this->m_rightArrow->setVisible(true);
 
-        /*CCMenu* menu = static_cast<CCMenu*>(this->m_rightArrow->getParent());
-        auto winSize = CCDirector::sharedDirector()->getWinSize();
-        bool isLocal = BetterInfo::isLocal(this->m_searchObject);
-        bool isSavedWithPlus = this->m_searchObject->m_searchType == SearchType::SavedLevels || this->m_searchObject->m_searchType == SearchType::FavouriteLevels;
-
-        if(isSavedWithPlus){
-            if(BetterInfo::isSavedFiltered() && this->m_countText) this->m_countText->setString((std::string("(Filtered) ") + this->m_countText->getString()).c_str());
-
-        }*/
         refreshButtonVisibility();
-        
-
-        
-
-        /*if(this->m_itemCount <= BetterInfo::levelsPerPage(this->m_searchObject)) return;
-
-        */
     }
 
     bool init(GJSearchObject* searchObj) {
