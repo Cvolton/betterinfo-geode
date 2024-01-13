@@ -121,7 +121,7 @@ class $modify(BIProfilePage, ProfilePage) {
             leftMenu->updateLayout();
         }
 
-        /*if(auto playerMenu = m_mainLayer->getChildByID("player-menu")) {
+        if(auto playerMenu = m_mainLayer->getChildByID("player-menu")) {
             SimplePlayer* playerJetpack = SimplePlayer::create(m_score->m_playerJetpack);
             playerJetpack->updatePlayerFrame(m_score->m_playerJetpack, IconType::Jetpack);
             playerJetpack->setColor(GM->colorForIdx(m_score->m_color1));
@@ -139,7 +139,7 @@ class $modify(BIProfilePage, ProfilePage) {
             playerMenu->updateLayout();
 
             this->m_buttons->addObject(jetpackContainer);
-        }*/
+        }
 
 
         /*if(auto playerShip = m_mainLayer->getChildByID("player-ship")) {
@@ -291,11 +291,5 @@ class $modify(BIProfilePage, ProfilePage) {
         BetterInfoOnline::sharedState()->m_scoreProfilePage = nullptr;
 
         ProfilePage::onClose(sender);
-    }
-
-    void keyBackClicked() {
-        BetterInfoOnline::sharedState()->m_scoreProfilePage = nullptr;
-
-        ProfilePage::keyBackClicked();
     }
 };
