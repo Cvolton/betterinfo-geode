@@ -350,9 +350,9 @@ bool BetterInfo::levelProgressMatchesObject(GJGameLevel* level, const BISearchOb
 }
 
 void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
-    //TODO: reverse LevelCell
+    auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    /*auto listLayer = getChildOfType<GJListLayer>(levelBrowserLayer, 0);
+    auto listLayer = getChildOfType<GJListLayer>(levelBrowserLayer, 0);
     if(!listLayer) return;
     auto listView = getChildOfType<CustomListView>(listLayer, 0);
     if(!listView) return;
@@ -360,46 +360,45 @@ void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
     if(!tableView) return;
     auto contentLayer = getChildOfType<CCContentLayer>(tableView, 0);
     if(!contentLayer) return;
-    auto children = CCArrayExt<CCNode>(contentLayer->getChildren());
+    auto children = CCArrayExt<CCNode*>(contentLayer->getChildren());
 
     for(auto& child : children) {
+        //TODO: rewrite the positioning code here
+
         auto levelCell = typeinfo_cast<LevelCell*>(child);
-        if(levelCell) {
-            auto layer = static_cast<CCLayer*>(levelCell->getChildren()->objectAtIndex(1));
-            auto menu = getChildOfType<CCMenu>(layer, 0);
-            auto playerName = static_cast<CCMenuItemSpriteExtra*>(menu->getChildren()->objectAtIndex(1));
-            auto textNode = static_cast<CCLabelBMFont*>(playerName->getChildren()->objectAtIndex(0));
+        if(!levelCell) continue;
+        auto menu = levelCell->m_mainLayer->getChildByID("main-menu");
+        if(!menu) continue;
+        auto playerName = menu->getChildByID("creator-name");
+        if(!playerName) continue;
+        auto textNode = static_cast<CCLabelBMFont*>(playerName->getChildren()->objectAtIndex(0));
+        if(!textNode) continue;
 
-            float oldXSize = textNode->getScaledContentSize().width;
+        float oldXSize = textNode->getScaledContentSize().width;
 
-            auto userName = GameLevelManager::sharedState()->userNameForUserID(levelCell->m_level->m_userID);
+        auto userName = GameLevelManager::sharedState()->userNameForUserID(levelCell->m_level->m_userID);
 
-            auto oldString = std::string(textNode->getString());
-            auto newString = fmt::format("By {}", std::string(userName));
+        auto oldString = std::string(textNode->getString());
+        auto newString = fmt::format("By {}", std::string(userName));
 
-            textNode->setString(newString.c_str());
-            playerName->setContentSize(textNode->getContentSize() * textNode->getScale());
-            auto winSize = CCDirector::sharedDirector()->getWinSize();
-            playerName->setPositionX((-285.5 + 23.5) + (playerName->getContentSize().width / 2));
-            textNode->setPositionX(playerName->getContentSize().width / 2);
+        textNode->setString(newString.c_str());
 
-            float difference = textNode->getScaledContentSize().width - oldXSize;
+        float difference = textNode->getScaledContentSize().width - oldXSize;
 
-            for(unsigned int i = 0; i < layer->getChildrenCount(); i++){
-                CCSprite* node = typeinfo_cast<CCSprite*>(layer->getChildren()->objectAtIndex(i));
-                if(node == nullptr) continue;
+        playerName->setContentSize(textNode->getContentSize() * textNode->getScale());
+        playerName->setPositionX(playerName->getPositionX() + (difference / 2));
 
-                if(isSprite(node, "collaborationIcon_001.png") || isSprite(node, "highObjectIcon_001.png")) {
-                    
-                    node->setPositionX(node->getPositionX() + difference);
+        textNode->setPositionX(playerName->getContentSize().width / 2);
 
-                }
-            }
-
-            levelCell->m_level->m_creatorName = userName;
-
+        if(auto copyIcon = menu->getChildByID("copy-indicator")) {
+            copyIcon->setPositionX(copyIcon->getPositionX() + difference);
         }
-    }*/
+        if(auto highObjectIcon = menu->getChildByID("high-object-indicator")) {
+            highObjectIcon->setPositionX(highObjectIcon->getPositionX() + difference);
+        }
+
+        levelCell->m_level->m_creatorName = userName;
+    }
 }
 
 inline bool objectIDIsSpeedPortal(int id) {
