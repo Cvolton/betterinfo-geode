@@ -19,8 +19,8 @@ void BetterInfoScheduler::onLevelSubmit(float dt){
         auto level = m_levelsToSubmit.front();
         m_levelsToSubmit.pop();
 
-        //TODO: handle LevelLeaderboardMode properly
-        GameLevelManager::sharedState()->getLevelLeaderboard(level, LevelLeaderboardType::Friends, (LevelLeaderboardMode) 0);
+        GameLevelManager::sharedState()->getLevelLeaderboard(level, LevelLeaderboardType::Friends, LevelLeaderboardMode::Time);
+        if(level->isPlatformer()) GameLevelManager::sharedState()->getLevelLeaderboard(level, LevelLeaderboardType::Friends, LevelLeaderboardMode::Points);
         level->release();
     }
 }

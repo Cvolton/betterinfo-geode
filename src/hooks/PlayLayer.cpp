@@ -12,7 +12,7 @@ class $modify(BIPlayLayer, PlayLayer) {
 
     inline static bool needsReset = false;
 
-    /*void levelComplete(){
+    void levelComplete(){
         PlayLayer::levelComplete();
 
         auto stats = BetterInfoStats::sharedState();
@@ -55,7 +55,7 @@ class $modify(BIPlayLayer, PlayLayer) {
             .y = player->m_position.y,
             .rotation = player->getRotation()
         });*/
-    /*}
+    }
 
     void resetLevel(){
         needsReset = false;
@@ -64,5 +64,5 @@ class $modify(BIPlayLayer, PlayLayer) {
 
         auto stats = BetterInfoStats::sharedState();
         stats->logAttempt(this->m_level, this->m_isPracticeMode);
-    }*/
+    }
 };
