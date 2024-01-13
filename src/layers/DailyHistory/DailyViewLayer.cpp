@@ -2,9 +2,9 @@
 #include "../JumpToPageLayer.h"
 #include "../../utils.hpp"
 
-DailyViewLayer* DailyViewLayer::create(bool isWeekly) {
+DailyViewLayer* DailyViewLayer::create(GJTimedLevelType timedType) {
     auto ret = new DailyViewLayer();
-    if (ret && ret->init(isWeekly)) {
+    if (ret && ret->init(timedType)) {
         ret->autorelease();
     } else {
         delete ret;
@@ -19,23 +19,25 @@ bool DailyViewLayer::compareDailies(const void* l1, const void* l2){
     return const_cast<geode::SeedValueRSV&>(level1->m_dailyID).value() < const_cast<geode::SeedValueRSV&>(level2->m_dailyID).value();
 }
 
-bool DailyViewLayer::init(bool isWeekly) {
+bool DailyViewLayer::init(GJTimedLevelType timedType) {
+    m_timedType = timedType;
+
     // initialize data
     auto GLM = GameLevelManager::sharedState();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
     setData(CCArray::create());
 
-    auto dailyLevels = GLM->m_dailyLevels;
-    CCDictElement* obj;
-    CCDICT_FOREACH(dailyLevels, obj){
-        auto currentLvl = static_cast<GJGameLevel*>(obj->getObject());
-        if(
-            currentLvl != nullptr &&
-            ((isWeekly && currentLvl->m_dailyID >= 100000) || (!isWeekly && currentLvl->m_dailyID < 100000))
-        ){
-            m_data->addObject(currentLvl);
+    for(auto [key, level] : CCDictionaryExt<gd::string, GJGameLevel*>(GLM->m_dailyLevels)){
+        if(level == nullptr) continue;
+
+        //2.21: support event levels
+        if(timedType == GJTimedLevelType::Weekly && level->m_dailyID >= 100000){
+            m_data->addObject(level);
+        } else if(timedType == GJTimedLevelType::Daily && level->m_dailyID < 100000){
+            m_data->addObject(level);
         }
     }
+
     std::sort(m_data->data->arr, m_data->data->arr + m_data->data->num, DailyViewLayer::compareDailies);
 
     // init the layer
@@ -66,22 +68,44 @@ void DailyViewLayer::loadPage(){
     auto displayedLevels = trimData();
 
     m_listView = CvoltonListView<DailyCell>::create(displayedLevels, 356.f, 220.f);
-    m_title = m_isWeekly ? "Weekly Demons" : "Daily Levels";
+    switch(m_timedType){
+        default:
+        case GJTimedLevelType::Daily:
+            m_title = "Daily Levels";
+            break;
+        case GJTimedLevelType::Weekly:
+            m_title = "Weekly Demons";
+            break;
+        case GJTimedLevelType::Event:
+            m_title = "Event Levels";
+            break;
+    }
 
     BIViewLayer::loadPage();
 }
 
+GJSearchObject* DailyViewLayer::getSearchObject() {
+    switch(m_timedType){
+        default:
+        case GJTimedLevelType::Daily:
+            return GJSearchObject::create(SearchType::DailySafe);
+        case GJTimedLevelType::Weekly:
+            return GJSearchObject::create(SearchType::WeeklySafe);
+        case GJTimedLevelType::Event:
+            return GJSearchObject::create(SearchType::EventSafe);
+    }
+}
+
 void DailyViewLayer::onMore(CCObject* object) {
-    auto searchObject = GJSearchObject::create(m_isWeekly ? SearchType::WeeklySafe : SearchType::DailySafe);
-    auto browserLayer = LevelBrowserLayer::scene(searchObject);
+    auto browserLayer = LevelBrowserLayer::scene(getSearchObject());
 
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
 
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
 
-CCScene* DailyViewLayer::scene(bool isWeekly) {
-    auto layer = DailyViewLayer::create(isWeekly);
+CCScene* DailyViewLayer::scene(GJTimedLevelType timedType) {
+    auto layer = DailyViewLayer::create(timedType);
     auto scene = CCScene::create();
     scene->addChild(layer);
     return scene;

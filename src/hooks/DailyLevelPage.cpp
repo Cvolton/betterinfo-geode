@@ -11,8 +11,7 @@ class $modify(BIDailyLevelPage, DailyLevelPage) {
      * Callbacks
      */
     void onDailyHistory(CCObject* sender){
-        //TODO: support event levels
-        auto layer = DailyViewLayer::scene(m_type == GJTimedLevelType::Weekly);
+        auto layer = DailyViewLayer::scene(m_type);
         auto transitionFade = CCTransitionFade::create(0.5, layer);
         CCDirector::sharedDirector()->pushScene(transitionFade);
     }
@@ -30,6 +29,7 @@ class $modify(BIDailyLevelPage, DailyLevelPage) {
         auto GM = GameLevelManager::sharedState();
         auto winSize = CCDirector::sharedDirector()->getWinSize();
 
+        //2.21: event levels
         std::ostringstream currentDaily;
         currentDaily << "Current: #" << ((m_type == GJTimedLevelType::Weekly) ? GM->m_weeklyID % 100000 : GM->m_dailyID);
         auto currentDailyNode = CCLabelBMFont::create(currentDaily.str().c_str(), "chatFont.fnt");
