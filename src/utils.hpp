@@ -47,6 +47,7 @@ namespace BetterInfo {
     bool validateRangeItem(const BISearchObject::RangeItem& rangeItem, int value);
     bool levelMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
     bool levelProgressMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
+    std::vector<GJGameLevel*> completedLevelsInStarRange(int min, int max, bool platformer);
 
     void reloadUsernames(LevelBrowserLayer* levelBrowserLayer);
 
@@ -58,6 +59,7 @@ namespace BetterInfo {
     bool isHoveringNode(CCNode* target);
 
     bool isSprite(CCSprite* sprite, const char* name);
+    void replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler);
 
     UnlockType iconTypeToUnlockType(IconType type);
 }

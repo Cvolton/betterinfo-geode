@@ -349,6 +349,20 @@ bool BetterInfo::levelProgressMatchesObject(GJGameLevel* level, const BISearchOb
     return true;
 }
 
+std::vector<GJGameLevel*> BetterInfo::completedLevelsInStarRange(int min, int max, bool platformer) {
+    std::vector<GJGameLevel*> levels;
+
+    for(auto [key, level] : CCDictionaryExt<gd::string, GJGameLevel*>(GameLevelManager::sharedState()->m_onlineLevels)) {
+        if(level->m_normalPercent < 100) continue;
+        if(level->m_stars < min || level->m_stars > max) continue;
+        if((platformer && !level->isPlatformer()) || (!platformer && level->isPlatformer())) continue;
+
+        levels.push_back(level);
+    }
+
+    return levels;
+}
+
 void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
@@ -590,6 +604,32 @@ bool BetterInfo::isSprite(CCSprite* sprite, const char* name) {
     if(!cache) return false;
 
     return cache->getTexture() == sprite->getTexture() && cache->getRect() == sprite->getTextureRect();
+}
+
+void BetterInfo::replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler) {
+
+    auto parent = node->getParent();
+
+    auto idx = parent->getChildren()->indexOfObject(node);
+    node->removeFromParent();
+
+    auto button = CCMenuItemSpriteExtra::create(
+        node,
+        self,
+        handler
+    );
+    button->setLayoutOptions(node->getLayoutOptions());
+    button->setZOrder(node->getZOrder());
+
+    parent->getChildren()->insertObject(button, idx);
+    parent->updateLayout();
+
+    button->setParent(parent);
+
+    if(parent->isRunning()) {
+        button->onEnter();
+        button->onEnterTransitionDidFinish();
+    }
 }
 
 UnlockType BetterInfo::iconTypeToUnlockType(IconType type)

@@ -1,6 +1,6 @@
 #include "CvoltonAlertLayerStub.h"
 
-bool CvoltonAlertLayerStub::createBasics(CCPoint contentSize, SEL_MenuHandler onClose, float closeBtnScale, const ccColor4B &color){
+bool CvoltonAlertLayerStub::createBasics(CCPoint contentSize, SEL_MenuHandler onClose, float closeBtnScale, const ccColor4B &color, int squareNumber){
 	bool init = CCLayerColor::initWithColor(color);
     if(!init) return false;
 
@@ -17,7 +17,7 @@ bool CvoltonAlertLayerStub::createBasics(CCPoint contentSize, SEL_MenuHandler on
     this->addChild(m_mainLayer);
 
 	CCSize winSize = director->getWinSize();
-	extension::CCScale9Sprite* bg = extension::CCScale9Sprite::create("GJ_square01.png", { 0.0f, 0.0f, 80.0f, 80.0f });
+	extension::CCScale9Sprite* bg = extension::CCScale9Sprite::create(fmt::format("GJ_square{:02}.png", squareNumber).c_str(), { 0.0f, 0.0f, 80.0f, 80.0f });
     bg->setContentSize(m_alertSize);
     m_mainLayer->addChild(bg, -1);
     bg->setPosition({ winSize.width / 2, winSize.height / 2 });
