@@ -13,12 +13,6 @@ LevelIDLayer* LevelIDLayer::create(){
     return ret;
 }
 
-void LevelIDLayer::onClose(cocos2d::CCObject* sender)
-{
-    setKeypadEnabled(false);
-    removeFromParentAndCleanup(true);
-}
-
 int LevelIDLayer::getNumber(){
     int pageNumber = 1;
     try{
@@ -42,8 +36,7 @@ void LevelIDLayer::onAccountProfile(cocos2d::CCObject* sender){
 }
 
 bool LevelIDLayer::init(){
-    bool init = createBasics({220.0f, 150.0f}, menu_selector(LevelIDLayer::onClose), 0.8f);
-    if(!init) return false;
+    if(!CvoltonAlertLayerStub::init({220.0f, 150.0f}, 0.8f)) return false;
 
     auto title = createTextLabel("ID Search", {0,57}, 0.7f, m_buttonMenu, "goldFont.fnt");
     title->setID("title-label"_spr);
@@ -71,7 +64,6 @@ bool LevelIDLayer::init(){
         this,
         menu_selector(LevelIDLayer::onLevelComments)
     );
-    buttonButton->setSizeMult(1.2f);
     buttonButton->setPosition({-52,-45});
     buttonButton->setID("comments-button"_spr);
     m_buttonMenu->addChild(buttonButton);
@@ -82,7 +74,6 @@ bool LevelIDLayer::init(){
         this,
         menu_selector(LevelIDLayer::onAccountProfile)
     );
-    profileButton->setSizeMult(1.2f);
     profileButton->setPosition({52,-45});
     profileButton->setID("profile-button"_spr);
     m_buttonMenu->addChild(profileButton);

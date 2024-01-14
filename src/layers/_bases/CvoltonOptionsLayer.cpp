@@ -16,13 +16,11 @@ CvoltonOptionsLayer* CvoltonOptionsLayer::create(){
 void CvoltonOptionsLayer::onClose(cocos2d::CCObject* sender)
 {   
     destroyToggles();
-    setKeypadEnabled(false);
-    removeFromParentAndCleanup(true);
+    CvoltonAlertLayerStub::onClose(sender);
 }
 
 bool CvoltonOptionsLayer::init(){
-    bool init = createBasics({370.0f, 280.0f}, menu_selector(CvoltonOptionsLayer::onClose), 0.8f);
-    if(!init) return false;
+    if(!CvoltonAlertLayerStub::init({370.0f, 280.0f}, 0.8f)) return false;
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 

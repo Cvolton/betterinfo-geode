@@ -23,8 +23,7 @@ void LevelBrowserEndLayer::onClose(cocos2d::CCObject* sender)
     auto GLM = GameLevelManager::sharedState();
     GLM->m_levelManagerDelegate = nullptr;
 
-    setKeypadEnabled(false);
-    removeFromParentAndCleanup(true);
+    CvoltonAlertLayerStub::onClose(sender);
 }
 
 void LevelBrowserEndLayer::onOK(cocos2d::CCObject* sender){
@@ -46,8 +45,7 @@ void LevelBrowserEndLayer::onOK(cocos2d::CCObject* sender){
 }
 
 bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer){
-    bool init = createBasics({230.0f, 160.0f}, menu_selector(LevelBrowserEndLayer::onClose), 0.8f);
-    if(!init) return false;
+    if(!CvoltonAlertLayerStub::init({230.0f, 160.0f}, 0.8f)) return false;
 
     levelBrowserLayer->retain();
     m_levelBrowserLayer = levelBrowserLayer;

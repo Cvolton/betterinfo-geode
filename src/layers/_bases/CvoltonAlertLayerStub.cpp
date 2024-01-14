@@ -1,6 +1,6 @@
 #include "CvoltonAlertLayerStub.h"
 
-bool CvoltonAlertLayerStub::createBasics(CCPoint contentSize, SEL_MenuHandler onClose, float closeBtnScale, const ccColor4B &color, int squareNumber){
+bool CvoltonAlertLayerStub::init(CCPoint contentSize, float closeBtnScale, const ccColor4B &color, int squareNumber){
 	bool init = CCLayerColor::initWithColor(color);
     if(!init) return false;
 
@@ -27,7 +27,7 @@ bool CvoltonAlertLayerStub::createBasics(CCPoint contentSize, SEL_MenuHandler on
     m_buttonMenu->setID("button-menu"_spr);
     m_mainLayer->addChild(m_buttonMenu, 10);
 
-    m_closeBtn = createButton("GJ_closeBtn_001.png", {-((m_alertSize.x)/2) + 9.5f, (m_alertSize.y / 2) - 10}, onClose, closeBtnScale);
+    m_closeBtn = createButton("GJ_closeBtn_001.png", {-((m_alertSize.x)/2) + 9.5f, (m_alertSize.y / 2) - 10}, menu_selector(CvoltonAlertLayerStub::onCloseThunk), closeBtnScale);
     m_closeBtn->setID("close-button"_spr);
 
     return true;
@@ -64,4 +64,13 @@ CCMenuItemSpriteExtra* CvoltonAlertLayerStub::createButton(const char* texture, 
 
 void CvoltonAlertLayerStub::keyBackClicked() {
     onClose(nullptr);
+}
+
+void CvoltonAlertLayerStub::onCloseThunk(CCObject* sender) {
+    onClose(sender);
+}
+
+void CvoltonAlertLayerStub::onClose(CCObject* sender) {
+    setKeypadEnabled(false);
+    removeFromParentAndCleanup(true);
 }

@@ -20,8 +20,7 @@ CvoltonSearchOptions* CvoltonSearchOptions::create(){
 void CvoltonSearchOptions::onClose(cocos2d::CCObject* sender)
 {
     destroyToggles();
-    setKeypadEnabled(false);
-    removeFromParentAndCleanup(true);
+    CvoltonAlertLayerStub::onClose(sender);
 }
 
 void CvoltonSearchOptions::onInfo(cocos2d::CCObject* sender)
@@ -37,8 +36,7 @@ void CvoltonSearchOptions::onPrev(cocos2d::CCObject* sender)
 }
 
 bool CvoltonSearchOptions::init(){
-    bool init = createBasics({440.0f, 290.0f}, menu_selector(CvoltonSearchOptions::onClose), 1.f, {0x00, 0x00, 0x00, 0x96});
-    if(!init) return false;
+    if(!CvoltonAlertLayerStub::init({440.0f, 290.0f}, 1.f, {0x00, 0x00, 0x00, 0x96})) return false;
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 

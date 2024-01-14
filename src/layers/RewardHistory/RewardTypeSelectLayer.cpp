@@ -15,12 +15,6 @@ RewardTypeSelectLayer* RewardTypeSelectLayer::create(){
     return ret;
 }
 
-void RewardTypeSelectLayer::onClose(cocos2d::CCObject* sender)
-{
-    setKeypadEnabled(false);
-    removeFromParentAndCleanup(true);
-}
-
 void RewardTypeSelectLayer::onDaily(cocos2d::CCObject* sender)
 {
     auto browserLayer = RewardViewLayer::scene(GameStatsManager::sharedState()->m_dailyChests, "Daily");
@@ -50,8 +44,7 @@ void RewardTypeSelectLayer::onOther(cocos2d::CCObject* sender)
 }
 
 bool RewardTypeSelectLayer::init(){
-    bool init = createBasics({360,180}, menu_selector(RewardTypeSelectLayer::onClose));
-    if(!init) return false;
+    if(!CvoltonAlertLayerStub::init({360,180})) return false;
 
     createTitle("Chest History");
 

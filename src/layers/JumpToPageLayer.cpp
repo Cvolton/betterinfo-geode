@@ -42,8 +42,8 @@ void JumpToPageLayer::onClose(cocos2d::CCObject* sender)
 {
     if(m_infoLayer != nullptr) m_infoLayer->release();
     //if(m_pageNumberDelegate != nullptr) m_pageNumberDelegate->release();
-    setKeypadEnabled(false);
-    removeFromParentAndCleanup(true);
+    
+    CvoltonAlertLayerStub::onClose(sender);
 }
 
 void JumpToPageLayer::onPrev(cocos2d::CCObject* sender)
@@ -78,8 +78,7 @@ void JumpToPageLayer::onOK(cocos2d::CCObject* sender){
 }
 
 bool JumpToPageLayer::init(){
-    bool init = createBasics({220.0f, 150.0f}, menu_selector(JumpToPageLayer::onClose), 0.8f);
-    if(!init) return false;
+    if(!CvoltonAlertLayerStub::init({220.0f, 150.0f}, 0.8f)) return false;
 
     createTextLabel("Go to Page", {0,57}, 0.7f, m_buttonMenu, "goldFont.fnt")->setID("header-text"_spr);
 

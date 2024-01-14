@@ -5,7 +5,6 @@ class LevelIDLayer : public CvoltonAlertLayerStub {
     CCTextInputNode* m_textNode;
 public:
     static LevelIDLayer* create();
-    void onClose(cocos2d::CCObject* sender);
     void onLevelComments(cocos2d::CCObject* sender);
     void onAccountProfile(cocos2d::CCObject* sender);
     bool init();

@@ -17,15 +17,13 @@ ProfileSearchOptionsSongSelect* ProfileSearchOptionsSongSelect::create(SongDialo
 
 void ProfileSearchOptionsSongSelect::onClose(cocos2d::CCObject* sender)
 {
-    destroyToggles();
     m_delegate->onSongDialogClosed(getOption("user_search_song_custom"), songID());
-    setKeypadEnabled(false);
-    removeFromParentAndCleanup(true);
+    
+    CvoltonOptionsLayer::onClose(sender);
 }
 
 bool ProfileSearchOptionsSongSelect::init(SongDialogCloseDelegate* delegate){
-    bool init = createBasics({240.0f, 150.0f}, menu_selector(ProfileSearchOptionsSongSelect::onClose), .8f, {0x00, 0x00, 0x00, 0x96});
-    if(!init) return false;
+    if(!CvoltonAlertLayerStub::init({240.0f, 150.0f}, .8f, {0x00, 0x00, 0x00, 0x96})) return false;
 
     m_delegate = delegate;
 

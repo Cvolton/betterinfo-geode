@@ -18,8 +18,8 @@ void UnregisteredProfileLayer::onClose(CCObject* sender)
 {
     m_score->release();
     if(m_invoker != nullptr) m_invoker->release();
-    setKeypadEnabled(false);
-    removeFromParentAndCleanup(true);
+    
+    CvoltonAlertLayerStub::onClose(sender);
 }
 
 void UnregisteredProfileLayer::onCopyUserID(CCObject* sender)
@@ -65,8 +65,7 @@ void UnregisteredProfileLayer::onCommentHistory(CCObject* sender) {
 }
 
 bool UnregisteredProfileLayer::init(GJUserScore* score, CCNode* invoker){
-    bool init = createBasics({360,180}, menu_selector(UnregisteredProfileLayer::onClose));
-    if(!init) return false;
+    if(!CvoltonAlertLayerStub::init({360,180})) return false;
 
     score->retain();
     m_score = score;

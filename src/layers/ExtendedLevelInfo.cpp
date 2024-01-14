@@ -29,8 +29,8 @@ void ExtendedLevelInfo::onClose(cocos2d::CCObject* sender)
 {
     BetterInfoCache::sharedState()->m_uploadDateDelegate = nullptr;
     m_level->release();
-    setKeypadEnabled(false);
-    removeFromParentAndCleanup(true);
+    
+    CvoltonAlertLayerStub::onClose(sender);
 }
 
 void ExtendedLevelInfo::onCopyName(cocos2d::CCObject* sender)
@@ -137,8 +137,7 @@ void ExtendedLevelInfo::setupAdditionalInfo() {
 }
 
 bool ExtendedLevelInfo::init(GJGameLevel* level){
-    bool init = createBasics({440.0f, 290.0f}, menu_selector(ExtendedLevelInfo::onClose));
-    if(!init) return false;
+    if(!CvoltonAlertLayerStub::init({440.0f, 290.0f})) return false;
 
     level->retain();
     this->m_level = level;

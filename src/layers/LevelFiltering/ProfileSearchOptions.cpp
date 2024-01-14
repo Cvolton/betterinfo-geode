@@ -19,12 +19,11 @@ ProfileSearchOptions* ProfileSearchOptions::create(LevelBrowserLayer* levelBrows
 
 void ProfileSearchOptions::onClose(cocos2d::CCObject* sender)
 {
-    destroyToggles();
     if(m_searchObjDelegate != nullptr) m_searchObjDelegate->onSearchObjectFinished(getSearchObject());
     reloadBrowser();
     if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->release();
-    setKeypadEnabled(false);
-    removeFromParentAndCleanup(true);
+    
+    CvoltonOptionsLayer::onClose(sender);
 }
 
 void ProfileSearchOptions::onPrev(cocos2d::CCObject* sender)
@@ -84,8 +83,7 @@ void ProfileSearchOptions::onSecondaryInfo(cocos2d::CCObject* sender){
 }
 
 bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std::string& prefix, BISearchObjectDelegate* searchObjDelegate){
-    bool init = createBasics({440.0f, 290.0f}, menu_selector(ProfileSearchOptions::onClose), 1.f, {0x00, 0x00, 0x00, 0x96});
-    if(!init) return false;
+    if(!CvoltonAlertLayerStub::init({440.0f, 290.0f}, 1.f, {0x00, 0x00, 0x00, 0x96})) return false;
 
     this->m_levelBrowserLayer = levelBrowserLayer;
     if(levelBrowserLayer != nullptr) levelBrowserLayer->retain();
