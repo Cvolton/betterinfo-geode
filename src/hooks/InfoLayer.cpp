@@ -53,11 +53,8 @@ class $modify(BIInfoLayer, InfoLayer) {
 
         auto senderBtn = static_cast<CCMenuItemToggler*>(sender);
 
-        bool newState = !(reinterpret_cast<size_t>(senderBtn->getUserData()));
-        senderBtn->setUserData(reinterpret_cast<void*>(newState));
-
         const char* text = "Live Comment Refresh: Enabled";
-        if(newState) {
+        if(!senderBtn->m_toggled) {
             this->getScheduler()->scheduleSelector(schedule_selector(BIInfoLayer::onInfoLayerSchedule), this, 2, false);
         } else {
             text = "Live Comment Refresh: Disabled";
@@ -108,10 +105,9 @@ class $modify(BIInfoLayer, InfoLayer) {
             this,
             menu_selector(BIInfoLayer::onInfoLayerToggleSchedule)
         );
-        scheduleBtn->setUserData(reinterpret_cast<void*>(false));
         scheduleBtn->setPosition({202.5, 100});
-        m_buttonMenu->addChild(scheduleBtn);
         scheduleBtn->setID("schedule-btn"_spr);
+        m_buttonMenu->addChild(scheduleBtn);
 
         if(auto originalBtn = m_buttonMenu->getChildByID("original-level-button")) {
             if(originalBtn->getPositionX() > 155.4f) originalBtn->setPosition({155.4f, originalBtn->getPositionY()});
