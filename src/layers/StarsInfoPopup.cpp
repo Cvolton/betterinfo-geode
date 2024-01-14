@@ -53,6 +53,7 @@ bool StarsInfoPopup::init(){
     m_closeBtn->setVisible(false);
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
+    auto GLM = GameLevelManager::sharedState();
 
     auto diffMenu = CCMenu::create();
     diffMenu->setLayout(
@@ -74,6 +75,18 @@ bool StarsInfoPopup::init(){
     thirdRowMenu->setContentSize(diffMenu->getContentSize());
     thirdRowMenu->setPosition({winSize.width / 2, winSize.height / 2 - 35});
     m_mainLayer->addChild(thirdRowMenu);
+
+    auto cornerMenu = CCMenu::create();
+    cornerMenu->setLayout(ColumnLayout::create()
+        ->setGap(14.f)
+        ->setAxisAlignment(AxisAlignment::Start)
+        ->setCrossAxisLineAlignment(AxisAlignment::End)
+        ->setAxisReverse(true)
+    );
+    cornerMenu->setContentSize({100, 182});
+    cornerMenu->setPosition({winSize.width / 2 + 178, winSize.height / 2});
+    cornerMenu->setAnchorPoint({1, .5f});
+    m_mainLayer->addChild(cornerMenu);
 
     for(int i = -1; i < 6; i++) {
         //if(i == 0) continue;
@@ -127,6 +140,21 @@ bool StarsInfoPopup::init(){
     buttonButton->setSizeMult(1.2f);
     buttonButton->setPosition({0, -80});
     m_buttonMenu->addChild(buttonButton);
+
+    auto cornerFont1 = CCLabelBMFont::create(fmt::format("Daily: {}", BetterInfo::completedLevelsInStarRange(0, 10, false, GLM->m_dailyLevels).size() + BetterInfo::completedLevelsInStarRange(0, 10, true, GLM->m_dailyLevels).size()).c_str(), "goldFont.fnt");
+    cornerFont1->setLayoutOptions(AxisLayoutOptions::create()
+        ->setMinScale(.0f)
+        ->setMaxScale(.4f)
+    );
+    cornerFont1->setAnchorPoint({1, 0});
+    cornerMenu->addChild(cornerFont1);
+
+    auto cornerFont2 = CCLabelBMFont::create(fmt::format("Gauntlet: {}", BetterInfo::completedLevelsInStarRange(0, 10, false, GLM->m_gauntletLevels).size() + BetterInfo::completedLevelsInStarRange(0, 10, true, GLM->m_gauntletLevels).size()).c_str(), "goldFont.fnt");
+    cornerFont2->setLayoutOptions(cornerFont1->getLayoutOptions());
+    cornerFont2->setAnchorPoint(cornerFont1->getAnchorPoint());
+    cornerMenu->addChild(cornerFont2);
+
+    cornerMenu->updateLayout();
 
     return true;
 }

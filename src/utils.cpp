@@ -349,10 +349,10 @@ bool BetterInfo::levelProgressMatchesObject(GJGameLevel* level, const BISearchOb
     return true;
 }
 
-std::vector<GJGameLevel*> BetterInfo::completedLevelsInStarRange(int min, int max, bool platformer) {
+std::vector<GJGameLevel*> BetterInfo::completedLevelsInStarRange(int min, int max, bool platformer, CCDictionary* dict) {
     std::vector<GJGameLevel*> levels;
 
-    for(auto [key, level] : CCDictionaryExt<gd::string, GJGameLevel*>(GameLevelManager::sharedState()->m_onlineLevels)) {
+    for(auto [key, level] : CCDictionaryExt<gd::string, GJGameLevel*>(dict)) {
         if(level->m_normalPercent < 100) continue;
         if(level->m_stars < min || level->m_stars > max) continue;
         if((platformer && !level->isPlatformer()) || (!platformer && level->isPlatformer())) continue;

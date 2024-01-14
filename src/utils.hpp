@@ -47,7 +47,7 @@ namespace BetterInfo {
     bool validateRangeItem(const BISearchObject::RangeItem& rangeItem, int value);
     bool levelMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
     bool levelProgressMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
-    std::vector<GJGameLevel*> completedLevelsInStarRange(int min, int max, bool platformer);
+    std::vector<GJGameLevel*> completedLevelsInStarRange(int min, int max, bool platformer, CCDictionary* dict = GameLevelManager::sharedState()->m_onlineLevels);
 
     void reloadUsernames(LevelBrowserLayer* levelBrowserLayer);
 
