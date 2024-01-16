@@ -14,6 +14,7 @@ public:
     virtual void drawToggles();
     static cocos2d::CCLabelBMFont* createTextLabel(const std::string text, const cocos2d::CCPoint& position, const float scale, cocos2d::CCNode* menu, const char* font = "bigFont.fnt");
     void createToggle(const char* option, const char* name);
+    void createToggle(const char* option, const char* name, float x, float y, cocos2d::SEL_MenuHandler additional = nullptr);
     void createButtonToggle(const char* option, cocos2d::CCNode* sprite, float x, float y, float scale = 1.f);
 
     virtual bool getOption(const std::string& option) const;

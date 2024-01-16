@@ -39,7 +39,6 @@ public:
     void drawTogglesPrimary();
     void drawTogglesSecondary();
     void drawTogglesTerciary();
-    void createToggle(const char* option, const char* name, float x, float y, cocos2d::SEL_MenuHandler additional = nullptr);
     void onSongDialogClosed(bool custom, int songID);
     void onIDRangeFinished(int min, int max, int additional);
     bool getOption(const std::string& option) const;

@@ -10,7 +10,6 @@ public:
     void onInfo(cocos2d::CCObject* sender);
     bool init();
     void drawToggles();
-    void createToggle(const char* option, const char* name, float x, float y);
     void onCompletedPrev(cocos2d::CCObject* sender);
     void onCompletedNext(cocos2d::CCObject* sender);
     void onPercentageRange(cocos2d::CCObject* sender);

@@ -12,7 +12,6 @@ public:
     bool init(SongDialogCloseDelegate* delegate);
     void drawToggles();
     int songID();
-    void createToggle(const char* option, const char* name, float x, float y);
     void onSaved(CCObject* sender);
 
     virtual void dropDownLayerWillClose(GJDropDownLayer*);

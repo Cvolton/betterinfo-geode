@@ -51,8 +51,10 @@ void CvoltonOptionsLayer::onToggle(cocos2d::CCObject* sender)
 }
 
 void CvoltonOptionsLayer::createToggle(const char* option, const char* name){
-    float y = 85.f - (m_toggleCount++ * 40.f);
-    
+    createToggle(option, name, -157, 85.f - (m_toggleCount++ * 40.f));
+}
+
+void CvoltonOptionsLayer::createToggle(const char* option, const char* name, float x, float y, SEL_MenuHandler additional){
     auto buttonSprite = CCSprite::createWithSpriteFrameName(getOption(option) ? "GJ_checkOn_001.png" : "GJ_checkOff_001.png");
     buttonSprite->setScale(0.8f);
     auto button = CCMenuItemSpriteExtra::create(
@@ -61,17 +63,23 @@ void CvoltonOptionsLayer::createToggle(const char* option, const char* name){
         menu_selector(CvoltonOptionsLayer::onToggle)
     );
     button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
-    button->setPosition({-157, y});
+    button->setPosition({x, y});
     m_buttonMenu->addChild(button);
     m_toggles.push_back(button);
 
     auto optionString = CCString::create(option);
     button->setUserObject(optionString);
 
-    auto label = createTextLabel(name, {-137, y}, 0.5f, m_buttonMenu);
+    auto label = createTextLabel(name, {x + 20, y}, 0.5f, m_buttonMenu);
     label->setAnchorPoint({0,0.5f});
+    label->limitLabelWidth(60, 0.5f, 0);
     label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
     m_toggles.push_back(label);
+
+    if(getOption(option) && additional) {
+        auto button = createButton("GJ_plusBtn_001.png", {x + 98, y}, additional, .65f);
+        m_toggles.push_back(button);
+    }
 }
 
 void CvoltonOptionsLayer::createButtonToggle(const char* option, CCNode* sprite, float x, float y, float scale){

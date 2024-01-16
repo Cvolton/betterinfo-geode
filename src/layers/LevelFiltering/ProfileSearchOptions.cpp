@@ -143,34 +143,6 @@ void ProfileSearchOptions::reloadBrowser(){
     if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
 }
 
-void ProfileSearchOptions::createToggle(const char* option, const char* name, float x, float y, SEL_MenuHandler additional){
-    auto buttonSprite = CCSprite::createWithSpriteFrameName(getOption(option) ? "GJ_checkOn_001.png" : "GJ_checkOff_001.png");
-    buttonSprite->setScale(0.8f);
-    auto button = CCMenuItemSpriteExtra::create(
-        buttonSprite,
-        this,
-        menu_selector(ProfileSearchOptions::onToggle)
-    );
-    button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
-    button->setPosition({x, y});
-    m_buttonMenu->addChild(button);
-    m_toggles.push_back(button);
-
-    auto optionString = CCString::create(option);
-    button->setUserObject(optionString);
-
-    auto label = createTextLabel(name, {x + 20, y}, 0.5f, m_buttonMenu);
-    label->setAnchorPoint({0,0.5f});
-    label->limitLabelWidth(60, 0.5f, 0);
-    label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
-    m_toggles.push_back(label);
-
-    if(getOption(option) && additional) {
-        auto button = createButton("GJ_plusBtn_001.png", {x + 98, y}, additional, .65f);
-        m_toggles.push_back(button);
-    }
-}
-
 void ProfileSearchOptions::drawToggles(){
     switch(m_page % 3) {
         default:
