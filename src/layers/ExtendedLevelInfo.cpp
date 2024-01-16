@@ -243,7 +243,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
         starsLabel->setAnchorPoint({1,0.5});
         starsLabel->setID("stars-label"_spr);
 
-        auto diffSprite = CCSprite::createWithSpriteFrameName("star_small01_001.png");
+        auto diffSprite = CCSprite::createWithSpriteFrameName(m_level->isPlatformer() ? "moon_small01_001.png" : "star_small01_001.png");
         diffSprite->setPosition({95,-87});
         diffSprite->setID("stars-sprite"_spr);
         m_buttonMenu->addChild(diffSprite);
