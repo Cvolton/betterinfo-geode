@@ -34,7 +34,7 @@ bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char*
     if(min != 0) m_minNode->setString(std::to_string(min).c_str());
     m_minNode->setAllowedChars("0123456789");
     m_minNode->setMaxLabelScale(0.7f);
-    m_minNode->setMaxLabelWidth(11);
+    m_minNode->setMaxLabelWidth(90);
     m_minNode->setPosition({0,6});
     m_minNode->setID("min-input"_spr);
     m_buttonMenu->addChild(m_minNode);
@@ -44,7 +44,7 @@ bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char*
     if(max != 0) m_maxNode->setString(std::to_string(max).c_str());
     m_maxNode->setAllowedChars("0123456789");
     m_maxNode->setMaxLabelScale(0.7f);
-    m_maxNode->setMaxLabelWidth(11);
+    m_maxNode->setMaxLabelWidth(90);
     m_maxNode->setPosition({0,-37});
     m_maxNode->setID("max-input"_spr);
     m_buttonMenu->addChild(m_maxNode);

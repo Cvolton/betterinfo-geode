@@ -88,7 +88,7 @@ bool JumpToPageLayer::init(){
     if(m_pageNumberDelegate != nullptr) m_textNode->setString(std::to_string(m_pageNumberDelegate->getPage()+1).c_str());
     m_textNode->setAllowedChars("0123456789");
     m_textNode->setMaxLabelScale(0.7f);
-    m_textNode->setMaxLabelWidth(11);
+    m_textNode->setMaxLabelWidth(40);
     m_textNode->setPosition({0,6});
     m_textNode->setID("text-input"_spr);
     m_buttonMenu->addChild(m_textNode);
