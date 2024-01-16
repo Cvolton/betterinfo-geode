@@ -91,7 +91,7 @@ class $modify(GameLevelManager) {
         return pRet;
     }
 
-    /*CCArray* getSavedLevels(bool filter, int folderID){
+    CCArray* getSavedLevels(bool filter, int folderID){
         CCArray* original = GameLevelManager::getSavedLevels(filter, folderID);
 
         if(m_fields->skipSavedFilter || !BetterInfo::isSavedFiltered()) return original;
@@ -206,5 +206,5 @@ class $modify(GameLevelManager) {
         GameLevelManager::limitSavedLevels();
 
         m_fields->skipSavedFilter = false;
-    }*/
+    }
 };
