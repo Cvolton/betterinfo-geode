@@ -43,7 +43,7 @@ void CvoltonOptionsLayer::onToggle(cocos2d::CCObject* sender)
 {
     sender->retain();
     auto button = static_cast<CCMenuItemSpriteExtra*>(sender);
-    toggleOption(static_cast<CCString*>(button->getUserData())->getCString());
+    toggleOption(static_cast<CCString*>(button->getUserObject())->getCString());
 
     destroyToggles();
     drawToggles();
@@ -51,6 +51,7 @@ void CvoltonOptionsLayer::onToggle(cocos2d::CCObject* sender)
 }
 
 void CvoltonOptionsLayer::createToggle(const char* option, const char* name){
+    float y = 85.f - (m_toggleCount++ * 40.f);
     
     auto buttonSprite = CCSprite::createWithSpriteFrameName(getOption(option) ? "GJ_checkOn_001.png" : "GJ_checkOff_001.png");
     buttonSprite->setScale(0.8f);
@@ -60,17 +61,17 @@ void CvoltonOptionsLayer::createToggle(const char* option, const char* name){
         menu_selector(CvoltonOptionsLayer::onToggle)
     );
     button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
-    m_buttonMenu->addChild(button);
-    float y = 85.f - (m_toggleCount++ * 40.f);
     button->setPosition({-157, y});
+    m_buttonMenu->addChild(button);
+    m_toggles.push_back(button);
+
     auto optionString = CCString::create(option);
-    optionString->retain();
-    button->setUserData(optionString);
-    button->setSizeMult(1.2f);
+    button->setUserObject(optionString);
 
     auto label = createTextLabel(name, {-137, y}, 0.5f, m_buttonMenu);
     label->setAnchorPoint({0,0.5f});
     label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
+    m_toggles.push_back(label);
 }
 
 void CvoltonOptionsLayer::createButtonToggle(const char* option, CCNode* sprite, float x, float y, float scale){
@@ -82,26 +83,20 @@ void CvoltonOptionsLayer::createButtonToggle(const char* option, CCNode* sprite,
         menu_selector(CvoltonOptionsLayer::onToggle)
     );
     button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
-    m_buttonMenu->addChild(button);
     button->setPosition({x, y});
     if(!getOption(option)) button->setColor({125,125,125});
+    m_buttonMenu->addChild(button);
+    m_toggles.push_back(button);
+
     auto optionString = CCString::create(option);
-    optionString->retain();
-    button->setUserData(optionString);
-    button->setSizeMult(1.2f);
+    button->setUserObject(optionString);
 }
 
 void CvoltonOptionsLayer::destroyToggles(){
-    //starting at 1 because 0 is the close button
-    unsigned int totalMembers = m_buttonMenu->getChildrenCount();
-    for(unsigned int i = 1; i < totalMembers; i++){
-        //static index 1 because we're actively moving the elements
-        auto object = static_cast<CCNode*>(m_buttonMenu->getChildren()->objectAtIndex(1));
-        auto userData = object->getUserData();
-        if(userData != nullptr) static_cast<CCString*>(userData)->release();
-        //m_buttonMenu->removeChild(object, false);
-        object->removeFromParent();
+    for(auto toggle : m_toggles) {
+        toggle->removeFromParent();
     }
+    m_toggles.clear();
     m_toggleCount = 0;
 }
 

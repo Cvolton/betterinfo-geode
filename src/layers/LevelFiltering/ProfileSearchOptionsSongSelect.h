@@ -10,7 +10,6 @@ public:
     static ProfileSearchOptionsSongSelect* create(SongDialogCloseDelegate* delegate);
     void onClose(cocos2d::CCObject* sender);
     bool init(SongDialogCloseDelegate* delegate);
-    void destroyToggles();
     void drawToggles();
     int songID();
     void createToggle(const char* option, const char* name, float x, float y);

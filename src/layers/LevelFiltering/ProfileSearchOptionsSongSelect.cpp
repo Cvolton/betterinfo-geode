@@ -44,11 +44,10 @@ bool ProfileSearchOptionsSongSelect::init(SongDialogCloseDelegate* delegate){
     auto infoBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
     infoBg->setContentSize({200,60});
     infoBg->setColor({123,60,31});
-    m_buttonMenu->addChild(infoBg, -1);
     infoBg->setPosition({0,-37});
     infoBg->setScale(0.6f);
     infoBg->setID("song-id-bg"_spr);
-    //createTextLabel("Advanced Options", {(winSize.width / 2), (winSize.height / 2) + 125}, 1.f, m_pLayer, "bigFont.fnt");
+    m_buttonMenu->addChild(infoBg, -1);
 
     drawToggles();
 
@@ -64,31 +63,18 @@ void ProfileSearchOptionsSongSelect::createToggle(const char* option, const char
         menu_selector(ProfileSearchOptionsSongSelect::onToggle)
     );
     button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
-    m_buttonMenu->addChild(button);
     button->setPosition({x, y});
+    m_buttonMenu->addChild(button);
+    m_toggles.push_back(button);
+
     auto optionString = CCString::create(option);
-    optionString->retain();
-    button->setUserData(optionString);
-    button->setSizeMult(1.2f);
+    button->setUserObject(optionString);
 
     auto label = createTextLabel(name, {x + 20, y}, 0.5f, m_buttonMenu);
     label->setAnchorPoint({0,0.5f});
     label->limitLabelWidth(80, 0.5f, 0);
     label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
-}
-
-void ProfileSearchOptionsSongSelect::destroyToggles(){
-    //starting at 1 because 0 is the close button and 1 is the prev button
-    unsigned int totalMembers = m_buttonMenu->getChildrenCount();
-    for(unsigned int i = 5; i < totalMembers; i++){
-        //static index 1 because we're actively moving the elements
-        auto object = static_cast<CCNode*>(m_buttonMenu->getChildren()->objectAtIndex(5));
-        auto userData = object->getUserData();
-        if(userData != nullptr) static_cast<CCString*>(userData)->release();
-        //m_buttonMenu->removeChild(object, false);
-        object->removeFromParent();
-    }
-    m_toggleCount = 0;
+    m_toggles.push_back(label);
 }
 
 void ProfileSearchOptionsSongSelect::drawToggles(){
@@ -106,8 +92,8 @@ void ProfileSearchOptionsSongSelect::drawToggles(){
     m_savedBtn->setPosition({88, -39});
     m_savedBtn->setID("saved-button"_spr);
     m_savedBtn->setVisible(getOption("user_search_song_custom"));
-    m_savedBtn->setVisible(getOption("user_search_song_custom"));
     m_buttonMenu->addChild(m_savedBtn);
+    m_toggles.push_back(m_savedBtn);
 }
 
 int ProfileSearchOptionsSongSelect::songID(){

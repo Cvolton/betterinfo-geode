@@ -143,28 +143,6 @@ void ProfileSearchOptions::reloadBrowser(){
     if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
 }
 
-void ProfileSearchOptions::createToggle(const char* option, const char* name, float x, float y){
-    auto buttonSprite = CCSprite::createWithSpriteFrameName(getOption(option) ? "GJ_checkOn_001.png" : "GJ_checkOff_001.png");
-    buttonSprite->setScale(0.8f);
-    auto button = CCMenuItemSpriteExtra::create(
-        buttonSprite,
-        this,
-        menu_selector(ProfileSearchOptions::onToggle)
-    );
-    button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
-    m_buttonMenu->addChild(button);
-    button->setPosition({x, y});
-    auto optionString = CCString::create(option);
-    optionString->retain();
-    button->setUserData(optionString);
-    button->setSizeMult(1.2f);
-
-    auto label = createTextLabel(name, {x + 20, y}, 0.5f, m_buttonMenu);
-    label->setAnchorPoint({0,0.5f});
-    label->limitLabelWidth(80, 0.5f, 0);
-    label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
-}
-
 void ProfileSearchOptions::createToggle(const char* option, const char* name, float x, float y, SEL_MenuHandler additional){
     auto buttonSprite = CCSprite::createWithSpriteFrameName(getOption(option) ? "GJ_checkOn_001.png" : "GJ_checkOff_001.png");
     buttonSprite->setScale(0.8f);
@@ -174,33 +152,23 @@ void ProfileSearchOptions::createToggle(const char* option, const char* name, fl
         menu_selector(ProfileSearchOptions::onToggle)
     );
     button->setID(Mod::get()->expandSpriteName(fmt::format("{}-toggle", option).c_str()));
-    m_buttonMenu->addChild(button);
     button->setPosition({x, y});
+    m_buttonMenu->addChild(button);
+    m_toggles.push_back(button);
+
     auto optionString = CCString::create(option);
-    optionString->retain();
-    button->setUserData(optionString);
-    button->setSizeMult(1.2f);
+    button->setUserObject(optionString);
 
     auto label = createTextLabel(name, {x + 20, y}, 0.5f, m_buttonMenu);
     label->setAnchorPoint({0,0.5f});
     label->limitLabelWidth(60, 0.5f, 0);
     label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
+    m_toggles.push_back(label);
 
-    if(getOption(option)) createButton("GJ_plusBtn_001.png", {x + 98, y}, additional, .65f);
-}
-
-void ProfileSearchOptions::destroyToggles(){
-    //starting at 1 because 0 is the close button and 1 is the prev button
-    unsigned int totalMembers = m_buttonMenu->getChildrenCount();
-    for(unsigned int i = 6; i < totalMembers; i++){
-        //static index 1 because we're actively moving the elements
-        auto object = static_cast<CCNode*>(m_buttonMenu->getChildren()->objectAtIndex(6));
-        auto userData = object->getUserData();
-        if(userData != nullptr) static_cast<CCString*>(userData)->release();
-        //m_buttonMenu->removeChild(object, false);
-        object->removeFromParent();
+    if(getOption(option) && additional) {
+        auto button = createButton("GJ_plusBtn_001.png", {x + 98, y}, additional, .65f);
+        m_toggles.push_back(button);
     }
-    m_toggleCount = 0;
 }
 
 void ProfileSearchOptions::drawToggles(){
@@ -231,8 +199,10 @@ void ProfileSearchOptions::drawTogglesPrimary(){
 
     auto timeIcon = CCSprite::createWithSpriteFrameName("GJ_timeIcon_001.png");
     timeIcon->setID("time-icon"_spr);
-    m_buttonMenu->addChild(timeIcon);
     timeIcon->setPosition({-193, -120});
+    m_buttonMenu->addChild(timeIcon);
+    m_toggles.push_back(timeIcon);
+
     createButtonToggle("len_00", CCLabelBMFont::create("Tiny", "bigFont.fnt"), -142, -119, 0.6f);
     createButtonToggle("len_01", CCLabelBMFont::create("Short", "bigFont.fnt"), -69, -119, 0.6f);
     createButtonToggle("len_02", CCLabelBMFont::create("Medium", "bigFont.fnt"), 16, -119, 0.6f);
@@ -287,6 +257,7 @@ void ProfileSearchOptions::drawTogglesSecondary(){
 
     auto infoBtn = createButton("GJ_infoIcon_001.png", {203, 128}, menu_selector(ProfileSearchOptions::onSecondaryInfo));
     infoBtn->setID("info-button"_spr);
+    m_toggles.push_back(infoBtn);
 
     createToggle("copied", "Copied", -170, 80);
     createToggle("downloaded", "Downloaded", -40, 80);

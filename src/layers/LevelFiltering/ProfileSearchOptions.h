@@ -10,8 +10,8 @@
 using namespace geode::prelude;
 
 class ProfileSearchOptions : public CvoltonOptionsLayer, public SongDialogCloseDelegate, public IDRangeDelegate {
-    std::map<std::string, bool> m_options;
-    std::map<std::string, int> m_optionInts;
+    std::unordered_map<std::string, bool> m_options;
+    std::unordered_map<std::string, int> m_optionInts;
     LevelBrowserLayer* m_levelBrowserLayer = nullptr;
     CCMenuItemSpriteExtra* m_prevBtn = nullptr;
     CCMenuItemSpriteExtra* m_nextBtn = nullptr;
@@ -35,13 +35,11 @@ public:
     void onSecondaryInfo(cocos2d::CCObject* sender);
     bool init(LevelBrowserLayer* levelBrowserLayer = nullptr, const std::string& prefix = "", BISearchObjectDelegate* searchObjDelegate = nullptr);
     void reloadBrowser();
-    void destroyToggles();
     void drawToggles();
     void drawTogglesPrimary();
     void drawTogglesSecondary();
     void drawTogglesTerciary();
-    void createToggle(const char* option, const char* name, float x, float y);
-    void createToggle(const char* option, const char* name, float x, float y, cocos2d::SEL_MenuHandler additional);
+    void createToggle(const char* option, const char* name, float x, float y, cocos2d::SEL_MenuHandler additional = nullptr);
     void onSongDialogClosed(bool custom, int songID);
     void onIDRangeFinished(int min, int max, int additional);
     bool getOption(const std::string& option) const;

@@ -1,5 +1,5 @@
 #pragma once
-#include "../_bases/CvoltonOptionsLayer.h"
+#include "../_bases/CvoltonAlertLayerStub.h"
 #include "../../delegates/IDRangeDelegate.h"
 
 class IDRangePopup : public CvoltonAlertLayerStub {

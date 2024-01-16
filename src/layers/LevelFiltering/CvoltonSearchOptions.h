@@ -9,7 +9,6 @@ public:
     void onPrev(cocos2d::CCObject* sender);
     void onInfo(cocos2d::CCObject* sender);
     bool init();
-    void destroyToggles();
     void drawToggles();
     void createToggle(const char* option, const char* name, float x, float y);
     void onCompletedPrev(cocos2d::CCObject* sender);

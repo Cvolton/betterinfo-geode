@@ -4,6 +4,7 @@
 class CvoltonOptionsLayer : public CvoltonAlertLayerStub {
 protected:
     int m_toggleCount = 0;
+    std::vector<CCNode*> m_toggles;
 public:
     static CvoltonOptionsLayer* create();
     void onClose(cocos2d::CCObject* sender);
