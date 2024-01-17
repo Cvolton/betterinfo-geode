@@ -50,8 +50,15 @@ void CvoltonOptionsLayer::onToggle(cocos2d::CCObject* sender)
     sender->release();
 }
 
-void CvoltonOptionsLayer::createToggle(const char* option, const char* name){
-    createToggle(option, name, -157, 85.f - (m_toggleCount++ * 40.f));
+void CvoltonOptionsLayer::createToggle(const char* option, const char* name, SEL_MenuHandler additional){
+    float width = m_alertSize.x - 50;
+
+    float x = -170 + floor(width / m_columns) * floor(m_toggleCount % m_columns);
+    float y = m_top - m_gap * floor(m_toggleCount / m_columns);
+
+    createToggle(option, name, x, y, additional);
+
+    m_toggleCount++;
 }
 
 void CvoltonOptionsLayer::createToggle(const char* option, const char* name, float x, float y, SEL_MenuHandler additional){
@@ -72,13 +79,14 @@ void CvoltonOptionsLayer::createToggle(const char* option, const char* name, flo
 
     auto label = createTextLabel(name, {x + 20, y}, 0.5f, m_buttonMenu);
     label->setAnchorPoint({0,0.5f});
-    label->limitLabelWidth(60, 0.5f, 0);
+    label->limitLabelWidth(80, 0.35f, 0);
     label->setID(Mod::get()->expandSpriteName(fmt::format("{}-label", option).c_str()));
     m_toggles.push_back(label);
 
     if(getOption(option) && additional) {
-        auto button = createButton("GJ_plusBtn_001.png", {x + 98, y}, additional, .65f);
+        auto button = createButton("GJ_plusBtn_001.png", {x + 101, y}, additional, .5f);
         m_toggles.push_back(button);
+        label->limitLabelWidth(68, 0.35f, 0);
     }
 }
 

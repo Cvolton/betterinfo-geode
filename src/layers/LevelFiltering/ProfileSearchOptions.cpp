@@ -85,6 +85,10 @@ void ProfileSearchOptions::onSecondaryInfo(cocos2d::CCObject* sender){
 bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std::string& prefix, BISearchObjectDelegate* searchObjDelegate){
     if(!CvoltonAlertLayerStub::init({440.0f, 290.0f}, 1.f, {0x00, 0x00, 0x00, 0x96})) return false;
 
+    m_columns = 3;
+    m_top = 96;
+    m_gap = 39;
+
     this->m_levelBrowserLayer = levelBrowserLayer;
     if(levelBrowserLayer != nullptr) levelBrowserLayer->retain();
     this->m_prefix = prefix;
@@ -92,7 +96,7 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    auto title = createTextLabel("Level Filters", {(winSize.width / 2), (winSize.height / 2) + 125}, 1.f, m_mainLayer, "bigFont.fnt");
+    auto title = createTextLabel("Level Filters", {(winSize.width / 2), (winSize.height / 2) + 127}, .7f, m_mainLayer, "goldFont.fnt");
     title->setID("title-label"_spr);
 
     m_lengthBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
@@ -194,15 +198,17 @@ void ProfileSearchOptions::drawTogglesPrimary(){
     createButtonToggle("diff_auto", CCSprite::createWithSpriteFrameName("difficulty_auto_btn_001.png"), 187, -70, .9f);
 
     //40 -60, 170 -60, 300 -60, 40 -110
-    createToggle("nofeatured", "Not Featured", -170, 80);
-    createToggle("noepic", "Not Epic", -40, 80);
-    createToggle("featured", "Featured", 90, 80);
-    createToggle("original", "Original", -170, 35);
-    createToggle("epic", "Epic", -40, 35);
-    createToggle("song", "Song", 90, 35, menu_selector(ProfileSearchOptions::onSong));
-    createToggle("nostar", "No Star", -170, -10);
-    createToggle("coins", "Coins", -40, -10);
-    createToggle("nocoins", "No Coins", 90, -10);
+    createToggle("nofeatured", "Not Featured");
+    createToggle("noepic", "Not Epic");
+    createToggle("original", "Original");
+    createToggle("coins", "Coins");
+    createToggle("nocoins", "No Coins");
+    createToggle("song", "Song", menu_selector(ProfileSearchOptions::onSong));
+    createToggle("nostar", "No Star");
+    createToggle("featured", "Featured");
+    createToggle("epic", "Epic");
+    createToggle("legendary", "Legendary");
+    createToggle("mythic", "Mythic");
 }
 
 void ProfileSearchOptions::drawTogglesSecondary(){
@@ -231,14 +237,14 @@ void ProfileSearchOptions::drawTogglesSecondary(){
     infoBtn->setID("info-button"_spr);
     m_toggles.push_back(infoBtn);
 
-    createToggle("copied", "Copied", -170, 80);
-    createToggle("downloaded", "Downloaded", -40, 80);
-    createToggle("starrange", "Star Range", 90, 80, menu_selector(ProfileSearchOptions::onStarRange));
-    createToggle("idrange", "ID Range", -170, 35, menu_selector(ProfileSearchOptions::onIdRange));
-    if(!m_prefix.empty()) createToggle("copy", "Copyable", -40, 35);
-    if(!m_prefix.empty()) createToggle("copy_free", "Free Copy", 90, 35);
-    if(!m_prefix.empty()) createToggle("ldm", "LDM", -170, -10);
-    createToggle("twoplayer", "2-Player", -40, -10);
+    createToggle("copied", "Copied");
+    createToggle("downloaded", "Downloaded");
+    createToggle("starrange", "Star Range", menu_selector(ProfileSearchOptions::onStarRange));
+    createToggle("idrange", "ID Range", menu_selector(ProfileSearchOptions::onIdRange));
+    if(!m_prefix.empty()) createToggle("copy", "Copyable");
+    if(!m_prefix.empty()) createToggle("copy_free", "Free Copy");
+    if(!m_prefix.empty()) createToggle("ldm", "LDM");
+    createToggle("twoplayer", "2-Player");
     
 }
 
@@ -249,20 +255,20 @@ void ProfileSearchOptions::drawTogglesTerciary(){
     m_demonDiffBg->setVisible(false);
     m_diffBg->setVisible(false);
 
-    createToggle("completed", "Completed", -170, 80); 
-    createToggle("completedorbs", "C. Orbs", -40, 80);
-    createToggle("completedleaderboard", "C. Leaderboard", 90, 80);
+    createToggle("completed", "Completed"); 
+    createToggle("completedorbs", "C. Orbs");
+    createToggle("completedleaderboard", "C. Leaderboard");
 
-    createToggle("uncompleted", "Uncompleted", -170, 35); 
-    createToggle("uncompletedorbs", "Uc. Orbs", -40, 35);
-    createToggle("uncompletedleaderboard", "Uc. Leaderboard", 90, 35);
+    createToggle("uncompleted", "Uncompleted"); 
+    createToggle("uncompletedorbs", "Uc. Orbs");
+    createToggle("uncompletedleaderboard", "Uc. Leaderboard");
 
-    createToggle("percentage", "Percentage", -170, -10, menu_selector(ProfileSearchOptions::onPercentage));
-    createToggle("percentageorbs", "% Orbs", -40, -10, menu_selector(ProfileSearchOptions::onPercentageOrbs));
-    createToggle("percentageleaderboard", "% Leaderboard", 90, -10, menu_selector(ProfileSearchOptions::onPercentageLeaderboard));
+    createToggle("percentage", "Percentage", menu_selector(ProfileSearchOptions::onPercentage));
+    createToggle("percentageorbs", "% Orbs", menu_selector(ProfileSearchOptions::onPercentageOrbs));
+    createToggle("percentageleaderboard", "% Leaderboard", menu_selector(ProfileSearchOptions::onPercentageLeaderboard));
 
-    createToggle("completedcoins", "C. Coins", -170, -50); 
-    createToggle("uncompletedcoins", "Uc. Coins", -40, -50);
+    createToggle("completedcoins", "C. Coins"); 
+    createToggle("uncompletedcoins", "Uc. Coins");
 }
 
 void ProfileSearchOptions::onSongDialogClosed(bool custom, int songID){

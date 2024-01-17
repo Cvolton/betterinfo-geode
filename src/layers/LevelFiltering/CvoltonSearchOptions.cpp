@@ -37,10 +37,11 @@ void CvoltonSearchOptions::onPrev(cocos2d::CCObject* sender)
 
 bool CvoltonSearchOptions::init(){
     if(!CvoltonAlertLayerStub::init({440.0f, 290.0f}, 1.f, {0x00, 0x00, 0x00, 0x96})) return false;
+    m_closeBtn->setPositionX(m_closeBtn->getPositionX() + 0.5f);
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    auto label = createTextLabel("Advanced Options", {(winSize.width / 2), (winSize.height / 2) + 125}, 1.f, m_mainLayer, "bigFont.fnt");
+    auto label = createTextLabel("Advanced Options", {(winSize.width / 2), (winSize.height / 2) + 127}, .7f, m_mainLayer, "goldFont.fnt");
     label->setID("title"_spr);
     auto prevBtn = createButton("GJ_arrow_03_001.png", {- (winSize.width / 2) + 30, 0}, menu_selector(CvoltonSearchOptions::onPrev));
     prevBtn->setID("prev-button"_spr);
@@ -58,7 +59,7 @@ void CvoltonSearchOptions::drawToggles(){
     //createToggle("search_contains", "Name Contains", -170, 75); //40 -60, 170 -60, 300 -60, 40 -110
     //createToggle("search_no_id", "No ID Search", -40, 75);
     //createToggle("search_surround_percent", "No Forced Star", 90, 75);
-    createToggle("search_trim", "Trim Spaces", -170, 75);
+    createToggle("search_trim", "Trim Spaces");
 
     auto completedMode = createTextLabel("Completed Mode:", {0, -95}, 0.5f, m_buttonMenu, "goldFont.fnt");
     completedMode->setID("completed-mode"_spr);
