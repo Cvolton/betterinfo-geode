@@ -154,9 +154,9 @@ class $modify(BILevelCell, LevelCell) {
             BetterInfoCache::sharedState()->cacheLevel(m_level);
         }
 
-        if(auto songLabel = m_mainLayer->getChildByID("song-name")) {
+        /*if(auto songLabel = m_mainLayer->getChildByID("song-name")) {
             if(!BetterInfo::isNewGrounds(m_level->m_songID)) static_cast<CCLabelBMFont*>(songLabel)->setColor({249,170,190});
-        }
+        }*/
 
         if(auto playerName = m_mainMenu->getChildByID("creator-name")) {
             static_cast<CCMenuItemSpriteExtra*>(playerName)->setEnabled(true);
