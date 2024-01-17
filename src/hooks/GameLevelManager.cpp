@@ -164,7 +164,9 @@ class $modify(GameLevelManager) {
             if(Mod::get()->getSavedValue<bool>("user_search_featured") && level->m_featured < 1) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_nofeatured") && level->m_featured >= 1) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_original") && level->m_originalLevel != 0) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_epic") && !(level->m_isEpic)) continue;
+            if(Mod::get()->getSavedValue<bool>("user_search_epic") && level->m_isEpic != 1) continue;
+            if(Mod::get()->getSavedValue<bool>("user_search_legendary") && level->m_isEpic != 2) continue;
+            if(Mod::get()->getSavedValue<bool>("user_search_mythic") && level->m_isEpic != 3) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_noepic") && level->m_isEpic) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_song")) {
                 if(Mod::get()->getSavedValue<bool>("user_search_song_custom") && level->m_songID != Mod::get()->getSavedValue<int>("user_search_song_id")) continue;

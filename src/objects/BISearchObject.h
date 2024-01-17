@@ -31,6 +31,8 @@ struct BISearchObject {
         bool coins = false;
         bool noCoins = false;
         bool epic = false;
+        bool legendary = false;
+        bool mythic = false;
         int folder = 0;
         bool song = false;
         bool songCustom = false;

@@ -303,7 +303,9 @@ bool BetterInfo::levelMatchesObject(GJGameLevel* level, const BISearchObject& se
     if(searchObj.twoPlayer && !level->m_twoPlayerMode) return false;
     if(searchObj.coins && (level->m_coins == 0 || level->m_coinsVerified == 0)) return false;
     if(searchObj.noCoins && (level->m_coins != 0 && level->m_coinsVerified != 0)) return false;
-    if(searchObj.epic && !level->m_isEpic) return false;
+    if(searchObj.epic && level->m_isEpic != 1) return false;
+    if(searchObj.legendary && level->m_isEpic != 2) return false;
+    if(searchObj.mythic && level->m_isEpic != 3) return false;
         //TODO: searchObj.folder
     if(searchObj.song) {
         if(!searchObj.songCustom && level->m_audioTrack != searchObj.songID) return false;
