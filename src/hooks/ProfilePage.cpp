@@ -195,12 +195,6 @@ class $modify(BIProfilePage, ProfilePage) {
         m_buttonMenu->addChild(usernameBtn);
         this->m_buttons->addObject(usernameBtn);
 
-        if(auto playerStats = m_mainLayer->getChildByID("stats-menu")) {
-            if(auto starsIcon = playerStats->getChildByID("stars-icon")) {
-                BetterInfo::replaceWithButton(starsIcon, this, menu_selector(BIProfilePage::onProfilePageStar));
-            }
-        }
-
         if(a2->m_userID != GameManager::sharedState()->m_playerUserID){
             if(auto rankIcon = m_mainLayer->getChildByID("global-rank-icon")) {
                 rankIcon->setVisible(false);
@@ -273,6 +267,12 @@ class $modify(BIProfilePage, ProfilePage) {
 
             if(auto modBadge = m_mainLayer->getChildByID("mod-badge")) {
                 modBadge->setPositionX((winSize.width / 2) - (usernameNode->getScaledContentSize().width / 2) - 16);
+            }
+        } else {
+            if(auto playerStats = m_mainLayer->getChildByID("stats-menu")) {
+                if(auto starsIcon = playerStats->getChildByID("stars-icon")) {
+                    BetterInfo::replaceWithButton(starsIcon, this, menu_selector(BIProfilePage::onProfilePageStar));
+                }
             }
         }
 
