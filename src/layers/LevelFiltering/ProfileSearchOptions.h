@@ -19,6 +19,7 @@ class ProfileSearchOptions : public CvoltonOptionsLayer, public SongDialogCloseD
     cocos2d::extension::CCScale9Sprite* m_diffBg = nullptr;
     cocos2d::extension::CCScale9Sprite* m_demonDiffBg = nullptr;
     BISearchObjectDelegate* m_searchObjDelegate = nullptr;
+    cocos2d::CCMenu* m_lenMenu = nullptr;
     std::string m_prefix;
     int m_page = 0;
 public:

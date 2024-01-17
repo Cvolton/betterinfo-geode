@@ -17,9 +17,9 @@ public:
     virtual void destroyToggles();
     virtual void drawToggles();
     static cocos2d::CCLabelBMFont* createTextLabel(const std::string text, const cocos2d::CCPoint& position, const float scale, cocos2d::CCNode* menu, const char* font = "bigFont.fnt");
-    void createToggle(const char* option, const char* name, cocos2d::SEL_MenuHandler additional = nullptr);
-    void createToggle(const char* option, const char* name, float x, float y, cocos2d::SEL_MenuHandler additional = nullptr);
-    void createButtonToggle(const char* option, cocos2d::CCNode* sprite, float x, float y, float scale = 1.f);
+    void createToggle(const char* option, const char* name, cocos2d::SEL_MenuHandler additional = nullptr, CCNode* parent = nullptr);
+    void createToggle(const char* option, const char* name, float x, float y, cocos2d::SEL_MenuHandler additional = nullptr, CCNode* parent = nullptr);
+    void createButtonToggle(const char* option, cocos2d::CCNode* sprite, float x, float y, float scale = 1.f, CCNode* parent = nullptr);
 
     virtual bool getOption(const std::string& option) const;
     virtual int getOptionInt(const std::string& option) const;

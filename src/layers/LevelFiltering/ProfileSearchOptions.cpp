@@ -137,6 +137,16 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
     m_nextBtn->setID("next-button"_spr);
     m_buttonMenu->addChild(m_nextBtn);
 
+    m_lenMenu = CCMenu::create();
+    m_lenMenu->setZOrder(10);
+    m_lenMenu->setContentSize({330, 30});
+    m_lenMenu->setPosition({(winSize.width / 2) , (winSize.height / 2) - 120});
+    m_lenMenu->setLayout(
+        RowLayout::create()
+            ->setGap(20.f)
+    );
+    m_mainLayer->addChild(m_lenMenu);
+
     drawToggles();
 
     return true;
@@ -179,12 +189,15 @@ void ProfileSearchOptions::drawTogglesPrimary(){
     m_buttonMenu->addChild(timeIcon);
     m_toggles.push_back(timeIcon);
 
-    createButtonToggle("len_00", CCLabelBMFont::create("Tiny", "bigFont.fnt"), -142, -119, 0.6f);
-    createButtonToggle("len_01", CCLabelBMFont::create("Short", "bigFont.fnt"), -69, -119, 0.6f);
-    createButtonToggle("len_02", CCLabelBMFont::create("Medium", "bigFont.fnt"), 16, -119, 0.6f);
-    createButtonToggle("len_03", CCLabelBMFont::create("Long", "bigFont.fnt"), 93.5f, -119, 0.6f);
-    createButtonToggle("len_04", CCLabelBMFont::create("XL", "bigFont.fnt"), 150, -119, 0.6f);
+    createButtonToggle("len_00", CCLabelBMFont::create("Tiny", "bigFont.fnt"), -142, -119, 0.6f, m_lenMenu);
+    createButtonToggle("len_01", CCLabelBMFont::create("Short", "bigFont.fnt"), -69, -119, 0.6f, m_lenMenu);
+    createButtonToggle("len_02", CCLabelBMFont::create("Medium", "bigFont.fnt"), 16, -119, 0.6f, m_lenMenu);
+    createButtonToggle("len_03", CCLabelBMFont::create("Long", "bigFont.fnt"), 93.5f, -119, 0.6f, m_lenMenu);
+    createButtonToggle("len_04", CCLabelBMFont::create("XL", "bigFont.fnt"), 150, -119, 0.6f, m_lenMenu);
+    createButtonToggle("len_05", CCLabelBMFont::create("Plat.", "bigFont.fnt"), 150, -119, 0.6f, m_lenMenu);
     createButtonToggle("star", CCSprite::createWithSpriteFrameName("GJ_starsIcon_001.png"), 193, -120);
+
+    m_lenMenu->updateLayout();
 
     for(unsigned int i = 0; i <= 6; i++){
         createButtonToggle(
@@ -347,7 +360,7 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
         if(getOption(diff)) searchObj.difficulty.insert(i);
     }
 
-    for(int i = 0; i <= 4; i++) {
+    for(int i = 0; i <= 5; i++) {
         auto len = CCString::createWithFormat("len_%02i", i)->getCString();
         if(getOption(len)) searchObj.length.insert(i);
     }
@@ -408,7 +421,7 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
         );
     }
 
-    for(int i = 0; i <= 4; i++) {
+    for(int i = 0; i <= 5; i++) {
         setOption(
             CCString::createWithFormat("len_%02i", i)->getCString(),
             searchObj.length.find(i) != searchObj.length.end()

@@ -107,7 +107,7 @@ class $modify(GameLevelManager) {
 
         //getting config
         std::vector<unsigned int> len;
-        for(unsigned int i = 0; i <= 4; i++){
+        for(unsigned int i = 0; i <= 5; i++){
             if(
                 Mod::get()->getSavedValue<bool>(
                     CCString::createWithFormat("user_search_len_%02u", i)->getCString()

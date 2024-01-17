@@ -136,7 +136,7 @@ bool BetterInfo::isAdvancedEnabled(GJSearchObject* searchObject) {
 }
 
 bool BetterInfo::isSavedFiltered() {
-    for(unsigned int i = 0; i <= 4; i++){
+    for(unsigned int i = 0; i <= 5; i++){
         if(
             Mod::get()->getSavedValue<bool>(
                 CCString::createWithFormat("user_search_len_%02u", i)->getCString()
@@ -173,7 +173,7 @@ bool BetterInfo::isSavedFiltered() {
         "user_search_completedorbs", "user_search_completedleaderboard", "user_search_uncompletedorbs",
         "user_search_uncompletedleaderboard", "user_search_percentage", "user_search_percentageorbs",
         "user_search_percentageleaderboard", "user_search_starrange", "user_search_completedcoins",
-        "user_search_uncompletedcoins"
+        "user_search_uncompletedcoins", "user_search_legendary", "user_search_mythic"
     };
 
     for(auto option : options) {
