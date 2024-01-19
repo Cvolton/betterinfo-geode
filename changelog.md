@@ -1,4 +1,14 @@
 # Changelog
+## <cg>4.0.0-alpha.1</c> (2024-01-19)
+* Added 2.204 support
+* Added info buttons to The Tower levels
+* Added StarsInfoPopup (click Star on your profile to see)
+* Added icon unlock info to the leaderboards
+
+### Missing features
+* Page limit bypass
+* Song Browser lag fix
+
 ## <cg>v3.1.1</c> (2023-12-21)
 This is the last update for 2.1. It changes defaults to better align with what people would want on private servers, since it is assumed that most people on real GD would be on 2.2 by now.
 
