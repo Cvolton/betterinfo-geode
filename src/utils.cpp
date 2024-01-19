@@ -608,7 +608,7 @@ bool BetterInfo::isSprite(CCSprite* sprite, const char* name) {
     return cache->getTexture() == sprite->getTexture() && cache->getRect() == sprite->getTextureRect();
 }
 
-void BetterInfo::replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler) {
+CCMenuItemSpriteExtra* BetterInfo::replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler) {
 
     auto parent = node->getParent();
 
@@ -622,6 +622,7 @@ void BetterInfo::replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_Menu
     );
     button->setLayoutOptions(node->getLayoutOptions());
     button->setZOrder(node->getZOrder());
+    button->setID(node->getID());
 
     parent->getChildren()->insertObject(button, idx);
     parent->updateLayout();
@@ -632,6 +633,8 @@ void BetterInfo::replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_Menu
         button->onEnter();
         button->onEnterTransitionDidFinish();
     }
+
+    return button;
 }
 
 UnlockType BetterInfo::iconTypeToUnlockType(IconType type)

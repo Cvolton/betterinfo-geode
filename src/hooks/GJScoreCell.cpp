@@ -22,10 +22,10 @@ class $modify(BIGJScoreCell, GJScoreCell) {
         GJScoreCell::loadFromScore(b);
 
         if(auto player = m_mainLayer->getChildByID("player-icon")) {
+            player->removeFromParent();
+
             auto playerMenu = CCMenu::create();
             playerMenu->setPosition(player->getPosition());
-            
-            m_mainLayer->removeChild(player);
             m_mainLayer->addChild(playerMenu);
 
             auto container = CCNode::create();

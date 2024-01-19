@@ -271,7 +271,7 @@ class $modify(BIProfilePage, ProfilePage) {
         } else {
             if(auto playerStats = m_mainLayer->getChildByID("stats-menu")) {
                 if(auto starsIcon = playerStats->getChildByID("stars-icon")) {
-                    BetterInfo::replaceWithButton(starsIcon, this, menu_selector(BIProfilePage::onProfilePageStar));
+                    m_buttons->addObject(BetterInfo::replaceWithButton(starsIcon, this, menu_selector(BIProfilePage::onProfilePageStar)));
                 }
             }
         }

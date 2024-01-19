@@ -59,7 +59,7 @@ namespace BetterInfo {
     bool isHoveringNode(CCNode* target);
 
     bool isSprite(CCSprite* sprite, const char* name);
-    void replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler);
+    CCMenuItemSpriteExtra* replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler);
 
     UnlockType iconTypeToUnlockType(IconType type);
 }
