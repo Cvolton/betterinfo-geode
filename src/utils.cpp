@@ -4,6 +4,7 @@
 #include <fmt/format.h>
 #include <time.h>
 #include <chrono>
+#include <charconv>
 
 #include <Geode/cocos/support/base64.h>
 #include <Geode/cocos/support/zip_support/ZipUtils.h>
