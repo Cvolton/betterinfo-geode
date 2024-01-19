@@ -62,4 +62,7 @@ namespace BetterInfo {
     CCMenuItemSpriteExtra* replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler);
 
     UnlockType iconTypeToUnlockType(IconType type);
+
+    AxisLayoutOptions* copyLayoutOptions(CCNode* a);
+    AxisLayoutOptions* copyLayoutOptions(AxisLayoutOptions* a);
 }

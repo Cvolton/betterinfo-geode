@@ -161,7 +161,7 @@ bool StarsInfoPopup::init(){
     cornerMenu->addChild(cornerFont1);
 
     auto cornerFont2 = CCLabelBMFont::create(fmt::format("Gauntlet: {}", BetterInfo::completedLevelsInStarRange(0, 10, false, GLM->m_gauntletLevels).size() + BetterInfo::completedLevelsInStarRange(0, 10, true, GLM->m_gauntletLevels).size()).c_str(), "goldFont.fnt");
-    cornerFont2->setLayoutOptions(cornerFont1->getLayoutOptions());
+    cornerFont2->setLayoutOptions(BetterInfo::copyLayoutOptions(cornerFont1));
     cornerFont2->setAnchorPoint(cornerFont1->getAnchorPoint());
     cornerFont2->setID("gauntlet-text"_spr);
     cornerMenu->addChild(cornerFont2);

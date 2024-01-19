@@ -615,77 +615,93 @@ CCMenuItemSpriteExtra* BetterInfo::replaceWithButton(CCNode* node, CCNode* self,
     auto idx = parent->getChildren()->indexOfObject(node);
     node->removeFromParent();
 
+    for(auto i = idx; i < parent->getChildrenCount(); i++) {
+        auto child = static_cast<CCNode*>(parent->getChildren()->objectAtIndex(i));
+        child->setZOrder(child->getZOrder() + 1);
+    }
+
     auto button = CCMenuItemSpriteExtra::create(
         node,
         self,
         handler
     );
-    button->setLayoutOptions(node->getLayoutOptions());
+    button->setLayoutOptions(copyLayoutOptions(node));
     button->setZOrder(node->getZOrder());
     button->setID(node->getID());
 
-    parent->getChildren()->insertObject(button, idx);
+    parent->addChild(button);
     parent->updateLayout();
-
-    button->setParent(parent);
-
-    if(parent->isRunning()) {
-        button->onEnter();
-        button->onEnterTransitionDidFinish();
-    }
 
     return button;
 }
 
-UnlockType BetterInfo::iconTypeToUnlockType(IconType type)
-    {
-        //the actual func doesnt work for an unknown reason
-        int result = 0;
+UnlockType BetterInfo::iconTypeToUnlockType(IconType type) {
+    //the actual func doesnt work for an unknown reason
+    int result = 0;
 
-        switch ((int) type)
-        {
-            case 0:
-                result = 1;
-                break;
-            case 1:
-                result = 4;
-                break;
-            case 2:
-                result = 5;
-                break;
-            case 3:
-                result = 6;
-                break;
-            case 4:
-                result = 7;
-                break;
-            case 5:
-                result = 8;
-                break;
-            case 6:
-                result = 9;
-                break;
-            case 7:
-                result = 13;
-                break;
-            case 8:
-                result = 14;
-                break;
-            case 9:
-                result = 11;
-                break;
-            case 0xA:
-                result = 10;
-                break;
-            case 0xB:
-                result = 12;
-                break;
-            case 0xC:
-                result = 15;
-                break;
-            default:
-                result = 0;
-                break;
-        }
-        return (UnlockType) result;
+    switch ((int) type)
+    {
+        case 0:
+            result = 1;
+            break;
+        case 1:
+            result = 4;
+            break;
+        case 2:
+            result = 5;
+            break;
+        case 3:
+            result = 6;
+            break;
+        case 4:
+            result = 7;
+            break;
+        case 5:
+            result = 8;
+            break;
+        case 6:
+            result = 9;
+            break;
+        case 7:
+            result = 13;
+            break;
+        case 8:
+            result = 14;
+            break;
+        case 9:
+            result = 11;
+            break;
+        case 0xA:
+            result = 10;
+            break;
+        case 0xB:
+            result = 12;
+            break;
+        case 0xC:
+            result = 15;
+            break;
+        default:
+            result = 0;
+            break;
     }
+    return (UnlockType) result;
+}
+
+AxisLayoutOptions* BetterInfo::copyLayoutOptions(CCNode* a) {
+    return copyLayoutOptions(typeinfo_cast<AxisLayoutOptions*>(a->getLayoutOptions()));
+}
+
+AxisLayoutOptions* BetterInfo::copyLayoutOptions(AxisLayoutOptions* a) {
+    if(!a) return nullptr;
+
+    return AxisLayoutOptions::create()
+        ->setMaxScale(a->getMaxScale())
+        ->setMinScale(a->getMinScale())
+        ->setRelativeScale(a->getRelativeScale())
+        ->setLength(a->getLength())
+        ->setPrevGap(a->getPrevGap())
+        ->setNextGap(a->getNextGap())
+        ->setBreakLine(a->getBreakLine())
+        ->setSameLine(a->getSameLine())
+        ->setScalePriority(a->getScalePriority());
+}
