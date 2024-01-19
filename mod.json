@@ -10,6 +10,13 @@
 	"developer": "Cvolton",
 	"description": "betterinfo geode real (not fake)",
     "repository": "https://github.com/cvolton/betterinfo-geode",
+    "dependencies": [
+        {
+            "id": "geode.node-ids",
+            "version": "v1.1.0",
+            "importance": "required"
+        }
+    ],
 	"settings": {
         "show-comment-ids": {
             "name": "Show comment IDs",
