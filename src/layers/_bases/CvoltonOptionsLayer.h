@@ -1,6 +1,8 @@
 #pragma once
 #include "CvoltonAlertLayerStub.h"
 
+#include "../../utils.hpp"
+
 class CvoltonOptionsLayer : public CvoltonAlertLayerStub {
 protected:
     int m_toggleCount = 0;

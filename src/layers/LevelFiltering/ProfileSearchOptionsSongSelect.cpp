@@ -74,11 +74,7 @@ void ProfileSearchOptionsSongSelect::drawToggles(){
 }
 
 int ProfileSearchOptionsSongSelect::songID(){
-    int songID = 0;
-    try{
-        songID = std::stoi(m_textNode->getString());
-    }catch(...){}
-    return songID;
+    return BetterInfo::stoi(m_textNode->getString());
 }
 
 void ProfileSearchOptionsSongSelect::onSaved(CCObject* sender){

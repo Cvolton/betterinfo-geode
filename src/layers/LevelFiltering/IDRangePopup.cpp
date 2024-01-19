@@ -1,5 +1,7 @@
 #include "IDRangePopup.h"
 
+#include "../../utils.hpp"
+
 IDRangePopup* IDRangePopup::create(IDRangeDelegate* delegate, int min, int max, const char* text, int additional){
     auto ret = new IDRangePopup();
     if (ret && ret->init(delegate, min, max, text, additional)) {
@@ -71,17 +73,9 @@ bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char*
 }
 
 int IDRangePopup::minID(){
-    int ret = 0;
-    try{
-        ret = std::stoi(m_minNode->getString());
-    }catch(...){}
-    return ret;
+    return BetterInfo::stoi(m_minNode->getString());
 }
 
 int IDRangePopup::maxID(){
-    int ret = 0;
-    try{
-        ret = std::stoi(m_maxNode->getString());
-    }catch(...){}
-    return ret;
+    return BetterInfo::stoi(m_maxNode->getString());
 }

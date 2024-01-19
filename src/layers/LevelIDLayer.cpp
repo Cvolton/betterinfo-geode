@@ -1,5 +1,7 @@
 #include "LevelIDLayer.h"
 
+#include "../utils.hpp"
+
 LevelIDLayer* LevelIDLayer::create(){
     auto ret = new LevelIDLayer();
     if (ret && ret->init()) {
@@ -14,11 +16,7 @@ LevelIDLayer* LevelIDLayer::create(){
 }
 
 int LevelIDLayer::getNumber(){
-    int pageNumber = 1;
-    try{
-        pageNumber = std::stoi(m_textNode->getString());
-    }catch(...){}
-    return pageNumber;
+    return BetterInfo::stoi(m_textNode->getString());
 }
 
 void LevelIDLayer::onLevelComments(cocos2d::CCObject* sender){
@@ -43,7 +41,7 @@ bool LevelIDLayer::init(){
 
     m_textNode = CCTextInputNode::create(150, 30, "ID", "bigFont.fnt");
     m_textNode->setLabelPlaceholderColor({0x75, 0xAA, 0xF0});
-    m_textNode->setAllowedChars("0123456789");
+    m_textNode->setAllowedChars("-0123456789");
     m_textNode->setMaxLabelScale(0.7f);
     m_textNode->setMaxLabelWidth(140);
     m_textNode->setPosition({0,6});

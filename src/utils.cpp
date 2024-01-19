@@ -705,3 +705,9 @@ AxisLayoutOptions* BetterInfo::copyLayoutOptions(AxisLayoutOptions* a) {
         ->setSameLine(a->getSameLine())
         ->setScalePriority(a->getScalePriority());
 }
+
+int BetterInfo::stoi(std::string_view str) {
+    int result = 0;
+    std::from_chars(str.data(), str.data() + str.size(), result);
+    return result;
+}

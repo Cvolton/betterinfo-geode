@@ -1,5 +1,7 @@
 #include "JumpToPageLayer.h"
 
+#include "../utils.hpp"
+
 JumpToPageLayer* JumpToPageLayer::create(InfoLayer* infoLayer){
     auto ret = new JumpToPageLayer();
     if (ret && ret->init(infoLayer)) {
@@ -64,11 +66,7 @@ void JumpToPageLayer::onReset(cocos2d::CCObject* sender)
 }
 
 int JumpToPageLayer::pageNumber(){
-    int pageNumber = 1;
-    try{
-        pageNumber = std::stoi(m_textNode->getString());
-    }catch(...){}
-    return pageNumber;
+    return BetterInfo::stoi(m_textNode->getString());
 }
 
 void JumpToPageLayer::onOK(cocos2d::CCObject* sender){
