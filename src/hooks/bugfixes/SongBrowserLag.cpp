@@ -1,5 +1,3 @@
-//TODO: MusicDownloadManager
-
 /*#include <Geode/Bindings.hpp>
 #include <Geode/modify/MusicDownloadManager.hpp>
 #include <Geode/modify/LevelInfoLayer.hpp>
@@ -29,11 +27,11 @@ class $modify(BISBLLevelInfoLayer, LevelInfoLayer) {
         LevelInfoLayer::onPlay(sender);
     }
 
-    bool init(GJGameLevel* level) {
+    bool init(GJGameLevel* level, bool challenge) {
         auto BICache = BetterInfoCache::sharedState();
         if(BICache->m_downloadedSongs.contains(level->m_songID)) BICache->m_downloadedSongs.erase(level->m_songID);
 
-        return LevelInfoLayer::init(level);
+        return LevelInfoLayer::init(level, bool challenge);
     }
 };
 

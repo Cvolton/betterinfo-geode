@@ -255,10 +255,10 @@ void BetterInfoCache::populateDownloadedSongsFast() {
     //TODO: reverse MusicDownloadManager
     /*auto MDM = MusicDownloadManager::sharedState();
     std::vector<int> knownSongs;
-    auto dict = CCDictionaryExt<std::string, CCString>(MDM->m_songsDict);
+    auto dict = CCDictionaryExt<std::string, CCString*>(MDM->m_songsDict);
     try {
         for(auto [id, song] : dict) {
-            knownSongs.push_back(std::stoi(id));
+            knownSongs.push_back(BetterInfo::stoi(id));
         }
     } catch(std::exception) {
         log::error("Exception in populateDownloadedSongsFast loop");
