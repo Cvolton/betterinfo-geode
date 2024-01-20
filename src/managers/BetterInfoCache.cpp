@@ -109,12 +109,10 @@ int BetterInfoCache::getDemonDifficulty(int levelID) {
 
 void BetterInfoCache::storeUserName(int userID, const std::string& username) {
     if(username.empty()) {
-        log::info("Username empty, not storing");
         return;
     }
 
     auto idString = std::to_string(userID);
-    log::info("Storing username {} for user ID {}", username, idString);
     m_json["username-dict"][idString] = username;
     doSave();
 
@@ -124,14 +122,12 @@ void BetterInfoCache::storeUserName(int userID, const std::string& username) {
 
 void BetterInfoCache::storeLevelInfo(int levelID, const std::string& field, const std::string& value) {
     if(field.empty() || value.empty()) {
-        log::info("Field or value empty, not storing");
         return;
     }
 
     auto idString = std::to_string(levelID);
     if(!m_json["level-info-dict"][idString].is_object()) m_json["level-info-dict"][idString] = matjson::Object();
 
-    log::info("Storing {} : {} for level ID {}", field, value, idString);
     m_json["level-info-dict"][idString][field] = value;
     doSave();
 }
@@ -198,12 +194,10 @@ int BetterInfoCache::getCoinCount(int levelID) {
 
 void BetterInfoCache::storeUploadDate(int levelID, const std::string& date) {
     if(date.empty()) {
-        log::info("Date empty, not storing");
         return;
     }
 
     auto idString = std::to_string(levelID);
-    log::info("Storing date {} for level ID {}", date, idString);
     m_json["upload-date-dict"][idString] = date;
     doSave();
 

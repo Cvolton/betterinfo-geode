@@ -6,7 +6,6 @@
 
 bool BaseJsonManager::init(const char* filename){
     m_filename = filename;
-    log::info("Loading {}", filename);
     auto loadResult = load();
     if(!loadResult) {
         log::warn("Unable to load {}", filename);
@@ -45,8 +44,6 @@ Result<> BaseJsonManager::save() {
     if (!res2) {
         log::error("Unable to save values: {}", res2.unwrapErr());
     }
-
-    log::info("Saved {}", m_filename);
     return Ok();
 }
 

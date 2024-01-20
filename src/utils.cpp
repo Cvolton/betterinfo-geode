@@ -544,8 +544,6 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
 
         timeFull += (maxPos - prevPortalX) / travelForPortalId(prevPortalId);
         auto b = timeInMs() - a;
-        log::debug("time spent decompressing: {}", c - a);
-        log::debug("time spent: {}", b);
         return timeFull;
     } catch(std::exception e) {
         log::error("An exception has occured while calculating time for levelString: {}", e.what());
