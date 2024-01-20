@@ -40,3 +40,20 @@ std::string TimeUtils::platformerTime(int value){
     if(minutes > 0) return fmt::format("{}:{}.{}", minutes, seconds, milliseconds);
     return fmt::format("{}.{}", seconds, milliseconds);
 }
+
+std::string TimeUtils::timestampToHumanReadable(time_t timestamp) {
+    auto diff = difftime(time(nullptr), timestamp);
+
+    int years = diff / 31536000;
+    int months = diff / 2592000;
+    int days = diff / 86400;
+    int hours = diff / 3600;
+    int minutes = diff / 60;
+
+    if(years > 0) return fmt::format("{} year{}", years, years > 1 ? "s" : "");
+    if(months > 0) return fmt::format("{} month{}", months, months > 1 ? "s" : "");
+    if(days > 0) return fmt::format("{} day{}", days, days > 1 ? "s" : "");
+    if(hours > 0) return fmt::format("{} hour{}", hours, hours > 1 ? "s" : "");
+    if(minutes > 0) return fmt::format("{} minute{}", minutes, minutes > 1 ? "s" : "");
+    return "Less than 1 minute";
+}

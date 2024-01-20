@@ -8,4 +8,5 @@ namespace TimeUtils {
     std::string isoTimeToString(const std::string& input);
     std::string workingTime(int value);
     std::string platformerTime(int value);
+    std::string timestampToHumanReadable(time_t timestamp);
 }
