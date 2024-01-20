@@ -149,7 +149,8 @@ class $modify(BIInfoLayer, InfoLayer) {
             return;
         }
 
-        ExtendedLevelInfo::create(this->m_level)->show();
+        if(m_level) ExtendedLevelInfo::create(m_level)->show();
+        if(m_list) m_levelList->showListInfo();
     }
 
     void setupCommentsBrowser(CCArray* a3) {
