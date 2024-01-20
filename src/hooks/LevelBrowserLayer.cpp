@@ -9,6 +9,10 @@
 using namespace geode::prelude;
 
 class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
+    static void onModify(auto& self) {
+        (void) self.setHookPriority("LevelBrowserLayer::onGoToPage", 99999);
+    }
+
     /*
      * Callbacks
      */
@@ -79,6 +83,12 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     /**
      * Hooks
      */
+    void onGoToPage(CCObject* sender) {
+        auto popup = SetIDPopup::create(m_searchObject->m_page + 1, 1, 999999, "Go to Page", "Go", true, 1, 60.f, false, false);
+        popup->m_delegate = this;
+        popup->show();
+    }
+
     void setupPageInfo(gd::string a1, const char* a2) {
         LevelBrowserLayer::setupPageInfo(a1, a2);
 
