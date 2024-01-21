@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.0.0-alpha.4</c> (2024-01-21)
+* Fixed even more crashing issues
+
 ## <cg>v4.0.0-alpha.3</c> (2024-01-21)
 * Fixed more crashing issues
 * Added exact upload dates to List Info
