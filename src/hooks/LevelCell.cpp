@@ -123,7 +123,11 @@ class $modify(BILevelCell, LevelCell) {
 
         auto idTextNode = CCLabelBMFont::create(fmt::format("#{}", m_level->m_levelID.value()).c_str(), "chatFont.fnt");
         //idTextNode->setPosition({346,79 - (m_level->m_dailyID == 0 && Loader::get()->isModLoaded("n.level_pronouns") ? 9.f : 0.f)});
-        idTextNode->setPosition({346,m_height - 1 - (m_level->m_dailyID == 0 && Loader::get()->isModLoaded("n.level_pronouns") ? 9.f : 0.f)});
+        idTextNode->setPosition({346,m_height - 1});
+        if(m_level->m_dailyID == 0 && Loader::get()->isModLoaded("n.level_pronouns")) {
+            if(m_compactView) idTextNode->setPositionX(idTextNode->getPositionX() - 23.f);
+            else idTextNode->setPositionY(idTextNode->getPositionY() - 9.f);
+        }
         idTextNode->setAnchorPoint({1,1});
         idTextNode->setScale(m_compactView ? 0.45f : 0.6f);
         idTextNode->setColor({51,51,51});
