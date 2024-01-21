@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.0.0-alpha.5</c> (2024-01-21)
+* Further bugfixes
+
 ## <cg>v4.0.0-alpha.4</c> (2024-01-21)
 * Fixed even more crashing issues
 
