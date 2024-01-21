@@ -7,7 +7,7 @@
 class BIViewLayer : public BIBaseLayer, public PageNumberDelegate {
 protected:
     std::string m_title;
-    BoomListView* m_listView = nullptr;
+    CustomListView* m_listView = nullptr;
     GJListLayer* m_listLayer = nullptr;
     cocos2d::CCArray* m_data = nullptr;
     CCMenuItemSpriteExtra* m_prevBtn = nullptr;

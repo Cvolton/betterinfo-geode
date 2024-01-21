@@ -53,4 +53,6 @@ public:
     void resetUnloadedLevels();
 
     void queueLoad(float dt);
+
+    void onEnter();
 };

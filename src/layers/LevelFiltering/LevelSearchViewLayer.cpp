@@ -372,3 +372,9 @@ void LevelSearchViewLayer::resetUnloadedLevels() {
 int LevelSearchViewLayer::resultsPerPage() const {
     return 10;
 }
+
+void LevelSearchViewLayer::onEnter() {
+    BIViewLayer::onEnter();
+    
+    loadPage();
+}
