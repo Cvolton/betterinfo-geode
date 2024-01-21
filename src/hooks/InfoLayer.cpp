@@ -135,12 +135,12 @@ class $modify(BIInfoLayer, InfoLayer) {
     }
 
     void onMore(CCObject* sender) {
-        if(this->m_level->m_accountID == 0) {
-            UnregisteredProfileLayer::displayProfile(this->m_level->m_userID, this->m_level->m_creatorName);
+        if(!this->m_level || this->m_level->m_accountID > 0) {
+            InfoLayer::onMore(sender);
             return;
         }
 
-        InfoLayer::onMore(sender);
+        UnregisteredProfileLayer::displayProfile(this->m_level->m_userID, this->m_level->m_creatorName);
     }
 
     void onLevelInfo(CCObject* sender) {
