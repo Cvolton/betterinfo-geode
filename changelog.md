@@ -1,9 +1,14 @@
 # Changelog
-## <cg>4.0.0-alpha.2</c> (2024-01-20)
+## <cg>v4.0.0-alpha.3</c> (2024-01-21)
+* Fixed more crashing issues
+* Added exact upload dates to List Info
+* Re-added BI's Level Progress dialog to Editor Levels
+
+## <cg>v4.0.0-alpha.2</c> (2024-01-20)
 * Fixed most crashing issues
 * Re-added page limit bypass
 
-## <cg>4.0.0-alpha.1</c> (2024-01-19)
+## <cg>v4.0.0-alpha.1</c> (2024-01-19)
 * Added 2.204 support
 * Added info buttons to The Tower levels
 * Added StarsInfoPopup (click Star on your profile to see)
