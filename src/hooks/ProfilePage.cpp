@@ -269,12 +269,14 @@ class $modify(BIProfilePage, ProfilePage) {
                 modBadge->setPositionX((winSize.width / 2) - (usernameNode->getScaledContentSize().width / 2) - 16);
             }
         } else {
+            #if GEODE_COMP_GD_VERSION <= 22040
             if(auto playerStats = m_mainLayer->getChildByID("stats-menu")) {
                 if(auto starsIcon = playerStats->getChildByID("stars-icon")) {
                     m_buttons->removeObject(starsIcon);
                     m_buttons->addObject(BetterInfo::replaceWithButton(starsIcon, this, menu_selector(BIProfilePage::onProfilePageStar)));
                 }
             }
+            #endif
         }
 
     }
