@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.0.0-alpha.6</c> (2024-01-22)
+* Added Android GD 2.205 support
+
 ## <cg>v4.0.0-alpha.5</c> (2024-01-21)
 * Further bugfixes
 
