@@ -1,9 +1,9 @@
 {
 	"geode": "2.0.0",
-	"version": "v4.0.0-alpha.5",
+	"version": "v4.0.0-alpha.6",
     "gd": {
         "win": "2.204",
-        "android": "2.200"
+        "android": "2.205"
     },
 	"id": "cvolton.betterinfo",
 	"name": "BetterInfo",
