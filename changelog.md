@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.0.0-alpha.9</c> (2024-01-24)
+* Updated for changes in Geode v2.0.0-beta.8
+
 ## <cg>v4.0.0-alpha.8</c> (2024-01-24)
 * Bugfixes & improvements
 
