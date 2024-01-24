@@ -23,7 +23,7 @@ void IDRangePopup::onClose(cocos2d::CCObject* sender)
 }
 
 bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char* text, int additional){
-    if(!CvoltonAlertLayerStub::init({240.0f, 150.0f}, .8f, {0x00, 0x00, 0x00, 0x96})) return false;
+    if(!CvoltonAlertLayerStub::init({240.0f, 150.0f}, .8f, 0x96)) return false;
 
     this->m_delegate = delegate;
 

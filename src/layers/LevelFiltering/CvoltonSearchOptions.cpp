@@ -36,7 +36,7 @@ void CvoltonSearchOptions::onPrev(cocos2d::CCObject* sender)
 }
 
 bool CvoltonSearchOptions::init(){
-    if(!CvoltonAlertLayerStub::init({440.0f, 290.0f}, 1.f, {0x00, 0x00, 0x00, 0x96})) return false;
+    if(!CvoltonAlertLayerStub::init({440.0f, 290.0f}, 1.f, 0x96)) return false;
     m_closeBtn->setPositionX(m_closeBtn->getPositionX() + 0.5f);
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();

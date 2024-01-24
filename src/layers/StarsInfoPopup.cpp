@@ -49,7 +49,7 @@ int StarsInfoPopup::completedLevelsForDifficulty(int difficulty, bool platformer
 }
 
 bool StarsInfoPopup::init(){
-    if(!CvoltonAlertLayerStub::init({380.0f, 210.0f}, 0.8f, {0x00, 0x00, 0x00, 0x4B}, 2)) return false;
+    if(!CvoltonAlertLayerStub::init({380.0f, 210.0f}, 0.8f, 0x4B, 2)) return false;
     m_closeBtn->setVisible(false);
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();

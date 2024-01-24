@@ -83,7 +83,7 @@ void ProfileSearchOptions::onSecondaryInfo(cocos2d::CCObject* sender){
 }
 
 bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std::string& prefix, BISearchObjectDelegate* searchObjDelegate){
-    if(!CvoltonAlertLayerStub::init({440.0f, 290.0f}, 1.f, {0x00, 0x00, 0x00, 0x96})) return false;
+    if(!CvoltonAlertLayerStub::init({440.0f, 290.0f}, 1.f, 0x96)) return false;
 
     m_columns = 3;
     m_top = 96;

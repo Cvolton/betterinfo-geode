@@ -1,27 +1,17 @@
 #include "CvoltonAlertLayerStub.h"
 
-bool CvoltonAlertLayerStub::init(CCPoint contentSize, float closeBtnScale, const ccColor4B &color, int squareNumber){
-	bool init = CCLayerColor::initWithColor(color);
+bool CvoltonAlertLayerStub::init(CCPoint contentSize, float closeBtnScale, uint8_t alpha, int squareNumber){
+	bool init = FLAlertLayer::init(alpha);
     if(!init) return false;
 
     m_alertSize = contentSize;
 
-    CCDirector* director = CCDirector::sharedDirector();
-    //director->getTouchDispatcher()->incrementForcePrio(2);
-
-    setTouchEnabled(true);
-    setKeypadEnabled(true);
-
-    m_mainLayer = CCLayer::create();
-
-    this->addChild(m_mainLayer);
-
-	CCSize winSize = director->getWinSize();
-	extension::CCScale9Sprite* bg = extension::CCScale9Sprite::create(fmt::format("GJ_square{:02}.png", squareNumber).c_str(), { 0.0f, 0.0f, 80.0f, 80.0f });
+	auto winSize = CCDirector::sharedDirector()->getWinSize();
+	auto bg = CCScale9Sprite::create(fmt::format("GJ_square{:02}.png", squareNumber).c_str(), { 0.0f, 0.0f, 80.0f, 80.0f });
     bg->setContentSize(m_alertSize);
-    m_mainLayer->addChild(bg, -1);
     bg->setPosition({ winSize.width / 2, winSize.height / 2 });
     bg->setID("background"_spr);
+    m_mainLayer->addChild(bg, -1);
 
     m_buttonMenu = CCMenu::create();
     m_buttonMenu->setID("button-menu"_spr);
