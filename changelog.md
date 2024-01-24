@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.0.0-alpha.8</c> (2024-01-24)
+* Bugfixes & improvements
+
 ## <cg>v4.0.0-alpha.7</c> (2024-01-23)
 * Fixed remaining Android-specific issues
 
