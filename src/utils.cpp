@@ -566,7 +566,7 @@ void BetterInfo::loadImportantNotices(CCLayer* layer) {
 
     layer->retain();
 
-    web::AsyncWebRequest().fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toString(false))).json().then([layer](const matjson::Value& info){
+    web::AsyncWebRequest().fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toString(true))).json().then([layer](const matjson::Value& info){
         auto notice = info.try_get("notice");
         if(notice == std::nullopt) return;
         
