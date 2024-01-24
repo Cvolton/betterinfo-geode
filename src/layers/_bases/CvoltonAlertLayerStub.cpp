@@ -64,3 +64,9 @@ void CvoltonAlertLayerStub::onClose(CCObject* sender) {
     setKeypadEnabled(false);
     removeFromParentAndCleanup(true);
 }
+
+void CvoltonAlertLayerStub::show(){
+    FLAlertLayer::show();
+    
+    cocos::handleTouchPriority(this);
+}
