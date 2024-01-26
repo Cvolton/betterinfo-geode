@@ -155,18 +155,16 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
     if(!objectExists("username-dict", idString)) {
         //if gdhistory was faster, this could be sync and the feature would be more efficient, sadly gdhistory is not faster
         if(download && m_attemptedUsernames.find(userID) == m_attemptedUsernames.end()) {
-            web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).text().then([userID](const std::string& userData){
-                log::info("{}", userData);
-                //GEODE_UNWRAP_INTO(auto data, userData);
-                auto data = matjson::parse(userData);
+            web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).json().then([userID](const matjson::Value& data){
+                log::info("Restored green username for {}: {}", userID, data.as_string());
                 std::string username;
 
                 if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
                 else if(data["username"].is_string()) username = data["username"].as_string();
 
                 BetterInfoCache::sharedState()->storeUserName(userID, username);
-            }).expect([](const std::string& error){
-
+            }).expect([userID](const std::string& error){
+                log::error("Error while getting username for {}: {}", userID, error);
             });
             m_attemptedUsernames.insert(userID);
         }
@@ -213,16 +211,13 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
     if(!objectExists("upload-date-dict", idString)) {
         //if gdhistory was faster, this could be sync and the feature would be more efficient, sadly gdhistory is not faster
         if(m_attemptedLevelDates.find(levelID) == m_attemptedLevelDates.end()) {
-            web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).text().then([levelID](const std::string& userData){
-                log::info("{}", userData);
-                auto data = matjson::parse(userData);
-
+            web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).json().then([levelID](const matjson::Value& data){
                 if(!data["approx"].is_object()) return;
                 if(!data["approx"]["estimation"].is_string()) return;
 
                 BetterInfoCache::sharedState()->storeUploadDate(levelID, data["approx"]["estimation"].as_string());
-            }).expect([](const std::string& error){
-
+            }).expect([levelID](const std::string& error){
+                log::error("Error while getting exact upload date for level {}: {}", levelID, error);
             });
             m_attemptedLevelDates.insert(levelID);
         }
