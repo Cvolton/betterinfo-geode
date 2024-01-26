@@ -89,22 +89,16 @@ std::string BetterInfoCache::getLevelName(int levelID) {
     auto idString = std::to_string(levelID);
     if(!objectExists("level-name-dict", idString)) return "Unknown";
 
-    try {
-        return m_json["level-name-dict"][idString].as_string();
-    } catch(std::exception) {
-        return "Unknown (malformed JSON)";
-    }
+    if(!m_json["level-name-dict"][idString].is_string()) return "Unknown (malformed JSON)";
+    return m_json["level-name-dict"][idString].as_string();
 }
 
 int BetterInfoCache::getDemonDifficulty(int levelID) {
     auto idString = std::to_string(levelID);
     if(!objectExists("demon-difficulty-dict", idString)) return 0;
 
-    try {
-        return m_json["demon-difficulty-dict"][idString].as_int();
-    } catch(std::exception) {
-        return 0;
-    }
+    if(!m_json["demon-difficulty-dict"][idString].is_number()) return 0;
+    return m_json["demon-difficulty-dict"][idString].as_int();
 }
 
 void BetterInfoCache::storeUserName(int userID, const std::string& username) {
@@ -171,23 +165,16 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
         return "";
     }
 
-    try {
-        return m_json["username-dict"][idString].as_string();
-    } catch(std::exception e) {
-        log::error("Exception in getUserName: {}", e.what());
-        return "";
-    }
+    if(!m_json["username-dict"][idString].is_string()) return "";
+    return m_json["username-dict"][idString].as_string();
 }
 
 int BetterInfoCache::getCoinCount(int levelID) {
     auto idString = std::to_string(levelID);
     if(!objectExists("coin-count-dict", idString)) return 3;
 
-    try {
-        return m_json["coin-count-dict"][idString].as_int();
-    } catch(std::exception) {
-        return 3;
-    }
+    if(!m_json["coin-count-dict"][idString].is_number()) return 3;
+    return m_json["coin-count-dict"][idString].as_int();
 }
 
 void BetterInfoCache::storeUploadDate(int levelID, const std::string& date) {
@@ -224,12 +211,8 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
         return "";
     }
 
-    try {
-        return m_json["upload-date-dict"][idString].as_string();
-    } catch(std::exception e) {
-        log::error("Exception in getUploadDate: {}", e.what());
-        return "";
-    }
+    if(!m_json["upload-date-dict"][idString].is_string()) return "";
+    return m_json["upload-date-dict"][idString].as_string();
 }
 
 void BetterInfoCache::loadLevelsFinished(cocos2d::CCArray* levels, const char*) {
