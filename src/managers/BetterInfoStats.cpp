@@ -136,11 +136,8 @@ time_t BetterInfoStats::getCompletion(GJGameLevel* level, bool practice) {
 
     auto ret = dict->valueForKey(keyForLevel(level));
     if(std::string_view(ret->getCString()).empty()) return 0;
-    try {
-        return std::strtol(ret->getCString(), nullptr, 10);
-    } catch(...) {
-        return 0;
-    }
+
+    return BetterInfo::strtol(ret->getCString());
 }
 
 void BetterInfoStats::logPlay(GJGameLevel* level) {
@@ -161,11 +158,8 @@ time_t BetterInfoStats::getPlay(GJGameLevel* level, bool last) {
 
     auto ret = dict->valueForKey(keyForLevel(level));
     if(std::string_view(ret->getCString()).empty()) return 0;
-    try {
-        return std::strtol(ret->getCString(), nullptr, 10);
-    } catch(...) {
-        return 0;
-    }
+
+    return BetterInfo::strtol(ret->getCString());
 }
 
 std::string BetterInfoStats::keyForLevel(GJGameLevel* level) {
@@ -185,9 +179,6 @@ int BetterInfoStats::getAttempts(GJGameLevel* level, bool practice) {
 
     auto ret = dict->valueForKey(keyForLevel(level));
     if(std::string_view(ret->getCString()).empty()) return 0;
-    try {
-        return std::strtol(ret->getCString(), nullptr, 10);
-    } catch(...) {
-        return 0;
-    }
+
+    return BetterInfo::stoi(ret->getCString());
 }

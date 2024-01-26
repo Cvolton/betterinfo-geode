@@ -67,4 +67,5 @@ namespace BetterInfo {
     AxisLayoutOptions* copyLayoutOptions(AxisLayoutOptions* a);
 
     int stoi(std::string_view str);
+    long long strtol(std::string_view str);
 }

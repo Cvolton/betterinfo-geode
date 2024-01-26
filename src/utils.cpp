@@ -710,3 +710,9 @@ int BetterInfo::stoi(std::string_view str) {
     std::from_chars(str.data(), str.data() + str.size(), result);
     return result;
 }
+
+long long BetterInfo::strtol(std::string_view str) {
+    long long result = 0;
+    std::from_chars(str.data(), str.data() + str.size(), result);
+    return result;
+}

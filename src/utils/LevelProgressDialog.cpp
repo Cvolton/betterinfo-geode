@@ -3,6 +3,7 @@
 
 #include "../managers/BetterInfoStats.h"
 #include "../layers/PaginatedFLAlert.h"
+#include "../utils.hpp"
 
 std::string LevelProgressDialog::printableProgress(std::string personalBests, int percentage){
 
@@ -10,10 +11,7 @@ std::string LevelProgressDialog::printableProgress(std::string personalBests, in
     std::string currentBest;
     std::deque<int> progresses;
     while(getline(bestsStream, currentBest, ',')){
-        try {
-            progresses.push_front(std::stoi(currentBest));
-            //contentStream << percentage << "% ";
-        }catch(...){}
+        progresses.push_front(BetterInfo::stoi(currentBest));
     }
     std::string printable;
     //std::reverse(std::begin(progresses), std::end(progresses));
