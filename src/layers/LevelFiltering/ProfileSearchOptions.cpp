@@ -317,21 +317,15 @@ void ProfileSearchOptions::onIDRangeFinished(int min, int max, int additional) {
 bool ProfileSearchOptions::getOption(const std::string& option) const {
     if(!m_prefix.empty()) return Mod::get()->getSavedValue<bool>(fmt::format("{}_{}", m_prefix, option));
 
-    try {
-        return m_options.at(option);
-    } catch(...) {
-        return false;
-    }
+    if(m_options.contains(option)) return m_options.at(option);
+    return false;
 }
 
 int ProfileSearchOptions::getOptionInt(const std::string& option) const {
     if(!m_prefix.empty()) return Mod::get()->getSavedValue<int>(fmt::format("{}_{}", m_prefix, option));
 
-    try {
-        return m_optionInts.at(option);
-    } catch(...) {
-        return 0;
-    }
+    if(m_optionInts.contains(option)) return m_optionInts.at(option);
+    return 0;
 }
 
 bool ProfileSearchOptions::toggleOption(const std::string& option) {
