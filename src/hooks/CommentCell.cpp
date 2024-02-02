@@ -37,72 +37,74 @@ class $modify(BICommentCell, CommentCell) {
     void loadFromComment(GJComment* b) {
         CommentCell::loadFromComment(b);
 
-        auto layer = static_cast<CCLayer*>(this->getChildren()->objectAtIndex(1));
-
         if(!Mod::get()->setSavedValue("comment-id-alert-shown", true)) FLAlertLayer::create(FLAlertResultHandler::create("show-comment-ids", true), Mod::get()->getName().c_str(), "Would you like to show comment IDs next to comments?", "No", "Yes")->show();
-
-        CCMenu* menu = nullptr;
 
         auto winSize = CCDirector::sharedDirector()->getWinSize();
         bool smallCommentsMode = this->m_height == 36; //this is how robtop does the check
 
-        auto idText = CCLabelBMFont::create(fmt::format("#{}", b->m_commentID).c_str(), "chatFont.fnt");
-        idText->setPosition(smallCommentsMode ? CCPoint(332, 12.5) : CCPoint(329, 21.5));
-        idText->setAnchorPoint({1, .5f});
-        idText->setScale(smallCommentsMode ? .325f : .425f);
-        idText->setOpacity(110);
-        idText->setColor({0,0,0});
-        idText->setID("comment-id"_spr);
-        if(Mod::get()->getSettingValue<bool>("show-comment-ids")) layer->addChild(idText);
-
-        for(unsigned int i = 0; i < layer->getChildrenCount(); i++){
-            menu = typeinfo_cast<CCMenu*>(layer->getChildren()->objectAtIndex(i));
-            if(menu != nullptr) break;
+        /**
+         * Add comment ID
+         */
+        if(Mod::get()->getSettingValue<bool>("show-comment-ids")) {
+            auto idText = CCLabelBMFont::create(fmt::format("#{}", b->m_commentID).c_str(), "chatFont.fnt");
+            idText->setPosition(smallCommentsMode ? CCPoint(332, 12.5) : CCPoint(329, 21.5));
+            idText->setAnchorPoint({1, .5f});
+            idText->setScale(smallCommentsMode ? .325f : .425f);
+            idText->setOpacity(110);
+            idText->setColor({0,0,0});
+            idText->setID("comment-id"_spr);
+            m_mainLayer->addChild(idText);
         }
 
-        if(menu == nullptr) return;
+        if(auto menu = static_cast<CCMenu*>(m_mainLayer->getChildByID("main-menu"))) {
+            /**
+             * Add comments InfoLayer button
+             */
+            if(b->m_hasLevelID) {
+                auto commentsSprite = CCSprite::createWithSpriteFrameName("GJ_chatBtn_001.png");
+                commentsSprite->setScale(smallCommentsMode ? 0.35f : 0.5f);
+                auto commentsButton = CCMenuItemSpriteExtra::create(
+                    commentsSprite,
+                    this,
+                    menu_selector(BICommentCell::onLevelInfoNoLoad)
+                );
 
-        if(!(b->m_hasLevelID)){
+                CCPoint smallPosition(206 - (winSize.width / 2), 24.5f - (winSize.height / 2));
+                CCPoint largePosition(154 - (winSize.width / 2), 60 - (winSize.height / 2));
+                commentsButton->setPosition(smallCommentsMode ? smallPosition : largePosition);
+                commentsButton->setSizeMult(1.2f);
+                commentsButton->setID("comments-button"_spr);
 
-            if(b->m_accountID != 0) return;
-
-            auto originalNameNode = static_cast<CCLabelBMFont*>(layer->getChildren()->objectAtIndex(2));
-            
-            if(strlen(originalNameNode->getString()) == 0){
-                std::stringstream contentStream;
-                contentStream << "- (ID: " << b->m_userID << ")";
-                originalNameNode->setString(contentStream.str().c_str());
+                menu->addChild(commentsButton);
             }
-            layer->removeChild(originalNameNode);
 
-            auto buttonButton = CCMenuItemSpriteExtra::create(
-                originalNameNode,
-                this,
-                menu_selector(BICommentCell::onProfilePage)
-            );
-            buttonButton->setSizeMult(1.2f);
-            buttonButton->setPosition(37 - (winSize.width / 2), smallCommentsMode ? 18.5f - (winSize.height / 2) : 50.5f - (winSize.height / 2) );
-            buttonButton->setAnchorPoint({0.1f,0});
-            buttonButton->setEnabled(true);
-            buttonButton->setID("profile-button"_spr);
-            menu->addChild(buttonButton);
+            /**
+             * Add username button
+            */
+            if(b->m_accountID == 0) if(auto usernameLabel = static_cast<CCLabelBMFont*>(m_mainLayer->getChildByID("username-label"))) {
+                auto content = std::string_view(usernameLabel->getString());
+                if(content == "" || content == "-") {
+                    usernameLabel->setString(fmt::format("- (ID: {})", b->m_userID).c_str());
+                }
 
-        }else{
+                CCPoint position = menu->convertToNodeSpace(m_mainLayer->convertToWorldSpace(usernameLabel->getPosition()));
+                usernameLabel->removeFromParent();
 
-            auto commentsSprite = CCSprite::createWithSpriteFrameName("GJ_chatBtn_001.png");
-            commentsSprite->setScale(smallCommentsMode ? 0.35f : 0.5f);
-            auto commentsButton = CCMenuItemSpriteExtra::create(
-                commentsSprite,
-                this,
-                menu_selector(BICommentCell::onLevelInfoNoLoad)
-            );
-            menu->addChild(commentsButton);
-            CCPoint smallPosition(206 - (winSize.width / 2), 24.5f - (winSize.height / 2));
-            CCPoint largePosition(154 - (winSize.width / 2), 60 - (winSize.height / 2));
-            commentsButton->setPosition(smallCommentsMode ? smallPosition : largePosition);
-            commentsButton->setSizeMult(1.2f);
-            commentsButton->setID("comments-button"_spr);
 
+                auto buttonButton = CCMenuItemSpriteExtra::create(
+                    usernameLabel,
+                    this,
+                    menu_selector(BICommentCell::onProfilePage)
+                );
+                buttonButton->setSizeMult(1.2f);
+                buttonButton->setPosition(position + CCPoint(usernameLabel->getScaledContentSize().width / 2, 0));
+                buttonButton->setEnabled(true);
+                buttonButton->setID("username-button"); //using vanilla style node ID because this is a replacement for a vanilla feature
+
+                menu->addChild(buttonButton);
+            }
+
+            
         }
 
     }
