@@ -244,8 +244,7 @@ class $modify(BIProfilePage, ProfilePage) {
                 this,
                 menu_selector(BIProfilePage::onProfilePageCopyUserID)
             );
-            userIDBtn->setPosition({38,-248});
-            userIDBtn->setAnchorPoint({0,1});
+            userIDBtn->setPosition(CCPoint(38  + (userIDNode->getScaledContentSize().width / 2),-254));
             userIDBtn->setID("userid-button"_spr);
             m_buttonMenu->addChild(userIDBtn);
             this->m_buttons->addObject(userIDBtn);
@@ -259,8 +258,7 @@ class $modify(BIProfilePage, ProfilePage) {
                 this,
                 menu_selector(BIProfilePage::onProfilePageCopyAccountID)
             );
-            accountIDBtn->setPosition({38,-258});
-            accountIDBtn->setAnchorPoint({0,1});
+            accountIDBtn->setPosition(CCPoint(38  + (accountIDBtn->getScaledContentSize().width / 2),-264));
             accountIDBtn->setID("accountid-button"_spr);
             m_buttonMenu->addChild(accountIDBtn);
             this->m_buttons->addObject(accountIDBtn);
