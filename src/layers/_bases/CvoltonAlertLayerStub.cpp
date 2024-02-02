@@ -65,8 +65,6 @@ void CvoltonAlertLayerStub::onClose(CCObject* sender) {
     removeFromParentAndCleanup(true);
 }
 
-void CvoltonAlertLayerStub::show(){
-    FLAlertLayer::show();
-    
-    cocos::handleTouchPriority(this);
+void CvoltonAlertLayerStub::registerWithTouchDispatcher() {
+    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -500, true);
 }

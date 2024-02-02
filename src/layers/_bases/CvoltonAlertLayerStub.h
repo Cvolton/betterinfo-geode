@@ -15,5 +15,5 @@ public:
 	void onCloseThunk(CCObject* sender);
 	virtual void onClose(CCObject* sender);
 	void keyBackClicked();
-	void show();
+	void registerWithTouchDispatcher();
 };
