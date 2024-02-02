@@ -66,5 +66,5 @@ void CvoltonAlertLayerStub::onClose(CCObject* sender) {
 }
 
 void CvoltonAlertLayerStub::registerWithTouchDispatcher() {
-    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -500, true);
+    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -250, true);
 }
