@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.0.0-alpha.10</c> (2024-02-02)
+* Fixed Legendary & Mythic filters in BI Filtered Search
+* Other bugfixes & improvements
+
 ## <cg>v4.0.0-alpha.9</c> (2024-01-24)
 * Updated for changes in Geode v2.0.0-beta.8
 
