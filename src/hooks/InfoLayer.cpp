@@ -10,6 +10,8 @@
 using namespace geode::prelude;
 
 class $modify(BIInfoLayer, InfoLayer) {
+    ButtonSprite* m_pageBtn = nullptr;
+
     static void onModify(auto& self) {
         auto res = self.setHookPriority("InfoLayer::onMore", 99999);
         res = self.setHookPriority("InfoLayer::onLevelInfo", 99999);
@@ -78,16 +80,15 @@ class $modify(BIInfoLayer, InfoLayer) {
         }
 
         if(auto menu = m_mainLayer->getChildByID("refresh-menu")) {
-            auto buttonSprite = ButtonSprite::create("1", 12, true, "bigFont.fnt", "GJ_button_02.png", 25, 0.4f);
+            m_fields->m_pageBtn = ButtonSprite::create("1", 12, true, "bigFont.fnt", "GJ_button_02.png", 25, 0.4f);
             auto buttonButton = CCMenuItemSpriteExtra::create(
-                buttonSprite,
+                m_fields->m_pageBtn,
                 this,
                 menu_selector(BIInfoLayer::onJumpToPageLayer)
             );
             buttonButton->setSizeMult(1.2f);
             buttonButton->setPosition({195,34});
             buttonButton->setID("comment-page-btn"_spr);
-            //buttonButton->setTag(commentPageBtnTag);
             menu->addChild(buttonButton);
             menu->updateLayout();
         }
@@ -163,14 +164,6 @@ class $modify(BIInfoLayer, InfoLayer) {
     void loadPage(int page, bool reload) {
         InfoLayer::loadPage(page, reload);
 
-        CCMenu* menu = static_cast<CCMenu*>(this->m_commentsBtn->getParent());
-
-        auto commentBtn = static_cast<CCMenuItemSpriteExtra*>(menu->getChildByID("comment-page-btn"_spr));
-        if(commentBtn == nullptr) return;
-
-        auto commentBtnSprite = static_cast<ButtonSprite*>(commentBtn->getChildren()->objectAtIndex(0));
-        if(commentBtnSprite == nullptr) return;
-
-        commentBtnSprite->setString(std::to_string(page+1).c_str());
+        if(m_fields->m_pageBtn) m_fields->m_pageBtn->setString(std::to_string(page+1).c_str());
     }
 };
