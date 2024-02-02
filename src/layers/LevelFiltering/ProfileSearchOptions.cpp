@@ -385,6 +385,8 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
     searchObj.coins = getOption("coins");
     searchObj.noCoins = getOption("nocoins");
     searchObj.epic = getOption("epic");
+    searchObj.legendary = getOption("legendary");
+    searchObj.mythic = getOption("mythic");
     searchObj.folder = 0;
     searchObj.song = getOption("song");
     searchObj.songCustom = getOption("song_custom");
@@ -448,6 +450,8 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
     setOption("coins", searchObj.coins);
     setOption("nocoins", searchObj.noCoins);
     setOption("epic", searchObj.epic);
+    setOption("legendary", searchObj.legendary);
+    setOption("mythic", searchObj.mythic);
     //searchObj.folder = 0;
     setOption("song", searchObj.song);
     setOption("song_custom", searchObj.songCustom);
