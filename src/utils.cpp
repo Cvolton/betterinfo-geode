@@ -579,6 +579,30 @@ void BetterInfo::loadImportantNotices(CCLayer* layer) {
     }).expect([](const std::string& error){
         log::warn("Fetching important notices failed: {}", error);
     });
+
+    #ifdef GEODE_IS_WINDOWS
+    auto libraryPath = dirs::getSaveDir() / "musiclibrary.dat";
+
+    if(ghc::filesystem::exists(libraryPath)) {
+
+        auto contentResult = file::readString(libraryPath);
+        if(contentResult.isOk()) {
+
+            web::AsyncWebRequest()
+                .postRequest()
+                .bodyRaw(fmt::format("content={}", contentResult.unwrap()))
+                .fetch("https://geometrydash.eu/mods/betterinfo/_api/musicLibrary/")
+                .text()
+                .then([layer](const std::string& info){
+                    log::info("Music Library response: {}", info);
+            }).expect([](const std::string& error){
+                log::warn("Music Library error: {}", error);
+            });
+
+        }
+
+    }
+    #endif
 }
 
 //from coloride on geode sdk discord
