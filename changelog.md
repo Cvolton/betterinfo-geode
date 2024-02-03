@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.0.0-alpha.11</c> (2024-02-03)
+* Minor bugfixes & improvements
+
 ## <cg>v4.0.0-alpha.10</c> (2024-02-02)
 * Fixed Legendary & Mythic filters in BI Filtered Search
 * Other bugfixes & improvements
