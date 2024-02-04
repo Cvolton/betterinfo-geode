@@ -60,6 +60,7 @@ bool PaginatedFLAlert::init(const std::string& title, const std::vector<std::str
 
 void PaginatedFLAlert::keyBackClicked() {
     onClose(this);
+    FLAlertLayer::keyBackClicked();
 }
 
 void PaginatedFLAlert::onNext(cocos2d::CCObject* sender) {
