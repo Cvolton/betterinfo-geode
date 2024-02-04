@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.0.0-alpha.12</c> (2024-02-04)
+* Added a temporary bugfix for a Geode Loader bug
+
 ## <cg>v4.0.0-alpha.11</c> (2024-02-03)
 * Minor bugfixes & improvements
 
