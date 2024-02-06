@@ -552,11 +552,7 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
 }
 
 bool BetterInfo::controllerConnected() {
-    #ifdef GEODE_IS_ANDROID
-    return false;
-    #else
-    return CCApplication::sharedApplication()->getControllerConnected();
-    #endif
+    return PlatformToolbox::isControllerConnected();
 }
 
 void BetterInfo::loadImportantNotices(CCLayer* layer) {
