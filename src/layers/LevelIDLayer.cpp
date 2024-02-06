@@ -23,14 +23,21 @@ void LevelIDLayer::onLevelComments(cocos2d::CCObject* sender){
     auto level = GJGameLevel::create();
     level->m_levelID = getNumber();
 
-    InfoLayer* infoLayer = InfoLayer::create(level, nullptr, nullptr);
-    infoLayer->show();
-
     onClose(sender);
+
+    Loader::get()->queueInMainThread([level]() {
+        InfoLayer::create(level, nullptr, nullptr)->show();
+    });
 }
 
 void LevelIDLayer::onAccountProfile(cocos2d::CCObject* sender){
-    ProfilePage::create(getNumber(), false)->show();
+    auto number = getNumber();
+
+    onClose(sender);
+
+    Loader::get()->queueInMainThread([number]() {
+        ProfilePage::create(number, false)->show();
+    });
 }
 
 bool LevelIDLayer::init(){
