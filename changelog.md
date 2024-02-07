@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.0.0-alpha.13</c> (2024-02-04)
+* Added Mac support
+* Fixed Extended Level Stats not working properly for old daily levels
+* Other bugfixes & improvements
+
 ## <cg>v4.0.0-alpha.12</c> (2024-02-04)
 * Added a temporary bugfix for a Geode Loader bug
 
