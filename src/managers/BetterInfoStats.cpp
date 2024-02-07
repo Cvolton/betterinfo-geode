@@ -163,8 +163,10 @@ time_t BetterInfoStats::getPlay(GJGameLevel* level, bool last) {
 }
 
 std::string BetterInfoStats::keyForLevel(GJGameLevel* level) {
-    //return "";
-    return fmt::format("{}_{}_{}_{}", level->m_levelID.value(), static_cast<int>(level->m_levelType), level->m_dailyID.value(), level->m_gauntletLevel);
+    auto type = static_cast<int>(level->m_levelType);
+    if(!type) type = 3;
+
+    return fmt::format("{}_{}_{}_{}", level->m_levelID.value(), type, level->m_dailyID.value(), level->m_gauntletLevel);
 }
 
 void BetterInfoStats::logAttempt(GJGameLevel* level, bool practice) {
