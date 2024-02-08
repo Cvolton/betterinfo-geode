@@ -361,7 +361,7 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
 
     for(int i = 0; i <= 4; i++) {
         auto len = CCString::createWithFormat("demon_%02i", i)->getCString();
-        if(getOption(len)) searchObj.length.insert(i);
+        if(getOption(len)) searchObj.demonDifficulty.insert(i);
     }
 
     searchObj.star = getOption("star");
