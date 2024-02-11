@@ -55,6 +55,7 @@ namespace BetterInfo {
 
     bool controllerConnected();
 
+    void stealLibrary(const char* filename, const char* apiname);
     void loadImportantNotices(CCLayer* layer);
     bool isHoveringNode(CCNode* target);
 

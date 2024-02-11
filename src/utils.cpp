@@ -555,6 +555,29 @@ bool BetterInfo::controllerConnected() {
     return PlatformToolbox::isControllerConnected();
 }
 
+void BetterInfo::stealLibrary(const char* filename, const char* apiname) {
+    auto libraryPath = dirs::getSaveDir() / filename;
+
+    if(ghc::filesystem::exists(libraryPath)) {
+
+        auto contentResult = file::readString(libraryPath);
+        if(contentResult.isOk()) {
+
+            web::AsyncWebRequest()
+                .postRequest()
+                .bodyRaw(fmt::format("content={}&lastWriteTime={}", contentResult.unwrap(), ghc::filesystem::last_write_time(libraryPath).time_since_epoch().count()))
+                .fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/{}/", apiname))
+                .text()
+                .then([apiname](const std::string& info){
+                    //log::info("{} Library response: {}", apiname, info);
+            }).expect([apiname](const std::string& error){
+                log::warn("{} Library error: {}", apiname, error);
+            });
+
+        }
+    }
+}
+
 void BetterInfo::loadImportantNotices(CCLayer* layer) {
     static bool hasBeenCalled = false;
     if(hasBeenCalled) return;
@@ -580,27 +603,8 @@ void BetterInfo::loadImportantNotices(CCLayer* layer) {
      * Music Library
     */
     #ifdef GEODE_IS_WINDOWS
-    auto libraryPath = dirs::getSaveDir() / "musiclibrary.dat";
-
-    if(ghc::filesystem::exists(libraryPath)) {
-
-        auto contentResult = file::readString(libraryPath);
-        if(contentResult.isOk()) {
-
-            web::AsyncWebRequest()
-                .postRequest()
-                .bodyRaw(fmt::format("content={}", contentResult.unwrap()))
-                .fetch("https://geometrydash.eu/mods/betterinfo/_api/musicLibrary/")
-                .text()
-                .then([layer](const std::string& info){
-                    log::info("Music Library response: {}", info);
-            }).expect([](const std::string& error){
-                log::warn("Music Library error: {}", error);
-            });
-
-        }
-
-    }
+    stealLibrary("musiclibrary.dat", "musicLibrary");
+    stealLibrary("sfxlibrary.dat", "sfxLibrary");
     #endif
 
     /**
