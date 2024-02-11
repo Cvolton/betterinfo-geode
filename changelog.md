@@ -1,5 +1,5 @@
 # Changelog
-## <cg>v4.0.0</c> (2024-02-11)
+## <cg>v4.0.0</c> (2024-02-12)
 * Fixed demon difficulty filtering in Filtered Search
 * Other bugfixes & improvements
 
