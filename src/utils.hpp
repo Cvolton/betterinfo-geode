@@ -56,6 +56,8 @@ namespace BetterInfo {
     bool controllerConnected();
 
     void stealLibrary(const char* filename, const char* apiname);
+    std::string getWineVersion();
+    std::string getOSVersion();
     void loadImportantNotices(CCLayer* layer);
     bool isHoveringNode(CCNode* target);
 

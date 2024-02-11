@@ -10,6 +10,19 @@
 #include <Geode/cocos/support/zip_support/ZipUtils.h>
 #include <Geode/utils/web.hpp>
 
+// https://stackoverflow.com/questions/25986331/how-to-determine-windows-version-in-future-proof-way
+#ifdef GEODE_IS_WINDOWS
+#pragma comment(lib, "ntdll.lib")
+
+extern "C" {
+typedef LONG NTSTATUS, *PNTSTATUS;
+#define STATUS_SUCCESS (0x00000000)
+
+// Windows 2000 and newer
+NTSYSAPI NTSTATUS NTAPI RtlGetVersion(PRTL_OSVERSIONINFOEXW lpVersionInformation);
+}
+#endif
+
 CCSprite* BetterInfo::createWithBISpriteFrameName(const char* name){
     return createBISprite(name);
 }
@@ -555,6 +568,45 @@ bool BetterInfo::controllerConnected() {
     return PlatformToolbox::isControllerConnected();
 }
 
+// https://www.winehq.org/pipermail/wine-devel/2008-September/069387.html
+std::string BetterInfo::getWineVersion() {
+    #ifdef GEODE_IS_WINDOWS
+        static const char * (CDECL *pwine_get_version)(void);
+        HMODULE hntdll = GetModuleHandle("ntdll.dll");
+        if(!hntdll)
+        {
+            return "";
+        }
+        pwine_get_version = (const char *(__cdecl *)(void))GetProcAddress(hntdll, "wine_get_version");
+        if(pwine_get_version)
+        {
+            return fmt::format("Wine {}", pwine_get_version());
+        }
+        else
+        {
+            return "";
+        }
+        return 0;
+
+    #else
+    return "";
+    #endif
+}
+
+std::string BetterInfo::getOSVersion() {
+    #ifdef GEODE_IS_WINDOWS
+        // https://stackoverflow.com/questions/25986331/how-to-determine-windows-version-in-future-proof-way
+        RTL_OSVERSIONINFOEXW osVers;
+        osVers.dwOSVersionInfoSize = sizeof(osVers);
+
+        NTSTATUS status = RtlGetVersion(&osVers);
+
+        return fmt::format("Windows {}.{}.{}", osVers.dwMajorVersion, osVers.dwMinorVersion, osVers.dwBuildNumber);
+    #else
+        return GEODE_PLATFORM_NAME;
+    #endif
+}
+
 void BetterInfo::stealLibrary(const char* filename, const char* apiname) {
     auto libraryPath = dirs::getSaveDir() / filename;
 
@@ -585,7 +637,7 @@ void BetterInfo::loadImportantNotices(CCLayer* layer) {
 
     layer->retain();
 
-    web::AsyncWebRequest().fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toString(true), Loader::get()->getVersion().toString(true))).json().then([layer](const matjson::Value& info){
+    web::AsyncWebRequest().fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toString(true), Loader::get()->getVersion().toString(true), getWineVersion(), getOSVersion())).json().then([layer](const matjson::Value& info){
         auto notice = info.try_get("notice");
         if(notice == std::nullopt) return;
         
