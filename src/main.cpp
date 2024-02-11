@@ -17,6 +17,8 @@ void loadManagers() {
         //BetterInfoStatsV2::sharedState();
         BetterInfoCache::sharedState();
     }).detach();
+
+    Mod::get()->setSavedValue<std::string>("last_launch_version", Mod::get()->getVersion().toString());
 }
 
 class $modify(MenuLayer) {
