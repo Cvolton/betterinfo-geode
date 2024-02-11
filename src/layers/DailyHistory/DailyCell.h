@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Geode/Bindings.hpp>
+#include <Geode/Geode.hpp>
 
 using namespace geode::prelude;
 
-class DailyCell : public GenericListCell {
+class DailyCell : public TableViewCell {
         GJGameLevel* m_level;
         
         void draw() override;

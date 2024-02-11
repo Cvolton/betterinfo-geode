@@ -80,7 +80,7 @@ void RewardCell::loadFromData(CCObject* object) {
 }
 
 RewardCell::RewardCell(const char* name, CCSize size) :
-    GenericListCell(name, size) {}
+    TableViewCell(name, size.width, size.height) {}
 
 RewardCell* RewardCell::create(const char* key, CCSize size) {
     auto ret = new RewardCell(key, size);

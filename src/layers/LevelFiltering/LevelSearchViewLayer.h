@@ -3,7 +3,7 @@
 #include "../../delegates/BISearchObjectDelegate.h"
 #include "../../objects/BISearchObject.h"
 #include "../_bases/BIViewLayer.h"
-#include <Geode/Bindings.hpp>
+#include <Geode/Geode.hpp>
 
 using namespace geode::prelude;
 

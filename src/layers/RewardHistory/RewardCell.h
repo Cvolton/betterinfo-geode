@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Geode/Bindings.hpp>
+#include <Geode/Geode.hpp>
 
 using namespace geode::prelude;
 
-class RewardCell : public GenericListCell {
+class RewardCell : public TableViewCell {
     public:
         RewardCell(const char* name, cocos2d::CCSize size);
         void loadFromData(CCObject* object);

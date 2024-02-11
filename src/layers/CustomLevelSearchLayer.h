@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Geode/Bindings.hpp>
+#include <Geode/Geode.hpp>
 
 class CustomLevelSearchLayer : public FLAlertLayer {
     GJGameLevel* m_level;

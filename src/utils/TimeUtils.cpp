@@ -1,6 +1,7 @@
 #include "TimeUtils.h"
 
 #include <fmt/format.h>
+#include <sstream>
 
 std::string TimeUtils::timeToString(time_t input) {
     char dateString[255];

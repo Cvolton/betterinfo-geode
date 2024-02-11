@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Geode/Bindings.hpp>
+#include <Geode/Geode.hpp>
 
 using namespace geode::prelude;
 

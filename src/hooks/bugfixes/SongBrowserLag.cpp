@@ -1,4 +1,4 @@
-/*#include <Geode/Bindings.hpp>
+/*#include <Geode/Geode.hpp>
 #include <Geode/modify/MusicDownloadManager.hpp>
 #include <Geode/modify/LevelInfoLayer.hpp>
 #include <Geode/modify/CustomSongWidget.hpp>

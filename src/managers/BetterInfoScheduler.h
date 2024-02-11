@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Geode/utils/general.hpp>
+#include <Geode/Geode.hpp>
 #include <queue>
 
 using namespace geode::prelude;

@@ -1,4 +1,4 @@
-#include <Geode/Bindings.hpp>
+#include <Geode/Geode.hpp>
 #include <Geode/modify/CommentCell.hpp>
 
 #include "../layers/UnregisteredProfileLayer.h"

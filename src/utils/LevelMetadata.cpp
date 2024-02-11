@@ -1,5 +1,8 @@
 #include "LevelMetadata.h"
 
+#include <sstream>
+#include <iomanip>
+
 std::string LevelMetadata::getGameVersionName(int version){
     if(version < 1 || version > 99) return std::string("NA");
 

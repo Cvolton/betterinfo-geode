@@ -1,5 +1,8 @@
 #pragma once
 
+#include <set>
+#include <string>
+
 struct BISearchObject {
     public:
         struct RangeItem {
