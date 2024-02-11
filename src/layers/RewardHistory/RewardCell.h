@@ -4,7 +4,7 @@
 
 using namespace geode::prelude;
 
-class RewardCell : public TableViewCell {
+class RewardCell : public GenericListCell {
     public:
         RewardCell(const char* name, cocos2d::CCSize size);
         void loadFromData(CCObject* object);

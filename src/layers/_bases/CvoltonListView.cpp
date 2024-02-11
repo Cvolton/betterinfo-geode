@@ -52,7 +52,7 @@ void CvoltonListView<Cell>::loadCell(TableViewCell* cell, int index) {
     static_cast<Cell*>(cell)->loadFromData(
         this->m_entries->objectAtIndex(index)
     );
-    static_cast<StatsCell*>(cell)->updateBGColor(index);
+    static_cast<Cell*>(cell)->updateBGColor(index);
 }
 
 template <class Cell>

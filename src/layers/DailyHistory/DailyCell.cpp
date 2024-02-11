@@ -207,7 +207,7 @@ void DailyCell::draw() {
 }
 
 DailyCell::DailyCell(const char* name, CCSize size) :
-    TableViewCell(name, size.width, size.height) {}
+    GenericListCell(name, size) {}
 
 DailyCell* DailyCell::create(const char* key, CCSize size) {
     auto ret = new DailyCell(key, size);
