@@ -19,3 +19,6 @@ The best epic modification ever made for Geometry Dash is here! BetterInfo, now 
 
 ## Special thanks
 - KontrollFreek for the logo
+- \_tZ, RandomB, TheSillyDoggo for minor code contributions
+- All [GDHistory](https://history.geometrydash.eu/) contributors (especially the Restoration Union)
+- Geode people and GDP people
