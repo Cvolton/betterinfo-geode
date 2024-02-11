@@ -51,7 +51,9 @@ class $modify(BILevelAreaInnerLayer, LevelAreaInnerLayer) {
         m_fields->m_menu->setPosition({0, 0});
         m_fields->m_menu->setZOrder(10);
         m_fields->m_menu->setID("info-menu"_spr);
-        static_cast<CCNode*>(getChildren()->objectAtIndex(getChildrenCount() - 1))->addChild(m_fields->m_menu);
+        if(auto node = getChildByID("main-node")) {
+            node->addChild(m_fields->m_menu);
+        }
 
         /*addInfoBtn(5001, {-58, -106});
         //addInfoBtn(5002, {139, -50});
@@ -66,7 +68,7 @@ class $modify(BILevelAreaInnerLayer, LevelAreaInnerLayer) {
         addInfoBtn(5004, {57.5f, 41});*/
 
         addInfoBtn(5001, {-60, -108.5f});
-        addInfoBtn(5002, {68, -52.5f});
+        addInfoBtn(5002, {138.5, -52.5f});
         addInfoBtn(5003, {-60, 2});
         addInfoBtn(5004, {57.5f, 41});
 
