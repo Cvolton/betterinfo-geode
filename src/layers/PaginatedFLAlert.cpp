@@ -58,10 +58,6 @@ bool PaginatedFLAlert::init(const std::string& title, const std::vector<std::str
     return true;
 }
 
-void PaginatedFLAlert::keyBackClicked() {
-    onClose(this);
-}
-
 void PaginatedFLAlert::onNext(cocos2d::CCObject* sender) {
     if(m_page+1 >= m_content.size()) return;
     loadPage(m_page+1);
@@ -77,15 +73,11 @@ void PaginatedFLAlert::loadPage(size_t page) {
     newAlert->setZOrder(getZOrder());
     if(!m_pParent) CCDirector::sharedDirector()->getRunningScene()->addChild(newAlert);
     else static_cast<CCNode*>(m_pParent)->addChild(newAlert);
-    onClose(this);
+    onBtn1(this);
 }
 
 void PaginatedFLAlert::keyDown(cocos2d::enumKeyCodes key) {
     switch(key) {
-        case KEY_Space:
-        case CONTROLLER_X:
-            keyBackClicked(); //no confirm button support yet
-            break;
         case KEY_Left:
         case CONTROLLER_Left:
             onPrev(nullptr);
@@ -95,10 +87,6 @@ void PaginatedFLAlert::keyDown(cocos2d::enumKeyCodes key) {
             onNext(nullptr);
             break;
         default:
-            CCLayer::keyDown(key);
+            FLAlertLayer::keyDown(key);
     }
-}
-
-void PaginatedFLAlert::onClose(cocos2d::CCObject* sender) {
-    onBtn1(sender);
 }
