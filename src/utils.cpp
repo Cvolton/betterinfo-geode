@@ -648,8 +648,9 @@ void BetterInfo::loadImportantNotices(CCLayer* layer) {
             alert->show();
             layer->release();
         }
-    }).expect([](const std::string& error){
+    }).expect([layer](const std::string& error){
         log::warn("Fetching important notices failed: {}", error);
+        layer->release();
     });
 
     /**
