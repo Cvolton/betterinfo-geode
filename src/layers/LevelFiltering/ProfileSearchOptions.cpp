@@ -282,6 +282,7 @@ void ProfileSearchOptions::drawTogglesTerciary(){
 
     createToggle("completedcoins", "C. Coins"); 
     createToggle("uncompletedcoins", "Uc. Coins");
+    if(m_prefix.empty()) createToggle("favorite", "Favorited");
 }
 
 void ProfileSearchOptions::onSongDialogClosed(bool custom, int songID){
@@ -399,6 +400,7 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
     searchObj.freeCopy = getOption("copy_free");
     searchObj.unfeatured = getOption("nofeatured");
     searchObj.unepic = getOption("noepic");
+    searchObj.favorite = getOption("favorite");
 
     setToRangeItem(searchObj.starRange, "starrange");
     /*searchObj.gameVersionMin = 0;
@@ -464,6 +466,7 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
     setOption("copy_free", searchObj.freeCopy);
     setOption("nofeatured", searchObj.unfeatured);
     setOption("noepic", searchObj.unepic);
+    setOption("favorite", searchObj.favorite);
     setFromRangeItem("starrange", searchObj.starRange);
     /*searchObj.gameVersionMin = 0;
     searchObj.gameVersionMax = 0;*/

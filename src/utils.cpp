@@ -361,6 +361,7 @@ bool BetterInfo::levelProgressMatchesObject(GJGameLevel* level, const BISearchOb
     if(!validateRangeItem(searchObj.percentageLeaderboard, (levelFromSaved ? levelFromSaved->m_newNormalPercent2 : 0))) return false;
 
     if(searchObj.downloaded && (!levelFromSaved || std::string(levelFromSaved->m_levelString).empty())) return false;
+    if(searchObj.favorite && (!levelFromSaved || !levelFromSaved->m_levelFavorited)) return false;
 
     return true;
 }

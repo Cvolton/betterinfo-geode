@@ -8,7 +8,7 @@ public:
     static LevelCategorySearchAlert* create();
     void onClose(cocos2d::CCObject* sender);
     void onPlayed(cocos2d::CCObject* sender);
-    void onPercentage(cocos2d::CCObject* sender);
+    void onFavorites(cocos2d::CCObject* sender);
     void onCompleted(cocos2d::CCObject* sender);
     void onOrbs(cocos2d::CCObject* sender);
     void onLeaderboard(cocos2d::CCObject* sender);

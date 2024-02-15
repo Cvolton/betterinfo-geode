@@ -27,8 +27,13 @@ void LevelCategorySearchAlert::onPlayed(CCObject* sender) {
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
 
-void LevelCategorySearchAlert::onPercentage(cocos2d::CCObject* sender) {
-    //TODO
+void LevelCategorySearchAlert::onFavorites(cocos2d::CCObject* sender) {
+    BISearchObject searchObj;
+    searchObj.favorite = true;
+
+    auto browserLayer = LevelSearchViewLayer::scene(LevelUtils::completedDeque(), searchObj);
+    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
+    CCDirector::sharedDirector()->pushScene(transitionFade);
 }
 
 void LevelCategorySearchAlert::onCompleted(cocos2d::CCObject* sender) {
@@ -128,9 +133,10 @@ bool LevelCategorySearchAlert::init(){
     /*auto neighborButton = createButton(m_buttonMenu, "Neighbors", menu_selector(LevelCategorySearchAlert::onNeighbors), 0, 4, (int)(120*0.6), 44*0.6f, 0.6f);
     auto similarButton = createButton(m_buttonMenu, "Similar", menu_selector(LevelCategorySearchAlert::onSimilar), 0, -48, (int)(120*0.6), 44*0.6f, 0.6f);*/
 
-    auto similarButton = createButton(m_buttonMenu, "Played", menu_selector(LevelCategorySearchAlert::onPlayed), 0, 18, (int)(120*0.6), 44*0.6f, 0.6f);
+    auto similarButton = createButton(m_buttonMenu, "Played", menu_selector(LevelCategorySearchAlert::onPlayed), -57, 18, (int)(120*0.6), 44*0.6f, 0.6f);
     similarButton->setID("similar-button"_spr);
-    //auto percentageButton = createButton(m_buttonMenu, "Percentage", menu_selector(LevelCategorySearchAlert::onPercentage), 57, 18, (int)(120*0.6), 44*0.6f, 0.6f);
+    auto favoriteButton = createButton(m_buttonMenu, "Favorites", menu_selector(LevelCategorySearchAlert::onFavorites), 57, 18, (int)(120*0.6), 44*0.6f, 0.6f);
+    favoriteButton->setID("favorite-button"_spr);
     auto completedButton = createButton(m_buttonMenu, "Completed", menu_selector(LevelCategorySearchAlert::onCompleted), -114, -22, (int)(120*0.6), 44*0.6f, 0.6f);
     completedButton->setID("completed-button"_spr);
     auto orbsButton = createButton(m_buttonMenu, "C. With Orbs", menu_selector(LevelCategorySearchAlert::onOrbs), 0, -22, (int)(120*0.6), 44*0.6f, 0.6f);

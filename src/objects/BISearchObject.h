@@ -48,6 +48,7 @@ struct BISearchObject {
         bool freeCopy = false;
         bool unfeatured = false;
         bool unepic = false;
+        bool favorite = false;
         RangeItem starRange;
         RangeItem gameVersion;
 };
