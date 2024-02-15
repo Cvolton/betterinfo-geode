@@ -51,14 +51,14 @@ class $modify(BIProfilePage, ProfilePage) {
         auto GM = GameManager::sharedState();
 
         std::ostringstream contentStream;
-        if(score->m_userID == GM->m_playerUserID) contentStream << "User ID: " << score->m_userID
-            << "\nAccount ID: " << score->m_accountID
+        if(score->m_userID == GM->m_playerUserID) contentStream << "<cy>User ID:</c> " << score->m_userID
+            << "\n<cr>Account ID:</c> " << score->m_accountID
             << "\n\n";//Leaderboard Icon: " << StaticStringHelper::getIconType(score->getIconType()) (is not sent)
-        contentStream << "Friend Requests: " << StaticStringHelper::getFriendRequestType(score->m_friendStatus)
-            << "\nPrivate Messages: " << StaticStringHelper::getMessageType(score->m_messageState)
-            << "\nComment History: " << StaticStringHelper::getMessageType(score->m_commentHistoryStatus)
+        contentStream << "<cg>Friend Requests:</c> " << StaticStringHelper::getFriendRequestType(score->m_friendStatus)
+            << "\n<cl>Private Messages:</c> " << StaticStringHelper::getMessageType(score->m_messageState)
+            << "\n<cp>Comment History:</c> " << StaticStringHelper::getMessageType(score->m_commentHistoryStatus)
             << "\n";
-        if(score->m_userID == GM->m_playerUserID) contentStream << "\nBootups: " << GM->m_bootups;
+        if(score->m_userID == GM->m_playerUserID) contentStream << "\n<co>Bootups:</c> " << GM->m_bootups;
 
         //if(score->m_userID == cvoltonID) contentStream << "\n\nThis user is epic!";
 
