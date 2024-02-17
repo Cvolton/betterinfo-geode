@@ -42,6 +42,9 @@ bool JumpToPageLayer::init(PageNumberDelegate* pageNumberDelegate) {
 
 void JumpToPageLayer::onClose(cocos2d::CCObject* sender)
 {
+    auto GLM = GameLevelManager::sharedState();
+    if(GLM->m_levelCommentDelegate == this) GLM->m_levelCommentDelegate = nullptr;
+
     if(m_infoLayer != nullptr) m_infoLayer->release();
     //if(m_pageNumberDelegate != nullptr) m_pageNumberDelegate->release();
     
@@ -67,6 +70,35 @@ void JumpToPageLayer::onReset(cocos2d::CCObject* sender)
 
 int JumpToPageLayer::pageNumber(){
     return BetterInfo::stoi(m_textNode->getString());
+}
+
+void JumpToPageLayer::onLast(cocos2d::CCObject* sender)
+{
+    if(m_infoLayer != nullptr) {
+        if(m_infoLayer->m_pageEndIdx != 0) {
+            m_infoLayer->loadPage(m_infoLayer->m_itemCount / m_infoLayer->m_pageEndIdx, false);
+            onClose(sender);
+        }
+        else {
+            m_infoLayer->loadPage(0, false);
+            // ugly delegate swap because it's the easiest way to maintain the params
+            GameLevelManager::sharedState()->m_levelCommentDelegate = this;
+        }
+    }
+
+}
+
+void JumpToPageLayer::loadCommentsFinished(cocos2d::CCArray*, char const*) {
+    if(!m_infoLayer) return;
+
+    m_infoLayer->loadPage(0, false);
+    onLast(nullptr);
+}
+
+void JumpToPageLayer::loadCommentsFailed(char const*) {
+    if(!m_infoLayer) return;
+
+    Notification::create("Failed to load comments.")->show();
 }
 
 void JumpToPageLayer::onOK(cocos2d::CCObject* sender){
@@ -113,6 +145,17 @@ bool JumpToPageLayer::init(){
     createButton("edit_leftBtn_001.png", {-50, 6}, menu_selector(JumpToPageLayer::onPrev), 1.1f)->setID("left-arrow"_spr);
     createButton("edit_rightBtn_001.png", {50, 6}, menu_selector(JumpToPageLayer::onNext), 1.1f)->setID("right-arrow"_spr);
     createButton("GJ_resetBtn_001.png", {93, 57}, menu_selector(JumpToPageLayer::onReset))->setID("reset-button"_spr);
+
+    if(m_infoLayer) {
+        auto lastBtn = CCMenuItemSpriteExtra::create(
+            BetterInfo::createDoubleArrow(true),
+            this,
+            menu_selector(JumpToPageLayer::onLast)
+        );
+        lastBtn->setPosition({ 50, -50});
+        lastBtn->setID("last-button"_spr);
+        m_buttonMenu->addChild(lastBtn);
+    }
 
     return true;
 }
