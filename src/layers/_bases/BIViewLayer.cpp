@@ -75,34 +75,22 @@ bool BIViewLayer::init(bool paginated) {
     m_randomBtn->setID("random-button"_spr);
     menu->addChild(m_randomBtn);
 
-    auto doubleArrowLeft = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-    auto arrowLeft = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-    arrowLeft->setPosition({0,20});
-    doubleArrowLeft->addChild(arrowLeft);
-    doubleArrowLeft->setScale(0.5f);
     m_firstBtn = CCMenuItemSpriteExtra::create(
-        doubleArrowLeft,
+        BetterInfo::createDoubleArrow(false),
         this,
         menu_selector(BIViewLayer::onFirst)
     );
     m_firstBtn->setID("first-button"_spr);
-    m_firstBtn->setPosition({ - (winSize.width / 2) + 26, 60});
+    m_firstBtn->setPosition({ - (winSize.width / 2) + 23, 60});
     m_firstBtn->setID("first-button"_spr);
     menu->addChild(m_firstBtn);
 
-    auto doubleArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-    auto arrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-    arrow->setPosition({31.5,20});
-    doubleArrow->addChild(arrow);
-    doubleArrow->setScale(0.5f);
-    doubleArrow->setFlipX(true);
-    arrow->setFlipX(true);
     m_lastBtn = CCMenuItemSpriteExtra::create(
-        doubleArrow,
+        BetterInfo::createDoubleArrow(true),
         this,
         menu_selector(BIViewLayer::onLast)
     );
-    m_lastBtn->setPosition({ (winSize.width / 2) - 26, 60});
+    m_lastBtn->setPosition({ (winSize.width / 2) - 23, 60});
     m_lastBtn->setID("last-button"_spr);
     menu->addChild(m_lastBtn);
 

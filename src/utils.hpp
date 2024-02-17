@@ -14,6 +14,7 @@ namespace BetterInfo {
     CCSprite* createWithBISpriteFrameName(const char* name);
     CCSprite* createBISprite(const char* name);
     CCSprite* createPlaceholder();
+    CCNode* createDoubleArrow(bool flip);
 
     CCMenuItemSpriteExtra* createTextButton(cocos2d::CCLayer* parent, const char* text, cocos2d::SEL_MenuHandler handler, int width, float height, float scale);
 

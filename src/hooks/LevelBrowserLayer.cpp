@@ -118,19 +118,8 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
              * Last page button
             */
             if(!BetterInfo::isLocal(this->m_searchObject)){
-                auto firstArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-                firstArrow->setPosition({35,25});
-                firstArrow->setFlipX(true);
-                auto secondArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-                secondArrow->setPosition({15,25});
-                secondArrow->setFlipX(true);
-                auto arrowParent = CCNode::create();
-                arrowParent->setContentSize({50,50});
-                arrowParent->addChild(firstArrow);
-                arrowParent->addChild(secondArrow);
-                arrowParent->setScale(.4f);
                 auto lastBtn = CCMenuItemSpriteExtra::create(
-                    arrowParent,
+                    BetterInfo::createDoubleArrow(true),
                     this,
                     menu_selector(BILevelBrowserLayer::onLevelBrowserLast)
                 );
@@ -163,17 +152,8 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             /**
              * First button
             */
-            auto firstArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-            firstArrow->setPosition({35,34.5});
-            auto secondArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-            secondArrow->setPosition({15,34.5});
-            auto arrowParent = CCNode::create();
-            arrowParent->setContentSize({50,69});
-            arrowParent->addChild(firstArrow);
-            arrowParent->addChild(secondArrow);
-            arrowParent->setScale(.4f);
             auto firstBtn = CCMenuItemSpriteExtra::create(
-                arrowParent,
+                BetterInfo::createDoubleArrow(false),
                 this,
                 menu_selector(BILevelBrowserLayer::onLevelBrowserFirst)
             );
