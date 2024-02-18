@@ -23,7 +23,7 @@ bool CvoltonAlertLayerStub::init(CCPoint contentSize, float closeBtnScale, uint8
     return true;
 }
 
-void CvoltonAlertLayerStub::createTitle(std::string text, float separatorScale, float usernameScale){
+CCLabelBMFont* CvoltonAlertLayerStub::createTitle(std::string text, float separatorScale, float usernameScale){
 	auto userName = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
     userName->setPosition({0, (m_alertSize.y/2) - 22});
     userName->setScale(usernameScale);
@@ -36,6 +36,8 @@ void CvoltonAlertLayerStub::createTitle(std::string text, float separatorScale, 
     separator->setOpacity(100);
     separator->setID("separator"_spr);
     m_buttonMenu->addChild(separator);
+
+    return userName;
 }
 
 CCMenuItemSpriteExtra* CvoltonAlertLayerStub::createButton(const char* texture, CCPoint position, SEL_MenuHandler callback, float textureScale, float sizeMult){

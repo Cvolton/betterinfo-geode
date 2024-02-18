@@ -11,6 +11,7 @@ class EnumSelectNode : public CCMenu {
     CCMenuItemSpriteExtra* m_arrowLeft = nullptr;
     CCLabelBMFont* m_label = nullptr;
     CCMenuItemSpriteExtra* m_arrowRight = nullptr;
+    bool m_showKey = false;
 protected:
     bool init(std::initializer_list<std::pair<Key, std::string>> args, std::function<void(Key)> callback) {
         if(!CCMenu::init()) return false;
@@ -58,6 +59,8 @@ protected:
     }
 
     void positionItems() {
+        if(!m_arrowLeft || !m_label || !m_arrowRight) return;
+
         m_arrowLeft->setPosition({8, getContentSize().height / 2});
         m_label->setPosition({getContentSize().width / 2, getContentSize().height / 2});
         m_arrowRight->setPosition({getContentSize().width - 8, getContentSize().height / 2});
@@ -67,8 +70,9 @@ protected:
         if(m_current == m_enumMap.end()) return;
         if(m_enumMap.empty()) return;
 
-        m_label->setString(fmt::format("{}: {}", static_cast<DisplayType>(m_current->first), m_current->second).c_str());
-        m_label->limitLabelWidth(200, 0.8f, 0);
+        if(m_showKey) m_label->setString(fmt::format("{}: {}", static_cast<DisplayType>(m_current->first), m_current->second).c_str());
+        else m_label->setString(m_current->second.c_str());
+        m_label->limitLabelWidth(getContentSize().width - 56, 0.8f, 0);
     }
 public:
     static EnumSelectNode* create(std::initializer_list<std::pair<Key, std::string>> values, std::function<void(Key)> callback) {
@@ -107,5 +111,15 @@ public:
         m_current = m_enumMap.find(value);
         refreshLabel();
         m_callback(value);
+    }
+
+    void setContentSize(const cocos2d::CCSize &contentSize) {
+        CCMenu::setContentSize(contentSize);
+        positionItems();
+    }
+
+    void setShowKey(bool showKey) {
+        m_showKey = showKey;
+        refreshLabel();
     }
 };

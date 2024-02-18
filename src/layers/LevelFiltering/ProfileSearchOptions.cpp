@@ -1,6 +1,7 @@
 #include "ProfileSearchOptions.h"
 #include "ProfileSearchOptionsSongSelect.h"
 #include "IDRangePopup.h"
+#include "GameVersionPopup.h"
 
 #include <fmt/format.h>
 
@@ -64,6 +65,11 @@ void ProfileSearchOptions::onPercentageLeaderboard(cocos2d::CCObject* sender)
     IDRangePopup::create(this, getOptionInt("percentageleaderboard_min"), getOptionInt("percentageleaderboard_max"), "% Leaderboard", 4)->show();
 }
 
+void ProfileSearchOptions::onGameVersionRange(cocos2d::CCObject* sender)
+{
+    GameVersionPopup::create(this, getOptionInt("gameversion_min"), getOptionInt("gameversion_max"), 5)->show();
+}
+
 void ProfileSearchOptions::onNext(cocos2d::CCObject* sender)
 {
     m_page += 1;
@@ -93,6 +99,8 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
     if(levelBrowserLayer != nullptr) levelBrowserLayer->retain();
     this->m_prefix = prefix;
     this->m_searchObjDelegate = searchObjDelegate;
+
+    Mod::get()->getSavedValue<int>(fmt::format("{}_{}", m_prefix, "gameversion_max"), INT_MAX);
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
@@ -258,6 +266,7 @@ void ProfileSearchOptions::drawTogglesSecondary(){
     if(!m_prefix.empty()) createToggle("copy_free", "Free Copy");
     if(!m_prefix.empty()) createToggle("ldm", "LDM");
     createToggle("twoplayer", "2-Player");
+    createToggle("gameversion", "Game Ver.", menu_selector(ProfileSearchOptions::onGameVersionRange));
     
 }
 
@@ -306,6 +315,9 @@ void ProfileSearchOptions::onIDRangeFinished(int min, int max, int additional) {
             break;
         case 4:
             option = "percentageleaderboard";
+            break;
+        case 5:
+            option = "gameversion";
             break;
     }
 
@@ -403,8 +415,7 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
     searchObj.favorite = getOption("favorite");
 
     setToRangeItem(searchObj.starRange, "starrange");
-    /*searchObj.gameVersionMin = 0;
-    searchObj.gameVersionMax = 0;*/
+    setToRangeItem(searchObj.gameVersion, "gameversion");
 
     return searchObj;
 }
@@ -468,8 +479,7 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
     setOption("noepic", searchObj.unepic);
     setOption("favorite", searchObj.favorite);
     setFromRangeItem("starrange", searchObj.starRange);
-    /*searchObj.gameVersionMin = 0;
-    searchObj.gameVersionMax = 0;*/
+    setFromRangeItem("gameversion", searchObj.gameVersion);
 
     destroyToggles();
     drawToggles();

@@ -202,7 +202,8 @@ bool BetterInfo::isSavedFiltered() {
         "user_search_completedorbs", "user_search_completedleaderboard", "user_search_uncompletedorbs",
         "user_search_uncompletedleaderboard", "user_search_percentage", "user_search_percentageorbs",
         "user_search_percentageleaderboard", "user_search_starrange", "user_search_completedcoins",
-        "user_search_uncompletedcoins", "user_search_legendary", "user_search_mythic"
+        "user_search_uncompletedcoins", "user_search_legendary", "user_search_mythic",
+        "user_search_gameversion"
     };
 
     for(auto option : options) {

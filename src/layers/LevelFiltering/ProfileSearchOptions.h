@@ -28,6 +28,7 @@ public:
     void onPrev(cocos2d::CCObject* sender);
     void onSong(cocos2d::CCObject* sender);
     void onIdRange(cocos2d::CCObject* sender);
+    void onGameVersionRange(cocos2d::CCObject* sender);
     void onStarRange(cocos2d::CCObject* sender);
     void onPercentage(cocos2d::CCObject* sender);
     void onPercentageOrbs(cocos2d::CCObject* sender);

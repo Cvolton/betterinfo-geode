@@ -187,6 +187,7 @@ class $modify(GameLevelManager) {
             if(!validateRangeOption("user_search_percentage", level->m_normalPercent)) continue;
             if(!validateRangeOption("user_search_percentageorbs", level->m_orbCompletion)) continue;
             if(!validateRangeOption("user_search_percentageleaderboard", level->m_newNormalPercent2)) continue;
+            if(!validateRangeOption("user_search_gameversion", level->m_gameVersion)) continue;
 
             bool hasAllCoins = LevelUtils::levelHasCollectedCoins(level);
             if(Mod::get()->getSavedValue<bool>("user_search_completedcoins") && (!hasAllCoins || level->m_coins == 0)) continue;
