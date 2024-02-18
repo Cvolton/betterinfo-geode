@@ -10,8 +10,6 @@ public:
     void onInfo(cocos2d::CCObject* sender);
     bool init();
     void drawToggles();
-    void onCompletedPrev(cocos2d::CCObject* sender);
-    void onCompletedNext(cocos2d::CCObject* sender);
     void onPercentageRange(cocos2d::CCObject* sender);
     std::string getCompletedString();
 

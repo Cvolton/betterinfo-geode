@@ -1,6 +1,7 @@
 #include "CvoltonSearchOptions.h"
 #include "IDRangePopup.h"
 #include "../../enums.hpp"
+#include "../../ui/EnumSelectNode.h"
 
 const int completedMax = 7;
 
@@ -48,6 +49,27 @@ bool CvoltonSearchOptions::init(){
     auto infoBtn = createButton("GJ_infoIcon_001.png", {203, 128}, menu_selector(CvoltonSearchOptions::onInfo));
     infoBtn->setID("info-button"_spr);
 
+    auto plus = createButton("GJ_plusBtn_001.png", {196, -120}, menu_selector(CvoltonSearchOptions::onPercentageRange), .75f);
+    plus->setID("percentage-plus-button"_spr);
+
+    auto completedModeSelect = EnumSelectNode<CompleteMode>::create({
+        {CompleteMode::modeDefault, "Default"},
+        {CompleteMode::completed, "Completed Levels"},
+        {CompleteMode::completed21, "Completed Orbs"},
+        {CompleteMode::completed211, "Completed Leaderboard"},
+        {CompleteMode::allCoins, "Completed With Coins"},
+        {CompleteMode::noCoins, "Completed Without Coins"},
+        {CompleteMode::percentage, "Percentage"},
+    },
+    [this, plus](CompleteMode mode) -> void {
+        setOptionInt("search_completed", static_cast<int>(mode));
+        GameLevelManager::sharedState()->m_timerDict->removeAllObjects();
+        plus->setVisible(mode == CompleteMode::percentage);
+    });
+    completedModeSelect->setCurrentValue(static_cast<CompleteMode>(getOptionInt("search_completed")));
+    completedModeSelect->setPosition({winSize.width / 2, (winSize.height / 2) - 120});
+    m_mainLayer->addChild(completedModeSelect);
+
     drawToggles();
 
     return true;
@@ -64,43 +86,6 @@ void CvoltonSearchOptions::drawToggles(){
     auto completedMode = createTextLabel("Completed Mode:", {0, -95}, 0.5f, m_buttonMenu, "goldFont.fnt");
     completedMode->setID("completed-mode"_spr);
     m_toggles.push_back(completedMode);
-
-    auto completedLeft = createButton("edit_leftBtn_001.png", {-120, -120}, menu_selector(CvoltonSearchOptions::onCompletedPrev), 1.2f);
-    completedLeft->setID("completed-left-button"_spr);
-    m_toggles.push_back(completedLeft);
-
-    auto label = createTextLabel(getCompletedString(), {0, -120}, 1, m_buttonMenu, "bigFont.fnt");
-    label->limitLabelWidth(200, 0.8f, 0);
-    label->setID("completed-mode-label"_spr);
-    m_toggles.push_back(label);
-
-    auto completedRight = createButton("edit_rightBtn_001.png", {120, -120}, menu_selector(CvoltonSearchOptions::onCompletedNext), 1.2f);
-    completedRight->setID("completed-right-button"_spr);
-    m_toggles.push_back(completedRight);
-
-    if(static_cast<CompleteMode>(getOptionInt("search_completed")) == CompleteMode::percentage) {
-        auto plus = createButton("GJ_plusBtn_001.png", {196, -120}, menu_selector(CvoltonSearchOptions::onPercentageRange), .75f);
-        plus->setID("percentage-plus-button"_spr);
-        m_toggles.push_back(plus);
-    }
-}
-
-void CvoltonSearchOptions::onCompletedPrev(cocos2d::CCObject* sender)
-{
-    int value = getOptionInt("search_completed") - 1;
-    if(value < 0) value = completedMax - 1;
-    setOptionInt("search_completed", value);
-    destroyToggles();
-    drawToggles();
-    GameLevelManager::sharedState()->m_timerDict->removeAllObjects();
-}
-
-void CvoltonSearchOptions::onCompletedNext(cocos2d::CCObject* sender)
-{
-    setOptionInt("search_completed", (getOptionInt("search_completed") + 1) % completedMax);
-    destroyToggles();
-    drawToggles();
-    GameLevelManager::sharedState()->m_timerDict->removeAllObjects();
 }
 
 void CvoltonSearchOptions::onPercentageRange(CCObject* sender) {
