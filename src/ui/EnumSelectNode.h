@@ -6,7 +6,7 @@ using namespace geode::prelude;
 template <class Key, class DisplayType = int>
 class EnumSelectNode : public CCMenu {
     std::map<Key, std::string> m_enumMap;
-    std::map<Key, std::string>::iterator m_current;
+    typename std::map<Key, std::string>::iterator m_current;
     std::function<void(Key)> m_callback;
     CCMenuItemSpriteExtra* m_arrowLeft = nullptr;
     CCLabelBMFont* m_label = nullptr;
