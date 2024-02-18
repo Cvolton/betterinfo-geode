@@ -42,7 +42,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
 
     void onLevelBrowserLast(CCObject* sender){
         if(this->m_itemCount == 9999 || BetterInfo::isFalseTotal(this->m_searchObject)) {
-            LevelBrowserEndLayer::create(this)->show();
+            LevelBrowserEndLayer::create(this, nullptr)->show();
             return;
         }
 

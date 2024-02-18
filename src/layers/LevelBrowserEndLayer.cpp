@@ -1,8 +1,8 @@
 #include "LevelBrowserEndLayer.h"
 
-LevelBrowserEndLayer* LevelBrowserEndLayer::create(LevelBrowserLayer* levelBrowserLayer){
+LevelBrowserEndLayer* LevelBrowserEndLayer::create(LevelBrowserLayer* levelBrowserLayer, InfoLayer* infoLayer){
     auto ret = new LevelBrowserEndLayer();
-    if (ret && ret->init(levelBrowserLayer)) {
+    if (ret && ret->init(levelBrowserLayer, infoLayer)) {
         //robert 1 :D
         ret->autorelease();
     } else {
@@ -15,10 +15,19 @@ LevelBrowserEndLayer* LevelBrowserEndLayer::create(LevelBrowserLayer* levelBrows
 
 void LevelBrowserEndLayer::onClose(cocos2d::CCObject* sender)
 {
-    m_levelBrowserLayer->m_searchObject->m_page = m_min;
-    if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
-    if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->release();
-    if(m_circle != nullptr) m_circle->fadeAndRemove();
+    if(m_levelBrowserLayer) {
+        m_levelBrowserLayer->m_searchObject->m_page = m_min;
+        m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
+        m_levelBrowserLayer->release();
+    }
+
+    if(m_infoLayer) {
+        m_infoLayer->m_page = m_min;
+        m_infoLayer->loadPage(m_infoLayer->m_page, false);
+        m_infoLayer->release();
+    }
+
+    if(m_circle) m_circle->fadeAndRemove();
 
     auto GLM = GameLevelManager::sharedState();
     GLM->m_levelManagerDelegate = nullptr;
@@ -27,9 +36,10 @@ void LevelBrowserEndLayer::onClose(cocos2d::CCObject* sender)
 }
 
 void LevelBrowserEndLayer::onOK(cocos2d::CCObject* sender){
-    m_levelBrowserLayer->m_searchObject->m_page = 1;
+    if(m_levelBrowserLayer) m_levelBrowserLayer->m_searchObject->m_page = 1;
+    if(m_infoLayer) m_infoLayer->m_page = 1;
     
-    getOnlineLevels(m_levelBrowserLayer->m_searchObject);
+    getOnlineLevels();
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
@@ -44,11 +54,18 @@ void LevelBrowserEndLayer::onOK(cocos2d::CCObject* sender){
     this->getScheduler()->scheduleSelector(schedule_selector(LevelBrowserEndLayer::onTimer), this, 1, false);
 }
 
-bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer){
+bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer, InfoLayer* infoLayer){
     if(!CvoltonAlertLayerStub::init({230.0f, 160.0f}, 0.8f)) return false;
 
-    levelBrowserLayer->retain();
-    m_levelBrowserLayer = levelBrowserLayer;
+    if(levelBrowserLayer) {
+        m_levelBrowserLayer = levelBrowserLayer;
+        m_levelBrowserLayer->retain();
+    }
+
+    if(infoLayer) {
+        m_infoLayer = infoLayer;
+        m_infoLayer->retain();
+    }
 
     auto title = createTextLabel("Finding Last Page", {0,63}, 0.7f, m_buttonMenu, "goldFont.fnt");
     title->setID("title-label"_spr);
@@ -98,12 +115,14 @@ CCLabelBMFont* LevelBrowserEndLayer::createTextLabel(const std::string text, con
 }
 
 void LevelBrowserEndLayer::loadLevelsFinished(cocos2d::CCArray*, const char* test){
-    m_min = m_levelBrowserLayer->m_searchObject->m_page;
+    if(m_levelBrowserLayer) m_min = m_levelBrowserLayer->m_searchObject->m_page;
+    if(m_infoLayer) m_min = m_infoLayer->m_page;
 
     if(m_max == 0) {
-        m_levelBrowserLayer->m_searchObject->m_page *= 2;
+        if(m_levelBrowserLayer) m_levelBrowserLayer->m_searchObject->m_page *= 2;
+        if(m_infoLayer) m_infoLayer->m_page *= 2;
 
-        getOnlineLevels(m_levelBrowserLayer->m_searchObject);
+        getOnlineLevels();
 
         updateDisplay();
         return;
@@ -114,9 +133,10 @@ void LevelBrowserEndLayer::loadLevelsFinished(cocos2d::CCArray*, const char* tes
         return;
     }
 
-    m_levelBrowserLayer->m_searchObject->m_page = m_levelBrowserLayer->m_searchObject->m_page + ((m_max - m_min) / 2);
+    if(m_levelBrowserLayer) m_levelBrowserLayer->m_searchObject->m_page = m_levelBrowserLayer->m_searchObject->m_page + ((m_max - m_min) / 2);
+    if(m_infoLayer) m_infoLayer->m_page = m_infoLayer->m_page + ((m_max - m_min) / 2);
 
-    getOnlineLevels(m_levelBrowserLayer->m_searchObject);
+    getOnlineLevels();
 
     updateDisplay();
 }
@@ -125,7 +145,10 @@ void LevelBrowserEndLayer::loadLevelsFinished(cocos2d::CCArray* result, const ch
     loadLevelsFinished(result, test);
 }
 void LevelBrowserEndLayer::loadLevelsFailed(const char* test){
-    m_max = m_levelBrowserLayer->m_searchObject->m_page;
+
+    if(m_levelBrowserLayer) m_max = m_levelBrowserLayer->m_searchObject->m_page;
+    if(m_infoLayer) m_max = m_infoLayer->m_page;
+
     if(m_requestsToMax == 0) {
         m_requestsToMax = m_requests;
         //maxReached = std::time(nullptr);
@@ -137,9 +160,10 @@ void LevelBrowserEndLayer::loadLevelsFailed(const char* test){
         return;
     };
 
-    m_levelBrowserLayer->m_searchObject->m_page = m_levelBrowserLayer->m_searchObject->m_page - ((m_max - m_min) / 2);
+    if(m_levelBrowserLayer) m_levelBrowserLayer->m_searchObject->m_page = m_levelBrowserLayer->m_searchObject->m_page - ((m_max - m_min) / 2);
+    if(m_infoLayer) m_infoLayer->m_page = m_infoLayer->m_page - ((m_max - m_min) / 2);
 
-    getOnlineLevels(m_levelBrowserLayer->m_searchObject);
+    getOnlineLevels();
 
     updateDisplay();
 }
@@ -151,6 +175,14 @@ void LevelBrowserEndLayer::setupPageInfo(gd::string, const char*){
     
 }
 
+void LevelBrowserEndLayer::loadCommentsFinished(cocos2d::CCArray* result, char const* test) {
+    loadLevelsFinished(result, test);
+}
+
+void LevelBrowserEndLayer::loadCommentsFailed(char const* test) {
+    loadLevelsFailed(test);
+}
+
 void LevelBrowserEndLayer::updateDisplay(){
     if(!m_updateLabel) return;
 
@@ -158,8 +190,12 @@ void LevelBrowserEndLayer::updateDisplay(){
 
     auto maximumStr = m_requestsToMax <= 0 ? "" : CCString::createWithFormat(" / %i", m_requestsToMax * 2)->getCString();
 
+    int page = 0;
+    if(m_levelBrowserLayer) page = m_levelBrowserLayer->m_searchObject->m_page;
+    if(m_infoLayer) page = m_infoLayer->m_page;
+
     m_textLabel->setString(
-        CCString::createWithFormat("<cg>Minimum</c>: %i\n<cy>Current</c>: %i\n<cr>Maximum</c>: %i\n<cl>Requests</c>: %i%s", m_min, m_levelBrowserLayer->m_searchObject->m_page, m_max, ++m_requests, maximumStr)->getCString()
+        CCString::createWithFormat("<cg>Minimum</c>: %i\n<cy>Current</c>: %i\n<cr>Maximum</c>: %i\n<cl>Requests</c>: %i%s", m_min, page, m_max, ++m_requests, maximumStr)->getCString()
     );
     m_textLabel->setScale(1.f);
 }
@@ -174,10 +210,17 @@ void LevelBrowserEndLayer::onTimer(float dt) {
     }
 }
 
-void LevelBrowserEndLayer::getOnlineLevels(GJSearchObject* searchObj) {
+void LevelBrowserEndLayer::getOnlineLevels() {
     auto GLM = GameLevelManager::sharedState();
-    GLM->m_levelManagerDelegate = this;
-    auto storedLevels = GLM->getStoredOnlineLevels(searchObj->getKey());
+
+    CCArray* storedLevels = nullptr;
+
+    if(m_levelBrowserLayer) {
+        storedLevels = GLM->getStoredOnlineLevels(m_levelBrowserLayer->m_searchObject->getKey());
+    } else if(m_infoLayer) {
+        storedLevels = GLM->getStoredOnlineLevels(GLM->getCommentKey(m_infoLayer->getID(), m_infoLayer->m_page, GameManager::sharedState()->getGameVariable("0069"), m_infoLayer->m_mode).c_str());
+    }
+
     if(storedLevels) {
         m_updateLabel = false;
         loadLevelsFinished(storedLevels, "");
@@ -189,6 +232,11 @@ void LevelBrowserEndLayer::getOnlineLevels(GJSearchObject* searchObj) {
 
 void LevelBrowserEndLayer::onQueueDownload(float dt) {
     auto GLM = GameLevelManager::sharedState();
-    GLM->m_levelManagerDelegate = this;
-    m_levelBrowserLayer->m_searchObject->m_searchMode == 1 ? GLM->getLevelLists(m_levelBrowserLayer->m_searchObject) : GLM->getOnlineLevels(m_levelBrowserLayer->m_searchObject);
+    if(m_levelBrowserLayer) {
+        GLM->m_levelManagerDelegate = this;
+        GLM->getOnlineLevels(m_levelBrowserLayer->m_searchObject);
+    } else if(m_infoLayer) {
+        GLM->m_levelCommentDelegate = this;
+        GLM->getLevelComments(m_infoLayer->getID(), m_infoLayer->m_page, m_infoLayer->m_pageEndIdx, GameManager::sharedState()->getGameVariable("0069"), m_infoLayer->m_mode);
+    }
 }

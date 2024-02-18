@@ -1,6 +1,7 @@
 #include "JumpToPageLayer.h"
 
 #include "../utils.hpp"
+#include "LevelBrowserEndLayer.h"
 
 JumpToPageLayer* JumpToPageLayer::create(InfoLayer* infoLayer){
     auto ret = new JumpToPageLayer();
@@ -35,7 +36,6 @@ bool JumpToPageLayer::init(InfoLayer* infoLayer) {
 }
 
 bool JumpToPageLayer::init(PageNumberDelegate* pageNumberDelegate) {
-    //pageNumberDelegate->retain();
     m_pageNumberDelegate = pageNumberDelegate;
     return init();
 }
@@ -46,7 +46,6 @@ void JumpToPageLayer::onClose(cocos2d::CCObject* sender)
     if(GLM->m_levelCommentDelegate == this) GLM->m_levelCommentDelegate = nullptr;
 
     if(m_infoLayer != nullptr) m_infoLayer->release();
-    //if(m_pageNumberDelegate != nullptr) m_pageNumberDelegate->release();
     
     CvoltonAlertLayerStub::onClose(sender);
 }
@@ -74,16 +73,21 @@ int JumpToPageLayer::pageNumber(){
 
 void JumpToPageLayer::onLast(cocos2d::CCObject* sender)
 {
-    if(m_infoLayer != nullptr) {
-        if(m_infoLayer->m_pageEndIdx != 0) {
-            m_infoLayer->loadPage(m_infoLayer->m_itemCount / m_infoLayer->m_pageEndIdx, false);
-            onClose(sender);
-        }
-        else {
-            m_infoLayer->loadPage(0, false);
-            // ugly delegate swap because it's the easiest way to maintain the params
-            GameLevelManager::sharedState()->m_levelCommentDelegate = this;
-        }
+    if(!m_infoLayer) return;
+
+    if(m_infoLayer->m_itemCount == 999) {
+        LevelBrowserEndLayer::create(nullptr, m_infoLayer)->show();
+        onClose(sender);
+        return;
+    }
+
+    if(m_infoLayer->m_pageEndIdx != 0) {
+        m_infoLayer->loadPage(m_infoLayer->m_itemCount / m_infoLayer->m_pageEndIdx, false);
+        onClose(sender);
+    } else {
+        m_infoLayer->loadPage(0, false);
+        // ugly delegate swap because it's the easiest way to maintain the params
+        GameLevelManager::sharedState()->m_levelCommentDelegate = this;
     }
 
 }

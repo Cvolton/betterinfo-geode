@@ -4,8 +4,9 @@
 
 using namespace geode::prelude;
 
-class LevelBrowserEndLayer : public CvoltonAlertLayerStub, public LevelManagerDelegate {
+class LevelBrowserEndLayer : public CvoltonAlertLayerStub, public LevelManagerDelegate, public LevelCommentDelegate {
     LevelBrowserLayer* m_levelBrowserLayer = nullptr;
+    InfoLayer* m_infoLayer = nullptr;
     TextArea* m_textLabel = nullptr;
     CCMenuItemSpriteExtra* m_goBtn = nullptr;
     LoadingCircle* m_circle = nullptr;
@@ -21,10 +22,10 @@ class LevelBrowserEndLayer : public CvoltonAlertLayerStub, public LevelManagerDe
 
     bool m_updateLabel = false;
 public:
-    static LevelBrowserEndLayer* create(LevelBrowserLayer* levelBrowserLayer);
+    static LevelBrowserEndLayer* create(LevelBrowserLayer* levelBrowserLayer, InfoLayer* infoLayer);
     void onClose(cocos2d::CCObject* sender);
     void onOK(cocos2d::CCObject* sender);
-    bool init(LevelBrowserLayer* levelBrowserLayer);
+    bool init(LevelBrowserLayer* levelBrowserLayer, InfoLayer* infoLayer);
     static cocos2d::CCLabelBMFont* createTextLabel(const std::string text, const cocos2d::CCPoint& position, const float scale, cocos2d::CCNode* menu, const char* font = "bigFont.fnt");
 
     void loadLevelsFinished(cocos2d::CCArray*, const char*);
@@ -33,8 +34,11 @@ public:
     void loadLevelsFailed(const char*, int);
     void setupPageInfo(gd::string, const char*);
 
+    void loadCommentsFinished(cocos2d::CCArray*, char const*);
+	void loadCommentsFailed(char const*);
+
     void updateDisplay();
     void onTimer(float dt);
-    void getOnlineLevels(GJSearchObject* searchObj);
+    void getOnlineLevels();
     void onQueueDownload(float dt);
 };
