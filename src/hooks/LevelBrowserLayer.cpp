@@ -63,7 +63,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     /**
      * Helpers
     */
-   void refreshButtonVisibility() {
+    void refreshButtonVisibility() {
         if(auto searchMenu = getChildByID("search-menu")) {
             if(auto firstButton = searchMenu->getChildByID("first-button"_spr)) {
                 firstButton->setVisible(m_searchObject->m_page > 0);
@@ -78,7 +78,15 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
                 randomButton->setVisible(this->m_itemCount > BetterInfo::levelsPerPage(this->m_searchObject));
             }
         }
-   }
+    }
+
+    bool canBeLocalFiltered() {
+        return BetterInfo::isLocal(m_searchObject) && m_searchObject->isLevelSearchObject() && m_searchObject->m_searchType != SearchType::MyLevels;
+    }
+
+    void showFilteredText() {
+        if(canBeLocalFiltered() && BetterInfo::isSavedFiltered() && this->m_countText) this->m_countText->setString((std::string("(Filtered) ") + this->m_countText->getString()).c_str());
+    }
 
     /**
      * Hooks
@@ -95,6 +103,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         if(this->m_itemCount == 9999 || BetterInfo::isFalseTotal(this->m_searchObject)) this->m_rightArrow->setVisible(true);
 
         refreshButtonVisibility();
+        showFilteredText();
     }
 
     bool init(GJSearchObject* searchObj) {
