@@ -424,9 +424,10 @@ void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
         float oldXSize = textNode->getScaledContentSize().width;
 
         auto userName = GameLevelManager::sharedState()->userNameForUserID(levelCell->m_level->m_userID);
+        if(userName.empty() || std::string(userName) == "-" || std::string(userName) == "Unknown") continue;
 
         auto oldString = std::string(textNode->getString());
-        auto newString = fmt::format("By {}", std::string(userName));
+        auto newString = fmt::format("{}{}", levelCell->m_compactView ? "" : "By ", std::string(userName));
 
         textNode->setString(newString.c_str());
 
