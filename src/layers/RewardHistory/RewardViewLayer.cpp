@@ -1,6 +1,7 @@
 #include "RewardViewLayer.h"
 #include "../JumpToPageLayer.h"
 #include "../../utils.hpp"
+#include "../../hooks/GJRewardItem.h"
 
 using namespace gd;
 using namespace cocos2d;
@@ -19,7 +20,11 @@ RewardViewLayer* RewardViewLayer::create(CCDictionary* chests, const char* title
 bool RewardViewLayer::compareRewards(const void* i1, const void* i2){
     const GJRewardItem* item1 = reinterpret_cast<const GJRewardItem*>(i1);
     const GJRewardItem* item2 = reinterpret_cast<const GJRewardItem*>(i2);
-    return item1->m_chestID < item2->m_chestID;
+    if(item1->m_chestID > 0 || item2->m_chestID > 0) return item1->m_chestID < item2->m_chestID;
+
+    auto key1 = BIGJRewardItem::s_keys.contains(item1) ? BIGJRewardItem::s_keys.at(item1) : std::string("");
+    auto key2 = BIGJRewardItem::s_keys.contains(item2) ? BIGJRewardItem::s_keys.at(item2) : std::string("");
+    return key1 < key2;
 }
 
 bool RewardViewLayer::init(CCDictionary* chests, const char* title) {
@@ -27,10 +32,11 @@ bool RewardViewLayer::init(CCDictionary* chests, const char* title) {
     m_title = fmt::format("{} Chests", title);
     setData(CCArray::create());
 
-    CCDictElement* obj;
-    CCDICT_FOREACH(chests, obj){
-        auto currentReward = static_cast<GJRewardItem*>(obj->getObject());
-        if(currentReward != nullptr) m_data->addObject(currentReward);
+    for(auto [key, reward] : CCDictionaryExt<gd::string, GJRewardItem*>(chests)) {
+        if(reward == nullptr) continue;
+
+        static_cast<BIGJRewardItem*>(reward)->setKey(key);
+        m_data->addObject(reward);
     }
     std::sort(m_data->data->arr, m_data->data->arr + m_data->data->num, RewardViewLayer::compareRewards);
 

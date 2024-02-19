@@ -1,7 +1,84 @@
 #include "RewardCell.h"
+#include "../../hooks/GJRewardItem.h"
+#include "../../utils.hpp"
+#include "../../managers/BetterInfoCache.h"
+
+std::string RewardCell::getDisplayName() {
+    auto key = static_cast<BIGJRewardItem*>(m_rewardItem)->getKey();
+    if(key.empty()) return "Unknown";
+
+    /**
+     * Gauntlet chests
+    */
+    if(key[0] == 'g' && key[1] == '_') {
+        key = key.substr(2);
+        return fmt::format("{} Gauntlet", GauntletNode::nameForType((GauntletType) BetterInfo::stoi(key)));
+    }
+
+    /**
+     * Other chests
+    */
+    std::array<const char*, 11> chestNames = {"Basement", "Demon Guardian", "Chamber of Time", "50 chests", "100 chests", "200 chests", "Facebook", "Twitter", "YouTube", "Twitch", "Discord"};
+
+    size_t idx = 1;
+    for(auto name : chestNames) {
+        if(key == fmt::format("{:04}", idx, key)) return name;
+        idx++;
+    }
+
+    for( ; idx <= 21; idx++) {
+        if(key == fmt::format("{:04}", idx, key)) return "Ad Chest";
+    }
+
+    std::array<const char*, 3> chestNames2 = {"Zolguroth", "Help Screen", "Reddit"};
+    for(auto name : chestNames2) {
+        if(key == fmt::format("{:04}", idx, key)) return name;
+        idx++;
+    }
+
+    /**
+     * Daily Chests
+    */
+    if(key[0] == '1' && key[1] == '_') {
+        key = key.substr(2);
+        return fmt::format("Small Chest {}", key);
+    }
+
+    if(key[0] == '2' && key[1] == '_') {
+        key = key.substr(2);
+        return fmt::format("Large Chest {}", key);
+    }
+
+    /**
+     * Weekly Chests
+    */
+    if(key[0] == 'd') {
+        key = key.substr(1);
+
+        auto level = typeinfo_cast<GJGameLevel*>(GameLevelManager::sharedState()->m_dailyLevels->objectForKey(key));
+        if(level) return fmt::format("{}: {}", BetterInfo::stoi(key) - 100000, BetterInfoCache::sharedState()->getLevelName(level->m_levelID));
+
+        return key;
+    }
+
+    /**
+     * Treasure Room Chests
+    */
+    auto chestID = BetterInfo::stoi(key);
+    if(chestID > 0 && std::to_string(chestID) == key) {
+        if(chestID < 1000) return "1 Key Chest";
+        if(chestID < 2000) return "5 Key Chest";
+        if(chestID < 3000) return "10 Key Chest";
+        if(chestID < 4000) return "25 Key Chest";
+        if(chestID < 5000) return "50 Key Chest";
+        if(chestID < 6000) return "100 Key Chest";
+    }
+
+    return key;
+}
 
 void RewardCell::loadFromData(CCObject* object) {
-    auto reward = static_cast<GJRewardItem*>(object);
+    m_rewardItem = static_cast<GJRewardItem*>(object);
 
     const float rowX = 48.f;
     const float rowY = 10.5f;
@@ -9,7 +86,7 @@ void RewardCell::loadFromData(CCObject* object) {
     const char* chestTexture = "chest_01_02_001.png";
     float chestSize = 0.35f;
     std::string chestTitle = Mod::get()->getSavedValue<std::string>("reward-cell-title");
-    switch(reward->m_rewardType) {
+    switch(m_rewardItem->m_rewardType) {
         default: break;
         case GJRewardType::Small: chestTexture = "chest_01_02_001.png"; break;
         case GJRewardType::Large: chestTexture = "chest_02_02_001.png"; chestSize = 0.275f; break;
@@ -25,7 +102,8 @@ void RewardCell::loadFromData(CCObject* object) {
     chest->setScale(chestSize);
     this->m_mainLayer->addChild(chest);
 
-    auto title = CCLabelBMFont::create(CCString::createWithFormat(reward->m_chestID != 0 ? "%s Chest %i" : "%s Chest", chestTitle.c_str(), reward->m_chestID)->getCString(), "bigFont.fnt");
+    //auto title = CCLabelBMFont::create(CCString::createWithFormat(m_rewardItem->m_chestID != 0 ? "%s Chest %i" : "%s Chest", chestTitle.c_str(), m_rewardItem->m_chestID)->getCString(), "bigFont.fnt");
+    auto title = CCLabelBMFont::create(getDisplayName().c_str(), "bigFont.fnt");
     title->setAnchorPoint({ 0.0f, .5f });
     title->setPosition(rowX, 31.5f);
     title->limitLabelWidth(356-rowX, .65f, .4f);
@@ -35,7 +113,7 @@ void RewardCell::loadFromData(CCObject* object) {
     CCObject* obj;
     CCSprite* lastSprite = nullptr;
     CCLabelBMFont* lastText = nullptr;
-    CCARRAY_FOREACH(reward->m_rewardObjects, obj){
+    CCARRAY_FOREACH(m_rewardItem->m_rewardObjects, obj){
         auto rewardObj = static_cast<GJRewardObject*>(obj);
 
         const char* textureName = "GJ_sRecentIcon_001.png";

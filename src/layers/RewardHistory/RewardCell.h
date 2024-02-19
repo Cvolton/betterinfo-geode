@@ -5,6 +5,9 @@
 using namespace geode::prelude;
 
 class RewardCell : public GenericListCell {
+        GJRewardItem* m_rewardItem;
+        
+        std::string getDisplayName();
     public:
         RewardCell(const char* name, cocos2d::CCSize size);
         void loadFromData(CCObject* object);
