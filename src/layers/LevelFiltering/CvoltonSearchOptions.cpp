@@ -26,7 +26,7 @@ void CvoltonSearchOptions::onClose(cocos2d::CCObject* sender)
 
 void CvoltonSearchOptions::onInfo(cocos2d::CCObject* sender)
 {
-    FLAlertLayer::create(nullptr, "Advanced options", "<cl>Trim Spaces:</c> Removes spaces from the beginning and end of your search query\n\n<co>Completed Mode:</c> Changes which levels are sent to the completed/uncompleted filters", "OK", nullptr, 480)->show();
+    FLAlertLayer::create("Completed Mode", "Changes how the <cg>completed</c>\nand <cl>uncompleted</c> filters work.\n\nEnable <cy>completed</c> on the 1st page\nto see levels that <cr>match</c> this filter.", "OK")->show();
 }
 
 void CvoltonSearchOptions::onPrev(cocos2d::CCObject* sender)
@@ -46,7 +46,7 @@ bool CvoltonSearchOptions::init(){
     label->setID("title"_spr);
     auto prevBtn = createButton("GJ_arrow_03_001.png", {- (winSize.width / 2) + 30, 0}, menu_selector(CvoltonSearchOptions::onPrev));
     prevBtn->setID("prev-button"_spr);
-    auto infoBtn = createButton("GJ_infoIcon_001.png", {203, 128}, menu_selector(CvoltonSearchOptions::onInfo));
+    auto infoBtn = createButton("GJ_infoIcon_001.png", {61, -92}, menu_selector(CvoltonSearchOptions::onInfo), .4f);
     infoBtn->setID("info-button"_spr);
 
     auto plus = createButton("GJ_plusBtn_001.png", {196, -120}, menu_selector(CvoltonSearchOptions::onPercentageRange), .75f);
