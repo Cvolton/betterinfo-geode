@@ -16,6 +16,14 @@ std::string RewardCell::getDisplayName() {
     }
 
     /**
+     * Path chests
+    */
+    if(key[0] == 'p' && key[1] == 'r' && key[2] == '_') {
+        key = key.substr(3);
+        return fmt::format("{} Path", GJPathsLayer::nameForPath(BetterInfo::stoi(key)));
+    }
+
+    /**
      * Other chests
     */
     std::array<const char*, 11> chestNames = {"Basement", "Demon Guardian", "Chamber of Time", "50 chests", "100 chests", "200 chests", "Facebook", "Twitter", "YouTube", "Twitch", "Discord"};
