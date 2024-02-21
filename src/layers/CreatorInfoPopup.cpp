@@ -24,6 +24,7 @@ bool CreatorInfoPopup::init(int userID){
 
     m_searchObject = GJSearchObject::create(SearchType::UsersLevels, std::to_string(userID));
     m_searchObject->m_starFilter = true;
+    m_searchObject->retain();
 
     m_levels = CCArray::create();
     m_levels->retain();
@@ -80,14 +81,16 @@ void CreatorInfoPopup::showResults() {
     m_secondRowMenu->removeAllChildren();
     m_thirdRowMenu->removeAllChildren();
 
-    for(int i = -1; i < 6; i++) {
+    auto winSize = CCDirector::sharedDirector()->getWinSize();
+
+    for(int i = -1; i <= 6; i++) {
         if(i == 0) continue;
 
         auto diff = GJDifficultySprite::create(i, (GJDifficultyName) 0);
         diff->setID(fmt::format("{}-diff", i));
         m_diffMenu->addChild(diff);
 
-        auto bmFont1 = CCLabelBMFont::create(std::to_string(CreatorInfoPopup::levelsForDifficulty(i)).c_str(), "goldFont.fnt");
+        auto bmFont1 = CCLabelBMFont::create(std::to_string(levelsForDifficulty(i, false)).c_str(), "goldFont.fnt");
         bmFont1->setScale(.6f);
 
         auto bmFont1Container = CCNode::create();
@@ -98,7 +101,7 @@ void CreatorInfoPopup::showResults() {
         bmFont1->setPosition(bmFont1Container->getContentSize() / 2);
         m_secondRowMenu->addChild(bmFont1Container);
 
-        /*auto bmFont2 = CCLabelBMFont::create(std::to_string(completedLevelsForDifficulty(i, true)).c_str(), "goldFont.fnt");
+        auto bmFont2 = CCLabelBMFont::create(std::to_string(levelsForDifficulty(i, true)).c_str(), "goldFont.fnt");
         bmFont2->setScale(.6f);
         bmFont2->setColor({255, 200, 255});
 
@@ -108,25 +111,25 @@ void CreatorInfoPopup::showResults() {
         bmFont2Container->setID(fmt::format("{}-text2", i));
 
         bmFont2->setPosition(bmFont2Container->getContentSize() / 2);
-        m_thirdRowMenu->addChild(bmFont2Container);*/
+        m_thirdRowMenu->addChild(bmFont2Container);
     }
 
     m_diffMenu->updateLayout();
     m_secondRowMenu->updateLayout();
     m_thirdRowMenu->updateLayout();
 
-    /*auto bmFont1 = CCLabelBMFont::create(fmt::format("Classic: {}", BetterInfo::completedLevelsInStarRange(0, 10, false).size()).c_str(), "goldFont.fnt");
+    auto bmFont1 = CCLabelBMFont::create(fmt::format("Classic: {}", 69).c_str(), "goldFont.fnt");
     bmFont1->setScale(.7f);
     bmFont1->setPosition({winSize.width / 2 - 80, winSize.height / 2 + 85});
     bmFont1->setID("classic-text");
     m_mainLayer->addChild(bmFont1);
 
-    auto bmFont2 = CCLabelBMFont::create(fmt::format("Platformer: {}", BetterInfo::completedLevelsInStarRange(0, 10, true).size()).c_str(), "goldFont.fnt");
+    auto bmFont2 = CCLabelBMFont::create(fmt::format("Platformer: {}", 69).c_str(), "goldFont.fnt");
     bmFont2->setScale(.7f);
     bmFont2->setPosition({winSize.width / 2 + 60, winSize.height / 2 + 85});
     bmFont2->setColor({255, 200, 255});
     bmFont2->setID("platformer-text");
-    m_mainLayer->addChild(bmFont2);*/
+    m_mainLayer->addChild(bmFont2);
 
     auto buttonSprite = ButtonSprite::create("OK", 0, false, "goldFont.fnt", "GJ_button_01.png", 0, 1.f);
     auto buttonButton = CCMenuItemSpriteExtra::create(
@@ -161,6 +164,8 @@ void CreatorInfoPopup::showResults() {
 }
 
 void CreatorInfoPopup::loadLevels() {
+    log::info("page {}", m_searchObject->m_page);
+
     auto GLM = GameLevelManager::sharedState();
     GLM->getOnlineLevels(m_searchObject);
     GLM->m_levelManagerDelegate = this;
@@ -179,7 +184,7 @@ void CreatorInfoPopup::loadLevelsFailed(const char*) {
     showResults();
 }
 
-int CreatorInfoPopup::levelsForDifficulty(int difficulty){
+int CreatorInfoPopup::levelsForDifficulty(int difficulty, bool platformer){
     int min, max, total = 0;
     switch(difficulty) {
         case -1:
@@ -206,10 +211,15 @@ int CreatorInfoPopup::levelsForDifficulty(int difficulty){
             min = 8;
             max = 9;
             break;
+        case 6:
+            min = 10;
+            max = 10;
+            break;
     }
 
     for(auto level : CCArrayExt<GJGameLevel*>(m_levels)) {
         if(level->m_stars < min || level->m_stars > max) continue;
+        if(platformer != level->isPlatformer()) continue;
         total += 1;
     }
 

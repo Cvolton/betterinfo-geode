@@ -18,5 +18,5 @@ public:
     void loadLevelsFinished(cocos2d::CCArray*, const char*);
     void loadLevelsFailed(const char*);
 
-    int levelsForDifficulty(int difficulty);
+    int levelsForDifficulty(int difficulty, bool platformer);
 };
