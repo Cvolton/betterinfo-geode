@@ -5,6 +5,7 @@
 #include "../managers/BetterInfoOnline.h"
 #include "../layers/LeaderboardViewLayer.h"
 #include "../layers/StarsInfoPopup.h"
+#include "../layers/CreatorInfoPopup.h"
 
 using namespace geode::prelude;
 
@@ -75,6 +76,10 @@ class $modify(BIProfilePage, ProfilePage) {
 
     void onProfilePageStar(CCObject* sender){
         StarsInfoPopup::create()->show();
+    }
+
+    void onProfilePageCreator(CCObject* sender){
+        CreatorInfoPopup::create(m_score->m_userID)->show();
     }
 
     void onProfilePageReload(CCObject* sender){
@@ -194,6 +199,13 @@ class $modify(BIProfilePage, ProfilePage) {
         usernameBtn->setID("username-button"_spr);
         m_buttonMenu->addChild(usernameBtn);
         this->m_buttons->addObject(usernameBtn);
+
+        if(auto playerStats = m_mainLayer->getChildByID("stats-menu")) {
+            if(auto starsIcon = playerStats->getChildByID("creator-points-icon")) {
+                m_buttons->removeObject(starsIcon);
+                m_buttons->addObject(BetterInfo::replaceWithButton(starsIcon, this, menu_selector(BIProfilePage::onProfilePageCreator)));
+            }
+        }
 
         if(a2->m_userID != GameManager::sharedState()->m_playerUserID){
             if(auto rankIcon = m_mainLayer->getChildByID("global-rank-icon")) {
