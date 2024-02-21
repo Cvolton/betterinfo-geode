@@ -48,19 +48,23 @@ bool RewardTypeSelectLayer::init(){
 
     createTitle("Chest History");
 
-    auto dailyBtn = BetterInfo::createTextButton(this, "Daily", menu_selector(RewardTypeSelectLayer::onDaily), (int)(120*0.6), 44*0.6f, 0.6f);
+    //auto dailyBtn = BetterInfo::createTextButton(this, "Timely Chests", menu_selector(RewardTypeSelectLayer::onDaily), (int)(120*0.6), 44*0.6f, 0.6f);
+    auto dailyBtn = BetterInfo::createSearchButton(this, "Daily", "GJ_timeIcon_001.png", menu_selector(RewardTypeSelectLayer::onDaily), .5f, .75f);
     dailyBtn->setPosition({-75, 8});
     m_buttonMenu->addChild(dailyBtn);
 
-    auto treasureBtn = BetterInfo::createTextButton(this, "Treasure Room", menu_selector(RewardTypeSelectLayer::onTreasure), (int)(120*0.6), 44*0.6f, 0.6f);
+    /*auto dailyIcon = static_cast<SearchButton*>(dailyBtn->getNormalImage())->m_icon;
+    dailyIcon->setPosition({dailyIcon->getPositionX() + 1, dailyIcon->getPositionY() + 1});*/
+
+    auto treasureBtn = BetterInfo::createSearchButton(this, "Treasure", "GJ_diamondsIcon_001.png", menu_selector(RewardTypeSelectLayer::onTreasure), .475f, .8f);
     treasureBtn->setPosition({75, 8});
     m_buttonMenu->addChild(treasureBtn);
 
-    auto weeklyBtn = BetterInfo::createTextButton(this, "Weekly Level", menu_selector(RewardTypeSelectLayer::onWeekly), (int)(120*0.6), 44*0.6f, 0.6f);
+    auto weeklyBtn = BetterInfo::createSearchButton(this, "Weekly", "diffIcon_06_btn_001.png", menu_selector(RewardTypeSelectLayer::onWeekly), .5f, .575f);
     weeklyBtn->setPosition({-75, -48});
     m_buttonMenu->addChild(weeklyBtn);
 
-    auto otherBtn = BetterInfo::createTextButton(this, "Other", menu_selector(RewardTypeSelectLayer::onOther), (int)(120*0.6), 44*0.6f, 0.6f);
+    auto otherBtn = BetterInfo::createSearchButton(this, "Other", "GJ_sMagicIcon_001.png", menu_selector(RewardTypeSelectLayer::onOther), .5f);
     otherBtn->setPosition({75, -48});
     m_buttonMenu->addChild(otherBtn);
 

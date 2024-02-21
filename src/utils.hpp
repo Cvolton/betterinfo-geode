@@ -17,6 +17,7 @@ namespace BetterInfo {
     CCNode* createDoubleArrow(bool flip);
 
     CCMenuItemSpriteExtra* createTextButton(cocos2d::CCLayer* parent, const char* text, cocos2d::SEL_MenuHandler handler, int width, float height, float scale);
+    CCMenuItemSpriteExtra* createSearchButton(cocos2d::CCLayer* parent, const char* text, const char* icon, cocos2d::SEL_MenuHandler handler, float scale = .4f, float iconScale = 1.0f);
 
     int randomNumber(int start, int end);
     void strToLower(std::string& str);

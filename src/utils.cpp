@@ -94,6 +94,30 @@ CCMenuItemSpriteExtra* BetterInfo::createTextButton(CCLayer* parent, const char*
     return buttonButton;
 }
 
+CCMenuItemSpriteExtra* BetterInfo::createSearchButton(cocos2d::CCLayer* parent, const char* text, const char* icon, cocos2d::SEL_MenuHandler handler, float scale, float iconScale){
+    auto searchTexture = SearchButton::create(
+        "GJ_longBtn04_001.png",
+        text,
+        scale,
+        icon
+    );
+    if(searchTexture->m_icon) {
+        auto ogSize = searchTexture->m_icon->getScaledContentSize();
+        searchTexture->m_icon->setScale(iconScale);
+
+        searchTexture->m_icon->setPositionX(searchTexture->m_icon->getPositionX() + (ogSize.width - searchTexture->m_icon->getScaledContentSize().width) / 4);
+        searchTexture->m_label->setPositionX(searchTexture->m_label->getPositionX() + (ogSize.width - searchTexture->m_icon->getScaledContentSize().width) / 4);
+    }
+    
+    //auto searchTexture = CCSprite::createWithSpriteFrameName(texture);
+    auto searchBtn = CCMenuItemSpriteExtra::create(
+        searchTexture,
+        parent,
+        handler
+    );
+    return searchBtn;
+}
+
 int BetterInfo::randomNumber(int start, int end){
     std::random_device os_seed;
     const unsigned int seed = os_seed();
