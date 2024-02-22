@@ -45,7 +45,7 @@ bool CreatorInfoPopup::init(int userID){
         RowLayout::create()
             ->setGap(16.f)
     );
-    m_diffMenu->setContentSize({370, 50});
+    m_diffMenu->setContentSize({366, 50});
     m_diffMenu->setPosition({winSize.width / 2, winSize.height / 2 + 30});
     m_diffMenu->setID("diff-menu"_spr);
     m_mainLayer->addChild(m_diffMenu);
@@ -80,21 +80,63 @@ bool CreatorInfoPopup::init(int userID){
     m_circle = LoadingCircle::create();
     m_circle->setParentLayer(m_mainLayer);
     m_circle->show();
+    
+    auto buttonSprite = ButtonSprite::create("OK", 0, false, "goldFont.fnt", "GJ_button_01.png", 0, 1.f);
+    auto buttonButton = CCMenuItemSpriteExtra::create(
+        buttonSprite,
+        this,
+        menu_selector(CreatorInfoPopup::onClose)
+    );
+    buttonButton->setSizeMult(1.2f);
+    buttonButton->setPosition({0, -80});
+    buttonButton->setID("ok-button"_spr);
+    m_buttonMenu->addChild(buttonButton);
 
     loadLevels();
+    createTabs();
 
     return true;
 }
 
+void CreatorInfoPopup::onClose(cocos2d::CCObject* sender)
+{
+    if(m_circle) m_circle->fadeAndRemove();
+    if(m_searchObject) m_searchObject->release();
+
+    auto GLM = GameLevelManager::sharedState();
+    GLM->m_levelManagerDelegate = nullptr;
+
+    CvoltonAlertLayerStub::onClose(sender);
+}
+
+void CreatorInfoPopup::onTab(cocos2d::CCObject* sender) {
+    auto button = typeinfo_cast<CCMenuItemSpriteExtra*>(sender);
+    if(!button) return;
+
+    m_tab = button->getTag();
+    createTabs();
+    if(m_loaded) showResults();
+}
+
 CCMenuItemSpriteExtra* CreatorInfoPopup::createTab(const char* text, const char* icon, int tab) {
+    auto sprite = BetterInfo::createBISprite(tab == m_tab ? "BI_blueTab_002.png" : "BI_blueTab_001.png");
+    auto font = CCLabelBMFont::create(text, "bigFont.fnt");
+    sprite->addChild(font);
+    font->setPosition(sprite->getContentSize() / 2);
+    font->limitLabelWidth(sprite->getContentSize().width - 15, .65f, .1f);
     //auto button = BetterInfo::createSearchButton(this, text, icon, nullptr, .5f, .75f);
     //auto button = TabButton::create(text, this, nullptr);
     auto button = CCMenuItemSpriteExtra::create(
-        TabButtonSprite::create(text, TabBaseColor::Unselected, TabBaseSize::Normal),
+        sprite,
         this,
-        nullptr
+        menu_selector(CreatorInfoPopup::onTab)
     );
     button->setTag(tab);
+    button->m_colorDip = .8f;
+    button->m_colorEnabled = true;
+    button->m_scaleMultiplier = 1.f;
+    button->setID(Mod::get()->expandSpriteName(fmt::format("tab-{}", tab).c_str()));
+    button->setEnabled(tab != m_tab);
     return button;
 }
 
@@ -115,6 +157,8 @@ void CreatorInfoPopup::showResults() {
     m_diffMenu->removeAllChildren();
     m_secondRowMenu->removeAllChildren();
     m_thirdRowMenu->removeAllChildren();
+    if(m_classic) m_classic->removeFromParent();
+    if(m_platformer) m_platformer->removeFromParent();
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
@@ -153,29 +197,18 @@ void CreatorInfoPopup::showResults() {
     m_secondRowMenu->updateLayout();
     m_thirdRowMenu->updateLayout();
 
-    auto bmFont1 = CCLabelBMFont::create(fmt::format("Classic: {}", levelsForDifficulty(-10, false)).c_str(), "goldFont.fnt");
-    bmFont1->setScale(.7f);
-    bmFont1->setPosition({winSize.width / 2 - 80, winSize.height / 2 + 85});
-    bmFont1->setID("classic-text");
-    m_mainLayer->addChild(bmFont1);
+    m_classic = CCLabelBMFont::create(fmt::format("Classic: {}", levelsForDifficulty(-10, false)).c_str(), "goldFont.fnt");
+    m_classic->setScale(.7f);
+    m_classic->setPosition({winSize.width / 2 - 80, winSize.height / 2 + 78});
+    m_classic->setID("classic-text");
+    m_mainLayer->addChild(m_classic);
 
-    auto bmFont2 = CCLabelBMFont::create(fmt::format("Platformer: {}", levelsForDifficulty(-10, true)).c_str(), "goldFont.fnt");
-    bmFont2->setScale(.7f);
-    bmFont2->setPosition({winSize.width / 2 + 60, winSize.height / 2 + 85});
-    bmFont2->setColor({255, 200, 255});
-    bmFont2->setID("platformer-text");
-    m_mainLayer->addChild(bmFont2);
-
-    auto buttonSprite = ButtonSprite::create("OK", 0, false, "goldFont.fnt", "GJ_button_01.png", 0, 1.f);
-    auto buttonButton = CCMenuItemSpriteExtra::create(
-        buttonSprite,
-        this,
-        menu_selector(CreatorInfoPopup::onClose)
-    );
-    buttonButton->setSizeMult(1.2f);
-    buttonButton->setPosition({0, -80});
-    buttonButton->setID("ok-button"_spr);
-    m_buttonMenu->addChild(buttonButton);
+    m_platformer = CCLabelBMFont::create(fmt::format("Platformer: {}", levelsForDifficulty(-10, true)).c_str(), "goldFont.fnt");
+    m_platformer->setScale(.7f);
+    m_platformer->setPosition({winSize.width / 2 + 60, winSize.height / 2 + 78});
+    m_platformer->setColor({255, 200, 255});
+    m_platformer->setID("platformer-text");
+    m_mainLayer->addChild(m_platformer);
 
     /*auto cornerFont1 = CCLabelBMFont::create(fmt::format("Daily: {}", BetterInfo::completedLevelsInStarRange(0, 10, false, GLM->m_dailyLevels).size() + BetterInfo::completedLevelsInStarRange(0, 10, true, GLM->m_dailyLevels).size()).c_str(), "goldFont.fnt");
     cornerFont1->setLayoutOptions(AxisLayoutOptions::create()
@@ -194,13 +227,16 @@ void CreatorInfoPopup::showResults() {
 
     m_cornerMenu->updateLayout();
 
-    m_circle->fadeAndRemove();
-    m_circle = nullptr;
+    if(m_circle) {
+        m_circle->fadeAndRemove();
+        m_circle = nullptr;
+    }
+
+    m_loaded = true;
 }
 
 void CreatorInfoPopup::loadLevels() {
-    log::info("page {}", m_searchObject->m_page);
-    createTabs();
+    log::info("Calculating creator info: page {}", m_searchObject->m_page);
 
     auto GLM = GameLevelManager::sharedState();
     auto storedLevels = GLM->getStoredOnlineLevels(m_searchObject->getKey());
@@ -232,44 +268,20 @@ void CreatorInfoPopup::loadLevelsFailed(const char*) {
 }
 
 int CreatorInfoPopup::levelsForDifficulty(int difficulty, bool platformer){
-    int min, max, total = 0;
-    switch(difficulty) {
-        case -10:
-            min = 1;
-            max = 127;
-            break;
-        case -1:
-            min = max = 1;
-            break;
-        case 0:
-            min = max = 0;
-            break;
-        case 1:
-            min = max = 2;
-            break;
-        case 2:
-            min = max = 3;
-            break;
-        case 3: 
-            min = 4;
-            max = 5;
-            break;
-        case 4:
-            min = 6;
-            max = 7;
-            break;
-        case 5:
-            min = 8;
-            max = 9;
-            break;
-        case 6:
-            min = 10;
-            max = 10;
-            break;
-    }
+    int total = 0;
 
     for(auto level : CCArrayExt<GJGameLevel*>(m_levels)) {
-        if(level->m_stars < min || level->m_stars > max) continue;
+        auto levelDifficulty = level->m_ratingsSum / level->m_ratings;
+        if(difficulty == -1 && !level->m_autoLevel) continue;
+        if(difficulty > 0 && difficulty < 6 && (levelDifficulty != difficulty || level->m_autoLevel || level->m_demon)) continue;
+        if(difficulty == 6 && !level->m_demon) continue;
+
+        if(m_tab == 1 && level->m_stars <= 0) continue;
+        if(m_tab == 2 && level->m_featured <= 0) continue;
+        if(m_tab == 3 && level->m_isEpic <= 0) continue;
+        if(m_tab == 4 && level->m_isEpic <= 1) continue;
+        if(m_tab == 5 && level->m_isEpic <= 2) continue;
+
         if(platformer != level->isPlatformer()) continue;
         total += 1;
     }
