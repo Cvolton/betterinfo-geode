@@ -23,7 +23,7 @@ bool CreatorInfoPopup::init(int userID){
     auto GLM = GameLevelManager::sharedState();
 
     m_searchObject = GJSearchObject::create(SearchType::UsersLevels, std::to_string(userID));
-    m_searchObject->m_starFilter = true;
+    //m_searchObject->m_starFilter = true;
     m_searchObject->retain();
 
     m_levels = CCArray::create();
@@ -68,7 +68,7 @@ bool CreatorInfoPopup::init(int userID){
     m_mainLayer->addChild(m_cornerMenu);
 
     m_circle = LoadingCircle::create();
-    m_circle->setParent(m_mainLayer);
+    m_circle->setParentLayer(m_mainLayer);
     m_circle->show();
 
     loadLevels();
@@ -118,13 +118,13 @@ void CreatorInfoPopup::showResults() {
     m_secondRowMenu->updateLayout();
     m_thirdRowMenu->updateLayout();
 
-    auto bmFont1 = CCLabelBMFont::create(fmt::format("Classic: {}", 69).c_str(), "goldFont.fnt");
+    auto bmFont1 = CCLabelBMFont::create(fmt::format("Classic: {}", levelsForDifficulty(-10, false)).c_str(), "goldFont.fnt");
     bmFont1->setScale(.7f);
     bmFont1->setPosition({winSize.width / 2 - 80, winSize.height / 2 + 85});
     bmFont1->setID("classic-text");
     m_mainLayer->addChild(bmFont1);
 
-    auto bmFont2 = CCLabelBMFont::create(fmt::format("Platformer: {}", 69).c_str(), "goldFont.fnt");
+    auto bmFont2 = CCLabelBMFont::create(fmt::format("Platformer: {}", levelsForDifficulty(-10, true)).c_str(), "goldFont.fnt");
     bmFont2->setScale(.7f);
     bmFont2->setPosition({winSize.width / 2 + 60, winSize.height / 2 + 85});
     bmFont2->setColor({255, 200, 255});
@@ -167,8 +167,19 @@ void CreatorInfoPopup::loadLevels() {
     log::info("page {}", m_searchObject->m_page);
 
     auto GLM = GameLevelManager::sharedState();
-    GLM->getOnlineLevels(m_searchObject);
+    auto storedLevels = GLM->getStoredOnlineLevels(m_searchObject->getKey());
+    if(storedLevels) {
+        loadLevelsFinished(storedLevels, "");
+    } else {
+        //this->getScheduler()->scheduleSelector(schedule_selector(CreatorInfoPopup::queueLoad), this, 1, 0, 0.5f, false);
+        CreatorInfoPopup::queueLoad(0);
+    }
+}
+
+void CreatorInfoPopup::queueLoad(float dt) {
+    auto GLM = GameLevelManager::sharedState();
     GLM->m_levelManagerDelegate = this;
+    GLM->getOnlineLevels(m_searchObject);
 }
 
 void CreatorInfoPopup::loadLevelsFinished(cocos2d::CCArray* levels, const char*) {
@@ -187,6 +198,10 @@ void CreatorInfoPopup::loadLevelsFailed(const char*) {
 int CreatorInfoPopup::levelsForDifficulty(int difficulty, bool platformer){
     int min, max, total = 0;
     switch(difficulty) {
+        case -10:
+            min = 1;
+            max = 127;
+            break;
         case -1:
             min = max = 1;
             break;

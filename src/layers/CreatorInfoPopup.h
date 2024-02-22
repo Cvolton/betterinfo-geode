@@ -15,6 +15,8 @@ public:
     void showResults();
     void loadLevels();
 
+    void queueLoad(float dt);
+
     void loadLevelsFinished(cocos2d::CCArray*, const char*);
     void loadLevelsFailed(const char*);
 
