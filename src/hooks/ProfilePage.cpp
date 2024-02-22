@@ -201,9 +201,9 @@ class $modify(BIProfilePage, ProfilePage) {
         this->m_buttons->addObject(usernameBtn);
 
         if(auto playerStats = m_mainLayer->getChildByID("stats-menu")) {
-            if(auto starsIcon = playerStats->getChildByID("creator-points-icon")) {
-                m_buttons->removeObject(starsIcon);
-                m_buttons->addObject(BetterInfo::replaceWithButton(starsIcon, this, menu_selector(BIProfilePage::onProfilePageCreator)));
+            if(auto creatorIcon = playerStats->getChildByID("creator-points-icon")) {
+                m_buttons->removeObject(creatorIcon);
+                m_buttons->addObject(BetterInfo::replaceWithButton(creatorIcon, this, menu_selector(BIProfilePage::onProfilePageCreator)));
             }
         }
 

@@ -30,6 +30,16 @@ bool CreatorInfoPopup::init(int userID){
     m_levels->retain();
     //TODO: release
 
+    m_tabMenu = CCMenu::create();
+    m_tabMenu->setLayout(
+        RowLayout::create()
+            ->setGap(16.f)
+    );
+    m_tabMenu->setContentSize({370, 50});
+    m_tabMenu->setPosition({winSize.width / 2, winSize.height / 2 + 112});
+    m_tabMenu->setID("tab-menu"_spr);
+    m_mainLayer->addChild(m_tabMenu);
+
     m_diffMenu = CCMenu::create();
     m_diffMenu->setLayout(
         RowLayout::create()
@@ -74,6 +84,31 @@ bool CreatorInfoPopup::init(int userID){
     loadLevels();
 
     return true;
+}
+
+CCMenuItemSpriteExtra* CreatorInfoPopup::createTab(const char* text, const char* icon, int tab) {
+    //auto button = BetterInfo::createSearchButton(this, text, icon, nullptr, .5f, .75f);
+    //auto button = TabButton::create(text, this, nullptr);
+    auto button = CCMenuItemSpriteExtra::create(
+        TabButtonSprite::create(text, TabBaseColor::Unselected, TabBaseSize::Normal),
+        this,
+        nullptr
+    );
+    button->setTag(tab);
+    return button;
+}
+
+void CreatorInfoPopup::createTabs() {
+    m_tabMenu->removeAllChildren();
+
+    m_tabMenu->addChild(createTab("Total", nullptr, 0));
+    m_tabMenu->addChild(createTab("Rated", nullptr, 1));
+    m_tabMenu->addChild(createTab("Featured", nullptr, 2));
+    m_tabMenu->addChild(createTab("Epic", nullptr, 3));
+    m_tabMenu->addChild(createTab("Legendary", nullptr, 4));
+    m_tabMenu->addChild(createTab("Mythic", nullptr, 5));
+
+    m_tabMenu->updateLayout();
 }
 
 void CreatorInfoPopup::showResults() {
@@ -165,6 +200,7 @@ void CreatorInfoPopup::showResults() {
 
 void CreatorInfoPopup::loadLevels() {
     log::info("page {}", m_searchObject->m_page);
+    createTabs();
 
     auto GLM = GameLevelManager::sharedState();
     auto storedLevels = GLM->getStoredOnlineLevels(m_searchObject->getKey());

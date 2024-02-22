@@ -4,6 +4,7 @@
 class CreatorInfoPopup : public CvoltonAlertLayerStub, public LevelManagerDelegate {
     cocos2d::CCArray* m_levels = nullptr;
     LoadingCircle* m_circle = nullptr;
+    cocos2d::CCMenu* m_tabMenu = nullptr;
     cocos2d::CCMenu* m_diffMenu = nullptr;
     cocos2d::CCMenu* m_secondRowMenu = nullptr;
     cocos2d::CCMenu* m_thirdRowMenu = nullptr;
@@ -12,6 +13,8 @@ class CreatorInfoPopup : public CvoltonAlertLayerStub, public LevelManagerDelega
 public:
     static CreatorInfoPopup* create(int userID);
     bool init(int userID);
+    CCMenuItemSpriteExtra* createTab(const char* text, const char* icon, int tab);
+    void createTabs();
     void showResults();
     void loadLevels();
 
