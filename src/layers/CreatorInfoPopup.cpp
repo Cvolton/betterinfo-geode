@@ -35,9 +35,10 @@ bool CreatorInfoPopup::init(int userID){
         RowLayout::create()
             ->setGap(16.f)
     );
-    m_tabMenu->setContentSize({370, 50});
-    m_tabMenu->setPosition({winSize.width / 2, winSize.height / 2 + 112});
+    m_tabMenu->setContentSize({366, 50});
+    m_tabMenu->setPosition({winSize.width / 2, winSize.height / 2 + 113});
     m_tabMenu->setID("tab-menu"_spr);
+    m_tabMenu->setZOrder(-2);
     m_mainLayer->addChild(m_tabMenu);
 
     m_diffMenu = CCMenu::create();
@@ -45,7 +46,7 @@ bool CreatorInfoPopup::init(int userID){
         RowLayout::create()
             ->setGap(16.f)
     );
-    m_diffMenu->setContentSize({366, 50});
+    m_diffMenu->setContentSize({370, 50});
     m_diffMenu->setPosition({winSize.width / 2, winSize.height / 2 + 30});
     m_diffMenu->setID("diff-menu"_spr);
     m_mainLayer->addChild(m_diffMenu);
@@ -118,8 +119,13 @@ void CreatorInfoPopup::onTab(cocos2d::CCObject* sender) {
     if(m_loaded) showResults();
 }
 
-CCMenuItemSpriteExtra* CreatorInfoPopup::createTab(const char* text, const char* icon, int tab) {
-    auto sprite = BetterInfo::createBISprite(tab == m_tab ? "BI_blueTab_002.png" : "BI_blueTab_001.png");
+CCMenuItemSpriteExtra* CreatorInfoPopup::createTab(const char* text, const char* icon, int tab, bool current) {
+    if(tab == m_tab && !current) {
+        m_currentTab = createTab(text, icon, tab, true);
+        m_buttonMenu->addChild(m_currentTab);
+    }
+
+    auto sprite = BetterInfo::createBISprite(tab == m_tab ? "BI_blueTab_002.png" : "BI_brownTab_001.png");
     auto font = CCLabelBMFont::create(text, "bigFont.fnt");
     sprite->addChild(font);
     font->setPosition(sprite->getContentSize() / 2);
@@ -143,6 +149,11 @@ CCMenuItemSpriteExtra* CreatorInfoPopup::createTab(const char* text, const char*
 void CreatorInfoPopup::createTabs() {
     m_tabMenu->removeAllChildren();
 
+    if(m_currentTab) {
+        m_currentTab->removeFromParent();
+        m_currentTab = nullptr;
+    }
+
     m_tabMenu->addChild(createTab("Total", nullptr, 0));
     m_tabMenu->addChild(createTab("Rated", nullptr, 1));
     m_tabMenu->addChild(createTab("Featured", nullptr, 2));
@@ -151,6 +162,13 @@ void CreatorInfoPopup::createTabs() {
     m_tabMenu->addChild(createTab("Mythic", nullptr, 5));
 
     m_tabMenu->updateLayout();
+
+    for(auto button : CCArrayExt<CCMenuItemSpriteExtra*>(m_tabMenu->getChildren())) {
+        if(button->getTag() == m_tab) {
+            m_currentTab->setPosition(m_buttonMenu->convertToNodeSpace(button->getParent()->convertToWorldSpace(button->getPosition())));
+            m_currentTab->setScale(button->getScale());
+        }
+    }
 }
 
 void CreatorInfoPopup::showResults() {

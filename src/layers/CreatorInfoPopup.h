@@ -12,6 +12,7 @@ class CreatorInfoPopup : public CvoltonAlertLayerStub, public LevelManagerDelega
     GJSearchObject* m_searchObject = nullptr;
     cocos2d::CCLabelBMFont* m_classic = nullptr;
     cocos2d::CCLabelBMFont* m_platformer = nullptr;
+    CCMenuItemSpriteExtra* m_currentTab = nullptr;
     int m_tab = 1;
     bool m_loaded = false;
 public:
@@ -19,7 +20,7 @@ public:
     bool init(int userID);
     void onClose(cocos2d::CCObject*);
     void onTab(cocos2d::CCObject*);
-    CCMenuItemSpriteExtra* createTab(const char* text, const char* icon, int tab);
+    CCMenuItemSpriteExtra* createTab(const char* text, const char* icon, int tab, bool current = false);
     void createTabs();
     void showResults();
     void loadLevels();
