@@ -125,7 +125,7 @@ CCMenuItemSpriteExtra* CreatorInfoPopup::createTab(const char* text, const char*
         m_buttonMenu->addChild(m_currentTab);
     }
 
-    auto sprite = BetterInfo::createBISprite(tab == m_tab ? "BI_blueTab_002.png" : "BI_brownTab_001.png");
+    auto sprite = BetterInfo::createBISprite(tab == m_tab ? "BI_blueTab_002.png" : "BI_blueTab_001.png");
     auto font = CCLabelBMFont::create(text, "bigFont.fnt");
     sprite->addChild(font);
     font->setPosition(sprite->getContentSize() / 2);
@@ -217,13 +217,13 @@ void CreatorInfoPopup::showResults() {
 
     m_classic = CCLabelBMFont::create(fmt::format("Classic: {}", levelsForDifficulty(-10, false)).c_str(), "goldFont.fnt");
     m_classic->setScale(.7f);
-    m_classic->setPosition({winSize.width / 2 - 80, winSize.height / 2 + 78});
+    m_classic->setPosition({winSize.width / 2 - 80, winSize.height / 2 + 82});
     m_classic->setID("classic-text");
     m_mainLayer->addChild(m_classic);
 
     m_platformer = CCLabelBMFont::create(fmt::format("Platformer: {}", levelsForDifficulty(-10, true)).c_str(), "goldFont.fnt");
     m_platformer->setScale(.7f);
-    m_platformer->setPosition({winSize.width / 2 + 60, winSize.height / 2 + 78});
+    m_platformer->setPosition({winSize.width / 2 + 60, winSize.height / 2 + 82});
     m_platformer->setColor({255, 200, 255});
     m_platformer->setID("platformer-text");
     m_mainLayer->addChild(m_platformer);
