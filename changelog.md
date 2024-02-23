@@ -1,4 +1,12 @@
 # Changelog
+## <cg>v4.1.0</c> (2024-02-tbd)
+* Added Favorite level search
+* Added Secret Chest Type to Icon Info
+* Added Game Version filter to Filtered Search
+* Added Creator Point Breakdown to Profiles
+* Added Jump to Last Page for Comments
+* Other bugfixes & improvements
+
 ## <cg>v4.0.0</c> (2024-02-12)
 * Fixed demon difficulty filtering in Filtered Search
 * Other bugfixes & improvements
