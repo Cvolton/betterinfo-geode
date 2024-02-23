@@ -38,24 +38,24 @@ bool BIBaseLayer::init(bool BL, bool BR, bool TL, bool TR) {
 
     auto menuBack = CCMenu::create();
     menuBack->addChild(backBtn);
-    menuBack->setPosition({25, winSize.height - 25});
+    menuBack->setPosition({24, winSize.height - 23});
     menuBack->setID("exit-menu"_spr);
 
     m_cornerBL = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
-    m_cornerBL->setPosition({0,0});
+    m_cornerBL->setPosition({-1,-1});
     m_cornerBL->setAnchorPoint({0,0});
     addChild(m_cornerBL, -1);
     m_cornerBL->setID("corner-bl"_spr);
 
     m_cornerTL = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
-    m_cornerTL->setPosition({0,winSize.height});
+    m_cornerTL->setPosition({-1,winSize.height+1});
     m_cornerTL->setAnchorPoint({0,1});
     m_cornerTL->setFlipY(true);
     m_cornerTL->setID("corner-ul"_spr);
     addChild(m_cornerTL, -1);
 
     m_cornerTR = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
-    m_cornerTR->setPosition({winSize.width,winSize.height});
+    m_cornerTR->setPosition({winSize.width+1,winSize.height+1});
     m_cornerTR->setAnchorPoint({1,1});
     m_cornerTR->setFlipX(true);
     m_cornerTR->setFlipY(true);
@@ -63,7 +63,7 @@ bool BIBaseLayer::init(bool BL, bool BR, bool TL, bool TR) {
     addChild(m_cornerTR, -1);
 
     m_cornerBR = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
-    m_cornerBR->setPosition({winSize.width,0});
+    m_cornerBR->setPosition({winSize.width+1,-1});
     m_cornerBR->setAnchorPoint({1,0});
     m_cornerBR->setFlipX(true);
     m_cornerBR->setID("corner-br"_spr);
