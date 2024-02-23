@@ -1,11 +1,14 @@
 # Changelog
 ## <cg>v4.1.0</c> (2024-02-tbd)
-* Added Favorite level search
-* Added Secret Chest Type to Icon Info
-* Added Game Version filter to Filtered Search
+This update is largely based on [your suggestions](https://twitter.com/Misabr0penguin/status/1757481064254034421)!
 * Added Creator Point Breakdown to Profiles
+* Added Game Version filter to Filtered Search
+* Added "Found in" to Icon Info
 * Added Jump to Last Page for Comments
+* Added Favorite level search
 * Other bugfixes & improvements
+
+**For texture pack creators:** This update changes the alignment of some textures, texture packs modifying BetterInfo's textures may need to be updated to avoid minor visual glitches.
 
 ## <cg>v4.0.0</c> (2024-02-12)
 * Fixed demon difficulty filtering in Filtered Search
