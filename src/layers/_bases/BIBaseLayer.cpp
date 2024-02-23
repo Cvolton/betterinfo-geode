@@ -34,6 +34,7 @@ bool BIBaseLayer::init(bool BL, bool BR, bool TL, bool TR) {
         menu_selector(BIBaseLayer::onBack)
     );
     backBtn->setID("exit-button"_spr);
+    backBtn->setSizeMult(1.2f);
 
     auto menuBack = CCMenu::create();
     menuBack->addChild(backBtn);

@@ -31,6 +31,7 @@ bool BIViewLayer::init(bool paginated) {
     );
     m_prevBtn->setPosition({- (winSize.width / 2) + 25, 0});
     m_prevBtn->setID("prev-button"_spr);
+    m_prevBtn->setSizeMult(1.2f);
     menu->addChild(m_prevBtn);
 
     auto nextSprite = CCSprite::createWithSpriteFrameName(controllerConnected ? "controllerBtn_DPad_Right_001.png" : "GJ_arrow_03_001.png");
@@ -42,6 +43,7 @@ bool BIViewLayer::init(bool paginated) {
     );
     m_nextBtn->setPosition({+ (winSize.width / 2) - 25, 0});
     m_nextBtn->setID("next-button"_spr);
+    m_nextBtn->setSizeMult(1.2f);
     menu->addChild(m_nextBtn);
 
     m_counter = CCLabelBMFont::create("0 to 0 of 0", "goldFont.fnt");
@@ -73,6 +75,7 @@ bool BIViewLayer::init(bool paginated) {
     );
     m_randomBtn->setPosition({ (winSize.width / 2) - 23, (winSize.height / 2) - 72});
     m_randomBtn->setID("random-button"_spr);
+    m_randomBtn->setSizeMult(1.2f);
     menu->addChild(m_randomBtn);
 
     m_firstBtn = CCMenuItemSpriteExtra::create(
@@ -82,7 +85,7 @@ bool BIViewLayer::init(bool paginated) {
     );
     m_firstBtn->setID("first-button"_spr);
     m_firstBtn->setPosition({ - (winSize.width / 2) + 23, 60});
-    m_firstBtn->setID("first-button"_spr);
+    m_firstBtn->setSizeMult(1.2f);
     menu->addChild(m_firstBtn);
 
     m_lastBtn = CCMenuItemSpriteExtra::create(
