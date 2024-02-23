@@ -68,6 +68,7 @@ bool CvoltonSearchOptions::init(){
     });
     completedModeSelect->setCurrentValue(static_cast<CompleteMode>(getOptionInt("search_completed")));
     completedModeSelect->setPosition({winSize.width / 2, (winSize.height / 2) - 120});
+    completedModeSelect->setShowKey(true);
     m_mainLayer->addChild(completedModeSelect);
 
     drawToggles();
