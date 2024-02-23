@@ -130,24 +130,48 @@ bool LevelCategorySearchAlert::init(){
     separator->setID("separator"_spr);
     m_mainLayer->addChild(separator);
 
-    /*auto neighborButton = createButton(m_buttonMenu, "Neighbors", menu_selector(LevelCategorySearchAlert::onNeighbors), 0, 4, (int)(120*0.6), 44*0.6f, 0.6f);
-    auto similarButton = createButton(m_buttonMenu, "Similar", menu_selector(LevelCategorySearchAlert::onSimilar), 0, -48, (int)(120*0.6), 44*0.6f, 0.6f);*/
+    //auto playedButton = createButton(m_buttonMenu, "Played", menu_selector(LevelCategorySearchAlert::onPlayed), -57, 18, (int)(120*0.6), 44*0.6f, 0.6f);
+    auto playedButton = BetterInfo::createSearchButton(this, "Played", "BI_playIcon_001.png"_spr, menu_selector(LevelCategorySearchAlert::onPlayed), .5f, .35f);
+    playedButton->setPosition({-59, 18});
+    playedButton->setID("played-button"_spr);
+    m_buttonMenu->addChild(playedButton);
 
-    auto similarButton = createButton(m_buttonMenu, "Played", menu_selector(LevelCategorySearchAlert::onPlayed), -57, 18, (int)(120*0.6), 44*0.6f, 0.6f);
-    similarButton->setID("similar-button"_spr);
-    auto favoriteButton = createButton(m_buttonMenu, "Favorites", menu_selector(LevelCategorySearchAlert::onFavorites), 57, 18, (int)(120*0.6), 44*0.6f, 0.6f);
+    //auto favoriteButton = createButton(m_buttonMenu, "Favorites", menu_selector(LevelCategorySearchAlert::onFavorites), 57, 18, (int)(120*0.6), 44*0.6f, 0.6f);
+    auto favoriteButton = BetterInfo::createSearchButton(this, "Favorites", "gj_heartOn_001.png", menu_selector(LevelCategorySearchAlert::onFavorites), .45f, .6f);
+    favoriteButton->setPosition({59, 18});
     favoriteButton->setID("favorite-button"_spr);
-    auto completedButton = createButton(m_buttonMenu, "Completed", menu_selector(LevelCategorySearchAlert::onCompleted), -114, -22, (int)(120*0.6), 44*0.6f, 0.6f);
+    m_buttonMenu->addChild(favoriteButton);
+
+    //auto completedButton = createButton(m_buttonMenu, "Completed", menu_selector(LevelCategorySearchAlert::onCompleted), -114, -22, (int)(120*0.6), 44*0.6f, 0.6f);
+    auto completedButton = BetterInfo::createSearchButton(this, "Completed", "GJ_completesIcon_001.png", menu_selector(LevelCategorySearchAlert::onCompleted), .45f, .5f);
+    completedButton->setPosition({-117, -22});
     completedButton->setID("completed-button"_spr);
-    auto orbsButton = createButton(m_buttonMenu, "C. With Orbs", menu_selector(LevelCategorySearchAlert::onOrbs), 0, -22, (int)(120*0.6), 44*0.6f, 0.6f);
+    m_buttonMenu->addChild(completedButton);
+
+    //auto orbsButton = createButton(m_buttonMenu, "C. With Orbs", menu_selector(LevelCategorySearchAlert::onOrbs), 0, -22, (int)(120*0.6), 44*0.6f, 0.6f);
+    auto orbsButton = BetterInfo::createSearchButton(this, "C. With Orbs", "currencyOrbIcon_001.png", menu_selector(LevelCategorySearchAlert::onOrbs), .35f, .75f);
+    orbsButton->setPosition({0, -22});
     orbsButton->setID("orbs-button"_spr);
-    auto leaderboardButton = createButton(m_buttonMenu, "C. Leaderboard", menu_selector(LevelCategorySearchAlert::onLeaderboard), 114, -22, (int)(120*0.6), 44*0.6f, 0.6f);
+    m_buttonMenu->addChild(orbsButton);
+
+    //auto leaderboardButton = createButton(m_buttonMenu, "C. Leaderboard", menu_selector(LevelCategorySearchAlert::onLeaderboard), 114, -22, (int)(120*0.6), 44*0.6f, 0.6f);
+    auto leaderboardButton = BetterInfo::createSearchButton(this, "C. Leaderboard", "rankIcon_top10_001.png", menu_selector(LevelCategorySearchAlert::onLeaderboard), .3f, .6f);
+    leaderboardButton->setPosition({117, -22});
     leaderboardButton->setID("leaderboard-button"_spr);
-    auto coinsButton = createButton(m_buttonMenu, "C. With Coins", menu_selector(LevelCategorySearchAlert::onCoins), -57, -64, (int)(120*0.6), 44*0.6f, 0.6f);
+    m_buttonMenu->addChild(leaderboardButton);
+
+    //auto coinsButton = createButton(m_buttonMenu, "C. With Coins", menu_selector(LevelCategorySearchAlert::onCoins), -57, -64, (int)(120*0.6), 44*0.6f, 0.6f);
+    auto coinsButton = BetterInfo::createSearchButton(this, "C. With Coins", "usercoin_small01_001.png", menu_selector(LevelCategorySearchAlert::onCoins), .35f, 1.1f);
+    coinsButton->setPosition({-59, -64});
     coinsButton->setID("coins-button"_spr);
-    auto noCoinsButton = createButton(m_buttonMenu, "C. Without Coins", menu_selector(LevelCategorySearchAlert::onNoCoins), 57, -64, (int)(120*0.6), 44*0.6f, 0.6f);
+    m_buttonMenu->addChild(coinsButton);
+
+    //auto noCoinsButton = createButton(m_buttonMenu, "C. Without Coins", menu_selector(LevelCategorySearchAlert::onNoCoins), 57, -64, (int)(120*0.6), 44*0.6f, 0.6f);
+    auto noCoinsButton = BetterInfo::createSearchButton(this, "C. W/o Coins", "usercoin_small01_001.png", menu_selector(LevelCategorySearchAlert::onNoCoins), .35f, 1.1f);
+    noCoinsButton->setPosition({59, -64});
     noCoinsButton->setID("no-coins-button"_spr);
-    /*auto songButton = createButton(m_buttonMenu, "Leaderboard", menu_selector(LevelCategorySearchAlert::onLeaderboard), 0, -48, (int)(120*0.6), 44*0.6f, 0.6f);*/
+    static_cast<SearchButton*>(noCoinsButton->getNormalImage())->m_icon->setColor({165, 165, 165});
+    m_buttonMenu->addChild(noCoinsButton);
 
     return true;
 }

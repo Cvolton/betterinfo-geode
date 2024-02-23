@@ -59,6 +59,11 @@
     "resources": {
         "sprites": [
             "resources/*.png"
-        ]
+        ],
+		"spritesheets": {
+            "SearchButtons-410": [
+                "resources/searchbuttons-410/*.png"
+            ]
+        }
     }
 }
