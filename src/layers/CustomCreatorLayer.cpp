@@ -135,9 +135,8 @@ void CustomCreatorLayer::onInfo(CCObject* object) {
             "This is the main menu for all features related to the mod.\n"
             "\n"
             "<cy>Featured:</c> Levels featured in Geometry Dash World\n"
-            "<cr>Daily/Weekly:</c> Old dailies as reported by the GD servers\n"
-            "<cg>Most liked:</c> \"Most Liked\" in Geometry Dash World,\nreal purpose unknown.\n"
-            "<cj>Search (ID):</c> View comments of any level ID.\n"
+            "<cr>Hall of Fame:</c> Epic levels (as seen in GD 2.1)\n"
+            "<cg>Search (ID):</c> View comments of any level ID.\n"
             "<cj>Level Search:</c> Show a list of levels based on your progress\n"
             "\n"
             "<cp>Settings:</c> Opens the mod settings",
