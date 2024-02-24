@@ -65,7 +65,7 @@ class $modify(BIMoreSearchLayer, MoreSearchLayer) {
             this,
             menu_selector(BIMoreSearchLayer::onMoreSearchNext)
         );
-        nextBtn->setPosition({(winSize.width / 2) + 185, - (winSize.height / 2) + 25});
+        nextBtn->setPosition({(winSize.width / 2) + 185, - 135});
         nextBtn->setID("next-button"_spr);
         m_buttonMenu->addChild(nextBtn);
 
