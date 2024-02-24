@@ -51,29 +51,33 @@ class $modify(BIChallengesPage, ChallengesPage) {
 
         auto winSize = CCDirector::get()->getWinSize();
 
+        auto arrowMenu = CCMenu::create();
+        arrowMenu->setID("arrow-menu"_spr);
+        m_mainLayer->addChild(arrowMenu);
+
         auto nextArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_03_001.png");
         nextArrow->setFlipX(true);
-        nextArrow->setScale(.8f);
         m_fields->m_nextArrowBtn = CCMenuItemSpriteExtra::create(
             nextArrow,
             this,
             menu_selector(BIChallengesPage::onNext)
         );
-        m_fields->m_nextArrowBtn->setPosition({405, -130});
+        //m_fields->m_nextArrowBtn->setPosition({(winSize.width / 2) + 185, - 130});
+        m_fields->m_nextArrowBtn->setPosition({(winSize.width / 2) - 35, 0});
         m_fields->m_nextArrowBtn->setID("next-button"_spr);
-        m_buttonMenu->addChild(m_fields->m_nextArrowBtn);
+        arrowMenu->addChild(m_fields->m_nextArrowBtn);
 
         auto prevArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_03_001.png");
-        prevArrow->setScale(.8f);
         m_fields->m_prevArrowBtn = CCMenuItemSpriteExtra::create(
             prevArrow,
             this,
             menu_selector(BIChallengesPage::onPrev)
         );
-        m_fields->m_prevArrowBtn->setPosition({-5, -130});
+        //m_fields->m_prevArrowBtn->setPosition({-5, -130});
+        m_fields->m_prevArrowBtn->setPosition({- (winSize.width / 2) + 35, 0});
         m_fields->m_prevArrowBtn->setID("prev-button"_spr);
         m_fields->m_prevArrowBtn->setVisible(false);
-        m_buttonMenu->addChild(m_fields->m_prevArrowBtn);
+        arrowMenu->addChild(m_fields->m_prevArrowBtn);
 
         for(intptr_t i = 1; i <= 3; i++) {
             auto node = ChallengeNode::create(GameStatsManager::sharedState()->getQueuedChallenge(i), this, false);
