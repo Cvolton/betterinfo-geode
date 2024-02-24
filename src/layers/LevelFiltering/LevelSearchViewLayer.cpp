@@ -142,9 +142,6 @@ void LevelSearchViewLayer::startLoading(){
             first = false;
         }
 
-        //workaround required to have type 26 working
-        toDownload << "&gameVersion=22";
-
         searchObj = GJSearchObject::create(starFilter ? SearchType::MapPackOnClick : (SearchType)26, toDownload.str());
 
     } else if(m_gjSearchObjOptimized) {
