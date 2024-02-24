@@ -2,6 +2,8 @@
 
 #include <fmt/format.h>
 #include <sstream>
+#include <sys/timeb.h>
+#include <time.h>
 
 std::string TimeUtils::timeToString(time_t input) {
     char dateString[255];
@@ -57,4 +59,16 @@ std::string TimeUtils::timestampToHumanReadable(time_t timestamp) {
     if(hours > 0) return fmt::format("{} hour{}", hours, hours > 1 ? "s" : "");
     if(minutes > 0) return fmt::format("{} minute{}", minutes, minutes > 1 ? "s" : "");
     return "Less than 1 minute";
+}
+
+double TimeUtils::getRobTopTime() {
+    struct _timeb timebuffer;
+    _ftime64(&timebuffer);
+    return (timebuffer.time & 0xfffff) + timebuffer.millitm / 1000.0;
+}
+
+double TimeUtils::getFullDoubleTime() {
+    struct _timeb timebuffer;
+    _ftime64(&timebuffer);
+    return timebuffer.time + timebuffer.millitm / 1000.0;
 }

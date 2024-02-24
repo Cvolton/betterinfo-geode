@@ -7,12 +7,21 @@
 using namespace geode::prelude;
 
 class $modify(BIRewardsPage, RewardsPage) {
+    CCLabelBMFont* m_timeLabel = nullptr;
 
     /*
      * Callbacks
      */
     void onRewardsPageHistory(CCObject* sender){
         RewardTypeSelectLayer::create()->show();
+    }
+
+    void onTimeRefresh(float dt){
+        //double time = (TimeUtils::getFullDoubleTime() - TimeUtils::getRobTopTime()) + 0xFFFFF;
+        double time = 0xFFFFF - TimeUtils::getRobTopTime();
+        m_fields->m_timeLabel->setString(
+            fmt::format("Time until timer bug: {}", GameToolbox::getTimeString(time)).c_str()
+        );
     }
 
     /*
@@ -30,8 +39,16 @@ class $modify(BIRewardsPage, RewardsPage) {
             menu_selector(BIRewardsPage::onRewardsPageHistory)
         );
         historyBtn->setPosition({-147,-87});
-        this->m_buttonMenu->addChild(historyBtn);
         historyBtn->setID("history-button"_spr);
+        m_buttonMenu->addChild(historyBtn);
+
+        m_fields->m_timeLabel = CCLabelBMFont::create("Time until timer bug: 3 years", "goldFont.fnt");
+        m_fields->m_timeLabel->setScale(.45f);
+        m_fields->m_timeLabel->setPosition({0,-95});
+        m_buttonMenu->addChild(m_fields->m_timeLabel);
+
+        this->getScheduler()->scheduleSelector(schedule_selector(BIRewardsPage::onTimeRefresh), this, 1, false);
+        onTimeRefresh(0);
 
         return true;
     }

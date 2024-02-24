@@ -9,4 +9,7 @@ namespace TimeUtils {
     std::string workingTime(int value);
     std::string platformerTime(int value);
     std::string timestampToHumanReadable(time_t timestamp);
+
+    double getRobTopTime();
+    double getFullDoubleTime();
 }
