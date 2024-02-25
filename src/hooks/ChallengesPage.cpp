@@ -2,6 +2,7 @@
 #include <Geode/modify/ChallengesPage.hpp>
 
 #include "../utils.hpp"
+#include "../layers/QuestHistory/QuestHistoryPopup.h"
 
 using namespace geode::prelude;
 
@@ -64,6 +65,10 @@ class $modify(BIChallengesPage, ChallengesPage) {
         }
 
         m_fields->m_page = 1;
+    }
+    
+    void onQuestHistory(cocos2d::CCObject* sender) {
+        QuestHistoryPopup::create()->show();
     }
 
     void reloadQuests() {
@@ -154,6 +159,17 @@ class $modify(BIChallengesPage, ChallengesPage) {
         m_fields->m_prevArrowBtn->setID("prev-button"_spr);
         m_fields->m_prevArrowBtn->setVisible(false);
         arrowMenu->addChild(m_fields->m_prevArrowBtn);
+
+        auto historySprite = BetterInfo::createWithBISpriteFrameName("BI_historyBtn_001.png");
+        historySprite->setScale(0.8f);
+        auto historyBtn = CCMenuItemSpriteExtra::create(
+            historySprite,
+            this,
+            menu_selector(BIChallengesPage::onQuestHistory)
+        );
+        historyBtn->setPosition({13,-247});
+        historyBtn->setID("history-button"_spr);
+        m_buttonMenu->addChild(historyBtn);
 
         reloadQuests();
 
