@@ -62,13 +62,13 @@ std::string TimeUtils::timestampToHumanReadable(time_t timestamp) {
 }
 
 double TimeUtils::getRobTopTime() {
-    struct _timeb timebuffer;
-    _ftime64(&timebuffer);
+    struct timeb timebuffer;
+    ftime(&timebuffer);
     return (timebuffer.time & 0xfffff) + timebuffer.millitm / 1000.0;
 }
 
 double TimeUtils::getFullDoubleTime() {
-    struct _timeb timebuffer;
-    _ftime64(&timebuffer);
+    struct timeb timebuffer;
+    ftime(&timebuffer);
     return timebuffer.time + timebuffer.millitm / 1000.0;
 }
