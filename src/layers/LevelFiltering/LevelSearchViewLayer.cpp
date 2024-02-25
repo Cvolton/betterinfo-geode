@@ -164,7 +164,6 @@ void LevelSearchViewLayer::startLoading(){
 
 void LevelSearchViewLayer::queueLoad(float dt) {
     auto GLM = GameLevelManager::sharedState();
-    GLM->m_levelManagerDelegate = this;
     GLM->getOnlineLevels(m_gjSearchObjLoaded);
     m_gjSearchObjLoaded->m_page += 1;
     m_gjSearchObjLoaded->release();
@@ -372,6 +371,9 @@ int LevelSearchViewLayer::resultsPerPage() const {
 
 void LevelSearchViewLayer::onEnter() {
     BIViewLayer::onEnter();
+
+    auto GLM = GameLevelManager::sharedState();
+    GLM->m_levelManagerDelegate = this;
     
     loadPage();
 }

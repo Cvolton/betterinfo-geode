@@ -103,6 +103,8 @@ bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer, InfoLayer*
     m_timer->setVisible(false);
     m_timer->setID("timer-label"_spr);
 
+    GameLevelManager::sharedState()->m_levelManagerDelegate = this;
+
     return true;
 }
 
@@ -233,10 +235,8 @@ void LevelBrowserEndLayer::getOnlineLevels() {
 void LevelBrowserEndLayer::onQueueDownload(float dt) {
     auto GLM = GameLevelManager::sharedState();
     if(m_levelBrowserLayer) {
-        GLM->m_levelManagerDelegate = this;
         GLM->getOnlineLevels(m_levelBrowserLayer->m_searchObject);
     } else if(m_infoLayer) {
-        GLM->m_levelCommentDelegate = this;
         GLM->getLevelComments(m_infoLayer->getID(), m_infoLayer->m_page, m_infoLayer->m_pageEndIdx, GameManager::sharedState()->getGameVariable("0069"), m_infoLayer->m_mode);
     }
 }
