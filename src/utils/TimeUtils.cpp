@@ -2,8 +2,11 @@
 
 #include <fmt/format.h>
 #include <sstream>
-#include <sys/timeb.h>
 #include <time.h>
+
+#ifndef GEODE_IS_ANDROID
+#include <sys/timeb.h>
+#endif
 
 std::string TimeUtils::timeToString(time_t input) {
     char dateString[255];
@@ -66,13 +69,27 @@ double TimeUtils::getRobTopTime() {
     // This implementation gets the current timestamp that is compatible
     // with things like GLM->m_challengeTime
 
-    struct timeb timebuffer;
-    ftime(&timebuffer);
-    return (timebuffer.time & 0xfffff) + timebuffer.millitm / 1000.0;
+    #ifdef GEODE_IS_ANDROID
+        // Remember what I just said?
+        // This is a lie on Android! Rob uses the full timestamp there!
+        return TimeUtils::getFullDoubleTime();
+    #else
+        struct timeb timebuffer;
+        ftime(&timebuffer);
+        return (timebuffer.time & 0xfffff) + timebuffer.millitm / 1000.0;
+    #endif
 }
 
 double TimeUtils::getFullDoubleTime() {
-    struct timeb timebuffer;
-    ftime(&timebuffer);
-    return timebuffer.time + timebuffer.millitm / 1000.0;
+    // Same output as getRobTopTime, but with the full timestamp
+
+    #ifdef GEODE_IS_ANDROID
+        struct timespec ts;
+        clock_gettime(0, &ts);
+        return ts.tv_sec + ts.tv_nsec / 1000000000.0;
+    #else
+        struct timeb timebuffer;
+        ftime(&timebuffer);
+        return timebuffer.time + timebuffer.millitm / 1000.0;
+    #endif
 }
