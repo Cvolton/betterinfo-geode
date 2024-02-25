@@ -1,20 +1,23 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/ChallengesPage.hpp>
 
+#include "../utils.hpp"
+
 using namespace geode::prelude;
 
 class $modify(BIChallengesPage, ChallengesPage) {
     CCMenuItemSpriteExtra* m_nextArrowBtn;
     CCMenuItemSpriteExtra* m_prevArrowBtn;
-    std::vector<CCNode*> m_queuedNodes;
+    std::vector<ChallengeNode*> m_queuedNodes;
     std::vector<CCNode*> m_queuedDots;
+    size_t m_page = 0;
 
     /*
      * Callbacks
      */
     void onPrev(CCObject* sender) {
-        m_fields->m_prevArrowBtn->setVisible(false);
-        m_fields->m_nextArrowBtn->setVisible(true);
+        if(m_fields->m_prevArrowBtn) m_fields->m_prevArrowBtn->setVisible(false);
+        if(m_fields->m_nextArrowBtn) m_fields->m_nextArrowBtn->setVisible(true);
 
         for(intptr_t i = 1; i <= 3; i++) {
             if(m_challengeNodes->objectForKey(i)) {
@@ -34,11 +37,13 @@ class $modify(BIChallengesPage, ChallengesPage) {
         for(auto dot : CCArrayExt<CCNode*>(m_dots)) {
             dot->setVisible(GameStatsManager::sharedState()->getQueuedChallenge(i++) != nullptr);
         }
+
+        m_fields->m_page = 0;
     }
 
     void onNext(CCObject* sender) {
-        m_fields->m_prevArrowBtn->setVisible(true);
-        m_fields->m_nextArrowBtn->setVisible(false);
+        if(m_fields->m_prevArrowBtn) m_fields->m_prevArrowBtn->setVisible(true);
+        if(m_fields->m_nextArrowBtn) m_fields->m_nextArrowBtn->setVisible(false);
 
         for(intptr_t i = 1; i <= 3; i++) {
             if(m_challengeNodes->objectForKey(i)) {
@@ -58,6 +63,7 @@ class $modify(BIChallengesPage, ChallengesPage) {
             dot->setVisible(false);
         }
 
+        m_fields->m_page = 1;
     }
 
     void reloadQuests() {
@@ -104,6 +110,11 @@ class $modify(BIChallengesPage, ChallengesPage) {
             dot->setTag(i);
             m_mainLayer->addChild(dot);
             m_fields->m_queuedDots.push_back(dot);
+        }
+
+        if(m_fields->m_page == 1) {
+            onPrev(nullptr);
+            onNext(nullptr);
         }
     }
 
@@ -155,5 +166,21 @@ class $modify(BIChallengesPage, ChallengesPage) {
         reloadQuests();
         
         return node;
+    }
+
+    void updateTimers(float num) {
+        ChallengesPage::updateTimers(num);
+
+        intptr_t i = 0;
+        for(auto node : m_fields->m_queuedNodes) {
+            i++;
+            if(node->m_challengeItem) continue;
+
+            if(auto countdownLabel = static_cast<CCLabelBMFont*>(node->getChildByID("countdown-label"))) {
+                double time = GameStatsManager::sharedState()->m_challengeTime;
+                if(!GameStatsManager::sharedState()->getChallenge(i)) time += 28800; // GDPS incompatible assumption
+                countdownLabel->setString(GameToolbox::getTimeString(time - TimeUtils::getRobTopTime()).c_str());
+            }
+        }
     }
 };
