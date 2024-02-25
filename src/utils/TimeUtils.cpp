@@ -62,6 +62,10 @@ std::string TimeUtils::timestampToHumanReadable(time_t timestamp) {
 }
 
 double TimeUtils::getRobTopTime() {
+    // For an unknown reason, RobTop only uses the bottom 20 bits of the time
+    // This implementation gets the current timestamp that is compatible
+    // with things like GLM->m_challengeTime
+
     struct timeb timebuffer;
     ftime(&timebuffer);
     return (timebuffer.time & 0xfffff) + timebuffer.millitm / 1000.0;
