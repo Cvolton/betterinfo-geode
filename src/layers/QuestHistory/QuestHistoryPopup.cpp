@@ -35,7 +35,7 @@ bool QuestHistoryPopup::init(){
 
     auto counts = CCArray::create();
     for(auto [key, value] : completed) {
-        log::info("Completed challenge {} diamonds {} times", key, value);
+        //log::info("Completed challenge {} diamonds {} times", key, value);
         counts->addObject(QuestHistoryObject::create(key, value));
     }
 
@@ -79,4 +79,8 @@ bool QuestHistoryPopup::init(){
     m_mainLayer->addChild(totalText);
 
     return true;
+}
+
+void QuestHistoryPopup::show() {
+    reinterpret_cast<InfoLayer*>(this)->InfoLayer::show();
 }

@@ -5,4 +5,5 @@ class QuestHistoryPopup : public CvoltonAlertLayerStub {
 public:
     static QuestHistoryPopup* create();
     bool init();
+    void show();
 };
