@@ -87,6 +87,7 @@ bool CreatorInfoPopup::init(int userID){
     m_loading->setScale(.6f);
     m_loading->setPosition({winSize.width / 2, winSize.height / 2 + 12});
     m_loading->setID("loading-text"_spr);
+    m_loading->setVisible(false);
     m_mainLayer->addChild(m_loading);
     
     auto buttonSprite = ButtonSprite::create("OK", 0, false, "goldFont.fnt", "GJ_button_01.png", 0, 1.f);
