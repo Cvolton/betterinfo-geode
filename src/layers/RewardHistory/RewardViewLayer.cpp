@@ -1,6 +1,5 @@
 #include "RewardViewLayer.h"
-#include "../JumpToPageLayer.h"
-#include "../../utils.hpp"
+#include "RewardCell.h"
 #include "../../hooks/GJRewardItem.h"
 
 using namespace gd;

@@ -1,5 +1,7 @@
 #include "RewardTypeSelectLayer.h"
+#include "RewardGroupLayer.h"
 #include "RewardViewLayer.h"
+#include "../../hooks/GJRewardItem.h"
 #include "../../utils.hpp"
 
 RewardTypeSelectLayer* RewardTypeSelectLayer::create(){
@@ -24,8 +26,19 @@ void RewardTypeSelectLayer::onDaily(cocos2d::CCObject* sender)
 
 void RewardTypeSelectLayer::onTreasure(cocos2d::CCObject* sender)
 {
-    auto browserLayer = RewardViewLayer::scene(GameStatsManager::sharedState()->m_treasureRoomChests, "Treasure");
-    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
+    auto groupLayer = RewardGroupLayer::scene(
+        "Treasure",
+        GameStatsManager::sharedState()->m_treasureRoomChests,
+        {
+            {"1 Key", "chest_01_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKeyInt() < 1000; }},
+            {"5 Key", "chest_02_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKeyInt() >= 1000 && item->getKeyInt() < 2000; }},
+            {"10 Key", "chest_03_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKeyInt() >= 2000 && item->getKeyInt() < 3000; }},
+            {"25 Key", "chest_04_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKeyInt() >= 3000 && item->getKeyInt() < 4000; }},
+            {"50 Key", "chest_05_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKeyInt() >= 4000 && item->getKeyInt() < 5000; }},
+            {"100 Key", "chest_06_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKeyInt() >= 5000 && item->getKeyInt() < 6000; }},
+        }
+    );
+    auto transitionFade = CCTransitionFade::create(0.5, groupLayer);
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
 
@@ -38,8 +51,26 @@ void RewardTypeSelectLayer::onWeekly(cocos2d::CCObject* sender)
 
 void RewardTypeSelectLayer::onOther(cocos2d::CCObject* sender)
 {
-    auto browserLayer = RewardViewLayer::scene(GameStatsManager::sharedState()->m_miscChests, "Other");
-    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
+    auto groupLayer = RewardGroupLayer::scene(
+        "Other",
+        GameStatsManager::sharedState()->m_miscChests,
+        {
+            {"Ad", "chest_02_02_001.png", [](BIGJRewardItem* item) -> bool { 
+                return item->getKey().size() == 4 && item->getKey()[0] == '0' && item->getKey()[1] == '0' &&
+                    item->getKeyInt() >= 12 && item->getKeyInt() <= 21; 
+            }},
+            {"Gauntlet", "chest_03_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKey().size() > 0 && item->getKey()[0] == 'g'; }},
+            {"Path", "chest_04_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKey().size() > 0 && item->getKey()[0] == 'p'; }},
+            {"Other", "chest_06_02_001.png", [](BIGJRewardItem* item) -> bool {
+                return item->getKey().size() == 0
+                    || !(item->getKey()[0] == 'g' || item->getKey()[0] == 'p'
+                    || (item->getKey().size() == 4 && item->getKey()[0] == '0' && item->getKey()[1] == '0' &&
+                        item->getKeyInt() >= 12 && item->getKeyInt() <= 21)
+                    ); 
+            }},
+        }
+    );
+    auto transitionFade = CCTransitionFade::create(0.5, groupLayer);
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
 

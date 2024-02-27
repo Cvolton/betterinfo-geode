@@ -1,8 +1,6 @@
 #pragma once
 
 #include "../_bases/BIViewLayer.h"
-#include "RewardCell.h"
-#include "../../delegates/PageNumberDelegate.h"
 
 class RewardViewLayer : public BIViewLayer {
 protected:

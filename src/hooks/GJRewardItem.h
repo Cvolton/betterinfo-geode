@@ -17,4 +17,8 @@ class $modify(BIGJRewardItem, GJRewardItem) {
     std::string getKey() {
         return s_keys[this];
     }
+
+    int getKeyInt() {
+        return BetterInfo::stoi(getKey());
+    }
 };

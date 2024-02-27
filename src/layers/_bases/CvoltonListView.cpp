@@ -3,6 +3,7 @@
 
 #include "../DailyHistory/DailyCell.h"
 #include "../RewardHistory/RewardCell.h"
+#include "../RewardHistory/RewardCategoryCell.h"
 #include "../QuestHistory/QuestHistoryCell.h"
 
 using namespace geode::prelude;
@@ -63,4 +64,5 @@ TableViewCell* CvoltonListView<Cell>::getListCell(const char* key) {
 
 template class CvoltonListView<DailyCell>;
 template class CvoltonListView<RewardCell>;
+template class CvoltonListView<RewardCategoryCell>;
 template class CvoltonListView<QuestHistoryCell>;
