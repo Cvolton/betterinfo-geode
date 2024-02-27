@@ -49,6 +49,7 @@ class $modify(BIRewardsPage, RewardsPage) {
             m_fields->m_timeLabel = CCLabelBMFont::create("Time until timer bug: 3 years", "goldFont.fnt");
             m_fields->m_timeLabel->setScale(.45f);
             m_fields->m_timeLabel->setPosition({0,-95});
+            m_fields->m_timeLabel->setVisible(false);
             m_buttonMenu->addChild(m_fields->m_timeLabel);
 
             this->getScheduler()->scheduleSelector(schedule_selector(BIRewardsPage::onTimeRefresh), this, 1, false);
