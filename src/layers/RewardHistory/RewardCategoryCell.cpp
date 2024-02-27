@@ -31,9 +31,10 @@ void RewardCategoryCell::loadFromData(CCObject* object) {
     menu->setPosition({0, 0});
     this->m_mainLayer->addChild(menu);
 
-    auto viewButton = ButtonSprite::create("View", 0, 0, "bigFont.fnt", "GJ_button_04.png", 32, .6f);
+    auto viewButton = ButtonSprite::create("View", 0, 0, "bigFont.fnt", "GJ_button_01.png", 32, .6f);
+    viewButton->setScale(.9f);
     auto viewBtn = CCMenuItemSpriteExtra::create(viewButton, this, menu_selector(RewardCategoryCell::onView));
-    viewBtn->setPosition({m_width - viewBtn->getScaledContentSize().width + 20, m_height / 2});
+    viewBtn->setPosition({m_width - viewBtn->getScaledContentSize().width + 18, m_height / 2});
     menu->addChild(viewBtn);
 
     CCSprite* lastSprite = nullptr;
