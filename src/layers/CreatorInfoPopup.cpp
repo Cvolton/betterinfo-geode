@@ -1,6 +1,7 @@
 #include "CreatorInfoPopup.h"
 
 #include "../utils.hpp"
+#include <string>
 
 CreatorInfoPopup* CreatorInfoPopup::create(int userID){
     auto ret = new CreatorInfoPopup();
@@ -28,7 +29,6 @@ bool CreatorInfoPopup::init(int userID){
 
     m_levels = CCArray::create();
     m_levels->retain();
-    //TODO: release
 
     m_tabMenu = CCMenu::create();
     m_tabMenu->setLayout(
@@ -80,7 +80,14 @@ bool CreatorInfoPopup::init(int userID){
 
     m_circle = LoadingCircle::create();
     m_circle->setParentLayer(m_mainLayer);
+    m_circle->setPosition({0, 11});
     m_circle->show();
+
+    m_loading = CCLabelBMFont::create("0%", "goldFont.fnt");
+    m_loading->setScale(.6f);
+    m_loading->setPosition({winSize.width / 2, winSize.height / 2 + 12});
+    m_loading->setID("loading-text"_spr);
+    m_mainLayer->addChild(m_loading);
     
     auto buttonSprite = ButtonSprite::create("OK", 0, false, "goldFont.fnt", "GJ_button_01.png", 0, 1.f);
     auto buttonButton = CCMenuItemSpriteExtra::create(
@@ -172,6 +179,7 @@ void CreatorInfoPopup::createTabs() {
 }
 
 void CreatorInfoPopup::showResults() {
+    m_loading->setVisible(false);
     m_diffMenu->removeAllChildren();
     m_secondRowMenu->removeAllChildren();
     m_thirdRowMenu->removeAllChildren();
@@ -254,7 +262,7 @@ void CreatorInfoPopup::showResults() {
 }
 
 void CreatorInfoPopup::loadLevels() {
-    log::info("Calculating creator info: page {}", m_searchObject->m_page);
+    log::debug("Calculating creator info: page {}", m_searchObject->m_page);
 
     auto GLM = GameLevelManager::sharedState();
     auto storedLevels = GLM->getStoredOnlineLevels(m_searchObject->getKey());
@@ -285,6 +293,21 @@ void CreatorInfoPopup::loadLevelsFailed(const char*) {
     showResults();
 }
 
+void CreatorInfoPopup::setupPageInfo(gd::string counts, const char* key) {
+
+    std::vector<int> countsVec;
+    std::stringstream responseStream(counts);
+    std::string currentKey;
+    while(std::getline(responseStream, currentKey, ':')) {
+        countsVec.push_back(BetterInfo::stoi(currentKey));
+    }
+
+    if(countsVec.size() != 3) return;
+    if(countsVec[0] == 0) return;
+
+    if(m_loading) m_loading->setString(fmt::format("{}%", 100 * countsVec[1] / countsVec[0]).c_str());
+}
+
 int CreatorInfoPopup::levelsForDifficulty(int difficulty, bool platformer){
     int total = 0;
 
@@ -305,4 +328,9 @@ int CreatorInfoPopup::levelsForDifficulty(int difficulty, bool platformer){
     }
 
     return total;
+}
+
+CreatorInfoPopup::~CreatorInfoPopup() {
+    if(m_circle) m_circle->fadeAndRemove();
+    if(m_searchObject) m_searchObject->release();
 }

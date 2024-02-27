@@ -13,6 +13,7 @@ class CreatorInfoPopup : public CvoltonAlertLayerStub, public LevelManagerDelega
     cocos2d::CCLabelBMFont* m_classic = nullptr;
     cocos2d::CCLabelBMFont* m_platformer = nullptr;
     CCMenuItemSpriteExtra* m_currentTab = nullptr;
+    cocos2d::CCLabelBMFont* m_loading = nullptr;
     int m_tab = 1;
     bool m_loaded = false;
 public:
@@ -29,6 +30,9 @@ public:
 
     void loadLevelsFinished(cocos2d::CCArray*, const char*);
     void loadLevelsFailed(const char*);
+    void setupPageInfo(gd::string counts, const char* key);
 
     int levelsForDifficulty(int difficulty, bool platformer);
+
+    ~CreatorInfoPopup();
 };
