@@ -1,24 +1,33 @@
 #include "TimeUtils.h"
 
+#include <fmt/core.h>
 #include <fmt/format.h>
+#include <fmt/chrono.h>
 #include <sstream>
 #include <time.h>
+#include <chrono>
 
 #ifndef GEODE_IS_ANDROID
 #include <sys/timeb.h>
 #endif
 
+// using namespace std chrono for the whole cpp is fine
+// since this is a dedicated utility file to time operations
+using namespace std::chrono;
+
 std::string TimeUtils::timeToString(time_t input) {
-    char dateString[255];
-    strftime(dateString, sizeof(dateString), "%F %H:%M", localtime(&input));
-    return dateString;
+    auto tp = system_clock::from_time_t(input);
+    return fmt::format("{:%F %H:%M}", tp);
 }
 
 std::string TimeUtils::isoTimeToString(const std::string& input) {
     if(input.empty()) return "NA";
-    int y,M,d;
+    std::string output;
+    getline(std::istringstream(input), output, 'T');
+    return output;
+    /*int y,M,d;
     sscanf(input.c_str(), "%d-%d-%dT", &y, &M, &d);
-    return fmt::format("{}-{:02}-{:02}", y, M, d);
+    return fmt::format("{}-{:02}-{:02}", y, M, d);*/
 }
 
 std::string TimeUtils::workingTime(int value){
