@@ -2,10 +2,12 @@
 ## <cg>v4.1.0</c> (2024-02-tbd)
 This update is largely based on [your suggestions](https://twitter.com/Misabr0penguin/status/1757481064254034421)!
 * Added Creator Point Breakdown to Profiles
+* Added Queued Quests view and Quests History
 * Added Game Version filter to Filtered Search
 * Added "Found in" to Icon Info
 * Added Jump to Last Page for Comments
 * Added Favorite level search
+* Improved Chest Reward History
 * Other bugfixes & improvements
 
 **For texture pack creators:** This update changes the alignment of some textures, texture packs modifying BetterInfo's textures may need to be updated to avoid minor visual glitches.
