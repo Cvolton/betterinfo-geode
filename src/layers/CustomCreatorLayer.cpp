@@ -24,8 +24,29 @@ bool CustomCreatorLayer::init() {
     auto menu = CCMenu::create();
     menu->setID("main-menu"_spr);
     addChild(menu);
-    auto label = CCLabelBMFont::create(Mod::get()->getName().c_str(), "goldFont.fnt");
 
+    auto buttonsMenu = CCMenu::create();
+    buttonsMenu->setID("creator-buttons-menu"_spr);
+    buttonsMenu->setContentSize({ 300.f, 240.f });
+    buttonsMenu->setPosition({winSize.width / 2, winSize.height / 2 + 4.5f});
+    buttonsMenu->setLayout(
+        RowLayout::create()
+            ->setGap(6.f)
+            ->setGrowCrossAxis(true)
+            ->setCrossAxisOverflow(false)
+    );
+    addChild(buttonsMenu);
+
+    auto bottomMenu = CCMenu::create();
+    bottomMenu->setID("bottom-menu"_spr);
+    bottomMenu->setContentSize({winSize.width - 140.f, 65.f});
+    bottomMenu->setPosition({winSize.width / 2, 25});
+    bottomMenu->setLayout(
+        RowLayout::create()
+    );
+    addChild(bottomMenu);
+
+    auto label = CCLabelBMFont::create(Mod::get()->getName().c_str(), "goldFont.fnt");
     label->setPosition({winSize.width / 2, winSize.height - 25});
     label->setID("title-label"_spr);
 
@@ -36,72 +57,36 @@ bool CustomCreatorLayer::init() {
         this,
         menu_selector(CustomCreatorLayer::onFeatured)
     );
-    menu->addChild(featuredBtn);
-    featuredBtn->setPosition({-60,55});
+    buttonsMenu->addChild(featuredBtn);
     featuredBtn->setSizeMult(1.2f);
     featuredBtn->setID("featured-button"_spr);
-
-    /*auto mostLikedBtn = CCMenuItemSpriteExtra::create(
-        BetterInfo::createWithBISpriteFrameName("BI_mostLikedBtn_001.png"),
-        this,
-        menu_selector(CustomCreatorLayer::onMostLiked)
-    );
-    menu->addChild(mostLikedBtn);
-    mostLikedBtn->setPosition({0,55});
-    mostLikedBtn->setSizeMult(1.2f);
-    mostLikedBtn->setID("most-liked-button"_spr);*/
-
-    auto searchBtn = CCMenuItemSpriteExtra::create(
-        BetterInfo::createBISprite("BI_searchLevel_001.png"),
-        this,
-        menu_selector(CustomCreatorLayer::onSearch)
-    );
-    menu->addChild(searchBtn);
-    searchBtn->setPosition({60,-55});
-    searchBtn->setSizeMult(1.2f);
-    searchBtn->setID("search-button"_spr);
-
-    auto searchIDBtn = CCMenuItemSpriteExtra::create(
-        BetterInfo::createBISprite("BI_searchID_001.png"),
-        this,
-        menu_selector(CustomCreatorLayer::onSearchID)
-    );
-    menu->addChild(searchIDBtn);
-    searchIDBtn->setPosition({-60,-55});
-    searchIDBtn->setSizeMult(1.2f);
-    searchIDBtn->setID("search-id-button"_spr);
-
-    /*auto dailyBtn = CCMenuItemSpriteExtra::create(
-        CCSprite::createWithSpriteFrameName("GJ_dailyBtn_001.png"),
-        this,
-        menu_selector(CustomCreatorLayer::onDaily)
-    );
-    menu->addChild(dailyBtn);
-    dailyBtn->setPosition({-122.5,-55});
-    dailyBtn->setSizeMult(1.2f);
-    dailyBtn->setID("daily-button"_spr);
-
-    //CCTextureCache::sharedTextureCache()->addImage("mostliked.png", 0);
-
-    auto weeklyBtn = CCMenuItemSpriteExtra::create(
-        CCSprite::createWithSpriteFrameName("GJ_weeklyBtn_001.png"),
-        this,
-        menu_selector(CustomCreatorLayer::onWeekly)
-    );
-    menu->addChild(weeklyBtn);
-    weeklyBtn->setPosition({-2.5,-55});
-    weeklyBtn->setSizeMult(1.2f);
-    weeklyBtn->setID("weekly-button"_spr);*/
 
     auto fameBtn = CCMenuItemSpriteExtra::create(
         BetterInfo::createBISprite("GJ_fameBtn_001.png"),
         this,
         menu_selector(CustomCreatorLayer::onFame)
     );
-    menu->addChild(fameBtn);
-    fameBtn->setPosition({60,55});
+    buttonsMenu->addChild(fameBtn);
     fameBtn->setSizeMult(1.2f);
     fameBtn->setID("weekly-button"_spr);
+
+    auto searchIDBtn = CCMenuItemSpriteExtra::create(
+        BetterInfo::createBISprite("BI_searchID_001.png"),
+        this,
+        menu_selector(CustomCreatorLayer::onSearchID)
+    );
+    buttonsMenu->addChild(searchIDBtn);
+    searchIDBtn->setSizeMult(1.2f);
+    searchIDBtn->setID("search-id-button"_spr);
+
+    auto searchBtn = CCMenuItemSpriteExtra::create(
+        BetterInfo::createBISprite("BI_searchLevel_001.png"),
+        this,
+        menu_selector(CustomCreatorLayer::onSearch)
+    );
+    buttonsMenu->addChild(searchBtn);
+    searchBtn->setSizeMult(1.2f);
+    searchBtn->setID("search-button"_spr);
 
     auto settingsSprite = CCSprite::createWithSpriteFrameName("GJ_optionsBtn_001.png");
     settingsSprite->setScale(0.775f);
@@ -110,8 +95,7 @@ bool CustomCreatorLayer::init() {
         this,
         menu_selector(CustomCreatorLayer::onSettings)
     );
-    menu->addChild(settingsBtn);
-    settingsBtn->setPosition({0, - ( (winSize.height / 2) - 25 ) });
+    bottomMenu->addChild(settingsBtn);
     settingsBtn->setSizeMult(1.2f);
     settingsBtn->setID("settings-button"_spr);
 
@@ -124,6 +108,9 @@ bool CustomCreatorLayer::init() {
     infoBtn->setPosition({ (winSize.width / 2) - 25 , (winSize.height / 2) - 25 });
     infoBtn->setSizeMult(1.2f);
     infoBtn->setID("info-button"_spr);
+
+    buttonsMenu->updateLayout();
+    bottomMenu->updateLayout();
 
     return true;
 }
