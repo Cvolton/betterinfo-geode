@@ -1,4 +1,5 @@
 #include "RewardCategoryCell.h"
+#include "RewardCell.h"
 #include "RewardViewLayer.h"
 #include "Geode/binding/ButtonSprite.hpp"
 
@@ -35,49 +36,27 @@ void RewardCategoryCell::loadFromData(CCObject* object) {
     viewBtn->setPosition({m_width - viewBtn->getScaledContentSize().width + 20, m_height / 2});
     menu->addChild(viewBtn);
 
-
-    /*CCObject* obj;
     CCSprite* lastSprite = nullptr;
     CCLabelBMFont* lastText = nullptr;
-    CCARRAY_FOREACH(m_rewardItem->m_rewardObjects, obj){
-        auto rewardObj = static_cast<GJRewardObject*>(obj);
-
-        const char* textureName = "GJ_sRecentIcon_001.png";
-        float scale = 1;
-        switch(rewardObj->m_specialRewardItem) {
-            case SpecialRewardItem::FireShard: textureName = "fireShardSmall_001.png"; break;
-            case SpecialRewardItem::IceShard: textureName = "iceShardSmall_001.png"; break;
-            case SpecialRewardItem::PoisonShard: textureName = "poisonShardSmall_001.png"; break;
-            case SpecialRewardItem::ShadowShard: textureName = "shadowShardSmall_001.png"; break;
-            case SpecialRewardItem::LavaShard: textureName = "lavaShardSmall_001.png"; break;
-            case SpecialRewardItem::BonusKey: textureName = "GJ_bigKey_001.png"; scale = .5f; break;
-            case SpecialRewardItem::Orbs: textureName = "currencyOrbIcon_001.png"; scale = .7f; break;
-            case SpecialRewardItem::Diamonds: textureName = "diamond_small01_001.png"; break;
-            case SpecialRewardItem::CustomItem: textureName = "collaborationIcon_001.png"; scale = .5f; break;
-            case SpecialRewardItem::EarthShard: textureName = "shard0201ShardSmall_001.png"; break;
-            case SpecialRewardItem::BloodShard: textureName = "shard0202ShardSmall_001.png"; break;
-            case SpecialRewardItem::MetalShard: textureName = "shard0203ShardSmall_001.png"; break;
-            case SpecialRewardItem::LightShard: textureName = "shard0204ShardSmall_001.png"; break;
-            case SpecialRewardItem::SoulShard: textureName = "shard0205ShardSmall_001.png"; break;
-            default: scale = 0.7f;
-        }
-
-        lastSprite = CCSprite::createWithSpriteFrameName(textureName);
-        if(rewardObj->m_specialRewardItem == SpecialRewardItem::CustomItem) {
-            lastSprite = GJItemIcon::createBrowserItem(rewardObj->m_unlockType, rewardObj->m_itemID);
+    for(auto [type, count] : m_category->countSpecialItems()) {
+        // this could likely be simplified by using geode layouts
+        // but that's a problem for future me
+        lastSprite = RewardCell::itemToSprite(type);
+        if(type == SpecialRewardItem::CustomItem) {
+            lastSprite = GJItemIcon::createBrowserItem(UnlockType::Cube, 1);
+            lastSprite->setScale(.45f);
         }
         if(lastText == nullptr) lastSprite->setPosition({rowX + 1, rowY});
         else lastSprite->setPosition({lastText->getPositionX() + (lastText->getContentSize().width * lastText->getScaleX()) + 11.f, rowY});
         lastSprite->setAnchorPoint({0, 0.5f});
-        lastSprite->setScale(scale);
         this->m_mainLayer->addChild(lastSprite);
 
-        lastText = CCLabelBMFont::create(CCString::createWithFormat("%i", rewardObj->m_total)->getCString(), "bigFont.fnt");
+        lastText = CCLabelBMFont::create(fmt::format(std::locale("en_US.UTF-8"), "{:L}", count).c_str(), "bigFont.fnt");
         lastText->setAnchorPoint({ 0.0f, 0.5f });
         lastText->setPosition({lastSprite->getPositionX() + ((lastSprite->getContentSize().width) * lastSprite->getScaleX()) + 5, rowY});
         lastText->setScale(.325f);
         this->m_mainLayer->addChild(lastText);
-    }*/
+    }
 
     this->m_mainLayer->setVisible(true);
     this->m_backgroundLayer->setOpacity(255);

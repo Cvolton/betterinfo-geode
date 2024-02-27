@@ -2,6 +2,7 @@
 #include "../../hooks/GJRewardItem.h"
 #include "../../utils.hpp"
 #include "../../managers/BetterInfoCache.h"
+#include "Geode/Enums.hpp"
 
 std::string RewardCell::getDisplayName() {
     auto key = static_cast<BIGJRewardItem*>(m_rewardItem)->getKey();
@@ -124,34 +125,14 @@ void RewardCell::loadFromData(CCObject* object) {
     CCARRAY_FOREACH(m_rewardItem->m_rewardObjects, obj){
         auto rewardObj = static_cast<GJRewardObject*>(obj);
 
-        const char* textureName = "GJ_sRecentIcon_001.png";
-        float scale = 1;
-        switch(rewardObj->m_specialRewardItem) {
-            case SpecialRewardItem::FireShard: textureName = "fireShardSmall_001.png"; break;
-            case SpecialRewardItem::IceShard: textureName = "iceShardSmall_001.png"; break;
-            case SpecialRewardItem::PoisonShard: textureName = "poisonShardSmall_001.png"; break;
-            case SpecialRewardItem::ShadowShard: textureName = "shadowShardSmall_001.png"; break;
-            case SpecialRewardItem::LavaShard: textureName = "lavaShardSmall_001.png"; break;
-            case SpecialRewardItem::BonusKey: textureName = "GJ_bigKey_001.png"; scale = .5f; break;
-            case SpecialRewardItem::Orbs: textureName = "currencyOrbIcon_001.png"; scale = .7f; break;
-            case SpecialRewardItem::Diamonds: textureName = "diamond_small01_001.png"; break;
-            case SpecialRewardItem::CustomItem: textureName = "collaborationIcon_001.png"; scale = .5f; break;
-            case SpecialRewardItem::EarthShard: textureName = "shard0201ShardSmall_001.png"; break;
-            case SpecialRewardItem::BloodShard: textureName = "shard0202ShardSmall_001.png"; break;
-            case SpecialRewardItem::MetalShard: textureName = "shard0203ShardSmall_001.png"; break;
-            case SpecialRewardItem::LightShard: textureName = "shard0204ShardSmall_001.png"; break;
-            case SpecialRewardItem::SoulShard: textureName = "shard0205ShardSmall_001.png"; break;
-            default: scale = 0.7f;
-        }
-
-        lastSprite = CCSprite::createWithSpriteFrameName(textureName);
+        lastSprite = itemToSprite(rewardObj->m_specialRewardItem);
         if(rewardObj->m_specialRewardItem == SpecialRewardItem::CustomItem) {
             lastSprite = GJItemIcon::createBrowserItem(rewardObj->m_unlockType, rewardObj->m_itemID);
+            lastSprite->setScale(0.5f);
         }
         if(lastText == nullptr) lastSprite->setPosition({rowX + 1, rowY});
         else lastSprite->setPosition({lastText->getPositionX() + (lastText->getContentSize().width * lastText->getScaleX()) + 11.f, rowY});
         lastSprite->setAnchorPoint({0, 0.5f});
-        lastSprite->setScale(scale);
         this->m_mainLayer->addChild(lastSprite);
 
         lastText = CCLabelBMFont::create(CCString::createWithFormat("%i", rewardObj->m_total)->getCString(), "bigFont.fnt");
@@ -177,4 +158,33 @@ RewardCell* RewardCell::create(const char* key, CCSize size) {
         ret = nullptr;
     }
     return ret;
+}
+
+CCSprite* RewardCell::itemToSprite(SpecialRewardItem item) {
+    const char* textureName = "GJ_sRecentIcon_001.png";
+    float scale = 1;
+    switch(item) {
+        case SpecialRewardItem::FireShard: textureName = "fireShardSmall_001.png"; break;
+        case SpecialRewardItem::IceShard: textureName = "iceShardSmall_001.png"; break;
+        case SpecialRewardItem::PoisonShard: textureName = "poisonShardSmall_001.png"; break;
+        case SpecialRewardItem::ShadowShard: textureName = "shadowShardSmall_001.png"; break;
+        case SpecialRewardItem::LavaShard: textureName = "lavaShardSmall_001.png"; break;
+        case SpecialRewardItem::BonusKey: textureName = "GJ_bigKey_001.png"; scale = .5f; break;
+        case SpecialRewardItem::Orbs: textureName = "currencyOrbIcon_001.png"; scale = .7f; break;
+        case SpecialRewardItem::Diamonds: textureName = "diamond_small01_001.png"; break;
+        case SpecialRewardItem::CustomItem: textureName = "collaborationIcon_001.png"; scale = .5f; break;
+        case SpecialRewardItem::EarthShard: textureName = "shard0201ShardSmall_001.png"; break;
+        case SpecialRewardItem::BloodShard: textureName = "shard0202ShardSmall_001.png"; break;
+        case SpecialRewardItem::MetalShard: textureName = "shard0203ShardSmall_001.png"; break;
+        case SpecialRewardItem::LightShard: textureName = "shard0204ShardSmall_001.png"; break;
+        case SpecialRewardItem::SoulShard: textureName = "shard0205ShardSmall_001.png"; break;
+        default: scale = 0.7f;
+    }
+
+    if(item == (SpecialRewardItem) -1) textureName = "bonusShardSmall_001.png";
+
+    auto sprite = CCSprite::createWithSpriteFrameName(textureName);
+    sprite->setScale(scale);
+
+    return sprite;
 }

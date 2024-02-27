@@ -1,4 +1,5 @@
 #include "RewardCategoryObject.h"
+#include "Geode/Enums.hpp"
 #include "Geode/cocos/cocoa/CCDictionary.h"
 
 RewardCategoryObject* RewardCategoryObject::create(std::string_view title, std::string_view icon, cocos2d::CCDictionary* chests, std::function<bool(BIGJRewardItem*)> filter) {
@@ -44,4 +45,21 @@ RewardCategoryObject::~RewardCategoryObject() {
     if (m_filteredChests) {
         m_filteredChests->release();
     }
+}
+
+std::map<SpecialRewardItem, int> RewardCategoryObject::countSpecialItems() {
+    std::map<SpecialRewardItem, int> counts;
+
+    for (auto&& [key, chest] : CCDictionaryExt<gd::string, BIGJRewardItem*>(filteredChests())) {
+        for(auto&& reward : CCArrayExt<GJRewardObject*>(chest->m_rewardObjects)) {
+            auto item = reward->m_specialRewardItem;
+            if(((int) item >= 0x1 && (int) item <= 0x5) || ((int) item >= 0xA && (int) item <= 0xE)) {
+                item = (SpecialRewardItem) -1;
+            }
+
+            counts[item] += reward->m_total;
+        }
+    }
+
+    return counts;
 }
