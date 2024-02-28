@@ -313,7 +313,7 @@ int CreatorInfoPopup::levelsForDifficulty(int difficulty, bool platformer){
     int total = 0;
 
     for(auto level : CCArrayExt<GJGameLevel*>(m_levels)) {
-        auto levelDifficulty = level->m_ratingsSum / level->m_ratings;
+        auto levelDifficulty = level->m_ratings > 0 ? (level->m_ratingsSum / level->m_ratings) : 0;
         if(difficulty == -1 && !level->m_autoLevel) continue;
         if(difficulty > 0 && difficulty < 6 && (levelDifficulty != difficulty || level->m_autoLevel || level->m_demon)) continue;
         if(difficulty == 6 && !level->m_demon) continue;
