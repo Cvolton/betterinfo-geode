@@ -1,4 +1,6 @@
 #include "utils.hpp"
+#include "Geode/binding/FLAlertLayer.hpp"
+#include "Geode/loader/Log.hpp"
 
 #include <random>
 #include <fmt/format.h>
@@ -6,9 +8,11 @@
 #include <chrono>
 #include <charconv>
 
+#include <Geode/Geode.hpp>
 #include <Geode/cocos/support/base64.h>
 #include <Geode/cocos/support/zip_support/ZipUtils.h>
 #include <Geode/utils/web.hpp>
+#include <Geode/ui/GeodeUI.hpp>
 
 // https://stackoverflow.com/questions/25986331/how-to-determine-windows-version-in-future-proof-way
 #ifdef GEODE_IS_WINDOWS
@@ -711,6 +715,59 @@ void BetterInfo::loadImportantNotices(CCLayer* layer) {
         mod->setSavedValue("last-modified-auto-update-check", value.substr(0, value.size() - 1));
     }
 
+}
+
+FLAlertLayer* BetterInfo::createUpdateDialog() {
+    auto versionResult = VersionInfo::parse(
+        Mod::get()->getSavedValue<std::string>(
+            "last_dialog_version",
+            Mod::get()->getSavedValue<std::string>(
+                "last_launch_version",
+                Mod::get()->getVersion().toString()
+            )
+        )
+    );
+    if(versionResult.isOk() && versionResult->getMinor() == Mod::get()->getVersion().getMinor()) return nullptr;
+
+    return createQuickPopup(
+        "BetterInfo",
+        "<cg>BetterInfo has updated!</c>\n"
+        "\n"
+        "<cy>Changelog:</c> <cg>v4.1.0</c> (2024-02-tbd)\n"
+        "- <cg>Added</c> <cj>Creator Point Breakdown</c> to <co>Profiles</c>\n"
+        "- <cg>Added</c> <cj>Queued Quests view</c> and <co>Quests History</c>\n"
+        "- <cg>Added</c> <cj>\"Found in\"</c> to <co>Icon Info</c>\n"
+        "- <cg>Improved</c> <co>Chest Reward History</c>\n"
+        "- <cr>More!</c> Click \"<cy>More Info</c>\" for the <co>whole list</c>!\n"
+        "\n"
+        "This update is largely based on your suggestions!\n",
+        "More Info",
+        "Ok",
+        400,
+        [](FLAlertLayer* me, bool btn2) {
+            Mod::get()->setSavedValue<std::string>("last_dialog_version", Mod::get()->getVersion().toString());
+
+            if(!btn2) {
+                openInfoPopup(Mod::get());
+
+                // since none of the functions related to the dialog are exported
+                // we have to traverse to the changelog button and press it ourselves
+
+                auto popup = CCScene::get()->getChildren()->objectAtIndex(CCScene::get()->getChildrenCount() - 1);
+                if(auto alert = typeinfo_cast<FLAlertLayer*>(popup)) {
+                    if(auto menu = getChildOfType<CCMenu>(alert->m_mainLayer, 0)) {
+                        // this means changelog is missing
+                        if(!getChildOfType<CCMenuItemToggler>(menu, 1)) return;
+
+                        if(auto changelog = getChildOfType<CCMenuItemToggler>(menu, 0)) {
+                            changelog->activate();
+                        }
+                    }
+                }
+            }
+        },
+        false
+    );
 }
 
 //from coloride on geode sdk discord

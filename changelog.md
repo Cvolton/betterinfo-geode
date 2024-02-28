@@ -1,10 +1,10 @@
 # Changelog
-## <cg>v4.1.0</c> (2024-02-tbd)
+## <cg>v4.1.0</c> (2024-02-28)
 This update is largely based on [your suggestions](https://twitter.com/Misabr0penguin/status/1757481064254034421)!
 * Added Creator Point Breakdown to Profiles
 * Added Queued Quests view and Quests History
-* Added Game Version filter to Filtered Search
 * Added "Found in" to Icon Info
+* Added Game Version filter to Filtered Search
 * Added Jump to Last Page for Comments
 * Added Favorite level search
 * Improved Chest Reward History

@@ -74,6 +74,13 @@ class $modify(BICreatorLayer, CreatorLayer) {
 
         this->addChild(menu);
 
+        if(auto updatePopup = BetterInfo::createUpdateDialog()) {
+            updatePopup->m_scene = this;
+            updatePopup->show();
+        }
+
+        Mod::get()->setSavedValue<std::string>("last_launch_version", Mod::get()->getVersion().toString());
+
         //showQuestExclamationMark();
 
         return true;
