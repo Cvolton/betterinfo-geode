@@ -161,6 +161,14 @@ void BIViewLayer::updateCounter(){
         m_lastBtn->setVisible(false);
     }
 
+    if(m_data->count() > count) {
+        m_pageBtn->setVisible(true);
+        m_randomBtn->setVisible(true);
+    } else {
+        m_pageBtn->setVisible(false);
+        m_randomBtn->setVisible(false);
+    }
+
     m_counter->setCString(CCString::createWithFormat("%i to %i of %i", firstIndex+1, (m_data->count() >= lastIndex) ? lastIndex : m_data->count(), m_data->count())->getCString());
 }
 
