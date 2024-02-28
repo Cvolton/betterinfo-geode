@@ -1,16 +1,16 @@
 # Changelog
 ## <cg>v4.1.0</c> (2024-02-28)
 This update is largely based on [your suggestions](https://twitter.com/Misabr0penguin/status/1757481064254034421)!
-* Added Creator Point Breakdown to Profiles
-* Added Queued Quests view and Quests History
-* Added "Found in" to Icon Info
-* Added Game Version filter to Filtered Search
-* Added Jump to Last Page for Comments
-* Added Favorite level search
-* Improved Chest Reward History
+* <cg>Added</c> <cj>Creator Point Breakdown</c> to <c FFAB03 >Profiles</c>
+* <cg>Added</c> <cj>Queued Quests view</c> and <cj>Quests History</c>
+* <cg>Added</c> <cj>"Found in"</c> to <c FFAB03>Icon Info</c>
+* <cg>Added</c> <cj>Game Version filter</c> to <c FFAB03>Filtered Search</c>
+* <cg>Added</c> <cj>Jump to Last Page</c> for <c FFAB03>Comments</c>
+* <cg>Added</c> <cj>Favorite</c> <c FFAB03>level search</c>
+* <cg>Improved</c> <cj>Chest Reward History</c>
 * Other bugfixes & improvements
 
-**For texture pack creators:** This update changes the alignment of some textures, texture packs modifying BetterInfo's textures may need to be updated to avoid minor visual glitches.
+**For texture pack creators:** This update changes the alignment of some textures. Texture packs modifying BetterInfo's textures may need to be updated to avoid minor visual glitches.
 
 ## <cg>v4.0.0</c> (2024-02-12)
 * Fixed demon difficulty filtering in Filtered Search
