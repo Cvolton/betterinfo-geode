@@ -733,7 +733,7 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
         "BetterInfo",
         "<cg>BetterInfo has updated!</c>\n"
         "\n"
-        "<cy>Changelog:</c> <cg>v4.1.0</c> (2024-02-tbd)\n"
+        "<cy>Changelog:</c> <cg>v4.1.0</c> (2024-02-28)\n"
         "- <cg>Added</c> <cj>Creator Point Breakdown</c> to <co>Profiles</c>\n"
         "- <cg>Added</c> <cj>Queued Quests view</c> and <co>Quests History</c>\n"
         "- <cg>Added</c> <cj>\"Found in\"</c> to <co>Icon Info</c>\n"
