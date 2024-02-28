@@ -1,4 +1,5 @@
 #include "LevelBrowserEndLayer.h"
+#include "Geode/binding/GameLevelManager.hpp"
 
 LevelBrowserEndLayer* LevelBrowserEndLayer::create(LevelBrowserLayer* levelBrowserLayer, InfoLayer* infoLayer){
     auto ret = new LevelBrowserEndLayer();
@@ -104,6 +105,7 @@ bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer, InfoLayer*
     m_timer->setID("timer-label"_spr);
 
     GameLevelManager::sharedState()->m_levelManagerDelegate = this;
+    GameLevelManager::sharedState()->m_levelCommentDelegate = this;
 
     return true;
 }
