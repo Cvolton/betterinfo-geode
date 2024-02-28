@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.1.1</c> (2024-02-28)
+* <cg>Fixed</c> a <cr>rare crash</c> in <cj>Creator Point Breakdown</c>
+* Other bugfixes & improvements
+
 ## <cg>v4.1.0</c> (2024-02-28)
 This update is largely based on [your suggestions](https://twitter.com/Misabr0penguin/status/1757481064254034421)!
 * <cg>Added</c> <cj>Creator Point Breakdown</c> to <c FFAB03 >Profiles</c>
