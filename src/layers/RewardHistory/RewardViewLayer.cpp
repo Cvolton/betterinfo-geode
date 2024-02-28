@@ -31,6 +31,9 @@ bool RewardViewLayer::init(CCDictionary* chests, const char* title) {
     m_title = fmt::format("{} Chests", title);
     setData(CCArray::create());
 
+    m_noInternetText = fmt::format("You have not <cg>opened</c> any\n<cl>{} Chests</c> yet!", title);
+    m_showNoInternet = true;
+
     for(auto [key, reward] : CCDictionaryExt<gd::string, GJRewardItem*>(chests)) {
         if(reward == nullptr) continue;
 

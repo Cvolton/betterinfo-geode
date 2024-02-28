@@ -94,24 +94,22 @@ void RewardCell::loadFromData(CCObject* object) {
 
     const char* chestTexture = "chest_01_02_001.png";
     float chestSize = 0.35f;
-    std::string chestTitle = Mod::get()->getSavedValue<std::string>("reward-cell-title");
     switch(m_rewardItem->m_rewardType) {
         default: break;
         case GJRewardType::Small: chestTexture = "chest_01_02_001.png"; break;
         case GJRewardType::Large: chestTexture = "chest_02_02_001.png"; chestSize = 0.275f; break;
-        case GJRewardType::SmallTreasure: chestTexture = "chest_03_02_001.png"; chestSize = 0.275f; chestTitle = "1 Key"; break;
-        case GJRewardType::LargeTreasure: chestTexture = "chest_04_02_001.png"; chestSize = 0.275f; chestTitle = "5 Key"; break;
-        case GJRewardType::Key10Treasure: chestTexture = "chest_05_02_001.png"; chestSize = 0.275f; chestTitle = "10 Key"; break;
-        case GJRewardType::Key25Treasure: chestTexture = "chest_06_02_001.png"; chestSize = 0.275f; chestTitle = "25 Key"; break;
-        case GJRewardType::Key50Treasure: chestTexture = "chest_07_02_001.png"; chestSize = 0.275f; chestTitle = "50 Key"; break;
-        case GJRewardType::Key100Treasure: chestTexture = "chest_08_02_001.png"; chestSize = 0.275f; chestTitle = "100 Key"; break;
+        case GJRewardType::SmallTreasure: chestTexture = "chest_03_02_001.png"; chestSize = 0.275f; break;
+        case GJRewardType::LargeTreasure: chestTexture = "chest_04_02_001.png"; chestSize = 0.275f; break;
+        case GJRewardType::Key10Treasure: chestTexture = "chest_05_02_001.png"; chestSize = 0.275f; break;
+        case GJRewardType::Key25Treasure: chestTexture = "chest_06_02_001.png"; chestSize = 0.275f; break;
+        case GJRewardType::Key50Treasure: chestTexture = "chest_07_02_001.png"; chestSize = 0.275f; break;
+        case GJRewardType::Key100Treasure: chestTexture = "chest_08_02_001.png"; chestSize = 0.275f; break;
     }
     CCSprite* chest = CCSprite::createWithSpriteFrameName(chestTexture);
     chest->setPosition({25, 22});
     chest->setScale(chestSize);
     this->m_mainLayer->addChild(chest);
 
-    //auto title = CCLabelBMFont::create(CCString::createWithFormat(m_rewardItem->m_chestID != 0 ? "%s Chest %i" : "%s Chest", chestTitle.c_str(), m_rewardItem->m_chestID)->getCString(), "bigFont.fnt");
     auto title = CCLabelBMFont::create(getDisplayName().c_str(), "bigFont.fnt");
     title->setAnchorPoint({ 0.0f, .5f });
     title->setPosition(rowX, 31.5f);

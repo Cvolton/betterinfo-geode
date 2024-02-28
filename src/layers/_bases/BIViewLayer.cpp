@@ -97,6 +97,14 @@ bool BIViewLayer::init(bool paginated) {
     m_lastBtn->setID("last-button"_spr);
     menu->addChild(m_lastBtn);
 
+    m_noInternet = TextArea::create(m_noInternetText.c_str(), "bigFont.fnt", 1.0f, 600, {0.5f, 0.5f}, 25, false);
+    m_noInternet->setPosition(winSize / 2);
+    m_noInternet->setScale(0.6f);
+    m_noInternet->setZOrder(20);
+    m_noInternet->setVisible(false);
+    m_noInternet->setID("no-internet-text"_spr);
+    addChild(m_noInternet);
+
     if(!paginated) {
         m_pageBtn->setVisible(false);
         m_randomBtn->setVisible(false);
@@ -124,6 +132,8 @@ void BIViewLayer::loadPage(){
     m_listLayer->setPosition(winSize / 2 - m_listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
     m_listLayer->setID("list-layer"_spr);
     addChild(m_listLayer);
+
+    m_noInternet->setVisible(m_showNoInternet && m_data->count() == 0);
 
     updateCounter();
 }

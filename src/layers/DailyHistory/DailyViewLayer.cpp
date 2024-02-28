@@ -1,6 +1,4 @@
 #include "DailyViewLayer.h"
-#include "../JumpToPageLayer.h"
-#include "../../utils.hpp"
 
 DailyViewLayer* DailyViewLayer::create(GJTimedLevelType timedType) {
     auto ret = new DailyViewLayer();
@@ -39,6 +37,23 @@ bool DailyViewLayer::init(GJTimedLevelType timedType) {
     }
 
     std::sort(m_data->data->arr, m_data->data->arr + m_data->data->num, DailyViewLayer::compareDailies);
+    
+    // set metadata
+    switch(m_timedType){
+        default:
+        case GJTimedLevelType::Daily:
+            m_title = "Daily Levels";
+            break;
+        case GJTimedLevelType::Weekly:
+            m_title = "Weekly Demons";
+            break;
+        case GJTimedLevelType::Event:
+            m_title = "Event Levels";
+            break;
+    }
+
+    m_noInternetText = fmt::format("You have not <cg>played</c> any\n<cl>{}</c> yet!", m_title);
+    m_showNoInternet = true;
 
     // init the layer
     BIViewLayer::init();
@@ -68,18 +83,6 @@ void DailyViewLayer::loadPage(){
     auto displayedLevels = trimData();
 
     m_listView = CvoltonListView<DailyCell>::create(displayedLevels, 356.f, 220.f);
-    switch(m_timedType){
-        default:
-        case GJTimedLevelType::Daily:
-            m_title = "Daily Levels";
-            break;
-        case GJTimedLevelType::Weekly:
-            m_title = "Weekly Demons";
-            break;
-        case GJTimedLevelType::Event:
-            m_title = "Event Levels";
-            break;
-    }
 
     BIViewLayer::loadPage();
 }

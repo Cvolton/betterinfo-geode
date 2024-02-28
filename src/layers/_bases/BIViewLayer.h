@@ -7,6 +7,7 @@
 class BIViewLayer : public BIBaseLayer, public PageNumberDelegate {
 protected:
     std::string m_title;
+    std::string m_noInternetText = "No <cg>internet</c> connection!";
     CustomListView* m_listView = nullptr;
     GJListLayer* m_listLayer = nullptr;
     cocos2d::CCArray* m_data = nullptr;
@@ -19,8 +20,10 @@ protected:
     cocos2d::CCLabelBMFont* m_counter = nullptr;
     ButtonSprite* m_pageBtnSprite = nullptr;
     LoadingCircle* m_circle = nullptr;
+    TextArea* m_noInternet = nullptr;
     unsigned int m_page = 0;
     bool m_paginated = true;
+    bool m_showNoInternet = false;
 
     virtual bool init(bool paginated = true);
     virtual void keyBackClicked();
