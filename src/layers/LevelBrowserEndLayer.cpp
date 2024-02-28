@@ -237,7 +237,7 @@ void LevelBrowserEndLayer::getOnlineLevels() {
 void LevelBrowserEndLayer::onQueueDownload(float dt) {
     auto GLM = GameLevelManager::sharedState();
     if(m_levelBrowserLayer) {
-        GLM->getOnlineLevels(m_levelBrowserLayer->m_searchObject);
+        m_levelBrowserLayer->m_searchObject->m_searchMode == 1 ? GLM->getLevelLists(m_levelBrowserLayer->m_searchObject) : GLM->getOnlineLevels(m_levelBrowserLayer->m_searchObject);
     } else if(m_infoLayer) {
         GLM->getLevelComments(m_infoLayer->getID(), m_infoLayer->m_page, m_infoLayer->m_pageEndIdx, GameManager::sharedState()->getGameVariable("0069"), m_infoLayer->m_mode);
     }
