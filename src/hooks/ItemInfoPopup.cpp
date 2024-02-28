@@ -61,6 +61,7 @@ class $modify(BIItemInfoPopup, ItemInfoPopup) {
                 menu_selector(BIItemInfoPopup::onChestReveal)
             );
             revealButton->setPosition({-90, 0});
+            revealButton->setID("chest-reveal-button"_spr);
             m_buttonMenu->addChild(revealButton);
         }
 
