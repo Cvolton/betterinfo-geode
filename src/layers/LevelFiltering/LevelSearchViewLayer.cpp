@@ -5,6 +5,8 @@
 
 #include <fmt/format.h>
 
+static inline std::unordered_map<std::string, cocos2d::CCArray*> s_cache;
+
 LevelSearchViewLayer* LevelSearchViewLayer::create(std::deque<GJGameLevel*> allLevels, BISearchObject searchObj) {
     auto ret = new LevelSearchViewLayer();
     if (ret && ret->init(allLevels, searchObj)) {
@@ -118,7 +120,7 @@ void LevelSearchViewLayer::startLoading(){
 
     if(!m_gjSearchObjOptimized && m_gjSearchObj) optimizeSearchObject();
 
-    if((m_unloadedLevels.empty() && !m_gjSearchObjOptimized) || (m_page + 2) * 10 < m_data->count() || (m_gjSearchObjOptimized && m_gjSearchObjOptimized->m_searchType == SearchType::MapPackOnClick && m_gjSearchObjOptimized->m_page > 0)) {
+    if((m_unloadedLevels.empty() && !m_gjSearchObjOptimized) || ( !m_allLocal && ( (m_page + 2) * 10 < m_data->count() ) ) || (m_gjSearchObjOptimized && m_gjSearchObjOptimized->m_searchType == SearchType::MapPackOnClick && m_gjSearchObjOptimized->m_page > 0)) {
         setTextStatus(true);
         return;
     }
@@ -148,8 +150,10 @@ void LevelSearchViewLayer::startLoading(){
     if(!searchObj) return;
 
     auto GLM = GameLevelManager::sharedState();
-    auto storedLevels = GLM->getStoredOnlineLevels(searchObj->getKey());
-    if(storedLevels) {
+    if(auto&& key = s_cache.find(searchObj->getKey()); key != s_cache.end()) {
+        searchObj->m_page += 1;
+        loadLevelsFinished(key->second, "");
+    } else if(auto storedLevels = GLM->getStoredOnlineLevels(searchObj->getKey())) {
         searchObj->m_page += 1;
         loadLevelsFinished(storedLevels, "");
     } else {
@@ -165,6 +169,7 @@ void LevelSearchViewLayer::queueLoad(float dt) {
     GLM->getOnlineLevels(m_gjSearchObjLoaded);
     m_gjSearchObjLoaded->m_page += 1;
     m_gjSearchObjLoaded->release();
+    m_allLocal = false;
 }
 
 void LevelSearchViewLayer::loadPage(bool reload){
@@ -207,7 +212,6 @@ void LevelSearchViewLayer::keyBackClicked() {
     BIViewLayer::keyBackClicked();
 }
 
-
 void LevelSearchViewLayer::onBack(CCObject* object) {
     keyBackClicked();
 }
@@ -226,8 +230,13 @@ CCScene* LevelSearchViewLayer::scene(GJSearchObject* gjSearchObj, BISearchObject
     return scene;
 }
 
-void LevelSearchViewLayer::loadLevelsFinished(cocos2d::CCArray* levels, const char*) {
+void LevelSearchViewLayer::loadLevelsFinished(cocos2d::CCArray* levels, const char* key) {
     if(!m_data) return;
+
+    if(!std::string_view(key).empty()) {
+        s_cache[key] = levels;
+        levels->retain();
+    }
 
     for(size_t i = 0; i < levels->count(); i++) {
         auto level = static_cast<GJGameLevel*>(levels->objectAtIndex(i));
@@ -379,4 +388,8 @@ void LevelSearchViewLayer::onEnter() {
 LevelSearchViewLayer::~LevelSearchViewLayer() {
     auto GLM = GameLevelManager::sharedState();
     if(GLM->m_levelManagerDelegate == this) GLM->m_levelManagerDelegate = nullptr;
+}
+
+void LevelSearchViewLayer::resetCache() {
+    s_cache.clear();
 }

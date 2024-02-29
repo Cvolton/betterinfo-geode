@@ -19,6 +19,7 @@ class LevelSearchViewLayer : public BIViewLayer, public LevelManagerDelegate, pu
     size_t m_firstIndex = 0;
     size_t m_lastIndex = 0;
     size_t m_totalAmount = 0;
+    bool m_allLocal = true;
 protected:
     virtual bool init(std::deque<GJGameLevel*> allLevels, BISearchObject searchObj = BISearchObject());
     virtual bool init(GJSearchObject* gjSearchObj, BISearchObject searchObj = BISearchObject());
@@ -56,4 +57,6 @@ public:
 
     void onEnter();
     ~LevelSearchViewLayer();
+
+    static void resetCache();
 };

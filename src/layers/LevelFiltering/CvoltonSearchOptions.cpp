@@ -1,6 +1,7 @@
 #include "CvoltonSearchOptions.h"
 #include "IDRangePopup.h"
 #include "../../enums.hpp"
+#include "../../utils.hpp"
 #include "../../ui/EnumSelectNode.h"
 
 const int completedMax = 7;
@@ -63,8 +64,8 @@ bool CvoltonSearchOptions::init(){
     },
     [this, plus](CompleteMode mode) -> void {
         setOptionInt("search_completed", static_cast<int>(mode));
-        GameLevelManager::sharedState()->m_timerDict->removeAllObjects();
         plus->setVisible(mode == CompleteMode::percentage);
+        LevelUtils::resetLevelCaches();
     });
     completedModeSelect->setCurrentValue(static_cast<CompleteMode>(getOptionInt("search_completed")));
     completedModeSelect->setPosition({winSize.width / 2, (winSize.height / 2) - 120});

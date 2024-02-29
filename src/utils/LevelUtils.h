@@ -7,6 +7,7 @@ using namespace geode::prelude;
 namespace LevelUtils {
     GJGameLevel* getLevelFromSaved(int levelID);
     std::deque<GJGameLevel*> completedDeque();
+    void resetLevelCaches();
 
     int levelDifficultyAsInt(GJGameLevel* level);
     int levelDemonDifficultyAsInt(GJGameLevel* level);

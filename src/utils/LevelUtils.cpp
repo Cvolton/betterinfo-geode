@@ -1,4 +1,5 @@
 #include "LevelUtils.h"
+#include "../layers/LevelFiltering/LevelSearchViewLayer.h"
 
 GJGameLevel* LevelUtils::getLevelFromSaved(int levelID) {
     return static_cast<GJGameLevel*>(GameLevelManager::sharedState()->m_onlineLevels->objectForKey(std::to_string(levelID)));
@@ -13,6 +14,11 @@ std::deque<GJGameLevel*> LevelUtils::completedDeque() {
         levelsDeque.push_back(currentLvl);
     }
     return levelsDeque;
+}
+
+void LevelUtils::resetLevelCaches() {
+    GameLevelManager::sharedState()->m_timerDict->removeAllObjects();
+    LevelSearchViewLayer::resetCache();
 }
 
 int LevelUtils::levelDifficultyAsInt(GJGameLevel* level) {
