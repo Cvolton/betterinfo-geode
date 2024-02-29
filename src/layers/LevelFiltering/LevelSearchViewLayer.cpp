@@ -161,13 +161,13 @@ void LevelSearchViewLayer::startLoading(){
         searchObj->retain();
         // this amounts to 80 requests per second, which is 20 below the server limit
         auto time = 0.75 - (TimeUtils::getFullDoubleTime() - m_lastLoadTime);
-        log::debug("Time: {}", time);
         if(time < 0) {
+            time = 0;
             this->queueLoad(0);
         } else {
             this->getScheduler()->scheduleSelector(schedule_selector(LevelSearchViewLayer::queueLoad), this, 1, 0, time, false);
         }
-        m_lastLoadTime = TimeUtils::getFullDoubleTime();
+        m_lastLoadTime = TimeUtils::getFullDoubleTime() + time;
     }
 }
 
