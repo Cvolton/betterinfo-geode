@@ -47,6 +47,7 @@ class $modify(BIRewardsPage, RewardsPage) {
         // see TimeUtils::getRobTopTime for more information
         #ifndef GEODE_IS_ANDROID
             m_fields->m_timeLabel = CCLabelBMFont::create("Time until timer bug: 3 years", "goldFont.fnt");
+            m_fields->m_timeLabel->setID("timer-bug-label"_spr);
             m_fields->m_timeLabel->setScale(.45f);
             m_fields->m_timeLabel->setPosition({0,-95});
             m_fields->m_timeLabel->setVisible(false);
