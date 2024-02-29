@@ -15,6 +15,7 @@ class LevelSearchViewLayer : public BIViewLayer, public LevelManagerDelegate, pu
     cocos2d::CCLabelBMFont* m_statusText = nullptr;
     std::deque<GJGameLevel*> m_unloadedLevels;
     std::deque<GJGameLevel*> m_allLevels;
+    double m_lastLoadTime = 0;
     size_t m_shownLevels = 0;
     size_t m_firstIndex = 0;
     size_t m_lastIndex = 0;
