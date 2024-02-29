@@ -197,6 +197,7 @@ void LevelSearchViewLayer::updateCounter() {
 
     BIViewLayer::updateCounter();
     
+    m_counter->setVisible(true);
     m_counter->setCString(fmt::format("{} to {} of {} / {}", m_firstIndex, m_lastIndex, m_data->count(), m_totalAmount).c_str());
 }
 

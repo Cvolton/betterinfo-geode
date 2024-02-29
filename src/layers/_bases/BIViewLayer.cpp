@@ -97,7 +97,7 @@ bool BIViewLayer::init(bool paginated) {
     m_lastBtn->setID("last-button"_spr);
     menu->addChild(m_lastBtn);
 
-    m_noInternet = TextArea::create(m_noInternetText.c_str(), "bigFont.fnt", 1.0f, 600, {0.5f, 0.5f}, 25, false);
+    m_noInternet = TextArea::create(m_noInternetText.c_str(), "bigFont.fnt", 1.0f, 600, {0.5f, 0.5f}, 40, false);
     m_noInternet->setPosition(winSize / 2);
     m_noInternet->setScale(0.6f);
     m_noInternet->setZOrder(20);
@@ -169,6 +169,7 @@ void BIViewLayer::updateCounter(){
         m_randomBtn->setVisible(false);
     }
 
+    m_counter->setVisible(m_data->count() > 0);
     m_counter->setCString(CCString::createWithFormat("%i to %i of %i", firstIndex+1, (m_data->count() >= lastIndex) ? lastIndex : m_data->count(), m_data->count())->getCString());
 }
 
