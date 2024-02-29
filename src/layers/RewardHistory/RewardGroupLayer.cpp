@@ -19,7 +19,7 @@ bool RewardGroupLayer::init(const char* title, CCDictionary* chests, RewardGroup
     m_title = fmt::format("{} Chests", title);
     setData(CCArray::create());
 
-    m_noInternetText = fmt::format("You have not <cg>opened</c> any <cl>{} Chests</c> yet", title);
+    m_noInternetText = fmt::format("You have not <cg>opened</c> any <cl>{} Chests</c> yet!", title);
     m_showNoInternet = true;
 
     for (auto& [title, icon, filter] : categories) {
