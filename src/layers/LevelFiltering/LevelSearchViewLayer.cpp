@@ -88,9 +88,6 @@ void LevelSearchViewLayer::unload() {
     m_lastIndex = 0;
     m_totalAmount = 0;
 
-    auto GLM = GameLevelManager::sharedState();
-    GLM->m_levelManagerDelegate = nullptr;
-
     if(m_gjSearchObjOptimized) {
         m_gjSearchObjOptimized->release();
         m_gjSearchObjOptimized = nullptr;
@@ -164,6 +161,7 @@ void LevelSearchViewLayer::startLoading(){
 
 void LevelSearchViewLayer::queueLoad(float dt) {
     auto GLM = GameLevelManager::sharedState();
+    GLM->m_levelManagerDelegate = this;
     GLM->getOnlineLevels(m_gjSearchObjLoaded);
     m_gjSearchObjLoaded->m_page += 1;
     m_gjSearchObjLoaded->release();
@@ -376,4 +374,9 @@ void LevelSearchViewLayer::onEnter() {
     GLM->m_levelManagerDelegate = this;
     
     loadPage();
+}
+
+LevelSearchViewLayer::~LevelSearchViewLayer() {
+    auto GLM = GameLevelManager::sharedState();
+    if(GLM->m_levelManagerDelegate == this) GLM->m_levelManagerDelegate = nullptr;
 }

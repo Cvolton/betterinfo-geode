@@ -55,4 +55,5 @@ public:
     void queueLoad(float dt);
 
     void onEnter();
+    ~LevelSearchViewLayer();
 };
