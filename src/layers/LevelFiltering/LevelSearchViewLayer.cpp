@@ -400,5 +400,8 @@ LevelSearchViewLayer::~LevelSearchViewLayer() {
 }
 
 void LevelSearchViewLayer::resetCache() {
+    for(auto&& [key, value] : s_cache) {
+        value->release();
+    }
     s_cache.clear();
 }
