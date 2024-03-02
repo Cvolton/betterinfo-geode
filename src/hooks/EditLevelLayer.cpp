@@ -6,6 +6,10 @@
 using namespace geode::prelude;
 
 class $modify(BIEditLevelLayer, EditLevelLayer) {
+    static void onModify(auto& self) {
+        (void) self.setHookPriority("EditLevelLayer::onLevelInfo", 99999);
+    }
+
     /*
      * Callbacks
      */
