@@ -7,12 +7,6 @@
 using namespace geode::prelude;
 
 class $modify(BICommentCell, CommentCell) {
-    bool retained = false;
-
-    static void onModify(auto& self) {
-        auto res = self.setHookPriority("CommentCell::onLike", 99999);
-    }
-
     /*
      * Callbacks
      */
@@ -107,54 +101,5 @@ class $modify(BICommentCell, CommentCell) {
             
         }
 
-    }
-
-    //The following CommentCell functions are required as fixes for crashes caused by refreshing the layer while liking/deleting an item
-    void onConfirmDelete(CCObject* sender) {
-        this->retain();
-        m_fields->retained = true;
-        CommentCell::onConfirmDelete(sender);
-    }
-
-    void FLAlert_Clicked(FLAlertLayer* layer, bool btn) {
-        CommentCell::FLAlert_Clicked(layer, btn);
-
-        if(m_fields->retained) this->release();
-        m_fields->retained = false;
-    }
-
-    //This function is simple enough that it's easier to rewrite it than to figure out how midhooks work
-    void onLike(CCObject* sender) {
-        if(!this->m_comment) return;
-
-        LikeItemType type = LikeItemType::Comment;
-        int special = this->m_comment->m_levelID;
-
-        if (this->m_accountComment) {
-            special = this->m_comment->m_accountID;
-            type = LikeItemType::AccountComment;
-        }
-
-        bool liked = GameLevelManager::sharedState()->hasLikedItemFullCheck(type, this->m_comment->m_commentID, special);
-        if(liked) return;
-
-        auto GM = GameManager::sharedState();
-        if (this->m_comment->m_userID == GM->m_playerUserID) return;
-        
-        auto AM = GJAccountManager::sharedState();
-        if (this->m_comment->m_accountID && this->m_comment->m_accountID == AM->m_accountID) return;
-
-        auto layer = LikeItemLayer::create(type, this->m_comment->m_commentID, special);
-        layer->m_likeDelegate = this;
-        layer->show();
-        this->retain();
-        m_fields->retained = true;
-    }
-
-    void likedItem(LikeItemType type, int id, int special) {
-        CommentCell::likedItem(type, id, special);
-
-        if(m_fields->retained) this->release();
-        m_fields->retained = false;
     }
 };
