@@ -194,8 +194,9 @@ class $modify(BIChallengesPage, ChallengesPage) {
 
             if(auto countdownLabel = static_cast<CCLabelBMFont*>(node->getChildByID("countdown-label"))) {
                 double time = GameStatsManager::sharedState()->m_challengeTime;
+                bool useRobTopTime = time < 1048576;
                 if(!GameStatsManager::sharedState()->getChallenge(i)) time += 28800; // GDPS incompatible assumption
-                countdownLabel->setString(GameToolbox::getTimeString(time - TimeUtils::getRobTopTime()).c_str());
+                countdownLabel->setString(GameToolbox::getTimeString(time - (useRobTopTime ? TimeUtils::getRobTopTime() : TimeUtils::getFullDoubleTime())).c_str());
             }
         }
     }
