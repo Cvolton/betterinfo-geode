@@ -31,7 +31,8 @@ std::string TimeUtils::isoTimeToString(const std::string& input) {
 }
 
 std::string TimeUtils::workingTime(int value){
-    if(value <= 0) return "NA";
+    if(value < 0) return fmt::format("NA ({})", value);
+    if(value == 0) return "NA";
 
     int hours = value / 3600;
     int minutes = (value % 3600) / 60;
