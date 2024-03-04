@@ -11,6 +11,7 @@
 	"developer": "Cvolton",
 	"description": "betterinfo geode real (not fake)",
     "repository": "https://github.com/cvolton/betterinfo-geode",
+    "tags": ["online", "enhancement", "interface", "utility"],
     "dependencies": [
         {
             "id": "geode.node-ids",
