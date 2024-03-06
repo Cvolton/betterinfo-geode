@@ -55,6 +55,12 @@
             "description": "Displays level IDs in level search white instead of grey. Useful if you have transparent lists",
             "type": "bool",
             "default": false
+        },
+        "hide-platformer-time": {
+            "name": "Hide Estimated Platformer Time",
+            "description": "BetterInfo displays the estimated time a level takes to complete on every level page - classic and platformer levels alike. The time for platformer levels is based on the verification time without checkpoints. Some people don't appreciate being provided this information, this option is for these people.",
+            "type": "bool",
+            "default": false
         }
     },
     "resources": {

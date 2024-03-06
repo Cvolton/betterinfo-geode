@@ -51,11 +51,25 @@ class $modify(LevelInfoLayer) {
     void updateLabelValues() {
         LevelInfoLayer::updateLabelValues();
 
+        retain();
+        /**
+         * Avoid updating the label if hide platformer time is enabled
+        */
+        if(m_level->isPlatformer() && Mod::get()->getSettingValue<bool>("hide-platformer-time")) {
+            m_lengthLabel->setPosition({m_lengthLabel->getPositionX(), m_lengthLabel->getPositionY() - 6.f});
+            Loader::get()->queueInMainThread([this]() {
+                if(auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("exact-time"_spr))) {
+                    bmFont->removeFromParent();
+                }
+
+                release();
+            });
+            return;
+        }
+
         /**
          * Update exact time label
         */
-        retain();
-
         auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("exact-time"_spr));
         if(bmFont && m_lengthLabel) bmFont->setPosition({m_lengthLabel->getPositionX() + 1, m_lengthLabel->getPositionY() - 8.f});
 
