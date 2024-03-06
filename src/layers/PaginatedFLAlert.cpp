@@ -69,11 +69,16 @@ void PaginatedFLAlert::onPrev(cocos2d::CCObject* sender) {
 }
 
 void PaginatedFLAlert::loadPage(size_t page) {
-    auto newAlert = PaginatedFLAlert::create(m_title, m_content, m_pParent, page);
-    newAlert->setZOrder(getZOrder());
-    if(!m_pParent) CCDirector::sharedDirector()->getRunningScene()->addChild(newAlert);
-    else static_cast<CCNode*>(m_pParent)->addChild(newAlert);
+    auto title = m_title;
+    auto content = m_content;
+    auto parent = m_pParent ? m_pParent : CCDirector::sharedDirector()->getRunningScene();
+    auto zOrder = getZOrder();
+
     onBtn1(this);
+
+    auto newAlert = PaginatedFLAlert::create(title, content, parent, page);
+    newAlert->setZOrder(zOrder);
+    parent->addChild(newAlert);
 }
 
 void PaginatedFLAlert::keyDown(cocos2d::enumKeyCodes key) {
