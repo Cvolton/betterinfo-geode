@@ -23,6 +23,7 @@ bool CustomCreatorLayer::init() {
 
     auto menu = CCMenu::create();
     menu->setID("main-menu"_spr);
+    menu->setZOrder(10);
     addChild(menu);
 
     auto buttonsMenu = CCMenu::create();
@@ -109,10 +110,28 @@ bool CustomCreatorLayer::init() {
     infoBtn->setSizeMult(1.2f);
     infoBtn->setID("info-button"_spr);
 
+    auto egg = CCMenuItemSpriteExtra::create(
+        BetterInfo::createBISprite("BI_partyHat_001.png"),
+        this,
+        menu_selector(CustomCreatorLayer::onEgg)
+    );
+    egg->setScale(.35f);
+    egg->m_baseScale = .35f;
+    egg->setPosition({59, (winSize.height / 2) - 16});
+    if(BetterInfo::randomNumber(9, 21) == 15 || BetterInfo::randomNumber(9, 21) == 17) menu->addChild(egg);
+
     buttonsMenu->updateLayout();
     bottomMenu->updateLayout();
 
     return true;
+}
+
+void CustomCreatorLayer::onEgg(CCObject* object) {
+    FLAlertLayer::create(
+        "BetterInfo", 
+        "BetterInfo 413 :)",
+        "OK"
+    )->show();
 }
 
 void CustomCreatorLayer::onInfo(CCObject* object) {

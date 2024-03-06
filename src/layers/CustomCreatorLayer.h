@@ -19,6 +19,7 @@ protected:
     void onSearch(cocos2d::CCObject*);
     void onSearchID(cocos2d::CCObject*);
     void onSettings(cocos2d::CCObject*);
+    void onEgg(cocos2d::CCObject*);
 public:
     static CustomCreatorLayer* create();
     static cocos2d::CCScene* scene();
