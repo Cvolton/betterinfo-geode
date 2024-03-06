@@ -584,9 +584,9 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
 
                 if(i % 2 == 0) keyID = currentKey;
                 else {
-                    if(keyID == "1") objID = std::stoi(currentKey);
-                    else if(keyID == "2") xPos = std::stof(currentKey);
-                    else if(keyID == "kA4") prevPortalId = speedToPortalId(std::stoi(currentKey));
+                    if(keyID == "1") objID = BetterInfo::stoi(currentKey);
+                    else if(keyID == "2") xPos = BetterInfo::stof(currentKey);
+                    else if(keyID == "kA4") prevPortalId = speedToPortalId(BetterInfo::stoi(currentKey));
                 }
                 i++;
 
@@ -896,6 +896,12 @@ AxisLayoutOptions* BetterInfo::copyLayoutOptions(AxisLayoutOptions* a) {
 
 int BetterInfo::stoi(std::string_view str) {
     int result = 0;
+    std::from_chars(str.data(), str.data() + str.size(), result);
+    return result;
+}
+
+float BetterInfo::stof(std::string_view str) {
+    float result = 0;
     std::from_chars(str.data(), str.data() + str.size(), result);
     return result;
 }
