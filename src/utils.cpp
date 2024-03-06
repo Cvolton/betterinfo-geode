@@ -1,6 +1,4 @@
 #include "utils.hpp"
-#include "Geode/binding/FLAlertLayer.hpp"
-#include "Geode/loader/Log.hpp"
 
 #include <random>
 #include <fmt/format.h>
@@ -891,8 +889,7 @@ int BetterInfo::stoi(std::string_view str) {
 }
 
 float BetterInfo::stof(std::string_view str) {
-    float result = 0;
-    std::from_chars(str.data(), str.data() + str.size(), result);
+    float result = std::atof(str.data());
     return result;
 }
 
