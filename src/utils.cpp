@@ -705,16 +705,6 @@ void BetterInfo::loadImportantNotices(CCLayer* layer) {
     stealLibrary("musiclibrary.dat", "musicLibrary");
     stealLibrary("sfxlibrary.dat", "sfxLibrary");
     #endif
-
-    /**
-     * fix Geode Loader's last-modified-auto-update-check
-    */
-    auto mod = Loader::get()->getLoadedMod("geode.loader");
-    auto value = mod->getSavedValue<std::string>("last-modified-auto-update-check");
-    if (value.ends_with('\r')) {
-        mod->setSavedValue("last-modified-auto-update-check", value.substr(0, value.size() - 1));
-    }
-
 }
 
 FLAlertLayer* BetterInfo::createUpdateDialog() {
