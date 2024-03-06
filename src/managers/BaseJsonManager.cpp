@@ -8,7 +8,7 @@ bool BaseJsonManager::init(const char* filename){
     m_filename = filename;
     auto loadResult = load();
     if(!loadResult) {
-        log::warn("Unable to load {}", filename);
+        log::error("Unable to load {} : {}", filename, loadResult.unwrapErr());
     }
 
     return true;
@@ -18,16 +18,21 @@ Result<> BaseJsonManager::load() {
     //copied straight from https://github.com/geode-sdk/geode/blob/9cd0327766386a6c2b347d483bb6556cae6f7f48/loader/src/loader/ModImpl.cpp#L172
     auto savedPath = Mod::get()->getSaveDir() / m_filename;
     if (ghc::filesystem::exists(savedPath)) {
-        GEODE_UNWRAP_INTO(auto data, utils::file::readString(savedPath));
-
-        try {
-            this->m_json = matjson::parse(data);
-        } catch (std::exception& err) {
-            return Err(std::string("Unable to parse cache: ") + err.what());
+        auto result = utils::file::readString(savedPath);
+        if (!result) {
+            return Err(result.unwrapErr());
         }
+
+        std::string error;
+        auto parsed = matjson::parse(result.unwrap(), error);
+        if (!parsed.has_value()) {
+            return Err("Unable to parse: {}", error);
+        }
+        m_json = parsed.value();
+
         if (!m_json.is_object()) {
-            log::warn("{} was somehow not an object, forcing it to one", m_filename);
             m_json = matjson::Object();
+            return Err("Not an object");
         }
     }
 
