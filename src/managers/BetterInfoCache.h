@@ -11,7 +11,6 @@ class BetterInfoCache : public BaseJsonManager, public LevelManagerDelegate {
 
 public:
 	UploadDateDelegate* m_uploadDateDelegate = nullptr;
-	std::unordered_map<int, bool> m_downloadedSongs;
 
 	bool init();
 
