@@ -26,12 +26,6 @@ class $modify(LevelInfoLayer) {
         playerName->setEnabled(true);
 
         /**
-         * Store date for InfoLayer
-        */
-        auto cache = BetterInfoCache::sharedState();
-        cache->storeDatesForLevel(this->m_level);
-
-        /**
          * Add exact time label
         */
         auto label = m_lengthLabel;
@@ -51,6 +45,16 @@ class $modify(LevelInfoLayer) {
     void updateLabelValues() {
         LevelInfoLayer::updateLabelValues();
 
+        /**
+         * Cache level
+        */
+        auto cache = BetterInfoCache::sharedState();
+        cache->cacheLevel(m_level);
+        cache->storeDatesForLevel(this->m_level);
+
+        /**
+         * Exact time label begin
+        */
         retain();
         /**
          * Avoid updating the label if hide platformer time is enabled

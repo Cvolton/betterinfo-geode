@@ -43,6 +43,8 @@ void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
 
     if(!toDownloadRated.empty()) cacheLevels(toDownloadRated, SearchType::MapPackOnClick, 300);
     if(!toDownloadUnrated.empty()) cacheLevels(toDownloadUnrated, SearchType::Type26, 100);
+
+    log::debug("Caching {} rated and {} unrated levels", toDownloadRated.size(), toDownloadUnrated.size());
 }
 
 void BetterInfoCache::cacheLevel(GJGameLevel* level) {
