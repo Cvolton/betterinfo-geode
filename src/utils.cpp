@@ -808,6 +808,8 @@ CCMenuItemSpriteExtra* BetterInfo::replaceWithButton(CCNode* node, CCNode* self,
     parent->addChild(button);
     parent->updateLayout();
 
+    node->setScale(1.f);
+
     return button;
 }
 
