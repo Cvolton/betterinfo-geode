@@ -219,7 +219,6 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
 
     auto idString = std::to_string(levelID);
     if(!objectExists("upload-date-dict", idString)) {
-        //if gdhistory was faster, this could be sync and the feature would be more efficient, sadly gdhistory is not faster
         if(m_attemptedLevelDates.find(levelID) == m_attemptedLevelDates.end()) {
             web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).json().then([levelID](const matjson::Value& data){
                 if(!data["approx"].is_object()) return;
