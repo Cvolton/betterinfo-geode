@@ -169,7 +169,7 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
                 downloading = true;
 
                 web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).json().then([userID](const matjson::Value& data){
-                    log::info("Restored green username for {}: {}", userID, data.dump(matjson::NO_INDENTATION));
+                    log::debug("Restored green username for {}: {}", userID, data.dump(matjson::NO_INDENTATION));
                     std::string username;
 
                     if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
