@@ -17,6 +17,11 @@
             "id": "geode.node-ids",
             "version": "v1.7.1",
             "importance": "required"
+        },
+        {
+            "id": "cvolton.misc_bugfixes",
+            "version": "v1.0.0",
+            "importance": "required"
         }
     ],
 	"settings": {
