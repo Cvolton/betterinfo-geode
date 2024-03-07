@@ -55,7 +55,6 @@ Result<> BaseJsonManager::save() {
 
 void BaseJsonManager::doSave() {
     std::thread([this] {
-        Sleep(15000);
         auto loadResult = save();
         if(!loadResult) {
             log::warn("Unable to save {}", m_filename);
