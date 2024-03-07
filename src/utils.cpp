@@ -523,20 +523,20 @@ inline float travelForPortalId(int speed) {
 
 inline int speedToPortalId(int speed) {
     switch(speed) {
-    case 3:
-        return 202;
-        break;
-    case 4:
-        return 1334;
+    default:
+        return 201;
         break;
     case 1:
         return 200;
         break;
-    default:
-        return 201;
-        break;
     case 2:
+        return 202;
+        break;
+    case 3:
         return 203;
+        break;
+    case 4:
+        return 1334;
         break;
     }
 }
@@ -598,6 +598,10 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
             prevPortalId = objID;
             prevPortalX = xPos;
         }
+
+        log::info("maxPos: {}", maxPos);
+        log::info("prevPortalX: {}", prevPortalX);
+        log::info("prevPortalId: {}", prevPortalId);
 
         timeFull += (maxPos - prevPortalX) / travelForPortalId(prevPortalId);
         auto b = timeInMs() - a;
