@@ -80,7 +80,7 @@ class $modify(LevelInfoLayer) {
         std::thread([this](){
             auto wt = m_level->m_timestamp
                 ? TimeUtils::workingTime(m_level->m_timestamp / 240)
-                : TimeUtils::workingTime(m_level->isPlatformer() ? 0 : std::round(BetterInfo::timeForLevelString(m_level->m_levelString)));
+                : TimeUtils::workingTime(m_level->isPlatformer() ? 0 : std::ceil(BetterInfo::timeForLevelString(m_level->m_levelString)));
             //since whatever is done by queueInMainThread is guaranteed to execute after init is finished, this shouldn't result in a race condition
             Loader::get()->queueInMainThread([this, wt]() {
                 auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("exact-time"_spr));
