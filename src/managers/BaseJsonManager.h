@@ -13,6 +13,7 @@ protected:
 public:
 	std::string m_filename;
 	matjson::Value m_json = matjson::Object();
+	std::mutex m_jsonMutex;
 
 	bool init(const char* filename);
 	Result<> load();

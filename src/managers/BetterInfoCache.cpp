@@ -6,7 +6,10 @@
 bool BetterInfoCache::init(){
     if(!BaseJsonManager::init("cache.json")) return false;
     Loader::get()->queueInMainThread([this]() {
-        checkDailies();
+        auto GLM = GameLevelManager::sharedState();
+        checkLevelsFromDict(GLM->m_onlineLevels);
+        checkLevelsFromDict(GLM->m_dailyLevels);
+        doSave();
     });
     return true;
 }
@@ -22,30 +25,28 @@ void BetterInfoCache::validateLoadedData() {
 
 BetterInfoCache::BetterInfoCache(){}
 
-void BetterInfoCache::checkDailies() {
+void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
     std::set<int> toDownload;
 
     auto GLM = GameLevelManager::sharedState();
 
-    auto dailyLevels = GLM->m_dailyLevels;
-    CCDictElement* obj;
-    CCDICT_FOREACH(dailyLevels, obj){
-        auto currentLvl = static_cast<GJGameLevel*>(obj->getObject());
-        if(currentLvl == nullptr) continue;
-
+    for(auto [key, currentLvl] : CCDictionaryExt<gd::string, GJGameLevel*>(dict)) {
+        log::info("doing level {}", key);
         auto idString = std::to_string(currentLvl->m_levelID);
         if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString) && objectExists("demon-difficulty-dict", idString) && getLevelName(currentLvl->m_levelID) != "") continue;
 
-        auto levelFromSaved = static_cast<GJGameLevel*>(GLM->m_onlineLevels->objectForKey(std::to_string(currentLvl->m_levelID).c_str()));
+        auto levelFromSaved = LevelUtils::getLevelFromSaved(currentLvl->m_levelID);
         if(levelFromSaved != nullptr && std::string(levelFromSaved->m_levelName) != "") cacheLevel(levelFromSaved);
         else toDownload.insert(currentLvl->m_levelID);
     }
 
+    log::info("checkLevelsFromDict for loop done");
+
     if(!toDownload.empty()) cacheLevels(toDownload);
-    doSave();
 }
 
 void BetterInfoCache::cacheLevel(GJGameLevel* level) {
+    std::lock_guard<std::mutex> guard(m_jsonMutex);
     auto idString = std::to_string(level->m_levelID);
     m_json["level-name-dict"][idString] = std::string(level->m_levelName);
     m_json["coin-count-dict"][idString] = level->m_coins;
@@ -104,6 +105,7 @@ void BetterInfoCache::storeUserName(int userID, const std::string& username) {
     }
 
     auto idString = std::to_string(userID);
+    std::lock_guard<std::mutex> guard(m_jsonMutex);
     m_json["username-dict"][idString] = username;
     doSave();
 
@@ -117,6 +119,7 @@ void BetterInfoCache::storeLevelInfo(int levelID, const std::string& field, cons
     }
 
     auto idString = std::to_string(levelID);
+    std::lock_guard<std::mutex> guard(m_jsonMutex);
     if(!m_json["level-info-dict"][idString].is_object()) m_json["level-info-dict"][idString] = matjson::Object();
 
     m_json["level-info-dict"][idString][field] = value;
@@ -135,6 +138,7 @@ void BetterInfoCache::storeDatesForLevel(GJGameLevel* level) {
     std::string uploadDateStd = level->m_uploadDate;
     std::string updateDateStd = level->m_updateDate;
 
+    std::lock_guard<std::mutex> guard(m_jsonMutex);
     if(!uploadDateStd.empty()) storeLevelInfo(level->m_levelID, "upload-date", uploadDateStd);
     if(!updateDateStd.empty()) storeLevelInfo(level->m_levelID, "update-date", updateDateStd);
 }
@@ -180,6 +184,7 @@ void BetterInfoCache::storeUploadDate(int levelID, const std::string& date) {
     }
 
     auto idString = std::to_string(levelID);
+    std::lock_guard<std::mutex> guard(m_jsonMutex);
     m_json["upload-date-dict"][idString] = date;
     doSave();
 

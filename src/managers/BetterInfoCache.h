@@ -25,7 +25,7 @@ public:
 	    return m_instance;
 	}
 
-	void checkDailies();
+	void checkLevelsFromDict(CCDictionary* dict);
 	void cacheLevel(GJGameLevel* level);
 	void cacheLevels(std::set<int> toDownload);
 

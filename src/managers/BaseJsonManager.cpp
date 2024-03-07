@@ -43,6 +43,7 @@ Result<> BaseJsonManager::load() {
 }
 
 Result<> BaseJsonManager::save() {
+    std::lock_guard<std::mutex> guard(m_jsonMutex);
     std::string savedStr = m_json.dump(matjson::NO_INDENTATION);
 
     auto res2 = utils::file::writeString(Mod::get()->getSaveDir() / m_filename, savedStr);
@@ -54,6 +55,7 @@ Result<> BaseJsonManager::save() {
 
 void BaseJsonManager::doSave() {
     std::thread([this] {
+        Sleep(15000);
         auto loadResult = save();
         if(!loadResult) {
             log::warn("Unable to save {}", m_filename);
