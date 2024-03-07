@@ -149,7 +149,6 @@ void BetterInfoCache::storeDatesForLevel(GJGameLevel* level) {
     std::string uploadDateStd = level->m_uploadDate;
     std::string updateDateStd = level->m_updateDate;
 
-    std::lock_guard<std::mutex> guard(m_jsonMutex);
     if(!uploadDateStd.empty()) storeLevelInfo(level->m_levelID, "upload-date", uploadDateStd);
     if(!updateDateStd.empty()) storeLevelInfo(level->m_levelID, "update-date", updateDateStd);
 }
