@@ -44,6 +44,7 @@ class $modify(GameLevelManager) {
     }
 
     CCArray* getCompletedLevels(bool newFilter){
+        auto BICache = BetterInfoCache::sharedState();
         CompleteMode mode = static_cast<CompleteMode>(Mod::get()->getSavedValue<int>("search_completed"));
         if(mode == CompleteMode::modeDefault) return GameLevelManager::getCompletedLevels(newFilter);
 
@@ -72,11 +73,12 @@ class $modify(GameLevelManager) {
                 case CompleteMode::allCoins:
                 case CompleteMode::noCoins: {
                     bool completed = true;
-                    for(int i = 0; i < currentLvl->m_coins; i++){
+                    auto coins = currentLvl->m_coins ? currentLvl->m_coins : BICache->getCoinCount(currentLvl->m_levelID);
+                    for(int i = 0; i < coins; i++){
                         bool hasntCoin = coinDict->objectForKey(currentLvl->getCoinKey(i + 1)) == nullptr && coinDict2->objectForKey(currentLvl->getCoinKey(i + 1)) == nullptr;
                         if(hasntCoin) completed = false; else completed = completed && true;
                     }
-                    if(((mode == CompleteMode::noCoins) != completed) && (currentLvl->m_coins > 0)) pRet->addObject(currentLvl);
+                    if(((mode == CompleteMode::noCoins) != completed) && (coins > 0)) pRet->addObject(currentLvl);
                     //if(currentLvl->m_coins > 0) pRet->addObject(currentLvl);
                     break;
                 }
