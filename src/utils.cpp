@@ -570,6 +570,7 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
             size_t i = 0;
             int objID = 0;
             float xPos = 0;
+            bool checked = false;
 
             /*objectStream.str("");
             objectStream.clear();
@@ -584,27 +585,25 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
                 else {
                     if(keyID == "1") objID = BetterInfo::stoi(currentKey);
                     else if(keyID == "2") xPos = BetterInfo::stof(currentKey);
+                    else if(keyID == "13") checked = BetterInfo::stoi(currentKey);
                     else if(keyID == "kA4") prevPortalId = speedToPortalId(BetterInfo::stoi(currentKey));
                 }
                 i++;
 
-                if(xPos != 0 && objID != 0) break;
+                if(xPos != 0 && objID != 0 && checked == true) break;
             }
 
             if(maxPos < xPos) maxPos = xPos;
-            if(!objectIDIsSpeedPortal(objID)) continue;
+            if(!checked || !objectIDIsSpeedPortal(objID)) continue;
 
             timeFull += (xPos - prevPortalX) / travelForPortalId(prevPortalId);
             prevPortalId = objID;
             prevPortalX = xPos;
         }
 
-        log::info("maxPos: {}", maxPos);
-        log::info("prevPortalX: {}", prevPortalX);
-        log::info("prevPortalId: {}", prevPortalId);
-
         timeFull += (maxPos - prevPortalX) / travelForPortalId(prevPortalId);
         auto b = timeInMs() - a;
+        log::info("Time for levelString: {}ms, decompress: {}ms, parse: {}ms", b, c - a, timeInMs() - c);
         return timeFull;
     } catch(std::exception e) {
         log::error("An exception has occured while calculating time for levelString: {}", e.what());
