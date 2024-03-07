@@ -157,7 +157,6 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
 
     auto idString = std::to_string(userID);
     if(!objectExists("username-dict", idString)) {
-        //if gdhistory was faster, this could be sync and the feature would be more efficient, sadly gdhistory is not faster
         if(download && m_attemptedUsernames.find(userID) == m_attemptedUsernames.end()) {
             web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).json().then([userID](const matjson::Value& data){
                 log::info("Restored green username for {}: {}", userID, data.dump(matjson::NO_INDENTATION));
