@@ -5,12 +5,10 @@
 
 bool BetterInfoCache::init(){
     if(!BaseJsonManager::init("cache.json")) return false;
-    Loader::get()->queueInMainThread([this]() {
-        auto GLM = GameLevelManager::sharedState();
-        checkLevelsFromDict(GLM->m_onlineLevels);
-        checkLevelsFromDict(GLM->m_dailyLevels);
-        doSave();
-    });
+    auto GLM = GameLevelManager::sharedState();
+    checkLevelsFromDict(GLM->m_onlineLevels);
+    checkLevelsFromDict(GLM->m_dailyLevels);
+    doSave();
     return true;
 }
 
@@ -26,23 +24,25 @@ void BetterInfoCache::validateLoadedData() {
 BetterInfoCache::BetterInfoCache(){}
 
 void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
-    std::set<int> toDownload;
+    std::set<int> toDownloadRated;
+    std::set<int> toDownloadUnrated;
 
     auto GLM = GameLevelManager::sharedState();
 
     for(auto [key, currentLvl] : CCDictionaryExt<gd::string, GJGameLevel*>(dict)) {
-        log::info("doing level {}", key);
         auto idString = std::to_string(currentLvl->m_levelID);
         if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString) && objectExists("demon-difficulty-dict", idString) && getLevelName(currentLvl->m_levelID) != "") continue;
 
         auto levelFromSaved = LevelUtils::getLevelFromSaved(currentLvl->m_levelID);
         if(levelFromSaved != nullptr && std::string(levelFromSaved->m_levelName) != "") cacheLevel(levelFromSaved);
-        else toDownload.insert(currentLvl->m_levelID);
+        else {
+            if(levelFromSaved && levelFromSaved->m_stars > 0) toDownloadRated.insert(currentLvl->m_levelID);
+            else toDownloadUnrated.insert(currentLvl->m_levelID);
+        }
     }
 
-    log::info("checkLevelsFromDict for loop done");
-
-    if(!toDownload.empty()) cacheLevels(toDownload);
+    if(!toDownloadRated.empty()) cacheLevels(toDownloadRated, SearchType::MapPackOnClick, 300);
+    if(!toDownloadUnrated.empty()) cacheLevels(toDownloadUnrated, SearchType::Type26, 100);
 }
 
 void BetterInfoCache::cacheLevel(GJGameLevel* level) {
@@ -59,7 +59,7 @@ void BetterInfoCache::cacheLevel(GJGameLevel* level) {
     m_json["demon-difficulty-dict"][idString] = level->m_demonDifficulty;
 }
 
-void BetterInfoCache::cacheLevels(std::set<int> toDownload) {
+void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchType, int levelsPerRequest) {
     //Search type 10 currently does not have a limit on level IDs, so we can do this all in one request
     bool first = true;
     std::stringstream levels;
@@ -79,9 +79,12 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload) {
 
     levelSets.push_back(levels.str());
 
+    //Limit to 20 requests, so we don't get too rate limited
+    if(levelSets.size() > 20) levelSets.resize(20);
+
     //Splitting up the request like this is required because GJSearchObject::create crashes if str is too long
     for(const auto& set : levelSets) {
-        auto searchObj = GJSearchObject::create(SearchType::MapPackOnClick, set);
+        auto searchObj = GJSearchObject::create(searchType, set);
         auto GLM = GameLevelManager::sharedState();
         GLM->m_levelManagerDelegate = this;
         GLM->getOnlineLevels(searchObj);

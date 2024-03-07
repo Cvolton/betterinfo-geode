@@ -27,7 +27,7 @@ public:
 
 	void checkLevelsFromDict(CCDictionary* dict);
 	void cacheLevel(GJGameLevel* level);
-	void cacheLevels(std::set<int> toDownload);
+	void cacheLevels(std::set<int> toDownload, SearchType searchType, int levelsPerRequest);
 
 	void storeUserName(int userID, const std::string& username);
 	void storeLevelInfo(int levelID, const std::string& field, const std::string& value);
