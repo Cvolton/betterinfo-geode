@@ -153,22 +153,35 @@ void BetterInfoCache::storeDatesForLevel(GJGameLevel* level) {
 }
 
 std::string BetterInfoCache::getUserName(int userID, bool download) {
+    static std::mutex downloadingMutex;
+    static std::condition_variable downloadingCV;
+    static bool downloading = false;
     if(userID == 0) return ""; //this prevents the request from being sent on every account comments load
 
     auto idString = std::to_string(userID);
     if(!objectExists("username-dict", idString)) {
         if(download && m_attemptedUsernames.find(userID) == m_attemptedUsernames.end()) {
-            web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).json().then([userID](const matjson::Value& data){
-                log::info("Restored green username for {}: {}", userID, data.dump(matjson::NO_INDENTATION));
-                std::string username;
+            std::thread([userID] {
+                std::unique_lock lock(downloadingMutex);
+                downloadingCV.wait(lock, []{ return !downloading; });
+                downloading = true;
 
-                if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
-                else if(data["username"].is_string()) username = data["username"].as_string();
+                web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).json().then([userID](const matjson::Value& data){
+                    log::info("Restored green username for {}: {}", userID, data.dump(matjson::NO_INDENTATION));
+                    std::string username;
 
-                BetterInfoCache::sharedState()->storeUserName(userID, username);
-            }).expect([userID](const std::string& error){
-                log::error("Error while getting username for {}: {}", userID, error);
-            });
+                    if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
+                    else if(data["username"].is_string()) username = data["username"].as_string();
+
+                    BetterInfoCache::sharedState()->storeUserName(userID, username);
+                    downloading = false;
+                    downloadingCV.notify_one();
+                }).expect([userID](const std::string& error){
+                    log::error("Error while getting username for {}: {}", userID, error);
+                    downloading = false;
+                    downloadingCV.notify_one();
+                });
+            }).detach();
             m_attemptedUsernames.insert(userID);
         }
         return "";
