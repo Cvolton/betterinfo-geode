@@ -47,14 +47,17 @@ std::string TimeUtils::workingTime(int value){
 }
 
 std::string TimeUtils::platformerTime(int value){
+    if(value < 0) return fmt::format("NA ({})", value);
+    if(value == 0) return "NA";
+
     int milliseconds = value % 1000;
     int seconds = (value / 1000) % 60;
     int minutes = (value / 60000) % 60;
     int hours = (value / 3600000);
 
-    if(hours > 0) return fmt::format("{}:{}:{}.{}", hours, minutes, seconds, milliseconds);
-    if(minutes > 0) return fmt::format("{}:{}.{}", minutes, seconds, milliseconds);
-    return fmt::format("{}.{}", seconds, milliseconds);
+    if(hours > 0) return fmt::format("{:02}:{:02}:{:02}.{:03}", hours, minutes, seconds, milliseconds);
+    if(minutes > 0) return fmt::format("{:02}:{:02}.{:03}", minutes, seconds, milliseconds);
+    return fmt::format("{:02}.{:03}", seconds, milliseconds);
 }
 
 std::string TimeUtils::timestampToHumanReadable(time_t timestamp) {

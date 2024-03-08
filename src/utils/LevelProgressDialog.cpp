@@ -49,7 +49,6 @@ void LevelProgressDialog::show(GJGameLevel* level){
         //auto statsV2 = BetterInfoStatsV2::sharedState();
 
         if(level->isPlatformer()) {
-            //TODO: better platformer formatting
             contentStream << "\n<cp>Best Time</c>: " << TimeUtils::platformerTime(level->m_bestTime)
             << "\n<co>Best Points</c>: " << level->m_bestPoints;
         } else {
