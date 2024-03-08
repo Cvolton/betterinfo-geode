@@ -25,4 +25,4 @@ endif()
 add_subdirectory($ENV{GEODE_SDK} $ENV{GEODE_SDK}/build)
 
 # Set up dependencies, resources, link Geode
-setup_geode_mod(${PROJECT_NAME} EXTERNALS geode.node-ids:1.7.1 cvolton.misc_bugfixes:1.0.0)
+setup_geode_mod(${PROJECT_NAME} EXTERNALS geode.node-ids:1.7.1 cvolton.misc_bugfixes:1.0.1)
