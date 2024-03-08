@@ -274,10 +274,6 @@ class $modify(BIProfilePage, ProfilePage) {
             accountIDBtn->setID("accountid-button"_spr);
             m_buttonMenu->addChild(accountIDBtn);
             this->m_buttons->addObject(accountIDBtn);
-
-            if(auto modBadge = m_mainLayer->getChildByID("mod-badge")) {
-                modBadge->setPositionX((winSize.width / 2) - (usernameNode->getScaledContentSize().width / 2) - 16);
-            }
         } else {
             #if GEODE_COMP_GD_VERSION <= 22040
             if(auto playerStats = m_mainLayer->getChildByID("stats-menu")) {
