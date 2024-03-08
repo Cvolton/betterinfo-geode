@@ -1,5 +1,6 @@
 #include "LevelUtils.h"
 #include "../layers/LevelFiltering/LevelSearchViewLayer.h"
+#include "../managers/BetterInfoCache.h"
 
 GJGameLevel* LevelUtils::getLevelFromSaved(int levelID) {
     return static_cast<GJGameLevel*>(GameLevelManager::sharedState()->m_onlineLevels->objectForKey(std::to_string(levelID)));
@@ -38,6 +39,7 @@ bool LevelUtils::levelHasCollectedCoins(GJGameLevel* level) {
     auto coinDict = GameStatsManager::sharedState()->m_verifiedUserCoins;
     auto coinDict2 = GameStatsManager::sharedState()->m_pendingUserCoins;
     bool hasAllCoins = true;
+    auto coins = level->m_coins ? level->m_coins : BetterInfoCache::sharedState()->getCoinCount(level->m_levelID);
     for(int i = 0; i < level->m_coins; i++){
         bool hasntCoin = coinDict->objectForKey(level->getCoinKey(i + 1)) == nullptr && coinDict2->objectForKey(level->getCoinKey(i + 1)) == nullptr;
         if(hasntCoin) hasAllCoins = false;
