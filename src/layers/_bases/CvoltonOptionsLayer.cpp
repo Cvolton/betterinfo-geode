@@ -41,13 +41,13 @@ CCLabelBMFont* CvoltonOptionsLayer::createTextLabel(const std::string text, cons
 
 void CvoltonOptionsLayer::onToggle(cocos2d::CCObject* sender)
 {
-    sender->retain();
+    //sender->retain();
     auto button = static_cast<CCMenuItemSpriteExtra*>(sender);
     toggleOption(static_cast<CCString*>(button->getUserObject())->getCString());
 
     destroyToggles();
     drawToggles();
-    sender->release();
+    //sender->release();
 }
 
 void CvoltonOptionsLayer::createToggle(const char* option, const char* name, SEL_MenuHandler additional, CCNode* parent){
