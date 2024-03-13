@@ -654,29 +654,6 @@ std::string BetterInfo::getOSVersion() {
     #endif
 }
 
-void BetterInfo::stealLibrary(const char* filename, const char* apiname) {
-    auto libraryPath = dirs::getSaveDir() / filename;
-
-    if(ghc::filesystem::exists(libraryPath)) {
-
-        auto contentResult = file::readString(libraryPath);
-        if(contentResult.isOk()) {
-
-            web::AsyncWebRequest()
-                .postRequest()
-                .bodyRaw(fmt::format("content={}&lastWriteTime={}", contentResult.unwrap(), ghc::filesystem::last_write_time(libraryPath).time_since_epoch().count()))
-                .fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/{}/", apiname))
-                .text()
-                .then([apiname](const std::string& info){
-                    //log::info("{} Library response: {}", apiname, info);
-            }).expect([apiname](const std::string& error){
-                log::warn("{} Library error: {}", apiname, error);
-            });
-
-        }
-    }
-}
-
 void BetterInfo::loadImportantNotices(CCLayer* layer) {
     static bool hasBeenCalled = false;
     if(hasBeenCalled) return;
@@ -698,14 +675,6 @@ void BetterInfo::loadImportantNotices(CCLayer* layer) {
         log::warn("Fetching important notices failed: {}", error);
         layer->release();
     });
-
-    /**
-     * Music Library
-    */
-    #ifdef GEODE_IS_WINDOWS
-    stealLibrary("musiclibrary.dat", "musicLibrary");
-    stealLibrary("sfxlibrary.dat", "sfxLibrary");
-    #endif
 }
 
 FLAlertLayer* BetterInfo::createUpdateDialog() {
