@@ -134,7 +134,8 @@ void LevelSearchViewLayer::startLoading(){
 
         std::stringstream toDownload;
         bool first = true;
-        for(size_t i = 0; i < ((m_unloadedLevels.size() < levelsPerRequest) ? m_unloadedLevels.size() : levelsPerRequest); i++) {
+        for(size_t i = 0; i < levelsPerRequest; i++) {
+            if(m_unloadedLevels.empty()) break;
             if(!first) toDownload << ",";
             toDownload << m_unloadedLevels[0]->m_levelID.value();
             m_unloadedLevels.pop_front();
