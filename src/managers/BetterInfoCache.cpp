@@ -41,7 +41,7 @@ void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
         }
     }
 
-    if(!toDownloadRated.empty()) cacheLevels(toDownloadRated, SearchType::MapPackOnClick, 300);
+    if(!toDownloadRated.empty()) cacheLevels(toDownloadRated, SearchType::MapPackOnClick, 2500);
     if(!toDownloadUnrated.empty()) cacheLevels(toDownloadUnrated, SearchType::Type26, 100);
 
     log::debug("Caching {} rated and {} unrated levels", toDownloadRated.size(), toDownloadUnrated.size());
@@ -72,7 +72,7 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchTyp
         levels << id;
         first = false;
         
-        i = (i + 1) % 300;
+        i = (i + 1) % levelsPerRequest;
         if(i == 0) {
             levelSets.push_back(levels.str());
             levels.str("");
@@ -85,12 +85,29 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchTyp
     if(levelSets.size() > 20) levelSets.resize(20);
 
     //Splitting up the request like this is required because GJSearchObject::create crashes if str is too long
+    //Status update: This was actually GLM getOnlineLevels, the issue is with CCDict max key length
+    //However we still need to split this up because we can request too many levels
+    //and we now use search types that do have a total level limit
+    std::vector<GJSearchObject*> searchObjects;
     for(const auto& set : levelSets) {
         auto searchObj = GJSearchObject::create(searchType, set);
-        auto GLM = GameLevelManager::sharedState();
-        GLM->m_levelManagerDelegate = this;
-        GLM->getOnlineLevels(searchObj);
+        searchObj->retain();
+        searchObjects.push_back(searchObj);
     }
+
+    std::thread([this, searchObjects] {
+        using namespace std::chrono_literals;
+        for(auto searchObj : searchObjects) {
+            ServerUtils::getOnlineLevels(searchObj, [this](std::vector<GJGameLevel*> levels, bool) {
+                for(auto level : levels) {
+                    cacheLevel(level);
+                    doSave();
+                }
+            });
+
+            std::this_thread::sleep_for(1500ms);
+        }
+    }).detach();
 
 }
 
@@ -237,17 +254,3 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
     if(!m_json["upload-date-dict"][idString].is_string()) return "";
     return m_json["upload-date-dict"][idString].as_string();
 }
-
-void BetterInfoCache::loadLevelsFinished(cocos2d::CCArray* levels, const char*) {
-    for(size_t i = 0; i < levels->count(); i++) {
-        auto level = static_cast<GJGameLevel*>(levels->objectAtIndex(i));
-        if(level == nullptr) continue;
-
-        cacheLevel(level);
-    }
-
-    doSave();
-}
-
-void BetterInfoCache::loadLevelsFailed(const char*) {}
-void BetterInfoCache::setupPageInfo(std::string, const char*) {}

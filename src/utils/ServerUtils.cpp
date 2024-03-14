@@ -11,6 +11,7 @@ const char* ServerUtils::getBaseURL() {
 
 void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<GJGameLevel*>, bool)> callback) {
     //TODO: if key is valid, cache levels
+    //TODO: cf error popups
     std::string completedLevels = ""; //TODO: get completed levels
 
     std::string postString = fmt::format("{}&type={}&str={}&diff={}&len={}&page={}&total={}&uncompleted={}&onlyCompleted={}&featured={}&original={}&twoPlayer={}&coins={}",

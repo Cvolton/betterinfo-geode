@@ -3,7 +3,7 @@
 #include "BaseJsonManager.h"
 #include "../delegates/UploadDateDelegate.h"
 
-class BetterInfoCache : public BaseJsonManager, public LevelManagerDelegate {
+class BetterInfoCache : public BaseJsonManager {
 	std::set<int> m_attemptedUsernames;
 	std::set<int> m_attemptedLevelDates;
 	inline static BetterInfoCache* m_instance = nullptr;
@@ -41,10 +41,6 @@ public:
 	std::string getLevelInfo(int levelID, const std::string& field);
 
 	std::string getUploadDate(int levelID, UploadDateDelegate* delegate = nullptr);
-
-	void loadLevelsFinished(cocos2d::CCArray*, const char*);
-    void loadLevelsFailed(const char*);
-    void setupPageInfo(std::string, const char*);
 
 	void populateDownloadedSongsFast();
 };
