@@ -11,7 +11,6 @@ const char* ServerUtils::getBaseURL() {
 
 void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<GJGameLevel*>, bool)> callback) {
     //TODO: if key is valid, cache levels
-    //TODO: cf error popups
     std::string completedLevels = ""; //TODO: get completed levels
 
     std::string postString = fmt::format("{}&type={}&str={}&diff={}&len={}&page={}&total={}&uncompleted={}&onlyCompleted={}&featured={}&original={}&twoPlayer={}&coins={}",
@@ -70,8 +69,8 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
 
             callback(levels, true);
         })
-        .expect([callback](web::SentAsyncWebRequest& request, const std::string& response) {
-            log::info("Retry-After: {}", request.getResponseHeader("Retry-After"));
+        .expect([callback](const std::string& response) {
+            //getting headers is currently not supported, gotta wait for new index...
 
             callback({}, false);
         });
