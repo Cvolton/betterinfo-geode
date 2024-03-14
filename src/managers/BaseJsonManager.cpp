@@ -54,10 +54,26 @@ Result<> BaseJsonManager::save() {
 }
 
 void BaseJsonManager::doSave() {
+    using namespace std::chrono_literals;
+
+    static bool isSaving = false;
+    static bool requestedAnotherSave = false;
+    if(isSaving) {
+        requestedAnotherSave = true;
+        return;
+    }
+
+    isSaving = true;
     std::thread([this] {
         auto loadResult = save();
         if(!loadResult) {
             log::warn("Unable to save {}", m_filename);
+        }
+        std::this_thread::sleep_for(15000ms);
+        isSaving = false;
+        if(requestedAnotherSave) {
+            requestedAnotherSave = false;
+            doSave();
         }
     }).detach();
 }
