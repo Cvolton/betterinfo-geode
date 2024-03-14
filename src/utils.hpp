@@ -8,6 +8,7 @@ using namespace geode::prelude;
 #include "utils/LevelMetadata.h"
 #include "utils/LevelProgressDialog.h"
 #include "utils/LevelUtils.h"
+#include "utils/ServerUtils.h"
 #include "utils/TimeUtils.h"
 
 namespace BetterInfo {

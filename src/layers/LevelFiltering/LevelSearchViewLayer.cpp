@@ -130,7 +130,7 @@ void LevelSearchViewLayer::startLoading(){
 
     if(!m_unloadedLevels.empty()) {
         bool starFilter = m_searchObj.star || m_searchObj.starRange.min > 0;
-        size_t levelsPerRequest = (starFilter) ? 300 : 100;
+        size_t levelsPerRequest = (starFilter) ? 1000 : 100;
 
         std::stringstream toDownload;
         bool first = true;
@@ -172,9 +172,23 @@ void LevelSearchViewLayer::startLoading(){
 }
 
 void LevelSearchViewLayer::queueLoad(float dt) {
-    auto GLM = GameLevelManager::sharedState();
-    GLM->m_levelManagerDelegate = this;
-    GLM->getOnlineLevels(m_gjSearchObjLoaded);
+    //auto GLM = GameLevelManager::sharedState();
+    //GLM->m_levelManagerDelegate = this;
+    //GLM->getOnlineLevels(m_gjSearchObjLoaded);
+    this->retain();
+    std::string key = m_gjSearchObjLoaded->getKey();
+    ServerUtils::getOnlineLevels(m_gjSearchObjLoaded, [this, key](auto levels, bool success) {
+        if(success) {
+            auto array = CCArray::create();
+            for(auto level : levels) {
+                array->addObject(level);
+            }
+            this->loadLevelsFinished(array, key.c_str());
+        } else {
+            this->loadLevelsFailed(key.c_str());
+        }
+        this->release();
+    });
     m_gjSearchObjLoaded->m_page += 1;
     m_gjSearchObjLoaded->release();
     m_allLocal = false;
@@ -265,10 +279,6 @@ void LevelSearchViewLayer::loadLevelsFailed(const char*) {
         setTextStatus(true);
         if(m_gjSearchObjOptimized) m_gjSearchObjOptimized->m_page -= 1;
     }
-}
-
-void LevelSearchViewLayer::setupPageInfo(gd::string, const char*) {
-
 }
 
 void LevelSearchViewLayer::setTextStatus(bool finished) {

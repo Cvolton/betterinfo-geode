@@ -46,7 +46,6 @@ public:
 
     void loadLevelsFinished(cocos2d::CCArray*, const char*);
     void loadLevelsFailed(const char*);
-    void setupPageInfo(gd::string, const char*);
 
     void onSearchObjectFinished(const BISearchObject& searchObj);
     void showInfoDialog();
