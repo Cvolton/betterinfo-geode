@@ -10,7 +10,6 @@ const char* ServerUtils::getBaseURL() {
 }
 
 void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<GJGameLevel*>, bool)> callback) {
-    //TODO: if key is valid, cache levels
     std::string completedLevels = ""; //TODO: get completed levels
 
     std::string postString = fmt::format("{}&type={}&str={}&diff={}&len={}&page={}&total={}&uncompleted={}&onlyCompleted={}&featured={}&original={}&twoPlayer={}&coins={}",
@@ -31,23 +30,29 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
 
     postString += "&secret=Wmfd2893gb7";
 
+    std::string key = searchObject->getKey();
+
     web::AsyncWebRequest()
         .userAgent("")
         .postRequest()
         .bodyRaw(postString)
         .fetch(fmt::format("{}/getGJLevels21.php", getBaseURL()))
         .text()
-        .then([callback](web::SentAsyncWebRequest& request, const std::string& response) {
+        .then([callback, key](web::SentAsyncWebRequest& request, const std::string& response) {
             size_t hashes = std::count(response.begin(), response.end(), '#');
             if(hashes < 4) return callback({}, false);
 
             std::stringstream responseStream(response);
             std::string levelData;
             std::string userData;
+            std::string songData;
+            std::string pageData;
             std::vector<GJGameLevel*> levels;
 
             getline(responseStream, levelData, '#');
             getline(responseStream, userData, '#');
+            getline(responseStream, songData, '#');
+            getline(responseStream, pageData, '#');
 
             std::stringstream userStream(userData);
             std::string currentUser;
@@ -66,6 +71,12 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
                 auto level = GJGameLevel::create(BetterInfo::responseToDict(currentLevel), false);
                 levels.push_back(level);
             }
+
+            CCArray* levelArray = CCArray::create();
+            for(auto level : levels) levelArray->addObject(level);
+
+            GameLevelManager::sharedState()->saveFetchedLevels(levelArray);
+            if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, pageData, key.c_str());
 
             callback(levels, true);
         })
