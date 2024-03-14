@@ -38,7 +38,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
         .bodyRaw(postString)
         .fetch(fmt::format("{}/getGJLevels21.php", getBaseURL()))
         .text()
-        .then([callback](const std::string& response) {
+        .then([callback](web::SentAsyncWebRequest& request, const std::string& response) {
             size_t hashes = std::count(response.begin(), response.end(), '#');
             if(hashes < 4) return callback({}, false);
 
@@ -69,5 +69,37 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             }
 
             callback(levels, true);
+        })
+        .expect([callback](web::SentAsyncWebRequest& request, const std::string& response) {
+            log::info("Retry-After: {}", request.getResponseHeader("Retry-After"));
+
+            callback({}, false);
         });
+}
+
+bool ServerUtils::showCFError(const std::string& data) {
+    if(data.starts_with("error code:")) {
+        auto error = BetterInfo::stoi(data.substr(12));
+        std::string message = "";
+        switch(error) {
+            case 1005:
+                message = "  Your ISP is banned from GD.\n  If you are using a VPN, try disabling it.\n  (error code: 1005)";
+                break;
+            case 1006:
+                message = "  Your IP address is banned from GD.\n  If you are using a VPN, try disabling it.\n  (error code: 1006)";
+                break;
+            case 1015:
+                message = " Rate limited by RobTop's server.\n (error code: 1015)";
+                break;
+            case 1020:
+                message = fmt::format(" Server is down for maintenance.\n (error code: {})", error);
+                break;
+            default:
+                message = fmt::format("  A server error has occurred.\n  (error code: {})", error);
+                break;
+        }
+        Notification::create(message, NotificationIcon::Error, 5.f)->show();
+        return true;
+    }
+    return false;
 }
