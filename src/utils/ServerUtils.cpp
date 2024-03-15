@@ -5,8 +5,30 @@
 
 using namespace geode::prelude;
 
-const char* ServerUtils::getBaseURL() {
-    return "http://www.boomlings.com/database";
+std::string ServerUtils::getBaseURL() {
+    // The addresses are pointing to "https://www.boomlings.com/database/getGJLevels21.php"
+    // in the main game executable
+    char* originalUrl = nullptr;
+    #ifdef GEODE_IS_WINDOWS
+        static_assert(GEODE_COMP_GD_VERSION == 22040, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x410a74); //not a mistake
+    #elif defined(GEODE_IS_MACOS)
+        static_assert(GEODE_COMP_GD_VERSION == 22000, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x83c079);
+    #elif defined(GEODE_IS_ANDROID64)
+        static_assert(GEODE_COMP_GD_VERSION == 22050, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0xE861D0);
+    #elif defined(GEODE_IS_ANDROID32)
+        static_assert(GEODE_COMP_GD_VERSION == 22050, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x93E3F0);
+    #else
+        static_assert(false, "Unsupported platform");
+    #endif
+
+    std::string ret = originalUrl;
+    if(ret.size() > 34) ret = ret.substr(0, 34);
+
+    return ret;
 }
 
 void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<GJGameLevel*>, bool)> callback) {
