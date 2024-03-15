@@ -293,11 +293,9 @@ void BetterInfo::copyToClipboard(const char* text, CCLayer* parent){
 }
 
 std::string BetterInfo::getSongUrl(int audioID) {
-    //TODO: reverse MusicDownloadManager
-    return "";
-    /*auto songInfo = static_cast<SongInfoObject*>(MusicDownloadManager::sharedState()->m_songsDict->objectForKey(std::to_string(audioID)));
+    auto songInfo = static_cast<SongInfoObject*>(MusicDownloadManager::sharedState()->m_songObjects->objectForKey(std::to_string(audioID)));
     if(!songInfo) return "";
-    return songInfo->m_songURL;*/
+    return songInfo->m_songUrl;
 }
 
 bool BetterInfo::isNewGrounds(int audioID) {
@@ -549,7 +547,6 @@ inline uint64_t timeInMs() {
 float BetterInfo::timeForLevelString(const std::string& levelString) {
         std::string epicString;
     try {
-        //todo: checked portals
         auto a = timeInMs();
 
         auto decompressString = decodeBase64Gzip(levelString);
