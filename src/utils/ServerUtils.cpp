@@ -78,6 +78,8 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             getline(responseStream, songData, '#');
             getline(responseStream, pageData, '#');
 
+            MusicDownloadManager::sharedState()->createSongsInfo(songData);
+
             std::stringstream userStream(userData);
             std::string currentUser;
             while(getline(userStream, currentUser, '|')) {
