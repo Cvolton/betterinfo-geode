@@ -863,8 +863,7 @@ int BetterInfo::stoi(std::string_view str) {
 }
 
 float BetterInfo::stof(std::string_view str) {
-    float result = std::atof(str.data());
-    return result;
+    return utils::numFromString<float>(str).unwrapOr(0);
 }
 
 long long BetterInfo::strtol(std::string_view str) {
