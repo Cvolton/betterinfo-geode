@@ -5,6 +5,8 @@
 
 using namespace geode::prelude;
 
+static inline std::unordered_map<std::string, Ref<cocos2d::CCArray>> s_cache;
+
 std::string ServerUtils::getBaseURL() {
     // The addresses are pointing to "https://www.boomlings.com/database/getGJLevels21.php"
     // in the main game executable
@@ -99,6 +101,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
 
             GameLevelManager::sharedState()->saveFetchedLevels(levelArray);
             if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, pageData, key.c_str());
+            else s_cache[key] = levelArray;
 
             callback(levels, true);
         })
@@ -107,6 +110,17 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
 
             callback({}, false);
         });
+}
+
+CCArray* ServerUtils::getStoredOnlineLevels(const std::string& key) {
+    if(key.length() < 255) return GameLevelManager::sharedState()->getStoredOnlineLevels(key.c_str());
+
+    if(s_cache.find(key) != s_cache.end()) return s_cache[key];
+    return nullptr;
+}
+
+void ServerUtils::resetCache() {
+    s_cache.clear();
 }
 
 bool ServerUtils::showCFError(const std::string& data) {

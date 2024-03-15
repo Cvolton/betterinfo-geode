@@ -5,8 +5,6 @@
 
 #include <fmt/format.h>
 
-static inline std::unordered_map<std::string, cocos2d::CCArray*> s_cache;
-
 LevelSearchViewLayer* LevelSearchViewLayer::create(std::deque<GJGameLevel*> allLevels, BISearchObject searchObj) {
     auto ret = new LevelSearchViewLayer();
     if (ret && ret->init(allLevels, searchObj)) {
@@ -151,12 +149,9 @@ void LevelSearchViewLayer::startLoading(){
     if(!searchObj) return;
 
     auto GLM = GameLevelManager::sharedState();
-    if(auto&& key = s_cache.find(searchObj->getKey()); key != s_cache.end()) {
+    if(auto key = ServerUtils::getStoredOnlineLevels(searchObj->getKey())) {
         searchObj->m_page += 1;
-        loadLevelsFinished(key->second, "");
-    } else if(auto storedLevels = GLM->getStoredOnlineLevels(searchObj->getKey())) {
-        searchObj->m_page += 1;
-        loadLevelsFinished(storedLevels, "");
+        loadLevelsFinished(key, "");
     } else {
         m_gjSearchObjLoaded = searchObj;
         searchObj->retain();
@@ -256,11 +251,6 @@ CCScene* LevelSearchViewLayer::scene(GJSearchObject* gjSearchObj, BISearchObject
 
 void LevelSearchViewLayer::loadLevelsFinished(cocos2d::CCArray* levels, const char* key) {
     if(!m_data) return;
-
-    if(!std::string_view(key).empty()) {
-        s_cache[key] = levels;
-        levels->retain();
-    }
 
     for(size_t i = 0; i < levels->count(); i++) {
         auto level = static_cast<GJGameLevel*>(levels->objectAtIndex(i));
@@ -408,11 +398,4 @@ void LevelSearchViewLayer::onEnter() {
 LevelSearchViewLayer::~LevelSearchViewLayer() {
     auto GLM = GameLevelManager::sharedState();
     if(GLM->m_levelManagerDelegate == this) GLM->m_levelManagerDelegate = nullptr;
-}
-
-void LevelSearchViewLayer::resetCache() {
-    for(auto&& [key, value] : s_cache) {
-        value->release();
-    }
-    s_cache.clear();
 }

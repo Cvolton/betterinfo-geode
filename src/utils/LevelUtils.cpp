@@ -1,5 +1,5 @@
 #include "LevelUtils.h"
-#include "../layers/LevelFiltering/LevelSearchViewLayer.h"
+#include "ServerUtils.h"
 #include "../managers/BetterInfoCache.h"
 
 GJGameLevel* LevelUtils::getLevelFromSaved(int levelID) {
@@ -19,7 +19,7 @@ std::deque<GJGameLevel*> LevelUtils::completedDeque() {
 
 void LevelUtils::resetLevelCaches() {
     GameLevelManager::sharedState()->m_timerDict->removeAllObjects();
-    LevelSearchViewLayer::resetCache();
+    ServerUtils::resetCache();
 }
 
 int LevelUtils::levelDifficultyAsInt(GJGameLevel* level) {

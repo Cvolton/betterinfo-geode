@@ -57,6 +57,4 @@ public:
 
     void onEnter();
     ~LevelSearchViewLayer();
-
-    static void resetCache();
 };
