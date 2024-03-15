@@ -117,8 +117,7 @@ void BetterInfoOnline::sendScoreToProfilePage(cocos2d::CCArray* scores, int acco
                 case IconType::Jetpack:
                     score->m_playerJetpack = score->m_iconID;
                     break;
-                case IconType::DeathEffect:
-                case IconType::Special:
+                default:
                     break;
             }
 
