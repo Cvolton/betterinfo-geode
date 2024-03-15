@@ -31,7 +31,7 @@ std::string ServerUtils::getBaseURL() {
     return ret;
 }
 
-void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<GJGameLevel*>, bool)> callback) {
+void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<Ref<GJGameLevel>>, bool)> callback) {
     std::string completedLevels = ""; //TODO: get completed levels
 
     std::string postString = fmt::format("{}&type={}&str={}&diff={}&len={}&page={}&total={}&uncompleted={}&onlyCompleted={}&featured={}&original={}&twoPlayer={}&coins={}",
@@ -69,7 +69,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             std::string userData;
             std::string songData;
             std::string pageData;
-            std::vector<GJGameLevel*> levels;
+            std::vector<Ref<GJGameLevel>> levels;
 
             getline(responseStream, levelData, '#');
             getline(responseStream, userData, '#');

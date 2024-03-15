@@ -98,11 +98,17 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchTyp
     std::thread([this, searchObjects] {
         using namespace std::chrono_literals;
         for(auto searchObj : searchObjects) {
-            ServerUtils::getOnlineLevels(searchObj, [this](std::vector<GJGameLevel*> levels, bool) {
-                for(auto level : levels) {
-                    cacheLevel(level);
+            ServerUtils::getOnlineLevels(searchObj, [this](auto levels, bool) {
+                std::thread([this, levels] {
+                    for(auto level : levels) {
+                        cacheLevel(level);
+                    }
                     doSave();
-                }
+                    Loader::get()->queueInMainThread([levels] {
+                        if(levels.size() > 0) log::debug("Cached {} levels", levels.size());
+                        // this is just a workaround to make sure the vector only gets destroyed in main thread
+                    });
+                }).detach();
             });
 
             std::this_thread::sleep_for(1500ms);
@@ -132,13 +138,17 @@ void BetterInfoCache::storeUserName(int userID, const std::string& username) {
         return;
     }
 
-    auto idString = std::to_string(userID);
-    std::lock_guard<std::mutex> guard(m_jsonMutex);
-    m_json["username-dict"][idString] = username;
-    doSave();
+    std::thread([this, userID, username] {
+        auto idString = std::to_string(userID);
+        std::lock_guard<std::mutex> guard(m_jsonMutex);
+        m_json["username-dict"][idString] = username;
+        doSave();
 
-    auto levelBrowserLayer = getChildOfType<LevelBrowserLayer>(CCDirector::sharedDirector()->getRunningScene(), 0);
-    if(levelBrowserLayer) BetterInfo::reloadUsernames(levelBrowserLayer);
+        Loader::get()->queueInMainThread([]() {
+            auto levelBrowserLayer = getChildOfType<LevelBrowserLayer>(CCDirector::sharedDirector()->getRunningScene(), 0);
+            if(levelBrowserLayer) BetterInfo::reloadUsernames(levelBrowserLayer);
+        });
+    }).detach();
 }
 
 void BetterInfoCache::storeLevelInfo(int levelID, const std::string& field, const std::string& value) {
