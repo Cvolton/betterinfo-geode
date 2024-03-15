@@ -110,7 +110,7 @@ bool CustomCreatorLayer::init() {
     infoBtn->setSizeMult(1.2f);
     infoBtn->setID("info-button"_spr);
 
-    auto egg = CCMenuItemSpriteExtra::create(
+    /*auto egg = CCMenuItemSpriteExtra::create(
         BetterInfo::createBISprite("BI_partyHat_001.png"),
         this,
         menu_selector(CustomCreatorLayer::onEgg)
@@ -118,7 +118,7 @@ bool CustomCreatorLayer::init() {
     egg->setScale(.35f);
     egg->m_baseScale = .35f;
     egg->setPosition({59, (winSize.height / 2) - 16});
-    if(BetterInfo::randomNumber(9, 21) == 15 || BetterInfo::randomNumber(9, 21) == 17) menu->addChild(egg);
+    if(BetterInfo::randomNumber(9, 21) == 15 || BetterInfo::randomNumber(9, 21) == 17) menu->addChild(egg);*/
 
     buttonsMenu->updateLayout();
     bottomMenu->updateLayout();
