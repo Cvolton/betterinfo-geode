@@ -78,10 +78,14 @@ bool LevelSearchViewLayer::init(BISearchObject searchObj) {
 
     if(m_gjSearchObj && !(Mod::get()->getSavedValue<bool>("lsvl_seen_info"))) showInfoDialog();
 
+    scheduleUpdate();
+
     return true;
 }
 
 void LevelSearchViewLayer::unload() {
+    unscheduleUpdate();
+
     m_page = 0;
     m_shownLevels = 0;
     m_firstIndex = 0;
@@ -108,6 +112,7 @@ void LevelSearchViewLayer::reload() {
 
     m_data = CCArray::create();
     m_data->retain();
+    scheduleUpdate();
 
     loadPage(true);
     startLoading();
@@ -199,8 +204,6 @@ void LevelSearchViewLayer::loadPage(bool reload){
     m_lastIndex = (m_page * 10) + currentPage->count();
     m_totalAmount = m_unloadedLevels.size() + m_data->count();
 
-    updateCounter();
-
     if(!reload && m_shownLevels == currentPage->count()) return;
     m_shownLevels = currentPage->count();
 
@@ -273,11 +276,7 @@ void LevelSearchViewLayer::loadLevelsFailed(const char*) {
 }
 
 void LevelSearchViewLayer::setTextStatus(bool finished) {
-    if(m_statusText) m_statusText->setString(
-        finished ? "Finished" : 
-        m_gjSearchObjOptimized ? fmt::format("Loading (online page {})", m_gjSearchObjOptimized->m_page).c_str() :
-        (m_data->count() > m_lastIndex ? "Loading (next page)" : "Loading (current page)")
-    );
+    m_finished = finished;
 }
 
 void LevelSearchViewLayer::onFilters(cocos2d::CCObject*) {
@@ -393,6 +392,17 @@ void LevelSearchViewLayer::onEnter() {
     GLM->m_levelManagerDelegate = this;
     
     loadPage();
+}
+
+void LevelSearchViewLayer::update(float dt) {
+    BIViewLayer::update(dt);
+    updateCounter();
+
+    if(m_statusText) m_statusText->setString(
+        m_finished ? "Finished" : 
+        m_gjSearchObjOptimized ? fmt::format("Loading (online page {})", m_gjSearchObjOptimized->m_page).c_str() :
+        (m_data->count() > m_lastIndex ? "Loading (next page)" : "Loading (current page)")
+    );
 }
 
 LevelSearchViewLayer::~LevelSearchViewLayer() {
