@@ -160,9 +160,9 @@ void LevelSearchViewLayer::startLoading(){
         
         auto func = std::function([this, key, searchObj] {
             searchObj->m_page += 1;
+            i++;
             loadLevelsFinished(key, "");
             searchObj->release();
-            i++;
         });
 
         // mac is crashing here and i cant rly figure out why
@@ -170,7 +170,7 @@ void LevelSearchViewLayer::startLoading(){
         // so this delays the level loading by a frame every 100 pages
         // so it doesnt reach that if a large amount of pages is pre-loaded
 
-        if(i % 100 == 0) {
+        if(i % 200 == 0) {
             this->retain();
             Loader::get()->queueInMainThread([func, this] {
                 func();
