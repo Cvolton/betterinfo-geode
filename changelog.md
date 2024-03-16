@@ -1,5 +1,5 @@
 # Changelog
-## <cg>v4.1.4</c> (2024-03-16)
+## <cg>v4.1.5</c> (2024-03-16)
 * <cg>Fixed</c> some filters not working properly in <cj>Filtered Search</c>
 
 ## <cg>v4.1.4</c> (2024-03-16)
