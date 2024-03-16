@@ -34,7 +34,7 @@ std::string ServerUtils::getBaseURL() {
 }
 
 void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<Ref<GJGameLevel>>, bool)> callback) {
-    std::string completedLevels = ""; //TODO: get completed levels
+    std::string completedLevels = "";
 
     std::string postString = fmt::format("{}&type={}&str={}&diff={}&len={}&page={}&total={}&uncompleted={}&onlyCompleted={}&featured={}&original={}&twoPlayer={}&coins={}",
         GameLevelManager::sharedState()->getBasePostString(), (int) searchObject->m_searchType, searchObject->m_searchQuery, searchObject->m_difficulty, searchObject->m_length, searchObject->m_page,
@@ -49,8 +49,20 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
         postString += fmt::format("&song={}", searchObject->m_songID);
         if(searchObject->m_customSongFilter) postString += "&customSong=1";
     }
-    if(searchObject->m_uncompletedFilter || searchObject->m_completedFilter) postString += fmt::format("&completedLevels={}", completedLevels);
-    if(searchObject->m_searchType == SearchType::LevelListsOnClick) postString += "&inc=1";
+    if(searchObject->m_uncompletedFilter || searchObject->m_completedFilter) {
+        auto completedArray = CCArrayExt<GJGameLevel*>(GameLevelManager::sharedState()->getCompletedLevels(GameManager::sharedState()->getGameVariable("0073")));
+        bool first = true;
+
+        for(auto level : completedArray) {
+            if(!first) completedLevels += ",";
+            completedLevels += fmt::format("{}", level->m_levelID.value());
+            first = false;
+        }
+
+        postString += fmt::format("&completedLevels={}", completedLevels);
+    }
+    //if(searchObject->m_searchType == SearchType::LevelListsOnClick) postString += "&inc=1";
+    postString += GameLevelManager::sharedState()->writeSpecialFilters(searchObject);
 
     postString += "&secret=Wmfd2893gb7";
 
