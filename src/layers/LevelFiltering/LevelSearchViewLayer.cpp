@@ -152,14 +152,35 @@ void LevelSearchViewLayer::startLoading(){
     }
 
     if(!searchObj) return;
+    searchObj->retain();
 
     auto GLM = GameLevelManager::sharedState();
     if(auto key = ServerUtils::getStoredOnlineLevels(searchObj->getKey())) {
-        searchObj->m_page += 1;
-        loadLevelsFinished(key, "");
+        static size_t i = 0;
+        
+        auto func = std::function([this, key, searchObj] {
+            searchObj->m_page += 1;
+            loadLevelsFinished(key, "");
+            searchObj->release();
+            i++;
+        });
+
+        // mac is crashing here and i cant rly figure out why
+        // im assuming its a low stack limit that were reaching
+        // so this delays the level loading by a frame every 100 pages
+        // so it doesnt reach that if a large amount of pages is pre-loaded
+
+        if(i % 100 == 0) {
+            this->retain();
+            Loader::get()->queueInMainThread([func, this] {
+                func();
+                this->release();
+            });
+        } else {
+            func();
+        }
     } else {
         m_gjSearchObjLoaded = searchObj;
-        searchObj->retain();
         // this amounts to 80 requests per second, which is 20 below the server limit
         auto time = 0.75 - (TimeUtils::getFullDoubleTime() - m_lastLoadTime);
         if(time < 0) {
