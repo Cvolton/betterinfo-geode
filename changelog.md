@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.1.4</c> (2024-03-16)
+* <cg>Fixed</c> potential <co>startup</c> <cr>crash and lag issues</c>
+* <cg>Optimized</c> <cj>Filtered Search</c>
+* Other bugfixes & improvements
+
 ## <cg>v4.1.3</c> (2024-03-08)
 * <cg>Added</c> <cj>"Hide Platformer Time"</c> <co>Settings Option</c>
 * <cg>Fixed</c> several <cp>Android-only</c> <cr>crashes</c>

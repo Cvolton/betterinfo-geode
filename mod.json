@@ -1,6 +1,6 @@
 {
 	"geode": "2.0.0-beta.20",
-	"version": "v4.1.3",
+	"version": "v4.1.4",
     "gd": {
         "win": "2.204",
         "android": "2.205",
@@ -20,7 +20,7 @@
         },
         {
             "id": "cvolton.misc_bugfixes",
-            "version": "v1.0.1",
+            "version": "v1.1.1",
             "importance": "required"
         }
     ],
