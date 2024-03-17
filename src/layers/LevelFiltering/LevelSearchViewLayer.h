@@ -9,9 +9,9 @@ using namespace geode::prelude;
 
 class LevelSearchViewLayer : public BIViewLayer, public LevelManagerDelegate, public BISearchObjectDelegate {
     BISearchObject m_searchObj;
-    GJSearchObject* m_gjSearchObj = nullptr;
-    GJSearchObject* m_gjSearchObjOptimized = nullptr;
-    GJSearchObject* m_gjSearchObjLoaded = nullptr;
+    Ref<GJSearchObject> m_gjSearchObj = nullptr;
+    Ref<GJSearchObject> m_gjSearchObjOptimized = nullptr;
+    Ref<GJSearchObject> m_gjSearchObjLoaded = nullptr;
     cocos2d::CCLabelBMFont* m_statusText = nullptr;
     std::deque<GJGameLevel*> m_unloadedLevels;
     std::deque<GJGameLevel*> m_allLevels;
@@ -58,5 +58,4 @@ public:
 
     void onEnter();
     void update(float dt);
-    ~LevelSearchViewLayer();
 };

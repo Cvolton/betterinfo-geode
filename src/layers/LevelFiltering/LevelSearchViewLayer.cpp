@@ -34,7 +34,6 @@ bool LevelSearchViewLayer::init(std::deque<GJGameLevel*> allLevels, BISearchObje
 
 bool LevelSearchViewLayer::init(GJSearchObject* gjSearchObj, BISearchObject searchObj) {
     m_gjSearchObj = gjSearchObj;
-    m_gjSearchObj->retain();
     return init(searchObj);
 }
 
@@ -92,11 +91,8 @@ void LevelSearchViewLayer::unload() {
     m_lastIndex = 0;
     m_totalAmount = 0;
 
-    if(m_gjSearchObjOptimized) {
-        m_gjSearchObjOptimized->release();
-        m_gjSearchObjOptimized = nullptr;
-    }
-
+    m_gjSearchObjOptimized = nullptr;
+    
     if(m_gjSearchObj) m_gjSearchObj->m_page = 0;
 
     if(!m_data) return;
@@ -152,51 +148,26 @@ void LevelSearchViewLayer::startLoading(){
     }
 
     if(!searchObj) return;
-    searchObj->retain();
 
-    auto GLM = GameLevelManager::sharedState();
-    if(auto key = ServerUtils::getStoredOnlineLevels(searchObj->getKey())) {
-        static size_t i = 0;
-        
-        auto func = std::function([this, key, searchObj] {
-            searchObj->m_page += 1;
-            i++;
-            loadLevelsFinished(key, "");
-            searchObj->release();
-        });
-
-        // mac is crashing here and i cant rly figure out why
-        // im assuming its a low stack limit that were reaching
-        // so this delays the level loading by a frame every 100 pages
-        // so it doesnt reach that if a large amount of pages is pre-loaded
-
-        if(i % 200 == 0) {
-            this->retain();
-            Loader::get()->queueInMainThread([func, this] {
-                func();
-                this->release();
-            });
-        } else {
-            func();
-        }
-    } else {
-        m_gjSearchObjLoaded = searchObj;
-        // this amounts to 80 requests per second, which is 20 below the server limit
-        auto time = 0.75 - (TimeUtils::getFullDoubleTime() - m_lastLoadTime);
-        if(time < 0) {
-            time = 0;
-            this->queueLoad(0);
-        } else {
-            this->getScheduler()->scheduleSelector(schedule_selector(LevelSearchViewLayer::queueLoad), this, 1, 0, time, false);
-        }
-        m_lastLoadTime = TimeUtils::getFullDoubleTime() + time;
+    while(auto key = ServerUtils::getStoredOnlineLevels(searchObj->getKey())) {
+        searchObj->m_page += 1;
+        loadLevelsFinished(key, "");
     }
+
+    m_gjSearchObjLoaded = searchObj;
+    // this amounts to 80 requests per second, which is 20 below the server limit
+    auto time = 0.75 - (TimeUtils::getFullDoubleTime() - m_lastLoadTime);
+    log::info("Time: {}", time);
+    if(time < 0) {
+        time = 0;
+        this->queueLoad(0);
+    } else {
+        this->getScheduler()->scheduleSelector(schedule_selector(LevelSearchViewLayer::queueLoad), this, 1, 0, time, false);
+    }
+    m_lastLoadTime = TimeUtils::getFullDoubleTime() + time;
 }
 
 void LevelSearchViewLayer::queueLoad(float dt) {
-    //auto GLM = GameLevelManager::sharedState();
-    //GLM->m_levelManagerDelegate = this;
-    //GLM->getOnlineLevels(m_gjSearchObjLoaded);
     this->retain();
     std::string key = m_gjSearchObjLoaded->getKey();
     ServerUtils::getOnlineLevels(m_gjSearchObjLoaded, [this, key](auto levels, bool success) {
@@ -212,7 +183,6 @@ void LevelSearchViewLayer::queueLoad(float dt) {
         this->release();
     });
     m_gjSearchObjLoaded->m_page += 1;
-    m_gjSearchObjLoaded->release();
     m_allLocal = false;
 }
 
@@ -250,7 +220,6 @@ void LevelSearchViewLayer::loadPage() {
 
 void LevelSearchViewLayer::keyBackClicked() {
     unload();
-    if(m_gjSearchObj) m_gjSearchObj->release();
 
     BIViewLayer::keyBackClicked();
 }
@@ -285,7 +254,7 @@ void LevelSearchViewLayer::loadLevelsFinished(cocos2d::CCArray* levels, const ch
 
     loadPage(false);
 
-    startLoading();
+    if(!std::string_view(key).empty()) startLoading();
 }
 
 void LevelSearchViewLayer::loadLevelsFailed(const char*) {
@@ -339,7 +308,6 @@ void LevelSearchViewLayer::showInfoDialog() {
 
 void LevelSearchViewLayer::optimizeSearchObject() {
     if(!m_gjSearchObj) return;
-    if(m_gjSearchObjOptimized) m_gjSearchObjOptimized->release();
 
     /*
         SearchType m_nScreenID; //236 android
@@ -359,7 +327,6 @@ void LevelSearchViewLayer::optimizeSearchObject() {
     */
 
     m_gjSearchObjOptimized = GJSearchObject::createFromKey(m_gjSearchObj->getKey());
-    m_gjSearchObjOptimized->retain();
 
     //TODO: if server optimization disabled: return
 
@@ -408,9 +375,6 @@ int LevelSearchViewLayer::resultsPerPage() const {
 
 void LevelSearchViewLayer::onEnter() {
     BIViewLayer::onEnter();
-
-    auto GLM = GameLevelManager::sharedState();
-    GLM->m_levelManagerDelegate = this;
     
     loadPage();
 }
@@ -424,9 +388,4 @@ void LevelSearchViewLayer::update(float dt) {
         m_gjSearchObjOptimized ? fmt::format("Loading (online page {})", m_gjSearchObjOptimized->m_page).c_str() :
         (m_data->count() > m_lastIndex ? "Loading (next page)" : "Loading (current page)")
     );
-}
-
-LevelSearchViewLayer::~LevelSearchViewLayer() {
-    auto GLM = GameLevelManager::sharedState();
-    if(GLM->m_levelManagerDelegate == this) GLM->m_levelManagerDelegate = nullptr;
 }
