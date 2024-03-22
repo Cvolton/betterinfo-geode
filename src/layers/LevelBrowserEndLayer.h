@@ -41,4 +41,6 @@ public:
     void onTimer(float dt);
     void getOnlineLevels();
     void onQueueDownload(float dt);
+
+    ~LevelBrowserEndLayer();
 };

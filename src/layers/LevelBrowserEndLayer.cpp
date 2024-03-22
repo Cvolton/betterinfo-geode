@@ -1,5 +1,5 @@
 #include "LevelBrowserEndLayer.h"
-#include "Geode/binding/GameLevelManager.hpp"
+#include "../utils/TimeUtils.h"
 
 LevelBrowserEndLayer* LevelBrowserEndLayer::create(LevelBrowserLayer* levelBrowserLayer, InfoLayer* infoLayer){
     auto ret = new LevelBrowserEndLayer();
@@ -29,7 +29,6 @@ void LevelBrowserEndLayer::onClose(cocos2d::CCObject* sender)
     if(m_circle) m_circle->fadeAndRemove();
 
     auto GLM = GameLevelManager::sharedState();
-    GLM->m_levelManagerDelegate = nullptr;
 
     CvoltonAlertLayerStub::onClose(sender);
 }
@@ -50,7 +49,7 @@ void LevelBrowserEndLayer::onOK(cocos2d::CCObject* sender){
 
     m_goBtn->setVisible(false);
 
-    this->getScheduler()->scheduleSelector(schedule_selector(LevelBrowserEndLayer::onTimer), this, 1, false);
+    this->getScheduler()->scheduleSelector(schedule_selector(LevelBrowserEndLayer::onTimer), this, 0.5f, false);
 }
 
 bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer, InfoLayer* infoLayer){
@@ -193,6 +192,7 @@ void LevelBrowserEndLayer::updateDisplay(){
         CCString::createWithFormat("<cg>Minimum</c>: %i\n<cy>Current</c>: %i\n<cr>Maximum</c>: %i\n<cl>Requests</c>: %i%s", m_min, page, m_max, ++m_requests, maximumStr)->getCString()
     );
     m_textLabel->setScale(1.f);
+    onTimer(0);
 }
 
 void LevelBrowserEndLayer::onTimer(float dt) {
@@ -200,7 +200,8 @@ void LevelBrowserEndLayer::onTimer(float dt) {
         double timePerRequest = (double) (m_lastLoad - m_maxReached) / (m_requests - m_requestsToMax);
         int requestsRemaining = (m_requestsToMax * 2) - m_requests;
         time_t timeElapsed = std::time(nullptr) - m_lastLoad;
-        m_timer->setString(fmt::format("{:.0f}", (timePerRequest * requestsRemaining) - timeElapsed).c_str());
+        double displayTime = ((timePerRequest * requestsRemaining) - timeElapsed) + 1;
+        m_timer->setString(TimeUtils::minutesSeconds(displayTime).c_str());
         m_timer->setVisible(true);
     }
 }
@@ -232,4 +233,11 @@ void LevelBrowserEndLayer::onQueueDownload(float dt) {
     } else if(m_infoLayer) {
         GLM->getLevelComments(m_infoLayer->getID(), m_infoLayer->m_page, m_infoLayer->m_pageEndIdx, GameManager::sharedState()->getGameVariable("0069"), m_infoLayer->m_mode);
     }
+}
+
+LevelBrowserEndLayer::~LevelBrowserEndLayer(){
+    auto GLM = GameLevelManager::sharedState();
+
+    if(GLM->m_levelManagerDelegate == this) GLM->m_levelManagerDelegate = nullptr;
+    if(GLM->m_levelCommentDelegate == this) GLM->m_levelCommentDelegate = nullptr;
 }

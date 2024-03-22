@@ -46,7 +46,7 @@ std::string TimeUtils::workingTime(int value){
     return stream.str();
 }
 
-std::string TimeUtils::platformerTime(int value){
+std::string TimeUtils::platformerTime(int value, bool showMilliseconds){
     if(value < 0) return fmt::format("NA ({})", value);
     if(value == 0) return "NA";
 
@@ -55,9 +55,21 @@ std::string TimeUtils::platformerTime(int value){
     int minutes = (value / 60000) % 60;
     int hours = (value / 3600000);
 
-    if(hours > 0) return fmt::format("{:02}:{:02}:{:02}.{:03}", hours, minutes, seconds, milliseconds);
-    if(minutes > 0) return fmt::format("{:02}:{:02}.{:03}", minutes, seconds, milliseconds);
-    return fmt::format("{:02}.{:03}", seconds, milliseconds);
+    std::string millisecondsStr = showMilliseconds ? fmt::format(".{:03}", milliseconds) : "";
+
+    if(hours > 0) return fmt::format("{:02}:{:02}:{:02}{}", hours, minutes, seconds, millisecondsStr);
+    if(minutes > 0) return fmt::format("{:02}:{:02}{}", minutes, seconds, millisecondsStr);
+    return fmt::format("{:02}{}", seconds, millisecondsStr);
+}
+
+std::string TimeUtils::minutesSeconds(int value){
+    if(value < 0) return fmt::format("NA ({})", value);
+    if(value == 0) return "NA";
+
+    int minutes = value / 60;
+    int seconds = value % 60;
+
+    return fmt::format("{:02}:{:02}", minutes, seconds);
 }
 
 std::string TimeUtils::timestampToHumanReadable(time_t timestamp) {
