@@ -33,7 +33,7 @@ std::string ServerUtils::getBaseURL() {
     return ret;
 }
 
-void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<Ref<GJGameLevel>>, bool)> callback) {
+void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<Ref<GJGameLevel>>, bool)> callback, bool cacheLevels) {
     std::string completedLevels = "";
 
     std::string postString = fmt::format("{}&type={}&str={}&diff={}&len={}&page={}&total={}&uncompleted={}&onlyCompleted={}&featured={}&original={}&twoPlayer={}&coins={}",
@@ -74,7 +74,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
         .bodyRaw(postString)
         .fetch(fmt::format("{}/getGJLevels21.php", getBaseURL()))
         .text()
-        .then([callback, key](web::SentAsyncWebRequest& request, const std::string& response) {
+        .then([callback, key, cacheLevels](web::SentAsyncWebRequest& request, const std::string& response) {
             size_t hashes = std::count(response.begin(), response.end(), '#');
             if(hashes < 4) return callback({}, false);
 
@@ -114,8 +114,10 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             for(auto level : levels) levelArray->addObject(level);
 
             GameLevelManager::sharedState()->saveFetchedLevels(levelArray);
-            if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, pageData, key.c_str());
-            else s_cache[key] = levelArray;
+            if(cacheLevels) {
+                if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, pageData, key.c_str());
+                else s_cache[key] = levelArray;
+            }
 
             callback(levels, true);
         })

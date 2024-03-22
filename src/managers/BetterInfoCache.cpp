@@ -95,23 +95,34 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchTyp
     }
 
     std::thread([this, searchObjects] {
+        thread::setName("Level Cache");
+
         using namespace std::chrono_literals;
-        for(auto searchObj : searchObjects) {
-            ServerUtils::getOnlineLevels(searchObj, [this](auto levels, bool) {
-                std::thread([this, levels] {
-                    for(auto level : levels) {
-                        cacheLevel(level);
-                    }
-                    doSave();
-                    Loader::get()->queueInMainThread([levels] {
-                        if(levels.size() > 0) log::debug("Cached {} levels", levels.size());
-                        // this is just a workaround to make sure the vector only gets destroyed in main thread
-                    });
-                }).detach();
-            });
+        for(auto& searchObj : searchObjects) {
+            ServerUtils::getOnlineLevels(
+                searchObj, 
+                [this](auto levels, bool) {
+                    std::thread([this, levels] {
+                        for(auto level : levels) {
+                            cacheLevel(level);
+                        }
+                        doSave();
+                        Loader::get()->queueInMainThread([levels] {
+                            if(levels.size() > 0) log::debug("Cached {} levels", levels.size());
+                            // this is just a workaround to make sure the vector only gets destroyed in main thread
+                        });
+                    }).detach();
+                },
+                false
+            );
 
             std::this_thread::sleep_for(1500ms);
         }
+        
+        Loader::get()->queueInMainThread([searchObjects] {
+            if(searchObjects.size() > 0) log::debug("Finished caching levels");
+            // this is just a workaround to make sure the vector only gets destroyed in main thread
+        });
     }).detach();
 
 }
