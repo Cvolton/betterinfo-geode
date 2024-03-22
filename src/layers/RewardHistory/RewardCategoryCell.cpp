@@ -11,7 +11,6 @@ void RewardCategoryCell::onView(CCObject* sender) {
 
 void RewardCategoryCell::loadFromData(CCObject* object) {
     m_category = static_cast<RewardCategoryObject*>(object);
-    m_category->retain();
 
     const float rowX = 48.f;
     const float rowY = 10.5f;
@@ -75,8 +74,4 @@ RewardCategoryCell* RewardCategoryCell::create(const char* key, CCSize size) {
         ret = nullptr;
     }
     return ret;
-}
-
-RewardCategoryCell::~RewardCategoryCell() {
-    m_category->release();
 }

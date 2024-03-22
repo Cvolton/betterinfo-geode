@@ -19,15 +19,12 @@ bool RewardCategoryObject::init(std::string_view title, std::string_view icon, c
     m_filter = filter;
     m_chests = chests;
 
-    m_chests->retain();
-
     return true;
 }
 
 cocos2d::CCDictionary* RewardCategoryObject::filteredChests() {
     if (!m_filteredChests) {
         m_filteredChests = cocos2d::CCDictionary::create();
-        m_filteredChests->retain();
 
         for (auto&& [key, chest] : CCDictionaryExt<gd::string, BIGJRewardItem*>(m_chests)) {
             chest->setKey(key);
@@ -38,13 +35,6 @@ cocos2d::CCDictionary* RewardCategoryObject::filteredChests() {
     }
 
     return m_filteredChests;
-}
-
-RewardCategoryObject::~RewardCategoryObject() {
-    m_chests->release();
-    if (m_filteredChests) {
-        m_filteredChests->release();
-    }
 }
 
 std::map<SpecialRewardItem, int> RewardCategoryObject::countSpecialItems() {

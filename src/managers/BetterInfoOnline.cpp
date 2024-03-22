@@ -43,12 +43,10 @@ void BetterInfoOnline::generateScores(const std::string& response, int accountID
     auto GM = GameManager::sharedState();
 
     if(m_scoreDict.contains(accountID)) { 
-        m_scoreDict[accountID]->release();
         m_scoreDict[accountID] = nullptr;
     }
 
     CCArray* scores = CCArray::create();
-    scores->retain();
     m_scoreDict[accountID] = scores;
 
     if(response == "-1") return;

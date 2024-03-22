@@ -88,10 +88,9 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchTyp
     //Status update: This was actually GLM getOnlineLevels, the issue is with CCDict max key length
     //However we still need to split this up because we can request too many levels
     //and we now use search types that do have a total level limit
-    std::vector<GJSearchObject*> searchObjects;
+    std::vector<Ref<GJSearchObject>> searchObjects;
     for(const auto& set : levelSets) {
         auto searchObj = GJSearchObject::create(searchType, set);
-        searchObj->retain();
         searchObjects.push_back(searchObj);
     }
 

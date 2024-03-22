@@ -20,7 +20,6 @@ public:
 	    if(m_instance == nullptr){
 	        m_instance = new BetterInfoStatsV2;
 	        m_instance->init();
-	        m_instance->retain();
 	    }
 	    return m_instance;
 	}

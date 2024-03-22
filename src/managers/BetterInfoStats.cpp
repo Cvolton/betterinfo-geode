@@ -16,24 +16,6 @@ bool BetterInfoStats::init(){
 
     auto FU = CCFileUtils::sharedFileUtils();
 
-    m_normalDict = CCDictionary::create();
-    m_normalDict->retain();
-
-    m_practiceDict = CCDictionary::create();
-    m_practiceDict->retain();
-
-    m_firstPlayedDict = CCDictionary::create();
-    m_firstPlayedDict->retain();
-
-    m_lastPlayedDict = CCDictionary::create();
-    m_lastPlayedDict->retain();
-
-    m_normalAttemptDict = CCDictionary::create();
-    m_normalAttemptDict->retain();
-
-    m_practiceAttemptDict = CCDictionary::create();
-    m_practiceAttemptDict->retain();
-
     this->setup();
 
     return true;
@@ -68,46 +50,22 @@ void BetterInfoStats::encodeDataTo(DS_Dictionary* data) {
 
 void BetterInfoStats::dataLoaded(DS_Dictionary* data) {
     auto normalDict = static_cast<CCDictionary*>(data->getObjectForKey("normalCompletions"));
-    if(normalDict) {
-        m_normalDict->release();
-        m_normalDict = normalDict;
-        m_normalDict->retain();
-    }
+    if(normalDict) m_normalDict = normalDict;
 
     auto practiceDict = static_cast<CCDictionary*>(data->getObjectForKey("practiceCompletions"));
-    if(practiceDict) {
-        m_practiceDict->release();
-        m_practiceDict = practiceDict;
-        m_practiceDict->retain();
-    }
+    if(practiceDict) m_practiceDict = practiceDict;
 
     auto firstPlayedDict = static_cast<CCDictionary*>(data->getObjectForKey("firstPlayed"));
-    if(firstPlayedDict) {
-        m_firstPlayedDict->release();
-        m_firstPlayedDict = firstPlayedDict;
-        m_firstPlayedDict->retain();
-    }
+    if(firstPlayedDict) m_firstPlayedDict = firstPlayedDict;
 
     auto lastPlayedDict = static_cast<CCDictionary*>(data->getObjectForKey("lastPlayed"));
-    if(lastPlayedDict) {
-        m_lastPlayedDict->release();
-        m_lastPlayedDict = lastPlayedDict;
-        m_lastPlayedDict->retain();
-    }
+    if(lastPlayedDict) m_lastPlayedDict = lastPlayedDict;
 
     auto normalAttemptDict = static_cast<CCDictionary*>(data->getObjectForKey("normalAttempt"));
-    if(normalAttemptDict) {
-        m_normalAttemptDict->release();
-        m_normalAttemptDict = normalAttemptDict;
-        m_normalAttemptDict->retain();
-    }
+    if(normalAttemptDict) m_normalAttemptDict = normalAttemptDict;
 
     auto practiceAttemptDict = static_cast<CCDictionary*>(data->getObjectForKey("practiceAttempt"));
-    if(practiceAttemptDict) {
-        m_practiceAttemptDict->release();
-        m_practiceAttemptDict = practiceAttemptDict;
-        m_practiceAttemptDict->retain();
-    }
+    if(practiceAttemptDict) m_practiceAttemptDict = practiceAttemptDict;
 
     this->save();
 }

@@ -2,8 +2,8 @@
 #include "_bases/CvoltonAlertLayerStub.h"
 
 class UnregisteredProfileLayer : public CvoltonAlertLayerStub {
-    GJUserScore* m_score;
-    CCNode* m_invoker;
+    Ref<GJUserScore> m_score = nullptr;
+    Ref<CCNode> m_invoker = nullptr;
 public:
     static UnregisteredProfileLayer* create(GJUserScore* score, CCNode* invoker = nullptr);
     void onClose(CCObject* sender);

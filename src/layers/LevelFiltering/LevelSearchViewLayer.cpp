@@ -95,9 +95,6 @@ void LevelSearchViewLayer::unload() {
     
     if(m_gjSearchObj) m_gjSearchObj->m_page = 0;
 
-    if(!m_data) return;
-
-    m_data->release();
     m_data = nullptr;
 }
 
@@ -107,7 +104,6 @@ void LevelSearchViewLayer::reload() {
     resetUnloadedLevels();
 
     m_data = CCArray::create();
-    m_data->retain();
     scheduleUpdate();
 
     loadPage(true);

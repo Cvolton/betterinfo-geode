@@ -9,12 +9,12 @@ class BetterInfoStats : public GManager {
 
 
 public:
-	cocos2d::CCDictionary* m_normalDict;
-	cocos2d::CCDictionary* m_practiceDict;
-	cocos2d::CCDictionary* m_firstPlayedDict;
-	cocos2d::CCDictionary* m_lastPlayedDict;
-	cocos2d::CCDictionary* m_normalAttemptDict;
-	cocos2d::CCDictionary* m_practiceAttemptDict;
+	Ref<cocos2d::CCDictionary> m_normalDict = CCDictionary::create();
+	Ref<cocos2d::CCDictionary> m_practiceDict = CCDictionary::create();
+	Ref<cocos2d::CCDictionary> m_firstPlayedDict = CCDictionary::create();
+	Ref<cocos2d::CCDictionary> m_lastPlayedDict = CCDictionary::create();
+	Ref<cocos2d::CCDictionary> m_normalAttemptDict = CCDictionary::create();
+	Ref<cocos2d::CCDictionary> m_practiceAttemptDict = CCDictionary::create();
 
 	bool init();
 	void migrateSaveData();
@@ -26,7 +26,6 @@ public:
 	    if(m_instance == nullptr){
 	        m_instance = new BetterInfoStats;
 	        m_instance->init();
-	        m_instance->retain();
 	    }
 	    return m_instance;
 	}

@@ -22,7 +22,6 @@ void ProfileSearchOptions::onClose(cocos2d::CCObject* sender)
 {
     if(m_searchObjDelegate != nullptr) m_searchObjDelegate->onSearchObjectFinished(getSearchObject());
     reloadBrowser();
-    if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->release();
     
     CvoltonOptionsLayer::onClose(sender);
 }
@@ -96,7 +95,6 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
     m_gap = 39;
 
     this->m_levelBrowserLayer = levelBrowserLayer;
-    if(levelBrowserLayer != nullptr) levelBrowserLayer->retain();
     this->m_prefix = prefix;
     this->m_searchObjDelegate = searchObjDelegate;
 

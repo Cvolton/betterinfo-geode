@@ -15,10 +15,7 @@ UnregisteredProfileLayer* UnregisteredProfileLayer::create(GJUserScore* score, C
 }
 
 void UnregisteredProfileLayer::onClose(CCObject* sender)
-{
-    m_score->release();
-    if(m_invoker != nullptr) m_invoker->release();
-    
+{   
     CvoltonAlertLayerStub::onClose(sender);
 }
 
@@ -67,9 +64,7 @@ void UnregisteredProfileLayer::onCommentHistory(CCObject* sender) {
 bool UnregisteredProfileLayer::init(GJUserScore* score, CCNode* invoker){
     if(!CvoltonAlertLayerStub::init({360,180})) return false;
 
-    score->retain();
     m_score = score;
-    if(invoker != nullptr) invoker->retain();
     m_invoker = invoker;
 
     createTitle("");

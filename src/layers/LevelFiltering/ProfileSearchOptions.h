@@ -12,7 +12,7 @@ using namespace geode::prelude;
 class ProfileSearchOptions : public CvoltonOptionsLayer, public SongDialogCloseDelegate, public IDRangeDelegate {
     std::unordered_map<std::string, bool> m_options;
     std::unordered_map<std::string, int> m_optionInts;
-    LevelBrowserLayer* m_levelBrowserLayer = nullptr;
+    Ref<LevelBrowserLayer> m_levelBrowserLayer = nullptr;
     CCMenuItemSpriteExtra* m_prevBtn = nullptr;
     CCMenuItemSpriteExtra* m_nextBtn = nullptr;
     cocos2d::extension::CCScale9Sprite* m_lengthBg = nullptr;

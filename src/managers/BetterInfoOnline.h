@@ -11,7 +11,7 @@ class BetterInfoOnline : public cocos2d::CCObject {
 
 
 public:
-	std::map<int, cocos2d::CCArray*> m_scoreDict;
+	std::map<int, Ref<cocos2d::CCArray>> m_scoreDict;
 	BILeaderboardDelegate* m_scoreDelegate = nullptr;
 	ProfilePage* m_scoreProfilePage = nullptr;
 
@@ -20,7 +20,6 @@ public:
 	    if(m_instance == nullptr){
 	        m_instance = new BetterInfoOnline;
 	        m_instance->init();
-	        m_instance->retain();
 	    }
 	    return m_instance;
 	}

@@ -87,7 +87,7 @@ class $modify(LevelInfoLayer) {
                 if(bmFont) {
                     bmFont->setString(fmt::format("{}", wt).c_str());
                 }
-                release();
+                this->release();
             });
         }).detach();
 

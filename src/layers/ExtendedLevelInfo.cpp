@@ -120,7 +120,7 @@ void ExtendedLevelInfo::refreshInfoTexts() {
 
 void ExtendedLevelInfo::setupAdditionalInfo() {
     m_uploadDateEstimated = BetterInfoCache::sharedState()->getUploadDate(m_level->m_levelID, this);
-    retain();
+    this->retain();
 
     std::thread([this]() {
         std::string levelString(BetterInfo::decodeBase64Gzip(m_level->m_levelString));
@@ -130,7 +130,7 @@ void ExtendedLevelInfo::setupAdditionalInfo() {
         refreshInfoTexts();
         Loader::get()->queueInMainThread([this]() {
             this->loadPage(this->m_page);
-            release();
+            this->release();
         });
     }).detach();
 }

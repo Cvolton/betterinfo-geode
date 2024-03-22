@@ -182,8 +182,6 @@ void BIViewLayer::keyBackClicked() {
     setTouchEnabled(false);
     setKeypadEnabled(false);
 
-    if(m_data) m_data->release();
-    if(m_circle) m_circle->release();
     m_circle = nullptr;
     
     CCDirector::sharedDirector()->popSceneWithTransition(0.5f, PopTransition::kPopTransitionFade);
@@ -265,9 +263,7 @@ void BIViewLayer::keyDown(enumKeyCodes key){
 }
 
 void BIViewLayer::setData(CCArray* data){
-    if(m_data) m_data->release();
     m_data = data;
-    m_data->retain();
 }
 
 void BIViewLayer::showCircle(){
@@ -275,7 +271,6 @@ void BIViewLayer::showCircle(){
 
     m_circle = LoadingCircle::create();
     m_circle->setID("loading-circle"_spr);
-    m_circle->retain();
     m_circle->setParentLayer(this);
     m_circle->show();
 }
@@ -283,7 +278,6 @@ void BIViewLayer::showCircle(){
 void BIViewLayer::hideCircle(){
     if(m_circle) {
         m_circle->fadeAndRemove();
-        m_circle->release();
         m_circle = nullptr;
     }
 }

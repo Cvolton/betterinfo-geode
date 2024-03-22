@@ -10,7 +10,7 @@ protected:
     std::string m_noInternetText = "No <cg>internet</c> connection!";
     CustomListView* m_listView = nullptr;
     GJListLayer* m_listLayer = nullptr;
-    cocos2d::CCArray* m_data = nullptr;
+    Ref<cocos2d::CCArray> m_data = nullptr;
     CCMenuItemSpriteExtra* m_prevBtn = nullptr;
     CCMenuItemSpriteExtra* m_nextBtn = nullptr;
     CCMenuItemSpriteExtra* m_pageBtn = nullptr;
@@ -19,7 +19,7 @@ protected:
     CCMenuItemSpriteExtra* m_lastBtn = nullptr;
     cocos2d::CCLabelBMFont* m_counter = nullptr;
     ButtonSprite* m_pageBtnSprite = nullptr;
-    LoadingCircle* m_circle = nullptr;
+    Ref<LoadingCircle> m_circle = nullptr;
     TextArea* m_noInternet = nullptr;
     unsigned int m_page = 0;
     bool m_paginated = true;
