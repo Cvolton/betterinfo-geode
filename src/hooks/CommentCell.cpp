@@ -2,7 +2,6 @@
 #include <Geode/modify/CommentCell.hpp>
 
 #include "../layers/UnregisteredProfileLayer.h"
-#include "../objects/FLAlertResultHandler.h"
 
 using namespace geode::prelude;
 
@@ -24,6 +23,27 @@ class $modify(BICommentCell, CommentCell) {
         infoLayer->show();
     }
 
+    /**
+     * Misc
+     */
+    void showCommentIDsAlert() {
+        createQuickPopup(
+            Mod::get()->getName().c_str(),
+            "Would you like to show comment IDs next to comments?",
+            "No",
+            "Yes",
+            [](FLAlertLayer* me, bool btn2) {
+                if(btn2) {
+                    Loader::get()->queueInMainThread([]{
+                        Mod::get()->setSettingValue<bool>("show-comment-ids", true);
+                    });
+
+                    FLAlertLayer::create(Mod::get()->getName().c_str(), "Refresh for the change to take effect.", "OK")->show();
+                }
+            }
+        );
+    }
+
     /*
      * Hooks
      */
@@ -31,7 +51,7 @@ class $modify(BICommentCell, CommentCell) {
     void loadFromComment(GJComment* b) {
         CommentCell::loadFromComment(b);
 
-        if(!Mod::get()->setSavedValue("comment-id-alert-shown", true)) FLAlertLayer::create(FLAlertResultHandler::create("show-comment-ids", true), Mod::get()->getName().c_str(), "Would you like to show comment IDs next to comments?", "No", "Yes")->show();
+        if(!Mod::get()->setSavedValue("comment-id-alert-shown", true)) showCommentIDsAlert();
 
         auto winSize = CCDirector::sharedDirector()->getWinSize();
         bool smallCommentsMode = this->m_height == 36; //this is how robtop does the check
