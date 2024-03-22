@@ -123,6 +123,7 @@ void ExtendedLevelInfo::setupAdditionalInfo() {
     this->retain();
 
     std::thread([this]() {
+        thread::setName("Additional Level Info");
         std::string levelString(BetterInfo::decodeBase64Gzip(m_level->m_levelString));
         m_objectsEstimated = std::count(levelString.begin(), levelString.end(), ';');
         m_fileSizeCompressed = BetterInfo::fileSize(m_level->m_levelString.size());

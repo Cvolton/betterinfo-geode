@@ -103,6 +103,7 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchTyp
                 searchObj, 
                 [this](auto levels, bool) {
                     std::thread([this, levels] {
+                        thread::setName("Level Cache (Inner)");
                         for(auto level : levels) {
                             cacheLevel(level);
                         }
@@ -149,6 +150,8 @@ void BetterInfoCache::storeUserName(int userID, const std::string& username) {
     }
 
     std::thread([this, userID, username] {
+        thread::setName("BI Username Store");
+
         auto idString = std::to_string(userID);
         std::lock_guard<std::mutex> guard(m_jsonMutex);
         m_json["username-dict"][idString] = username;
@@ -200,6 +203,8 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
     if(!objectExists("username-dict", idString)) {
         if(download && m_attemptedUsernames.find(userID) == m_attemptedUsernames.end()) {
             std::thread([userID] {
+                thread::setName("BI Username Downloader");
+
                 std::unique_lock lock(downloadingMutex);
                 downloadingCV.wait(lock, []{ return !downloading; });
                 downloading = true;

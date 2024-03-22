@@ -14,6 +14,7 @@ void loadManagers() {
     BetterInfoStats::sharedState();
 
     std::thread([] {
+        thread::setName("BI Manager Loader");
         //BetterInfoStatsV2::sharedState();
         BetterInfoCache::sharedState();
     }).detach();

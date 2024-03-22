@@ -65,6 +65,8 @@ void BaseJsonManager::doSave() {
 
     isSaving = true;
     std::thread([this] {
+        thread::setName("BI JSON Manager Saver");
+
         auto loadResult = save();
         if(!loadResult) {
             log::warn("Unable to save {}", m_filename);

@@ -78,6 +78,8 @@ class $modify(LevelInfoLayer) {
         if(bmFont && m_lengthLabel) bmFont->setPosition({m_lengthLabel->getPositionX() + 1, m_lengthLabel->getPositionY() - 8.f});
 
         std::thread([this](){
+            thread::setName("Exact Level Length");
+
             auto wt = m_level->m_timestamp
                 ? TimeUtils::workingTime(m_level->m_timestamp / 240)
                 : TimeUtils::workingTime(m_level->isPlatformer() ? 0 : std::ceil(BetterInfo::timeForLevelString(m_level->m_levelString)));
