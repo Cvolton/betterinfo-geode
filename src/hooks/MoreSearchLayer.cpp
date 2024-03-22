@@ -7,7 +7,7 @@ using namespace geode::prelude;
 
 class DropDownDelegateHelper : public GJDropDownLayerDelegate {
 public:
-    CCTextInputNode* m_input = nullptr;
+    Ref<CCTextInputNode> m_input = nullptr;
 
     virtual void dropDownLayerWillClose(GJDropDownLayer* layer) {
         auto browser = static_cast<GJSongBrowser*>(layer);
