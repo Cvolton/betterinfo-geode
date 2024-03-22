@@ -30,7 +30,6 @@ JumpToPageLayer* JumpToPageLayer::create(PageNumberDelegate* pageNumberDelegate)
 }
 
 bool JumpToPageLayer::init(InfoLayer* infoLayer) {
-    infoLayer->retain();
     m_infoLayer = infoLayer;
     return init();
 }
@@ -44,8 +43,6 @@ void JumpToPageLayer::onClose(cocos2d::CCObject* sender)
 {
     auto GLM = GameLevelManager::sharedState();
     if(GLM->m_levelCommentDelegate == this) GLM->m_levelCommentDelegate = nullptr;
-
-    if(m_infoLayer != nullptr) m_infoLayer->release();
     
     CvoltonAlertLayerStub::onClose(sender);
 }

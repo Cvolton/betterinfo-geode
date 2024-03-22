@@ -55,7 +55,7 @@ class $modify(LevelInfoLayer) {
         /**
          * Exact time label begin
         */
-        retain();
+        this->retain();
         /**
          * Avoid updating the label if hide platformer time is enabled
         */
@@ -66,7 +66,7 @@ class $modify(LevelInfoLayer) {
                     bmFont->removeFromParent();
                 }
 
-                release();
+                this->release();
             });
             return;
         }

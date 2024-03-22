@@ -651,14 +651,13 @@ std::string BetterInfo::getOSVersion() {
     #endif
 }
 
-void BetterInfo::loadImportantNotices(CCLayer* layer) {
+void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
     static bool hasBeenCalled = false;
     if(hasBeenCalled) return;
     hasBeenCalled = true;
 
-    layer->retain();
-
-    web::AsyncWebRequest().fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toString(true), Loader::get()->getVersion().toString(true), getWineVersion(), getOSVersion())).json().then([layer](const matjson::Value& info){
+    web::AsyncWebRequest().fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toString(true), Loader::get()->getVersion().toString(true), getWineVersion(), getOSVersion()))
+    .json().then([layer](const matjson::Value& info){
         auto notice = info.try_get("notice");
         if(notice == std::nullopt) return;
         
@@ -666,11 +665,9 @@ void BetterInfo::loadImportantNotices(CCLayer* layer) {
             auto alert = FLAlertLayer::create("BetterInfo", info["notice"].as_string(), "OK");
             alert->m_scene = layer;
             alert->show();
-            layer->release();
         }
     }).expect([layer](const std::string& error){
         log::warn("Fetching important notices failed: {}", error);
-        layer->release();
     });
 }
 

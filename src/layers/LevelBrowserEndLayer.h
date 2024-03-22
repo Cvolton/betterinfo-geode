@@ -5,8 +5,8 @@
 using namespace geode::prelude;
 
 class LevelBrowserEndLayer : public CvoltonAlertLayerStub, public LevelManagerDelegate, public LevelCommentDelegate {
-    LevelBrowserLayer* m_levelBrowserLayer = nullptr;
-    InfoLayer* m_infoLayer = nullptr;
+    Ref<LevelBrowserLayer> m_levelBrowserLayer = nullptr;
+    Ref<InfoLayer> m_infoLayer = nullptr;
     TextArea* m_textLabel = nullptr;
     CCMenuItemSpriteExtra* m_goBtn = nullptr;
     LoadingCircle* m_circle = nullptr;

@@ -9,7 +9,7 @@ using namespace geode::prelude;
 
 class $modify(GameLevelManager) {
     bool skipSavedFilter = false;
-    CCArray* filteredLevels = nullptr;
+    Ref<CCArray> filteredLevels = nullptr;
 
     /*
      * Helpers
@@ -99,7 +99,6 @@ class $modify(GameLevelManager) {
         if(m_fields->skipSavedFilter || !BetterInfo::isSavedFiltered()) return original;
 
         if(m_fields->filteredLevels != nullptr && Mod::get()->getSavedValue<bool>("user_search_dirty", true)) {
-            m_fields->filteredLevels->release();
             m_fields->filteredLevels = nullptr;
         }
 
@@ -201,7 +200,6 @@ class $modify(GameLevelManager) {
         Mod::get()->setSavedValue<bool>("user_search_dirty", false);
 
         m_fields->filteredLevels = pRet;
-        m_fields->filteredLevels->retain();
         return pRet;
     }
 

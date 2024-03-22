@@ -12,7 +12,7 @@ class ExtendedLevelInfo : public CvoltonAlertLayerStub, public UploadDateDelegat
     std::string m_fileSizeCompressed = "NA";
     std::string m_fileSizeUncompressed = "NA";
     std::string m_uploadDateEstimated = "NA";
-    GJGameLevel* m_level;
+    Ref<GJGameLevel> m_level;
     TextArea* m_info;
     CCMenuItemSpriteExtra* m_prevBtn;
     CCMenuItemSpriteExtra* m_nextBtn;

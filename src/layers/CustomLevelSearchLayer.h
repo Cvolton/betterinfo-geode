@@ -2,8 +2,10 @@
 
 #include <Geode/Geode.hpp>
 
+using namespace geode::prelude;
+
 class CustomLevelSearchLayer : public FLAlertLayer {
-    GJGameLevel* m_level;
+    Ref<GJGameLevel> m_level = nullptr;
 public:
     static CustomLevelSearchLayer* create(GJGameLevel* level);
     void onClose(cocos2d::CCObject* sender);

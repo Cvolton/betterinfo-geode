@@ -28,7 +28,6 @@ ExtendedLevelInfo* ExtendedLevelInfo::create(GJGameLevel* level){
 void ExtendedLevelInfo::onClose(cocos2d::CCObject* sender)
 {
     BetterInfoCache::sharedState()->m_uploadDateDelegate = nullptr;
-    m_level->release();
     
     CvoltonAlertLayerStub::onClose(sender);
 }
@@ -139,7 +138,6 @@ void ExtendedLevelInfo::setupAdditionalInfo() {
 bool ExtendedLevelInfo::init(GJGameLevel* level){
     if(!CvoltonAlertLayerStub::init({440.0f, 290.0f})) return false;
 
-    level->retain();
     this->m_level = level;
 
     auto levelName = CCLabelBMFont::create(m_level->m_levelName.c_str(), "bigFont.fnt");

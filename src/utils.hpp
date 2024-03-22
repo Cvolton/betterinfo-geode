@@ -60,7 +60,7 @@ namespace BetterInfo {
 
     std::string getWineVersion();
     std::string getOSVersion();
-    void loadImportantNotices(CCLayer* layer);
+    void loadImportantNotices(Ref<CCLayer> layer);
     FLAlertLayer* createUpdateDialog();
     bool isHoveringNode(CCNode* target);
 

@@ -1,9 +1,9 @@
 #pragma once
 #include "_bases/CvoltonAlertLayerStub.h"
-#include "DailyHistory/DailyViewLayer.h"
+#include "../delegates/PageNumberDelegate.h"
 
 class JumpToPageLayer : public CvoltonAlertLayerStub, public LevelCommentDelegate {
-    InfoLayer* m_infoLayer = nullptr;
+    Ref<InfoLayer> m_infoLayer = nullptr;
     PageNumberDelegate* m_pageNumberDelegate = nullptr;
     CCTextInputNode* m_textNode;
 public:

@@ -25,10 +25,8 @@ bool CreatorInfoPopup::init(int userID){
 
     m_searchObject = GJSearchObject::create(SearchType::UsersLevels, std::to_string(userID));
     //m_searchObject->m_starFilter = true;
-    m_searchObject->retain();
 
     m_levels = CCArray::create();
-    m_levels->retain();
 
     m_tabMenu = CCMenu::create();
     m_tabMenu->setLayout(
@@ -110,7 +108,6 @@ bool CreatorInfoPopup::init(int userID){
 void CreatorInfoPopup::onClose(cocos2d::CCObject* sender)
 {
     if(m_circle) m_circle->fadeAndRemove();
-    if(m_searchObject) m_searchObject->release();
 
     auto GLM = GameLevelManager::sharedState();
     GLM->m_levelManagerDelegate = nullptr;
@@ -333,5 +330,4 @@ int CreatorInfoPopup::levelsForDifficulty(int difficulty, bool platformer){
 
 CreatorInfoPopup::~CreatorInfoPopup() {
     if(m_circle) m_circle->fadeAndRemove();
-    if(m_searchObject) m_searchObject->release();
 }

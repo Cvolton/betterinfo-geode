@@ -19,13 +19,11 @@ void LevelBrowserEndLayer::onClose(cocos2d::CCObject* sender)
     if(m_levelBrowserLayer) {
         m_levelBrowserLayer->m_searchObject->m_page = m_min;
         m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
-        m_levelBrowserLayer->release();
     }
 
     if(m_infoLayer) {
         m_infoLayer->m_page = m_min;
         m_infoLayer->loadPage(m_infoLayer->m_page, false);
-        m_infoLayer->release();
     }
 
     if(m_circle) m_circle->fadeAndRemove();
@@ -58,16 +56,9 @@ void LevelBrowserEndLayer::onOK(cocos2d::CCObject* sender){
 bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer, InfoLayer* infoLayer){
     if(!CvoltonAlertLayerStub::init({230.0f, 160.0f}, 0.8f)) return false;
 
-    if(levelBrowserLayer) {
-        m_levelBrowserLayer = levelBrowserLayer;
-        m_levelBrowserLayer->retain();
-    }
-
-    if(infoLayer) {
-        m_infoLayer = infoLayer;
-        m_infoLayer->retain();
-    }
-
+    m_levelBrowserLayer = levelBrowserLayer;
+    m_infoLayer = infoLayer;
+    
     auto title = createTextLabel("Finding Last Page", {0,63}, 0.7f, m_buttonMenu, "goldFont.fnt");
     title->setID("title-label"_spr);
 

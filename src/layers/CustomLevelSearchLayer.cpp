@@ -1,7 +1,6 @@
 #include "CustomLevelSearchLayer.h"
 
-using namespace cocos2d;
-using namespace gd;
+using namespace geode::prelude;
 
 CustomLevelSearchLayer* CustomLevelSearchLayer::create(GJGameLevel* level){
     auto ret = new CustomLevelSearchLayer();
@@ -18,7 +17,6 @@ CustomLevelSearchLayer* CustomLevelSearchLayer::create(GJGameLevel* level){
 
 void CustomLevelSearchLayer::onClose(cocos2d::CCObject* sender)
 {
-    m_level->release();
     setKeypadEnabled(false);
     removeFromParentAndCleanup(true);
 }
@@ -67,7 +65,6 @@ bool CustomLevelSearchLayer::init(GJGameLevel* level){
     bool init = cocos2d::CCLayerColor::initWithColor({0x00, 0x00, 0x00, 0x4B});
     if(!init) return false;
 
-    level->retain();
     this->m_level = level;
 
     cocos2d::CCDirector* director = cocos2d::CCDirector::sharedDirector();
