@@ -6,6 +6,7 @@ using namespace geode::prelude;
 
 namespace ServerUtils {
     std::string getBaseURL();
+    std::string getBasePostString();
     void getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<Ref<GJGameLevel>>, bool)> callback, bool cacheLevels = true);
     cocos2d::CCArray* getStoredOnlineLevels(const std::string& key);
     void resetCache();

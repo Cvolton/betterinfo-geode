@@ -33,11 +33,19 @@ std::string ServerUtils::getBaseURL() {
     return ret;
 }
 
+std::string ServerUtils::getBasePostString() {
+    auto ret =  fmt::format("gameVersion={}&binaryVersion={}&gdw={}&udid={}&uuid={}", 22, 40, 0, GameManager::sharedState()->m_playerUDID, GameManager::sharedState()->m_playerUserID.value());
+
+    if(GJAccountManager::sharedState()->m_accountID <= 0) ret += fmt::format("&accountID={}&gjp2={}", GJAccountManager::sharedState()->m_accountID, GJAccountManager::sharedState()->m_GJP2);
+
+    return ret;
+}
+
 void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<Ref<GJGameLevel>>, bool)> callback, bool cacheLevels) {
     std::string completedLevels = "";
 
     std::string postString = fmt::format("{}&type={}&str={}&diff={}&len={}&page={}&total={}&uncompleted={}&onlyCompleted={}&featured={}&original={}&twoPlayer={}&coins={}",
-        GameLevelManager::sharedState()->getBasePostString(), (int) searchObject->m_searchType, searchObject->m_searchQuery, searchObject->m_difficulty, searchObject->m_length, searchObject->m_page,
+        getBasePostString(), (int) searchObject->m_searchType, searchObject->m_searchQuery, searchObject->m_difficulty, searchObject->m_length, searchObject->m_page,
         searchObject->m_total, searchObject->m_uncompletedFilter ? 1 : 0, searchObject->m_completedFilter ? 1 : 0, searchObject->m_featuredFilter ? 1 : 0, searchObject->m_originalFilter ? 1 : 0,
         searchObject->m_twoPlayerFilter ? 1 : 0, searchObject->m_coinsFilter ? 1 : 0);
 
