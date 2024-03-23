@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.1.6</c> (2024-03-23)
+* <cg>Fixed</c> a few obscure <cr>crashes</c>
+* Other bugfixes & improvements
+
 ## <cg>v4.1.5</c> (2024-03-16)
 * <cg>Fixed</c> some filters not working properly in <cj>Filtered Search</c>
 
