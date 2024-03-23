@@ -131,6 +131,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
         })
         .expect([callback](const std::string& response) {
             //getting headers is currently not supported, gotta wait for new index...
+            showCFError(response);
 
             callback({}, false);
         });
