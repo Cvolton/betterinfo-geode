@@ -155,7 +155,16 @@ class $modify(BILevelCell, LevelCell) {
             dailyTextNode->setID("daily-id-label"_spr);
             m_mainLayer->addChild(dailyTextNode);
 
-            BetterInfoCache::sharedState()->cacheLevel(m_level);
+            m_level->retain();
+            std::thread([level = m_level](){
+                thread::setName("Cache Level");
+
+                BetterInfoCache::sharedState()->cacheLevel(level);
+
+                Loader::get()->queueInMainThread([level]() {
+                    level->release();
+                });
+            }).detach();
         }
 
         /*if(auto songLabel = m_mainLayer->getChildByID("song-name")) {

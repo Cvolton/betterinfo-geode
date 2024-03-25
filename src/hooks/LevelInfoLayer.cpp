@@ -48,9 +48,18 @@ class $modify(LevelInfoLayer) {
         /**
          * Cache level
         */
-        auto cache = BetterInfoCache::sharedState();
-        cache->cacheLevel(m_level);
-        cache->storeDatesForLevel(this->m_level);
+        m_level->retain();
+        std::thread([level = this->m_level](){
+            thread::setName("Cache Level");
+
+            auto cache = BetterInfoCache::sharedState();
+            cache->cacheLevel(level);
+            cache->storeDatesForLevel(level);
+
+            Loader::get()->queueInMainThread([level]() {
+                level->release();
+            });
+        }).detach();
 
         /**
          * Exact time label begin

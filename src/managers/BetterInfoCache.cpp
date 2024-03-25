@@ -48,7 +48,6 @@ void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
 }
 
 void BetterInfoCache::cacheLevel(GJGameLevel* level) {
-    std::lock_guard<std::mutex> guard(m_jsonMutex);
     auto idString = std::to_string(level->m_levelID);
 
     auto name = std::string(level->m_levelName);
@@ -56,6 +55,7 @@ void BetterInfoCache::cacheLevel(GJGameLevel* level) {
         if(*it < 0x20) *it = ' ';
     }
 
+    std::lock_guard<std::mutex> guard(m_jsonMutex);
     m_json["level-name-dict"][idString] = name;
     m_json["coin-count-dict"][idString] = level->m_coins;
     m_json["demon-difficulty-dict"][idString] = level->m_demonDifficulty;
