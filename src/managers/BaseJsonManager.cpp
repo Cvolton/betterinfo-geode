@@ -11,10 +11,15 @@ bool BaseJsonManager::init(const char* filename){
         log::error("Unable to load {} : {}", filename, loadResult.unwrapErr());
     }
 
+    log::debug("Loaded {}", filename);
+    m_initDone = true;
+
     return true;
 }
 
 Result<> BaseJsonManager::load() {
+    std::lock_guard<std::mutex> guard(m_jsonMutex);
+
     auto savedPath = Mod::get()->getSaveDir() / m_filename;
     if (ghc::filesystem::exists(savedPath)) {
         auto result = utils::file::readString(savedPath);
@@ -80,7 +85,19 @@ void BaseJsonManager::doSave() {
 }
 
 void BaseJsonManager::waitForLoad() {
-    while(!m_loaded) {}
+    using namespace std::chrono_literals;
+
+    while(!m_loaded) {
+        std::this_thread::sleep_for(100ms);
+    }
+}
+
+void BaseJsonManager::waitForInit() {
+    using namespace std::chrono_literals;
+
+    while(!m_initDone) {
+        std::this_thread::sleep_for(100ms);
+    }
 }
 
 void BaseJsonManager::validateLoadedData() {

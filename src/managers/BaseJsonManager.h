@@ -6,6 +6,7 @@ using namespace geode::prelude;
 
 class BaseJsonManager {
 	std::atomic_bool m_loaded = false;
+	std::atomic_bool m_initDone = false;
 
 protected:
 	BaseJsonManager();
@@ -19,7 +20,9 @@ public:
 	Result<> load();
 	Result<> save();
 	void doSave();
+
 	void waitForLoad();
+	void waitForInit();
 
 	virtual void validateLoadedData();
 	void validateIsObject(const char* key);
