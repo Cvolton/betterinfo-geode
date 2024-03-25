@@ -15,7 +15,6 @@ bool BaseJsonManager::init(const char* filename){
 }
 
 Result<> BaseJsonManager::load() {
-    //copied straight from https://github.com/geode-sdk/geode/blob/9cd0327766386a6c2b347d483bb6556cae6f7f48/loader/src/loader/ModImpl.cpp#L172
     auto savedPath = Mod::get()->getSaveDir() / m_filename;
     if (ghc::filesystem::exists(savedPath)) {
         auto result = utils::file::readString(savedPath);

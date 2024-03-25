@@ -4,7 +4,7 @@
 
 using namespace geode::prelude;
 
-class BaseJsonManager : public CCObject {
+class BaseJsonManager {
 	std::atomic_bool m_loaded = false;
 
 protected:
