@@ -6,7 +6,7 @@
 using namespace geode::prelude;
 
 class BetterInfoScheduler : public cocos2d::CCNode {
-	inline static BetterInfoScheduler* m_instance = nullptr;
+	inline static BetterInfoScheduler* s_instance = nullptr;
 	BetterInfoScheduler();
 
 
@@ -15,11 +15,11 @@ public:
 
 	bool init();
 	static BetterInfoScheduler* sharedState(){
-	    if(m_instance == nullptr){
-	        m_instance = new BetterInfoScheduler;
-	        m_instance->init();
+	    if(s_instance == nullptr){
+	        s_instance = new BetterInfoScheduler;
+	        s_instance->init();
 	    }
-	    return m_instance;
+	    return s_instance;
 	}
 
     void submitLevel(GJGameLevel*);

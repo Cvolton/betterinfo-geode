@@ -6,7 +6,7 @@
 using namespace geode::prelude;
 
 class BetterInfoOnline : public cocos2d::CCObject {
-	inline static BetterInfoOnline* m_instance = nullptr;
+	inline static BetterInfoOnline* s_instance = nullptr;
 	BetterInfoOnline();
 
 
@@ -17,11 +17,11 @@ public:
 
 	bool init();
 	static BetterInfoOnline* sharedState(){
-	    if(m_instance == nullptr){
-	        m_instance = new BetterInfoOnline;
-	        m_instance->init();
+	    if(s_instance == nullptr){
+	        s_instance = new BetterInfoOnline;
+	        s_instance->init();
 	    }
-	    return m_instance;
+	    return s_instance;
 	}
 
     void loadScores(int accountID, bool force);

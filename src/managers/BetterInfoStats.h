@@ -4,7 +4,7 @@
 using namespace geode::prelude;
 
 class BetterInfoStats : public GManager {
-	inline static BetterInfoStats* m_instance = nullptr;
+	inline static BetterInfoStats* s_instance = nullptr;
 	BetterInfoStats();
 
 
@@ -23,11 +23,11 @@ public:
     void dataLoaded(DS_Dictionary* data);
     void firstLoad();
 	static BetterInfoStats* sharedState(){
-	    if(m_instance == nullptr){
-	        m_instance = new BetterInfoStats;
-	        m_instance->init();
+	    if(s_instance == nullptr){
+	        s_instance = new BetterInfoStats;
+	        s_instance->init();
 	    }
-	    return m_instance;
+	    return s_instance;
 	}
 	void logCompletion(GJGameLevel* level, bool practice);
 	void logCompletion(GJGameLevel* level, bool practice, time_t timestamp);

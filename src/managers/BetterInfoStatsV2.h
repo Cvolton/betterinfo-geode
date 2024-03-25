@@ -4,7 +4,7 @@
 #include "../objects/LevelDeath.h"
 
 class BetterInfoStatsV2 : public BaseJsonManager {
-	inline static BetterInfoStatsV2* m_instance = nullptr;
+	inline static BetterInfoStatsV2* s_instance = nullptr;
 	BetterInfoStatsV2();
 
 public:
@@ -17,10 +17,10 @@ public:
 	std::pair<int, int> getCommonFail(GJGameLevel* gjLevel);
 
 	static BetterInfoStatsV2* sharedState(){
-	    if(m_instance == nullptr){
-	        m_instance = new BetterInfoStatsV2;
-	        m_instance->init();
+	    if(s_instance == nullptr){
+	        s_instance = new BetterInfoStatsV2;
+	        s_instance->init();
 	    }
-	    return m_instance;
+	    return s_instance;
 	}
 };

@@ -6,7 +6,7 @@
 class BetterInfoCache : public BaseJsonManager {
 	std::set<int> m_attemptedUsernames;
 	std::set<int> m_attemptedLevelDates;
-	inline static BetterInfoCache* m_instance = nullptr;
+	inline static BetterInfoCache* s_instance = nullptr;
 	BetterInfoCache();
 
 public:
@@ -17,11 +17,11 @@ public:
 	void validateLoadedData();
 
 	static BetterInfoCache* sharedState(){
-	    if(m_instance == nullptr){
-	        m_instance = new BetterInfoCache;
-	        m_instance->init();
+	    if(s_instance == nullptr){
+	        s_instance = new BetterInfoCache;
+	        s_instance->init();
 	    }
-	    return m_instance;
+	    return s_instance;
 	}
 
 	void checkLevelsFromDict(CCDictionary* dict);
