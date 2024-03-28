@@ -56,6 +56,8 @@ class $modify(GameLevelManager) {
 
         CCArray* pRet = CCArray::create();
 
+        //uint64_t now = BetterInfo::timeInMs();
+
         auto levels = this->m_onlineLevels;
         CCDictElement* obj;
         CCDICT_FOREACH(levels, obj){
@@ -73,13 +75,17 @@ class $modify(GameLevelManager) {
                 case CompleteMode::allCoins:
                 case CompleteMode::noCoins: {
                     bool completed = true;
+                    
+                    if(currentLvl->m_normalPercent < 100) continue;
+
                     auto coins = currentLvl->m_coins ? currentLvl->m_coins : BICache->getCoinCount(currentLvl->m_levelID);
                     for(int i = 0; i < coins; i++){
-                        bool hasntCoin = coinDict->objectForKey(currentLvl->getCoinKey(i + 1)) == nullptr && coinDict2->objectForKey(currentLvl->getCoinKey(i + 1)) == nullptr;
-                        if(hasntCoin) completed = false; else completed = completed && true;
+                        auto key = currentLvl->getCoinKey(i + 1);
+                        bool hasCoin = coinDict->objectForKey(key) != nullptr || coinDict2->objectForKey(key) != nullptr;
+                        completed = hasCoin ? (completed && true) : false;
                     }
                     if(((mode == CompleteMode::noCoins) != completed) && (coins > 0)) pRet->addObject(currentLvl);
-                    //if(currentLvl->m_coins > 0) pRet->addObject(currentLvl);
+                    
                     break;
                 }
                 case CompleteMode::percentage:
@@ -89,6 +95,8 @@ class $modify(GameLevelManager) {
                     break;
             }
         }
+        //std::cout <<  ("Unlocking shared_lock GLM::getCompletedLevels") << std::endl;
+        //log::info("Took {} seconds to filter levels", BetterInfo::timeInMs() - now);
 
         return pRet;
     }
