@@ -11,14 +11,15 @@ bool BaseJsonManager::init(const char* filename){
         log::error("Unable to load {} : {}", filename, loadResult.unwrapErr());
     }
 
-    log::debug("Loaded {}", filename);
+    log::info("Loaded {}", filename);
     m_initDone = true;
 
     return true;
 }
 
 Result<> BaseJsonManager::load() {
-    std::lock_guard<std::mutex> guard(m_jsonMutex);
+    //std::cout <<  ("Locking unique_lock load") << std::endl;
+    std::unique_lock guard(m_jsonMutex);
 
     auto savedPath = Mod::get()->getSaveDir() / m_filename;
     if (ghc::filesystem::exists(savedPath)) {
@@ -43,17 +44,21 @@ Result<> BaseJsonManager::load() {
     validateLoadedData();
     m_loaded = true;
 
+    //std::cout <<  ("Unlocked unique_lock load") << std::endl;
+
     return Ok();
 }
 
 Result<> BaseJsonManager::save() {
-    std::lock_guard<std::mutex> guard(m_jsonMutex);
+    //std::cout <<  ("Locking shared_lock save") << std::endl;
+    std::shared_lock guard(m_jsonMutex);
     std::string savedStr = m_json.dump(matjson::NO_INDENTATION);
 
     auto res2 = utils::file::writeString(Mod::get()->getSaveDir() / m_filename, savedStr);
     if (!res2) {
         log::error("Unable to save values: {}", res2.unwrapErr());
     }
+    //std::cout <<  ("Unlocked shared_lock save") << std::endl;
     return Ok();
 }
 
@@ -112,7 +117,6 @@ void BaseJsonManager::validateIsObject(const char* key) {
 BaseJsonManager::BaseJsonManager(){}
 
 bool BaseJsonManager::objectExists(const char* dict, const std::string& key) {
-    std::lock_guard<std::mutex> guard(m_jsonMutex);
-
+    // no mutex because this is only intended to be called from funcs that already lock it
     return m_json[dict].as_object().find(key) != m_json[dict].as_object().end();
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Geode/Geode.hpp>
+#include <shared_mutex>
 
 using namespace geode::prelude;
 
@@ -14,7 +15,7 @@ protected:
 public:
 	std::string m_filename;
 	matjson::Value m_json = matjson::Object();
-	std::mutex m_jsonMutex;
+	std::shared_mutex m_jsonMutex;
 
 	bool init(const char* filename);
 	Result<> load();

@@ -54,6 +54,7 @@ namespace BetterInfo {
 
     void reloadUsernames(LevelBrowserLayer* levelBrowserLayer);
 
+    uint64_t timeInMs();
     float timeForLevelString(const std::string& levelString);
 
     bool controllerConnected();

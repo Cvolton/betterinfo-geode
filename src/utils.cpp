@@ -539,7 +539,7 @@ inline int speedToPortalId(int speed) {
     }
 }
 
-inline uint64_t timeInMs() {
+uint64_t BetterInfo::timeInMs() {
     using namespace std::chrono;
     return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }

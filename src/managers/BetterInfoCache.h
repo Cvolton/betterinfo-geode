@@ -4,8 +4,10 @@
 #include "../delegates/UploadDateDelegate.h"
 
 class BetterInfoCache : public BaseJsonManager {
-	std::set<int> m_attemptedUsernames;
-	std::set<int> m_attemptedLevelDates;
+	std::unordered_set<int> m_attemptedUsernames;
+	std::unordered_set<int> m_attemptedLevelDates;
+	std::unordered_map<int, int> m_coinCounts;
+	std::mutex m_coinCountsMutex;
 	inline static BetterInfoCache* s_instance = nullptr;
 	BetterInfoCache();
 
@@ -15,6 +17,7 @@ public:
 	bool init();
 
 	void validateLoadedData();
+	void establishCachedDicts();
 
 	static BetterInfoCache* sharedState(){
 	    if(s_instance == nullptr){
