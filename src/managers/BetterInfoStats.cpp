@@ -14,8 +14,6 @@ bool BetterInfoStats::init(){
         this->migrateSaveData();
     #endif
 
-    auto FU = CCFileUtils::sharedFileUtils();
-
     this->setup();
 
     return true;

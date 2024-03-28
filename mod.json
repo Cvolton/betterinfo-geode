@@ -12,6 +12,7 @@
 	"description": "betterinfo geode real (not fake)",
     "repository": "https://github.com/cvolton/betterinfo-geode",
     "tags": ["online", "enhancement", "interface", "utility"],
+    "early-load": true,
     "dependencies": [
         {
             "id": "geode.node-ids",

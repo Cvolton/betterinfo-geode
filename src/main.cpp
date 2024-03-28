@@ -1,5 +1,6 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/MenuLayer.hpp>
+#include <Geode/modify/GameManager.hpp>
 
 #include <thread>
 
@@ -21,13 +22,32 @@ void loadManagers() {
     
 }
 
+void finishLoadingManagers() {
+    std::thread([] {
+        thread::setName("BI Manager Loader II");
+        BetterInfoCache::sharedState()->finishLoading();
+    }).detach();
+    
+}
+
 class $modify(MenuLayer) {
     bool init() {
         if(!MenuLayer::init()) return false;
 
-        loadManagers();
         BetterInfo::loadImportantNotices(this);
+
+        static bool managersLoaded = false;
+        if(!managersLoaded) {
+            managersLoaded = true;
+            finishLoadingManagers();
+        }
 
         return true;
     }
 };
+
+$execute {
+    Loader::get()->queueInMainThread([] {
+        loadManagers();
+    });
+}

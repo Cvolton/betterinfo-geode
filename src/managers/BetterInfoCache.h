@@ -15,6 +15,7 @@ public:
 	UploadDateDelegate* m_uploadDateDelegate = nullptr;
 
 	bool init();
+	void finishLoading();
 
 	void validateLoadedData();
 	void establishCachedDicts();

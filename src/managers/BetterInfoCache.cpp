@@ -5,12 +5,15 @@
 
 bool BetterInfoCache::init(){
     if(!BaseJsonManager::init("cache.json")) return false;
-    auto GLM = GameLevelManager::sharedState();
-    checkLevelsFromDict(GLM->m_onlineLevels);
-    checkLevelsFromDict(GLM->m_dailyLevels);
     doSave();
     establishCachedDicts();
     return true;
+}
+
+void BetterInfoCache::finishLoading(){
+    auto GLM = GameLevelManager::sharedState();
+    checkLevelsFromDict(GLM->m_onlineLevels);
+    checkLevelsFromDict(GLM->m_dailyLevels);
 }
 
 void BetterInfoCache::validateLoadedData() {
@@ -55,7 +58,7 @@ void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
     if(!toDownloadRated.empty()) cacheLevels(toDownloadRated, SearchType::MapPackOnClick, 2500);
     if(!toDownloadUnrated.empty()) cacheLevels(toDownloadUnrated, SearchType::Type26, 100);
 
-    log::info("Caching {} rated and {} unrated levels", toDownloadRated.size(), toDownloadUnrated.size());
+    log::debug("Caching {} rated and {} unrated levels", toDownloadRated.size(), toDownloadUnrated.size());
 }
 
 void BetterInfoCache::cacheLevel(GJGameLevel* level) {
@@ -245,7 +248,7 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
                 downloading = true;
 
                 web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).json().then([userID](const matjson::Value& data){
-                    log::info("Restored green username for {}: {}", userID, data.dump(matjson::NO_INDENTATION));
+                    log::debug("Restored green username for {}: {}", userID, data.dump(matjson::NO_INDENTATION));
                     std::string username;
 
                     if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
