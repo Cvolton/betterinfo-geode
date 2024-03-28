@@ -43,7 +43,6 @@ void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
     for(auto [key, currentLvl] : CCDictionaryExt<gd::string, GJGameLevel*>(dict)) {
         auto idString = std::to_string(currentLvl->m_levelID);
         if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString) && objectExists("demon-difficulty-dict", idString) && getLevelName(currentLvl->m_levelID) != "") continue;
-        log::info("#{}: Caching level {} from dict", ++i, currentLvl->m_levelID.value());
 
         auto levelFromSaved = LevelUtils::getLevelFromSaved(currentLvl->m_levelID);
         if(levelFromSaved != nullptr && std::string(levelFromSaved->m_levelName) != "") cacheLevel(levelFromSaved);

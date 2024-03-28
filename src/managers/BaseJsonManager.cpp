@@ -117,6 +117,7 @@ void BaseJsonManager::validateIsObject(const char* key) {
 BaseJsonManager::BaseJsonManager(){}
 
 bool BaseJsonManager::objectExists(const char* dict, const std::string& key) {
-    // no mutex because this is only intended to be called from funcs that already lock it
+    std::shared_lock guard(m_jsonMutex);
+    
     return m_json[dict].as_object().find(key) != m_json[dict].as_object().end();
 }
