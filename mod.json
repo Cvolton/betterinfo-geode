@@ -1,17 +1,22 @@
 {
-	"geode": "2.0.0-beta.20",
-	"version": "v4.1.6",
+    "geode": "2.0.0-beta.20",
+    "version": "v4.1.6",
     "gd": {
         "win": "2.204",
         "android": "2.205",
         "mac": "2.200"
     },
-	"id": "cvolton.betterinfo",
-	"name": "BetterInfo",
-	"developer": "Cvolton",
-	"description": "betterinfo geode real (not fake)",
+    "id": "cvolton.betterinfo",
+    "name": "BetterInfo",
+    "developer": "Cvolton",
+    "description": "betterinfo geode real (not fake)",
     "repository": "https://github.com/cvolton/betterinfo-geode",
-    "tags": ["online", "enhancement", "interface", "utility"],
+    "tags": [
+        "online",
+        "enhancement",
+        "interface",
+        "utility"
+    ],
     "early-load": true,
     "dependencies": [
         {
@@ -25,7 +30,7 @@
             "importance": "required"
         }
     ],
-	"settings": {
+    "settings": {
         "show-comment-ids": {
             "name": "Show comment IDs",
             "description": "Whether comment IDs should be shown in comment cells",
@@ -73,7 +78,7 @@
         "sprites": [
             "resources/*.png"
         ],
-		"spritesheets": {
+        "spritesheets": {
             "SearchButtons-410": [
                 "resources/searchbuttons-410/*.png"
             ]
