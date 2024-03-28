@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.1.7</c> (2024-03-28)
+* <cg>Fixed</c> a few other obscure <cr>crashes</c>
+* <cg>Made</c> the mod <cj>early-load</c> to make cache load faster
+* Other bugfixes & improvements
+
 ## <cg>v4.1.6</c> (2024-03-23)
 * <cg>Fixed</c> a few obscure <cr>crashes</c>
 * Other bugfixes & improvements
