@@ -76,6 +76,7 @@ CCNode* BetterInfo::createDoubleArrow(bool flip) {
     auto secondArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
     secondArrow->setPosition({15,25});
     secondArrow->setFlipX(flip);
+    secondArrow->setZOrder(flip ? -1 : 1);
     auto arrowParent = CCNode::create();
     arrowParent->setContentSize({50,50});
     arrowParent->addChild(firstArrow);
