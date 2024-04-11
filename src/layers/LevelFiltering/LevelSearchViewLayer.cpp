@@ -75,7 +75,10 @@ bool LevelSearchViewLayer::init(BISearchObject searchObj) {
 
     reload();
 
-    if(m_gjSearchObj && !(Mod::get()->getSavedValue<bool>("lsvl_seen_info"))) showInfoDialog();
+    if(m_gjSearchObj) {
+        onFilters(nullptr);
+        if(!Mod::get()->getSavedValue<bool>("lsvl_seen_info")) showInfoDialog();
+    }
 
     scheduleUpdate();
 
@@ -268,6 +271,7 @@ void LevelSearchViewLayer::setTextStatus(bool finished) {
 void LevelSearchViewLayer::onFilters(cocos2d::CCObject*) {
     auto searchOptions = ProfileSearchOptions::create(nullptr, "", this);
     searchOptions->setSearchObject(m_searchObj);
+    searchOptions->m_scene = this;
     searchOptions->show();
 }
 
