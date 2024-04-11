@@ -13,6 +13,7 @@ public:
     static BIBaseLayer* create(bool TL = true, bool TR = true, bool BL = true, bool BR = true);
     static cocos2d::CCScene* scene(bool TL = true, bool TR = true, bool BL = true, bool BR = true);
     void setCorners(bool TL, bool TR, bool BL, bool BR);
+    void onEnterTransitionDidFinish();
 
     CCSprite* m_cornerBL = nullptr;
     CCSprite* m_cornerBR = nullptr;

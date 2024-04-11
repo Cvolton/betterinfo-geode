@@ -1,4 +1,6 @@
 #include "BIBaseLayer.h"
+#include "Geode/binding/FLAlertLayer.hpp"
+#include "Geode/utils/cocos.hpp"
 
 BIBaseLayer* BIBaseLayer::create(bool BL, bool BR, bool TL, bool TR) {
     auto ret = new BIBaseLayer();
@@ -98,4 +100,16 @@ CCScene* BIBaseLayer::scene(bool BL, bool BR, bool TL, bool TR) {
     auto scene = CCScene::create();
     scene->addChild(layer);
     return scene;
+}
+
+void BIBaseLayer::onEnterTransitionDidFinish() {
+    CCLayer::onEnterTransitionDidFinish();
+
+    //workaround for no esc catching bug
+    size_t i = 0;
+    while(Ref<FLAlertLayer> alert = getChildOfType<FLAlertLayer>(this, i++)) {
+        alert->removeFromParent();
+        alert->m_noElasticity = true;
+        alert->show();
+    }
 }
