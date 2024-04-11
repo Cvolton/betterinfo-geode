@@ -244,6 +244,8 @@ CCScene* LevelSearchViewLayer::scene(GJSearchObject* gjSearchObj, BISearchObject
 void LevelSearchViewLayer::loadLevelsFinished(cocos2d::CCArray* levels, const char* key) {
     if(!m_data) return;
 
+    m_failedAttempts = 0;
+
     for(size_t i = 0; i < levels->count(); i++) {
         auto level = static_cast<GJGameLevel*>(levels->objectAtIndex(i));
         if(level == nullptr) continue;
@@ -256,11 +258,17 @@ void LevelSearchViewLayer::loadLevelsFinished(cocos2d::CCArray* levels, const ch
     if(!std::string_view(key).empty()) startLoading();
 }
 
-void LevelSearchViewLayer::loadLevelsFailed(const char*) {
+void LevelSearchViewLayer::loadLevelsFailed(const char* key) {
+    m_failedAttempts++;
+
     if(!m_gjSearchObj) startLoading();
     else {
-        setTextStatus(true);
         if(m_gjSearchObjOptimized) m_gjSearchObjOptimized->m_page -= 1;
+        if(m_failedAttempts < 3) {
+            startLoading();
+        } else {
+            setTextStatus(true);
+        }
     }
 }
 
@@ -379,13 +387,17 @@ void LevelSearchViewLayer::onEnter() {
     loadPage();
 }
 
+void LevelSearchViewLayer::onEnterTransitionDidFinish() {
+    BIViewLayer::onEnterTransitionDidFinish();
+}
+
 void LevelSearchViewLayer::update(float dt) {
     BIViewLayer::update(dt);
     updateCounter();
 
     if(m_statusText) m_statusText->setString(
         m_finished ? "Finished" : 
-        m_gjSearchObjOptimized ? fmt::format("Loading (online page {})", m_gjSearchObjOptimized->m_page).c_str() :
+        m_gjSearchObjOptimized ? fmt::format("Loading (online page {}){}", m_gjSearchObjOptimized->m_page, m_failedAttempts > 0 ? fmt::format(" (att. {})", m_failedAttempts) : std::string("")).c_str() :
         (m_data->count() > m_lastIndex ? "Loading (next page)" : "Loading (current page)")
     );
 }

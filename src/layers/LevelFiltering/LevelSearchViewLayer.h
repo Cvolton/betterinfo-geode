@@ -20,6 +20,7 @@ class LevelSearchViewLayer : public BIViewLayer, public LevelManagerDelegate, pu
     size_t m_firstIndex = 0;
     size_t m_lastIndex = 0;
     size_t m_totalAmount = 0;
+    size_t m_failedAttempts = 0;
     bool m_allLocal = true;
     bool m_finished = false;
 protected:
@@ -57,5 +58,6 @@ public:
     void queueLoad(float dt);
 
     void onEnter();
+    void onEnterTransitionDidFinish();
     void update(float dt);
 };
