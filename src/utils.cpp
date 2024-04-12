@@ -70,11 +70,11 @@ CCSprite* BetterInfo::createPlaceholder(){
     return sprite;
 }
 
-CCNode* BetterInfo::createDoubleArrow(bool flip) {
-    auto firstArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
+CCNode* BetterInfo::createDoubleArrow(bool flip, const char* texture) {
+    auto firstArrow = CCSprite::createWithSpriteFrameName(texture);
     firstArrow->setPosition({35,25});
     firstArrow->setFlipX(flip);
-    auto secondArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
+    auto secondArrow = CCSprite::createWithSpriteFrameName(texture);
     secondArrow->setPosition({15,25});
     secondArrow->setFlipX(flip);
     secondArrow->setZOrder(flip ? -1 : 1);

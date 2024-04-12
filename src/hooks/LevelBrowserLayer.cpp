@@ -41,7 +41,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     }
 
     void onLevelBrowserLast(CCObject* sender){
-        if(this->m_itemCount == 9999 || BetterInfo::isFalseTotal(this->m_searchObject)) {
+        if(shouldSearchForLastPage()) {
             LevelBrowserEndLayer::create(this, nullptr)->show();
             return;
         }
@@ -88,6 +88,10 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         if(canBeLocalFiltered() && BetterInfo::isSavedFiltered() && this->m_countText) this->m_countText->setString((std::string("(Filtered) ") + this->m_countText->getString()).c_str());
     }
 
+    bool shouldSearchForLastPage() {
+        return this->m_itemCount == 9999 || BetterInfo::isFalseTotal(this->m_searchObject);
+    }
+
     /**
      * Hooks
      */
@@ -128,7 +132,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             */
             if(!BetterInfo::isLocal(this->m_searchObject)){
                 auto lastBtn = CCMenuItemSpriteExtra::create(
-                    BetterInfo::createDoubleArrow(true),
+                    BetterInfo::createDoubleArrow(true, shouldSearchForLastPage() ? "GJ_arrow_03_001.png" : "GJ_arrow_02_001.png"),
                     this,
                     menu_selector(BILevelBrowserLayer::onLevelBrowserLast)
                 );
