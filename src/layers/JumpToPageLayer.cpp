@@ -1,7 +1,6 @@
 #include "JumpToPageLayer.h"
 
 #include "../utils.hpp"
-#include "../ui/DoubleArrow.h"
 #include "LevelBrowserEndLayer.h"
 
 JumpToPageLayer* JumpToPageLayer::create(InfoLayer* infoLayer){
@@ -79,22 +78,19 @@ void JumpToPageLayer::onLast(cocos2d::CCObject* sender)
         return;
     }
 
-    if(m_infoLayer->m_pageEndIdx != 0) {
-        m_infoLayer->loadPage(m_infoLayer->m_itemCount / m_infoLayer->m_pageEndIdx, false);
-        onClose(sender);
-    } else {
-        m_infoLayer->loadPage(0, false);
-        // ugly delegate swap because it's the easiest way to maintain the params
-        GameLevelManager::sharedState()->m_levelCommentDelegate = this;
-    }
-
+    m_infoLayer->loadPage(m_infoLayer->m_itemCount / m_infoLayer->m_pageEndIdx, false);
+    onClose(sender);
 }
 
 void JumpToPageLayer::loadCommentsFinished(cocos2d::CCArray*, char const*) {
     if(!m_infoLayer) return;
 
     m_infoLayer->loadPage(0, false);
-    onLast(nullptr);
+    m_lastBtn->setVisible(true);
+    m_lastArrow->usePopupTexture(m_infoLayer->m_itemCount == 999);
+
+    //workaround bc infolayer calls handlewith and handlewith doesnt rly detect that it did that
+    this->setTouchPriority(-600);
 }
 
 void JumpToPageLayer::loadCommentsFailed(char const*) {
@@ -149,15 +145,21 @@ bool JumpToPageLayer::init(){
     createButton("GJ_resetBtn_001.png", {93, 57}, menu_selector(JumpToPageLayer::onReset))->setID("reset-button"_spr);
 
     if(m_infoLayer) {
-        //TODO: what if it isnt loaded
-        auto lastBtn = CCMenuItemSpriteExtra::create(
-            DoubleArrow::create(true, m_infoLayer->m_itemCount == 999 ? "GJ_arrow_03_001.png" : "GJ_arrow_02_001.png"),
+        m_lastBtn = CCMenuItemSpriteExtra::create(
+            m_lastArrow = DoubleArrow::create(true, m_infoLayer->m_itemCount == 999 ? "GJ_arrow_03_001.png" : "GJ_arrow_02_001.png"),
             this,
             menu_selector(JumpToPageLayer::onLast)
         );
-        lastBtn->setPosition({ 50, -50});
-        lastBtn->setID("last-button"_spr);
-        m_buttonMenu->addChild(lastBtn);
+        m_lastBtn->setPosition({ 50, -50});
+        m_lastBtn->setID("last-button"_spr);
+        m_buttonMenu->addChild(m_lastBtn);
+
+        if(m_infoLayer->m_pageEndIdx == 0) {
+            m_lastBtn->setVisible(false);
+            m_infoLayer->loadPage(0, false);
+            // ugly delegate swap because it's the easiest way to maintain the params
+            GameLevelManager::sharedState()->m_levelCommentDelegate = this;
+        }
     }
 
     return true;
