@@ -130,6 +130,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             /**
              * Last page button
             */
+            //TODO: set texture on page load as well
             if(!BetterInfo::isLocal(this->m_searchObject)){
                 auto lastBtn = CCMenuItemSpriteExtra::create(
                     BetterInfo::createDoubleArrow(true, shouldSearchForLastPage() ? "GJ_arrow_03_001.png" : "GJ_arrow_02_001.png"),

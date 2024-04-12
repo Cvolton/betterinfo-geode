@@ -148,8 +148,9 @@ bool JumpToPageLayer::init(){
     createButton("GJ_resetBtn_001.png", {93, 57}, menu_selector(JumpToPageLayer::onReset))->setID("reset-button"_spr);
 
     if(m_infoLayer) {
+        //TODO: what if it isnt loaded
         auto lastBtn = CCMenuItemSpriteExtra::create(
-            BetterInfo::createDoubleArrow(true),
+            BetterInfo::createDoubleArrow(true, m_infoLayer->m_itemCount == 999 ? "GJ_arrow_03_001.png" : "GJ_arrow_02_001.png"),
             this,
             menu_selector(JumpToPageLayer::onLast)
         );
