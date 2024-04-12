@@ -36,18 +36,23 @@ void LevelBrowserEndLayer::onClose(cocos2d::CCObject* sender)
 void LevelBrowserEndLayer::onOK(cocos2d::CCObject* sender){
     if(m_levelBrowserLayer) m_levelBrowserLayer->m_searchObject->m_page = 1;
     if(m_infoLayer) m_infoLayer->m_page = 1;
+
+    Mod::get()->setSavedValue("level-browser-end-ok-clicked", true);
     
     getOnlineLevels();
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
     m_circle = LoadingCircle::create();
+    m_circle->setParentLayer(m_mainLayer);
     m_circle->setPosition({0, -55});
     m_circle->setScale(.475f);
     m_circle->show();
     m_circle->setZOrder(999);
 
     m_goBtn->setVisible(false);
+
+    updateDisplay();
 
     this->getScheduler()->scheduleSelector(schedule_selector(LevelBrowserEndLayer::onTimer), this, 0.5f, false);
 }
@@ -96,6 +101,10 @@ bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer, InfoLayer*
 
     GameLevelManager::sharedState()->m_levelManagerDelegate = this;
     GameLevelManager::sharedState()->m_levelCommentDelegate = this;
+    
+    if(Mod::get()->getSavedValue("level-browser-end-ok-clicked", false)) {
+        onOK(nullptr);
+    }
 
     return true;
 }
