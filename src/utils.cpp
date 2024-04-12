@@ -70,22 +70,6 @@ CCSprite* BetterInfo::createPlaceholder(){
     return sprite;
 }
 
-CCNode* BetterInfo::createDoubleArrow(bool flip, const char* texture) {
-    auto firstArrow = CCSprite::createWithSpriteFrameName(texture);
-    firstArrow->setPosition({35,25});
-    firstArrow->setFlipX(flip);
-    auto secondArrow = CCSprite::createWithSpriteFrameName(texture);
-    secondArrow->setPosition({15,25});
-    secondArrow->setFlipX(flip);
-    secondArrow->setZOrder(flip ? -1 : 1);
-    auto arrowParent = CCNode::create();
-    arrowParent->setContentSize({50,50});
-    arrowParent->addChild(firstArrow);
-    arrowParent->addChild(secondArrow);
-    arrowParent->setScale(.4f);
-    return arrowParent;
-}
-
 CCMenuItemSpriteExtra* BetterInfo::createTextButton(CCLayer* parent, const char* text, cocos2d::SEL_MenuHandler handler, int width, float height, float scale){
     auto buttonSprite = ButtonSprite::create(text, width, true, "bigFont.fnt", "GJ_button_01.png", height, scale);
     auto buttonButton = CCMenuItemSpriteExtra::create(

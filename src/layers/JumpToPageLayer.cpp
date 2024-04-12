@@ -1,6 +1,7 @@
 #include "JumpToPageLayer.h"
 
 #include "../utils.hpp"
+#include "../ui/DoubleArrow.h"
 #include "LevelBrowserEndLayer.h"
 
 JumpToPageLayer* JumpToPageLayer::create(InfoLayer* infoLayer){
@@ -150,7 +151,7 @@ bool JumpToPageLayer::init(){
     if(m_infoLayer) {
         //TODO: what if it isnt loaded
         auto lastBtn = CCMenuItemSpriteExtra::create(
-            BetterInfo::createDoubleArrow(true, m_infoLayer->m_itemCount == 999 ? "GJ_arrow_03_001.png" : "GJ_arrow_02_001.png"),
+            DoubleArrow::create(true, m_infoLayer->m_itemCount == 999 ? "GJ_arrow_03_001.png" : "GJ_arrow_02_001.png"),
             this,
             menu_selector(JumpToPageLayer::onLast)
         );
