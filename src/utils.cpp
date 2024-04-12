@@ -1,4 +1,5 @@
 #include "utils.hpp"
+#include "Geode/Enums.hpp"
 
 #include <random>
 #include <fmt/format.h>
@@ -156,7 +157,10 @@ int BetterInfo::levelsPerPage(GJSearchObject* searchObject){
 bool BetterInfo::isLocal(GJSearchObject* searchObject){
     return searchObject->m_searchType == SearchType::MyLevels 
     || searchObject->m_searchType == SearchType::SavedLevels 
-    || searchObject->m_searchType == SearchType::FavouriteLevels;
+    || searchObject->m_searchType == SearchType::FavouriteLevels
+    || searchObject->m_searchType == SearchType::SmartTemplates
+    || searchObject->m_searchType == SearchType::MyLists
+    || searchObject->m_searchType == SearchType::FavouriteLists;
 }
 
 bool BetterInfo::isFalseTotal(GJSearchObject* searchObject){
