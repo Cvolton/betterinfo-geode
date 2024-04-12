@@ -1,11 +1,14 @@
 #pragma once
 #include "_bases/CvoltonAlertLayerStub.h"
 #include "../delegates/PageNumberDelegate.h"
+#include "../ui/DoubleArrow.h"
 
 class JumpToPageLayer : public CvoltonAlertLayerStub, public LevelCommentDelegate {
     Ref<InfoLayer> m_infoLayer = nullptr;
     PageNumberDelegate* m_pageNumberDelegate = nullptr;
-    CCTextInputNode* m_textNode;
+    CCTextInputNode* m_textNode = nullptr;
+    CCMenuItemSpriteExtra* m_lastBtn = nullptr;
+    DoubleArrow* m_lastArrow = nullptr;
 public:
     static JumpToPageLayer* create(InfoLayer* infoLayer);
     static JumpToPageLayer* create(PageNumberDelegate* pageNumberDelegate);

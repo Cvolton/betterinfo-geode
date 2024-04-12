@@ -1,6 +1,7 @@
 #include "BIViewLayer.h"
 #include "../JumpToPageLayer.h"
 #include "../../utils.hpp"
+#include "../../ui/DoubleArrow.h"
 
 BIViewLayer* BIViewLayer::create(bool paginated) {
     auto ret = new BIViewLayer();
@@ -79,7 +80,7 @@ bool BIViewLayer::init(bool paginated) {
     menu->addChild(m_randomBtn);
 
     m_firstBtn = CCMenuItemSpriteExtra::create(
-        BetterInfo::createDoubleArrow(false),
+        DoubleArrow::create(false),
         this,
         menu_selector(BIViewLayer::onFirst)
     );
@@ -89,7 +90,7 @@ bool BIViewLayer::init(bool paginated) {
     menu->addChild(m_firstBtn);
 
     m_lastBtn = CCMenuItemSpriteExtra::create(
-        BetterInfo::createDoubleArrow(true),
+        DoubleArrow::create(true),
         this,
         menu_selector(BIViewLayer::onLast)
     );

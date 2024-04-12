@@ -1,4 +1,5 @@
 #include "utils.hpp"
+#include "Geode/Enums.hpp"
 
 #include <random>
 #include <fmt/format.h>
@@ -67,22 +68,6 @@ CCSprite* BetterInfo::createPlaceholder(){
     sprite->setContentSize(subSprite1->getContentSize());
 
     return sprite;
-}
-
-CCNode* BetterInfo::createDoubleArrow(bool flip) {
-    auto firstArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-    firstArrow->setPosition({35,25});
-    firstArrow->setFlipX(flip);
-    auto secondArrow = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
-    secondArrow->setPosition({15,25});
-    secondArrow->setFlipX(flip);
-    secondArrow->setZOrder(flip ? -1 : 1);
-    auto arrowParent = CCNode::create();
-    arrowParent->setContentSize({50,50});
-    arrowParent->addChild(firstArrow);
-    arrowParent->addChild(secondArrow);
-    arrowParent->setScale(.4f);
-    return arrowParent;
 }
 
 CCMenuItemSpriteExtra* BetterInfo::createTextButton(CCLayer* parent, const char* text, cocos2d::SEL_MenuHandler handler, int width, float height, float scale){
@@ -156,7 +141,10 @@ int BetterInfo::levelsPerPage(GJSearchObject* searchObject){
 bool BetterInfo::isLocal(GJSearchObject* searchObject){
     return searchObject->m_searchType == SearchType::MyLevels 
     || searchObject->m_searchType == SearchType::SavedLevels 
-    || searchObject->m_searchType == SearchType::FavouriteLevels;
+    || searchObject->m_searchType == SearchType::FavouriteLevels
+    || searchObject->m_searchType == SearchType::SmartTemplates
+    || searchObject->m_searchType == SearchType::MyLists
+    || searchObject->m_searchType == SearchType::FavouriteLists;
 }
 
 bool BetterInfo::isFalseTotal(GJSearchObject* searchObject){

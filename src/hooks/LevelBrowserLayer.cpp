@@ -2,6 +2,7 @@
 #include <Geode/modify/LevelBrowserLayer.hpp>
 
 #include "../utils.hpp"
+#include "../ui/DoubleArrow.h"
 #include "../layers/LevelBrowserEndLayer.h"
 #include "../layers/LevelFiltering/LevelSearchViewLayer.h"
 #include "../layers/LevelFiltering/ProfileSearchOptions.h"
@@ -9,6 +10,8 @@
 using namespace geode::prelude;
 
 class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
+    DoubleArrow* m_biLastPageBtn = nullptr;
+
     static void onModify(auto& self) {
         (void) self.setHookPriority("LevelBrowserLayer::onGoToPage", 99999);
     }
@@ -41,7 +44,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     }
 
     void onLevelBrowserLast(CCObject* sender){
-        if(this->m_itemCount == 9999 || BetterInfo::isFalseTotal(this->m_searchObject)) {
+        if(shouldSearchForLastPage()) {
             LevelBrowserEndLayer::create(this, nullptr)->show();
             return;
         }
@@ -78,6 +81,10 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
                 randomButton->setVisible(this->m_itemCount > BetterInfo::levelsPerPage(this->m_searchObject));
             }
         }
+
+        if(auto lastBtn = m_fields->m_biLastPageBtn) {
+            lastBtn->usePopupTexture(shouldSearchForLastPage());
+        }
     }
 
     bool canBeLocalFiltered() {
@@ -86,6 +93,10 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
 
     void showFilteredText() {
         if(canBeLocalFiltered() && BetterInfo::isSavedFiltered() && this->m_countText) this->m_countText->setString((std::string("(Filtered) ") + this->m_countText->getString()).c_str());
+    }
+
+    bool shouldSearchForLastPage() {
+        return this->m_itemCount == 9999 || BetterInfo::isFalseTotal(this->m_searchObject);
     }
 
     /**
@@ -128,7 +139,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             */
             if(!BetterInfo::isLocal(this->m_searchObject)){
                 auto lastBtn = CCMenuItemSpriteExtra::create(
-                    BetterInfo::createDoubleArrow(true),
+                    m_fields->m_biLastPageBtn = DoubleArrow::create(true, shouldSearchForLastPage()),
                     this,
                     menu_selector(BILevelBrowserLayer::onLevelBrowserLast)
                 );
@@ -162,7 +173,7 @@ class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
              * First button
             */
             auto firstBtn = CCMenuItemSpriteExtra::create(
-                BetterInfo::createDoubleArrow(false),
+                DoubleArrow::create(false),
                 this,
                 menu_selector(BILevelBrowserLayer::onLevelBrowserFirst)
             );
