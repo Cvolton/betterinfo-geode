@@ -189,7 +189,10 @@ class $modify(BIProfilePage, ProfilePage) {
         }
 
         auto usernameNode = CCLabelBMFont::create(a2->m_userName.c_str(), "bigFont.fnt");
-        usernameNode->limitLabelWidth(a2->m_modBadge > 0 ? 140.f : 160.0f, 0.8f, 0.0f);
+        a2->m_modBadge > 0
+            ? usernameNode->limitLabelWidth(140.f, 0.9f, 0.0f)
+            : usernameNode->limitLabelWidth(160.0f, 0.8f, 0.0f);
+
         auto usernameBtn = CCMenuItemSpriteExtra::create(
             usernameNode,
             this,
