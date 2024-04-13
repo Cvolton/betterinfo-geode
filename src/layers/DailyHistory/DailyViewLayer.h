@@ -4,7 +4,7 @@
 #include "DailyCell.h"
 #include "../../delegates/PageNumberDelegate.h"
 
-class DailyViewLayer : public BIViewLayer {
+class BI_DLL DailyViewLayer : public BIViewLayer {
     GJTimedLevelType m_timedType = GJTimedLevelType::Daily;
 protected:
     virtual bool init(GJTimedLevelType timedType);

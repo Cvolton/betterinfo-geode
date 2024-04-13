@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Geode/Enums.hpp"
 #include <Geode/Geode.hpp>
+#include "../../utils.hpp"
 
 using namespace geode::prelude;
 
-class RewardCell : public GenericListCell {
+class BI_DLL RewardCell : public GenericListCell {
         GJRewardItem* m_rewardItem;
         
         std::string getDisplayName();

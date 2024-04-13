@@ -10,7 +10,7 @@
 
 using namespace geode::prelude;
 
-class $modify(LevelInfoLayer) {
+class BI_DLL $modify(LevelInfoLayer) {
     static void onModify(auto& self) {
         auto res = self.setHookPriority("LevelInfoLayer::onViewProfile", 99999);
         res = self.setHookPriority("LevelInfoLayer::onLevelInfo", 99999);

@@ -6,9 +6,11 @@
 //#include "../managers/BetterInfoStatsV2.h"
 #include "../managers/BetterInfoCache.h"
 
+#include "../utils.hpp"
+
 using namespace geode::prelude;
 
-class $modify(BIPlayLayer, PlayLayer) {
+class BI_DLL $modify(BIPlayLayer, PlayLayer) {
 
     inline static bool needsReset = false;
 

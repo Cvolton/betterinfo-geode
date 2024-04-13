@@ -1,9 +1,10 @@
 #pragma once
 #include <Geode/Geode.hpp>
+#include "../utils.hpp"
 
 using namespace geode::prelude;
 
-class PaginatedFLAlert : public FLAlertLayer {
+class BI_DLL PaginatedFLAlert : public FLAlertLayer {
     std::string m_title;
     std::vector<std::string> m_content;
     size_t m_page = 0;

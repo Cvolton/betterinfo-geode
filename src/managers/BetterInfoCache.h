@@ -3,7 +3,7 @@
 #include "BaseJsonManager.h"
 #include "../delegates/UploadDateDelegate.h"
 
-class BetterInfoCache : public BaseJsonManager {
+class BI_DLL BetterInfoCache : public BaseJsonManager {
 	std::unordered_set<int> m_attemptedUsernames;
 	std::unordered_set<int> m_attemptedLevelDates;
 	std::unordered_map<int, int> m_coinCounts;

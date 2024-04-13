@@ -1,7 +1,7 @@
 #pragma once
 #include "_bases/CvoltonAlertLayerStub.h"
 
-class LevelIDLayer : public CvoltonAlertLayerStub {
+class BI_DLL LevelIDLayer : public CvoltonAlertLayerStub {
     CCTextInputNode* m_textNode;
 public:
     static LevelIDLayer* create();

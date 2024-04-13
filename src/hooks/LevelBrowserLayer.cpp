@@ -9,7 +9,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BILevelBrowserLayer, LevelBrowserLayer) {
+class BI_DLL $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     DoubleArrow* m_biLastPageBtn = nullptr;
 
     static void onModify(auto& self) {

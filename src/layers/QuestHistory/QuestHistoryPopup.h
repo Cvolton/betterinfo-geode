@@ -1,7 +1,7 @@
 #pragma once
 #include "../_bases/CvoltonAlertLayerStub.h"
 
-class QuestHistoryPopup : public CvoltonAlertLayerStub {
+class BI_DLL QuestHistoryPopup : public CvoltonAlertLayerStub {
 public:
     static QuestHistoryPopup* create();
     bool init();

@@ -5,7 +5,7 @@
 
 using RewardGroupCategoryVector = std::vector<std::tuple<const char*, const char*, std::function<bool(BIGJRewardItem*)>>>; // title, icon, filter
 
-class RewardGroupLayer : public BIViewLayer {
+class BI_DLL RewardGroupLayer : public BIViewLayer {
 protected:
     virtual bool init(const char* title, cocos2d::CCDictionary* chests, RewardGroupCategoryVector categories);
 public:

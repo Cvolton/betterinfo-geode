@@ -1,10 +1,11 @@
 #pragma once
 
 #include <Geode/Geode.hpp>
+#include "../../utils.hpp"
 
 using namespace geode::prelude;
 
-class BIBaseLayer : public cocos2d::CCLayer {
+class BI_DLL BIBaseLayer : public cocos2d::CCLayer {
 protected:
     virtual bool init(bool TL = true, bool TR = true, bool BL = true, bool BR = true);
     virtual void keyBackClicked();

@@ -5,6 +5,20 @@ using namespace geode::prelude;
 
 #include "objects/BISearchObject.h"
 
+#ifdef GEODE_IS_WINDOWS
+    #ifdef BI_EXPORTING
+        #define BI_DLL __declspec(dllexport)
+    #else
+        #define BI_DLL __declspec(dllimport)
+    #endif
+#else
+    #ifdef BI_EXPORTING
+        #define BI_DLL __attribute__((visibility("default")))
+    #else
+        #define BI_DLL
+    #endif
+#endif
+
 #include "utils/LevelMetadata.h"
 #include "utils/LevelProgressDialog.h"
 #include "utils/LevelUtils.h"
@@ -12,67 +26,67 @@ using namespace geode::prelude;
 #include "utils/TimeUtils.h"
 
 namespace BetterInfo {
-    CCSprite* createWithBISpriteFrameName(const char* name);
-    CCSprite* createBISprite(const char* name);
-    CCSprite* createPlaceholder();
+    BI_DLL CCSprite* createWithBISpriteFrameName(const char* name);
+    BI_DLL CCSprite* createBISprite(const char* name);
+    BI_DLL CCSprite* createPlaceholder();
 
-    CCMenuItemSpriteExtra* createTextButton(cocos2d::CCLayer* parent, const char* text, cocos2d::SEL_MenuHandler handler, int width, float height, float scale);
-    CCMenuItemSpriteExtra* createSearchButton(cocos2d::CCLayer* parent, const char* text, const char* icon, cocos2d::SEL_MenuHandler handler, float scale = .4f, float iconScale = 1.0f);
+    BI_DLL CCMenuItemSpriteExtra* createTextButton(cocos2d::CCLayer* parent, const char* text, cocos2d::SEL_MenuHandler handler, int width, float height, float scale);
+    BI_DLL CCMenuItemSpriteExtra* createSearchButton(cocos2d::CCLayer* parent, const char* text, const char* icon, cocos2d::SEL_MenuHandler handler, float scale = .4f, float iconScale = 1.0f);
 
-    int randomNumber(int start, int end);
-    void strToLower(std::string& str);
+    BI_DLL int randomNumber(int start, int end);
+    BI_DLL void strToLower(std::string& str);
 
-    const char* rankIcon(int position);
+    BI_DLL const char* rankIcon(int position);
 
-    int levelsPerPage(GJSearchObject* searchObj);
+    BI_DLL int levelsPerPage(GJSearchObject* searchObj);
 
-    bool isLocal(GJSearchObject* searchObj);
-    bool isFalseTotal(GJSearchObject* searchObj);
-    bool isStarUseless(GJSearchObject* searchObj);
-    bool isAdvancedEnabled(GJSearchObject* searchObj);
+    BI_DLL bool isLocal(GJSearchObject* searchObj);
+    BI_DLL bool isFalseTotal(GJSearchObject* searchObj);
+    BI_DLL bool isStarUseless(GJSearchObject* searchObj);
+    BI_DLL bool isAdvancedEnabled(GJSearchObject* searchObj);
 
-    bool isSavedFiltered();
+    BI_DLL bool isSavedFiltered();
 
-    std::string decodeBase64Gzip(const std::string& input);
-    std::string fileSize(size_t bytes);
-    std::string fixColorCrashes(std::string input);
-    std::string fixNullByteCrash(std::string input);
+    BI_DLL std::string decodeBase64Gzip(const std::string& input);
+    BI_DLL std::string fileSize(size_t bytes);
+    BI_DLL std::string fixColorCrashes(std::string input);
+    BI_DLL std::string fixNullByteCrash(std::string input);
     
-    void copyToClipboard(const char* text);
-    void copyToClipboard(const char* text, CCLayer* parent);
+    BI_DLL void copyToClipboard(const char* text);
+    BI_DLL void copyToClipboard(const char* text, CCLayer* parent);
 
-    std::string getSongUrl(int audioID);
-    bool isNewGrounds(int audioID);
+    BI_DLL std::string getSongUrl(int audioID);
+    BI_DLL bool isNewGrounds(int audioID);
 
-    cocos2d::CCDictionary* responseToDict(const std::string& response);
+    BI_DLL cocos2d::CCDictionary* responseToDict(const std::string& response);
 
-    bool validateRangeItem(const BISearchObject::RangeItem& rangeItem, int value);
-    bool levelMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
-    bool levelProgressMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
-    std::vector<GJGameLevel*> completedLevelsInStarRange(int min, int max, bool platformer, CCDictionary* dict = GameLevelManager::sharedState()->m_onlineLevels);
+    BI_DLL bool validateRangeItem(const BISearchObject::RangeItem& rangeItem, int value);
+    BI_DLL bool levelMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
+    BI_DLL bool levelProgressMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
+    BI_DLL std::vector<GJGameLevel*> completedLevelsInStarRange(int min, int max, bool platformer, CCDictionary* dict = GameLevelManager::sharedState()->m_onlineLevels);
 
-    void reloadUsernames(LevelBrowserLayer* levelBrowserLayer);
+    BI_DLL void reloadUsernames(LevelBrowserLayer* levelBrowserLayer);
 
-    uint64_t timeInMs();
-    float timeForLevelString(const std::string& levelString);
+    BI_DLL uint64_t timeInMs();
+    BI_DLL float timeForLevelString(const std::string& levelString);
 
-    bool controllerConnected();
+    BI_DLL bool controllerConnected();
 
-    std::string getWineVersion();
-    std::string getOSVersion();
-    void loadImportantNotices(Ref<CCLayer> layer);
-    FLAlertLayer* createUpdateDialog();
-    bool isHoveringNode(CCNode* target);
+    BI_DLL std::string getWineVersion();
+    BI_DLL std::string getOSVersion();
+    BI_DLL void loadImportantNotices(Ref<CCLayer> layer);
+    BI_DLL FLAlertLayer* createUpdateDialog();
+    BI_DLL bool isHoveringNode(CCNode* target);
 
-    bool isSprite(CCSprite* sprite, const char* name);
-    CCMenuItemSpriteExtra* replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler);
+    BI_DLL bool isSprite(CCSprite* sprite, const char* name);
+    BI_DLL CCMenuItemSpriteExtra* replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler);
 
-    UnlockType iconTypeToUnlockType(IconType type);
+    BI_DLL UnlockType iconTypeToUnlockType(IconType type);
 
-    AxisLayoutOptions* copyLayoutOptions(CCNode* a);
-    AxisLayoutOptions* copyLayoutOptions(AxisLayoutOptions* a);
+    BI_DLL AxisLayoutOptions* copyLayoutOptions(CCNode* a);
+    BI_DLL AxisLayoutOptions* copyLayoutOptions(AxisLayoutOptions* a);
 
-    int stoi(std::string_view str);
-    float stof(std::string_view str);
-    long long strtol(std::string_view str);
+    BI_DLL int stoi(std::string_view str);
+    BI_DLL float stof(std::string_view str);
+    BI_DLL long long strtol(std::string_view str);
 }

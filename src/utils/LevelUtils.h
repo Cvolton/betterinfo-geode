@@ -1,15 +1,16 @@
 #pragma once
 
 #include <Geode/Geode.hpp>
+#include "../utils.hpp"
 
 using namespace geode::prelude;
 
 namespace LevelUtils {
-    GJGameLevel* getLevelFromSaved(int levelID);
-    std::deque<GJGameLevel*> completedDeque();
-    void resetLevelCaches();
+    BI_DLL GJGameLevel* getLevelFromSaved(int levelID);
+    BI_DLL std::deque<GJGameLevel*> completedDeque();
+    BI_DLL void resetLevelCaches();
 
-    int levelDifficultyAsInt(GJGameLevel* level);
-    int levelDemonDifficultyAsInt(GJGameLevel* level);
-    bool levelHasCollectedCoins(GJGameLevel* level);
+    BI_DLL int levelDifficultyAsInt(GJGameLevel* level);
+    BI_DLL int levelDemonDifficultyAsInt(GJGameLevel* level);
+    BI_DLL bool levelHasCollectedCoins(GJGameLevel* level);
 }

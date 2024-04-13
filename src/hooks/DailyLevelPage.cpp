@@ -6,7 +6,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BIDailyLevelPage, DailyLevelPage) {
+class BI_DLL $modify(BIDailyLevelPage, DailyLevelPage) {
     /*
      * Callbacks
      */

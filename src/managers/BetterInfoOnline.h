@@ -2,10 +2,11 @@
 
 #include <Geode/Geode.hpp>
 #include "../delegates/BILeaderboardDelegate.h"
+#include "../utils.hpp"
 
 using namespace geode::prelude;
 
-class BetterInfoOnline : public cocos2d::CCObject {
+class BI_DLL BetterInfoOnline : public cocos2d::CCObject {
 	inline static BetterInfoOnline* s_instance = nullptr;
 	BetterInfoOnline();
 

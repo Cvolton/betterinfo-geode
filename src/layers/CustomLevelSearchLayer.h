@@ -1,10 +1,12 @@
 #pragma once
 
 #include <Geode/Geode.hpp>
+#include "../utils.hpp"
 
 using namespace geode::prelude;
 
-class CustomLevelSearchLayer : public FLAlertLayer {
+//TODO: use CvoltonAlertLayerStub
+class BI_DLL CustomLevelSearchLayer : public FLAlertLayer {
     Ref<GJGameLevel> m_level = nullptr;
 public:
     static CustomLevelSearchLayer* create(GJGameLevel* level);

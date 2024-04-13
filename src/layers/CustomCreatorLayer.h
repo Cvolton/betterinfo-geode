@@ -6,7 +6,7 @@
 
 using namespace geode::prelude;
 
-class CustomCreatorLayer : public BIBaseLayer {
+class BI_DLL CustomCreatorLayer : public BIBaseLayer {
 protected:
     virtual bool init();
     void onBack(cocos2d::CCObject*);

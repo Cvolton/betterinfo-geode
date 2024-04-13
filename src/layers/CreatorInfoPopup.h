@@ -1,7 +1,7 @@
 #pragma once
 #include "_bases/CvoltonAlertLayerStub.h"
 
-class CreatorInfoPopup : public CvoltonAlertLayerStub, public LevelManagerDelegate {
+class BI_DLL CreatorInfoPopup : public CvoltonAlertLayerStub, public LevelManagerDelegate {
     Ref<cocos2d::CCArray> m_levels = nullptr;
     LoadingCircle* m_circle = nullptr;
     cocos2d::CCMenu* m_tabMenu = nullptr;

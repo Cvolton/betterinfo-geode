@@ -5,7 +5,7 @@
 
 using namespace geode::prelude;
 
-class RewardCategoryCell : public GenericListCell {
+class BI_DLL RewardCategoryCell : public GenericListCell {
         Ref<RewardCategoryObject> m_category;
     public:
         RewardCategoryCell(const char* name, cocos2d::CCSize size);

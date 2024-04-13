@@ -5,7 +5,7 @@
 
 using namespace geode::prelude;
 
-class DropDownDelegateHelper : public GJDropDownLayerDelegate {
+class BI_DLL DropDownDelegateHelper : public GJDropDownLayerDelegate {
 public:
     Ref<CCTextInputNode> m_input = nullptr;
 
@@ -19,7 +19,7 @@ public:
     }
 };
 
-class $modify(BIMoreSearchLayer, MoreSearchLayer) {
+class BI_DLL $modify(BIMoreSearchLayer, MoreSearchLayer) {
     CCMenuItemSpriteExtra* m_savedBtn = nullptr;
     int m_songID = 0;
 

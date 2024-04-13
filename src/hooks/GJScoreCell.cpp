@@ -5,7 +5,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BIGJScoreCell, GJScoreCell) {
+class BI_DLL $modify(BIGJScoreCell, GJScoreCell) {
 
     /*
      * Callbacks

@@ -1,9 +1,11 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/GJGameLevel.hpp>
 
+#include "../../utils.hpp"
+
 using namespace geode::prelude;
 
-class $modify(GJGameLevel) {
+class BI_DLL $modify(GJGameLevel) {
     static gd::string lengthKeyToString(int key) {
         switch (key) {
             case 0: return "Tiny";

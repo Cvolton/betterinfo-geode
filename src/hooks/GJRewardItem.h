@@ -7,7 +7,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BIGJRewardItem, GJRewardItem) {
+class BI_DLL $modify(BIGJRewardItem, GJRewardItem) {
     static inline std::unordered_map<const GJRewardItem*, std::string> s_keys;
 
     void setKey(const std::string& key) {

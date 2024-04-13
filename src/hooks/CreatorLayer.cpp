@@ -6,7 +6,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BICreatorLayer, CreatorLayer) {
+class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
     /*
      * Callbacks
      */

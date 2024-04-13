@@ -5,7 +5,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BICommentCell, CommentCell) {
+class BI_DLL $modify(BICommentCell, CommentCell) {
     /*
      * Callbacks
      */

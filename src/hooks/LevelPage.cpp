@@ -1,11 +1,11 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LevelPage.hpp>
 
-#include "../utils/LevelProgressDialog.h"
+#include "../utils.hpp"
 
 using namespace geode::prelude;
 
-class $modify(LevelPage) {
+class BI_DLL $modify(LevelPage) {
     static void onModify(auto& self) {
         auto res = self.setHookPriority("LevelPage::onInfo", 99999);
     }

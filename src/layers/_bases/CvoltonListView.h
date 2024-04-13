@@ -1,9 +1,10 @@
 #pragma once
 
 #include <Geode/Geode.hpp>
+#include "../../utils.hpp"
 
 template <class Cell>
-class CvoltonListView : public CustomListView {
+class BI_DLL CvoltonListView : public CustomListView {
 protected:
     bool init(cocos2d::CCArray* entries, float width, float height, float separation);
     virtual ~CvoltonListView();

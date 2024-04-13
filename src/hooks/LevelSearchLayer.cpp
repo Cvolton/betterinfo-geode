@@ -1,9 +1,11 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LevelSearchLayer.hpp>
 
+#include "../utils.hpp"
+
 using namespace geode::prelude;
 
-class $modify(BILevelSearchLayer, LevelSearchLayer) {
+class BI_DLL $modify(BILevelSearchLayer, LevelSearchLayer) {
 
     GJSearchObject* getSearchObject(SearchType type, gd::string gdstr) {
         std::string str = gdstr;

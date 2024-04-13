@@ -2,7 +2,7 @@
 #include "../_bases/CvoltonAlertLayerStub.h"
 
 
-class RewardTypeSelectLayer : public CvoltonAlertLayerStub {
+class BI_DLL RewardTypeSelectLayer : public CvoltonAlertLayerStub {
 public:
     static RewardTypeSelectLayer* create();
     void onDaily(cocos2d::CCObject* sender);

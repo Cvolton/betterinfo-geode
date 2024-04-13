@@ -1,9 +1,10 @@
 #pragma once
 #include <Geode/Geode.hpp>
+#include "../utils.hpp"
 
 using namespace geode::prelude;
 
-class BetterInfoStats : public GManager {
+class BI_DLL BetterInfoStats : public GManager {
 	inline static BetterInfoStats* s_instance = nullptr;
 	BetterInfoStats();
 

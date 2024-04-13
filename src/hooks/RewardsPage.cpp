@@ -6,7 +6,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BIRewardsPage, RewardsPage) {
+class BI_DLL $modify(BIRewardsPage, RewardsPage) {
     CCLabelBMFont* m_timeLabel = nullptr;
 
     /*

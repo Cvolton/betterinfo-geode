@@ -2,10 +2,11 @@
 
 #include <Geode/Geode.hpp>
 #include <queue>
+#include "../utils.hpp"
 
 using namespace geode::prelude;
 
-class BetterInfoScheduler : public cocos2d::CCNode {
+class BI_DLL BetterInfoScheduler : public cocos2d::CCNode {
 	inline static BetterInfoScheduler* s_instance = nullptr;
 	BetterInfoScheduler();
 

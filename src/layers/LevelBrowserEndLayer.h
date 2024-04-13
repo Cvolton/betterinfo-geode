@@ -4,7 +4,7 @@
 
 using namespace geode::prelude;
 
-class LevelBrowserEndLayer : public CvoltonAlertLayerStub, public LevelManagerDelegate, public LevelCommentDelegate {
+class BI_DLL LevelBrowserEndLayer : public CvoltonAlertLayerStub, public LevelManagerDelegate, public LevelCommentDelegate {
     Ref<LevelBrowserLayer> m_levelBrowserLayer = nullptr;
     Ref<InfoLayer> m_infoLayer = nullptr;
     TextArea* m_textLabel = nullptr;

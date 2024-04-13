@@ -1,7 +1,7 @@
 #pragma once
 #include "_bases/CvoltonAlertLayerStub.h"
 
-class UnregisteredProfileLayer : public CvoltonAlertLayerStub {
+class BI_DLL UnregisteredProfileLayer : public CvoltonAlertLayerStub {
     Ref<GJUserScore> m_score = nullptr;
     Ref<CCNode> m_invoker = nullptr;
 public:

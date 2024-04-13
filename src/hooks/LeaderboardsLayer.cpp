@@ -1,9 +1,11 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LeaderboardsLayer.hpp>
 
+#include "../utils.hpp"
+
 using namespace geode::prelude;
 
-class $modify(BILeaderboardsLayer, LeaderboardsLayer) {
+class BI_DLL $modify(BILeaderboardsLayer, LeaderboardsLayer) {
 
     /*
      * Callbacks

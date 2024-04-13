@@ -1,9 +1,11 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/DailyLevelNode.hpp>
 
+#include "../utils.hpp"
+
 using namespace geode::prelude;
 
-class $modify(BIDailyLevelNode, DailyLevelNode) {
+class BI_DLL $modify(BIDailyLevelNode, DailyLevelNode) {
     bool init(GJGameLevel* level, DailyLevelPage* page, bool weekly) {
         if(!DailyLevelNode::init(level, page, weekly)) return false;
 

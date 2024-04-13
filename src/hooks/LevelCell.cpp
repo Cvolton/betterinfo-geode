@@ -7,7 +7,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BILevelCell, LevelCell) {
+class BI_DLL $modify(BILevelCell, LevelCell) {
     int m_hoverCount = 0;
     CCPoint m_lastMousePos = {0,0};
     CCNode* m_levelDesc = nullptr;

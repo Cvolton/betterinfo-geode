@@ -1,7 +1,7 @@
 #pragma once
 #include "_bases/CvoltonAlertLayerStub.h"
 
-class StarsInfoPopup : public CvoltonAlertLayerStub {
+class BI_DLL StarsInfoPopup : public CvoltonAlertLayerStub {
 public:
     static StarsInfoPopup* create();
     bool init();

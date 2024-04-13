@@ -2,7 +2,7 @@
 #include "../_bases/CvoltonOptionsLayer.h"
 #include "../../delegates/SongDialogCloseDelegate.h"
 
-class ProfileSearchOptionsSongSelect : public CvoltonOptionsLayer, public GJDropDownLayerDelegate {
+class BI_DLL ProfileSearchOptionsSongSelect : public CvoltonOptionsLayer, public GJDropDownLayerDelegate {
     SongDialogCloseDelegate* m_delegate;
     CCTextInputNode* m_textNode = nullptr;
     CCMenuItemSpriteExtra* m_savedBtn = nullptr;

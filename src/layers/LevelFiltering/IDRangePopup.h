@@ -2,7 +2,7 @@
 #include "../_bases/CvoltonAlertLayerStub.h"
 #include "../../delegates/IDRangeDelegate.h"
 
-class IDRangePopup : public CvoltonAlertLayerStub {
+class BI_DLL IDRangePopup : public CvoltonAlertLayerStub {
     IDRangeDelegate* m_delegate;
     CCTextInputNode* m_minNode = nullptr;
     CCTextInputNode* m_maxNode = nullptr;

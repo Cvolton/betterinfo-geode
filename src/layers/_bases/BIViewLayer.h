@@ -3,8 +3,9 @@
 #include "CvoltonListView.h"
 #include "BIBaseLayer.h"
 #include "../../delegates/PageNumberDelegate.h"
+#include "../../utils.hpp"
 
-class BIViewLayer : public BIBaseLayer, public PageNumberDelegate {
+class BI_DLL BIViewLayer : public BIBaseLayer, public PageNumberDelegate {
 protected:
     std::string m_title;
     std::string m_noInternetText = "No <cg>internet</c> connection!";

@@ -6,7 +6,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BIChallengesPage, ChallengesPage) {
+class BI_DLL $modify(BIChallengesPage, ChallengesPage) {
     CCMenuItemSpriteExtra* m_nextArrowBtn;
     CCMenuItemSpriteExtra* m_prevArrowBtn;
     std::vector<ChallengeNode*> m_queuedNodes;

@@ -2,7 +2,7 @@
 
 #include "../_bases/BIViewLayer.h"
 
-class RewardViewLayer : public BIViewLayer {
+class BI_DLL RewardViewLayer : public BIViewLayer {
 protected:
     virtual bool init(cocos2d::CCDictionary* chests, const char* title);
 public:

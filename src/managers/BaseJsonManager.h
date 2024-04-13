@@ -3,9 +3,11 @@
 #include <Geode/Geode.hpp>
 #include <shared_mutex>
 
+#include "../utils.hpp"
+
 using namespace geode::prelude;
 
-class BaseJsonManager {
+class BI_DLL BaseJsonManager {
 	std::atomic_bool m_loaded = false;
 	std::atomic_bool m_initDone = false;
 

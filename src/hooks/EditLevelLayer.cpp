@@ -1,11 +1,11 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/EditLevelLayer.hpp>
 
-#include "../utils/LevelProgressDialog.h"
+#include "../utils.hpp"
 
 using namespace geode::prelude;
 
-class $modify(BIEditLevelLayer, EditLevelLayer) {
+class BI_DLL $modify(BIEditLevelLayer, EditLevelLayer) {
     static void onModify(auto& self) {
         (void) self.setHookPriority("EditLevelLayer::onLevelInfo", 99999);
     }

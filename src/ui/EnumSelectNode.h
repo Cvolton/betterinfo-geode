@@ -1,10 +1,11 @@
 #pragma once
 #include <Geode/Geode.hpp>
+#include "../utils.hpp"
 
 using namespace geode::prelude;
 
 template <class Key, class DisplayType = int>
-class EnumSelectNode : public CCMenu {
+class BI_DLL EnumSelectNode : public CCMenu {
     std::map<Key, std::string> m_enumMap;
     typename std::map<Key, std::string>::iterator m_current;
     std::function<void(Key)> m_callback;

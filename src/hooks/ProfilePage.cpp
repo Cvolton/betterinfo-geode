@@ -42,7 +42,7 @@ namespace StaticStringHelper {
     }
 };
 
-class $modify(BIProfilePage, ProfilePage) {
+class BI_DLL $modify(BIProfilePage, ProfilePage) {
     /*
      * Callbacks
      */

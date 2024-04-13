@@ -5,7 +5,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BIItemInfoPopup, ItemInfoPopup) {
+class BI_DLL $modify(BIItemInfoPopup, ItemInfoPopup) {
 
     /*
      * Callbacks

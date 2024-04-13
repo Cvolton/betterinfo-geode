@@ -2,7 +2,7 @@
 #include "../_bases/CvoltonAlertLayerStub.h"
 #include "../../delegates/IDRangeDelegate.h"
 
-class GameVersionPopup : public CvoltonAlertLayerStub {
+class BI_DLL GameVersionPopup : public CvoltonAlertLayerStub {
     IDRangeDelegate* m_delegate;
     int m_min = 0;
     int m_max = 0;

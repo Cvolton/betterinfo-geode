@@ -1,10 +1,11 @@
 #pragma once
 
 #include <Geode/Geode.hpp>
+#include "../../utils.hpp"
 
 using namespace geode::prelude;
 
-class QuestHistoryCell : public GenericListCell {
+class BI_DLL QuestHistoryCell : public GenericListCell {
     public:
         QuestHistoryCell(const char* name, cocos2d::CCSize size);
         void loadFromData(CCObject* object);

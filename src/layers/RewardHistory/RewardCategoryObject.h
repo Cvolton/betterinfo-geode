@@ -6,7 +6,7 @@
 
 using namespace geode::prelude;
 
-class RewardCategoryObject : public CCObject {
+class BI_DLL RewardCategoryObject : public CCObject {
         Ref<cocos2d::CCDictionary> m_filteredChests = nullptr;
     public:
         std::string m_title;

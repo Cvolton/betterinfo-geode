@@ -1,9 +1,10 @@
 #pragma once
 #include <Geode/Geode.hpp>
+#include "../utils.hpp"
 
 using namespace geode::prelude;
 
-class DoubleArrow : public CCNode {
+class BI_DLL DoubleArrow : public CCNode {
     CCSprite* m_firstArrow = nullptr;
     CCSprite* m_secondArrow = nullptr;
     bool m_flipped = false;

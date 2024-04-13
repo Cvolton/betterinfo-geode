@@ -5,7 +5,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BIGJLevelList, GJLevelList) {
+class BI_DLL $modify(BIGJLevelList, GJLevelList) {
     void showListInfo() {
         std::string desc = getUnpackedDescription();
 

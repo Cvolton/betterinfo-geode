@@ -7,7 +7,7 @@
 
 using namespace geode::prelude;
 
-class $modify(BILevelListCell, LevelListCell) {
+class BI_DLL $modify(BILevelListCell, LevelListCell) {
     /*
      * Hooks
      */

@@ -1,10 +1,11 @@
 #pragma once
 
 #include <Geode/Geode.hpp>
+#include "../../utils.hpp"
 
 using namespace geode::prelude;
 
-class QuestHistoryObject : public CCObject {
+class BI_DLL QuestHistoryObject : public CCObject {
     public:
         int m_diamondCount;
         int m_questCount;

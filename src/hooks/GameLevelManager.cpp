@@ -7,7 +7,7 @@
 
 using namespace geode::prelude;
 
-class $modify(GameLevelManager) {
+class BI_DLL $modify(GameLevelManager) {
     bool skipSavedFilter = false;
     Ref<CCArray> filteredLevels = nullptr;
 

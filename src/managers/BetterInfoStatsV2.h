@@ -2,8 +2,9 @@
 
 #include "BaseJsonManager.h"
 #include "../objects/LevelDeath.h"
+#include "../utils.hpp"
 
-class BetterInfoStatsV2 : public BaseJsonManager {
+class BI_DLL BetterInfoStatsV2 : public BaseJsonManager {
 	inline static BetterInfoStatsV2* s_instance = nullptr;
 	BetterInfoStatsV2();
 

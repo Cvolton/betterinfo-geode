@@ -1,9 +1,11 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LevelLeaderboard.hpp>
 
+#include "../utils.hpp"
+
 using namespace geode::prelude;
 
-class $modify(BILevelLeaderboard, LevelLeaderboard) {
+class BI_DLL $modify(BILevelLeaderboard, LevelLeaderboard) {
 
     /*
      * Callbacks

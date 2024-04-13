@@ -1,10 +1,11 @@
 #pragma once
 
 #include <Geode/Geode.hpp>
+#include "../../utils.hpp"
 
 using namespace geode::prelude;
 
-class CvoltonAlertLayerStub : public FLAlertLayer {
+class BI_DLL CvoltonAlertLayerStub : public FLAlertLayer {
 public:
 	CCPoint m_alertSize;
 	CCMenuItemSpriteExtra* m_closeBtn;

@@ -5,8 +5,9 @@ using namespace geode::prelude;
 
 #include "_bases/CvoltonAlertLayerStub.h"
 #include "../delegates/UploadDateDelegate.h"
+#include "../utils.hpp"
 
-class ExtendedLevelInfo : public CvoltonAlertLayerStub, public UploadDateDelegate {
+class BI_DLL ExtendedLevelInfo : public CvoltonAlertLayerStub, public UploadDateDelegate {
     std::string m_primary;
     std::string m_secondary;
     std::string m_fileSizeCompressed = "NA";

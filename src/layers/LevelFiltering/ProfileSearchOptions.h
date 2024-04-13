@@ -9,7 +9,7 @@
 
 using namespace geode::prelude;
 
-class ProfileSearchOptions : public CvoltonOptionsLayer, public SongDialogCloseDelegate, public IDRangeDelegate {
+class BI_DLL ProfileSearchOptions : public CvoltonOptionsLayer, public SongDialogCloseDelegate, public IDRangeDelegate {
     std::unordered_map<std::string, bool> m_options;
     std::unordered_map<std::string, int> m_optionInts;
     Ref<LevelBrowserLayer> m_levelBrowserLayer = nullptr;

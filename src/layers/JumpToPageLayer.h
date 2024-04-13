@@ -3,7 +3,7 @@
 #include "../delegates/PageNumberDelegate.h"
 #include "../ui/DoubleArrow.h"
 
-class JumpToPageLayer : public CvoltonAlertLayerStub, public LevelCommentDelegate {
+class BI_DLL JumpToPageLayer : public CvoltonAlertLayerStub, public LevelCommentDelegate {
     Ref<InfoLayer> m_infoLayer = nullptr;
     PageNumberDelegate* m_pageNumberDelegate = nullptr;
     CCTextInputNode* m_textNode = nullptr;

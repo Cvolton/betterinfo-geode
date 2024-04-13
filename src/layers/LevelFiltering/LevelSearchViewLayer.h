@@ -7,7 +7,7 @@
 
 using namespace geode::prelude;
 
-class LevelSearchViewLayer : public BIViewLayer, public LevelManagerDelegate, public BISearchObjectDelegate {
+class BI_DLL LevelSearchViewLayer : public BIViewLayer, public LevelManagerDelegate, public BISearchObjectDelegate {
     BISearchObject m_searchObj;
     Ref<GJSearchObject> m_gjSearchObj = nullptr;
     Ref<GJSearchObject> m_gjSearchObjOptimized = nullptr;

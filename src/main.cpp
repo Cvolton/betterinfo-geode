@@ -11,7 +11,7 @@
 
 using namespace geode::prelude;
 
-void loadManagers() {
+void BI_DLL loadManagers() {
     BetterInfoStats::sharedState();
 
     std::thread([] {
@@ -22,7 +22,7 @@ void loadManagers() {
     
 }
 
-void finishLoadingManagers() {
+void BI_DLL finishLoadingManagers() {
     std::thread([] {
         thread::setName("BI Manager Loader II");
         BetterInfoCache::sharedState()->finishLoading();
@@ -30,7 +30,7 @@ void finishLoadingManagers() {
     
 }
 
-class $modify(MenuLayer) {
+class BI_DLL $modify(MenuLayer) {
     bool init() {
         if(!MenuLayer::init()) return false;
 

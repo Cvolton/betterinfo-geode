@@ -2,7 +2,7 @@
 #include "../_bases/CvoltonOptionsLayer.h"
 #include "../../delegates/IDRangeDelegate.h"
 
-class CvoltonSearchOptions : public CvoltonOptionsLayer, public IDRangeDelegate {
+class BI_DLL CvoltonSearchOptions : public CvoltonOptionsLayer, public IDRangeDelegate {
 public:
     static CvoltonSearchOptions* create();
     void onClose(cocos2d::CCObject* sender);
