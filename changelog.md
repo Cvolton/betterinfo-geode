@@ -1,4 +1,13 @@
 # Changelog
+## <cg>v4.1.8</c> (2024-04-15)
+* <cj>Jump to Last Page</c> button is now <cp>pink</c> if it opens <co>Last Page Search</c>
+* <cg>Made</c> the <cj>Filters popup</c> in <cj>Filtered Search</c> open immediately
+* <cg>Made</c> the <cj>Last Page Search</c> start immediately
+* <cg>Fixed</c> <cj>Filtered Search</c> button missing from <co>user level search</c>
+* <cg>Fixed</c> <cj>completion times</c> being shown in <cr>UTC</c>
+* <cg>Exported</c> <cj>function symbols</c> (experimental, for developers)
+* Other bugfixes & improvements
+
 ## <cg>v4.1.7</c> (2024-03-28)
 * <cg>Fixed</c> a few other obscure <cr>crashes</c>
 * <cg>Made</c> the mod <cj>early-load</c> to make cache load faster
