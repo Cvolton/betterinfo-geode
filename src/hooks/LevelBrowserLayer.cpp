@@ -11,7 +11,8 @@ using namespace geode::prelude;
 
 class BI_DLL 
 $modify(BILevelBrowserLayer, LevelBrowserLayer) {
-    DoubleArrow* m_biLastPageBtn = nullptr;
+    CCMenuItemSpriteExtra* m_biLastPageBtn = nullptr;
+    DoubleArrow* m_biLastPageBtnArrow = nullptr;
 
     static void onModify(auto& self) {
         (void) self.setHookPriority("LevelBrowserLayer::onGoToPage", 99999);
@@ -76,14 +77,14 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
 
         if(auto pageMenu = getChildByID("page-menu")) {
             if(auto lastButton = pageMenu->getChildByID("last-button"_spr)) {
-                lastButton->setVisible(this->m_itemCount > BetterInfo::levelsPerPage(this->m_searchObject));
+                lastButton->setVisible(m_rightArrow->isVisible());
             }
             if(auto randomButton = pageMenu->getChildByID("random-button"_spr)) {
                 randomButton->setVisible(this->m_itemCount > BetterInfo::levelsPerPage(this->m_searchObject));
             }
         }
 
-        if(auto lastBtn = m_fields->m_biLastPageBtn) {
+        if(auto lastBtn = m_fields->m_biLastPageBtnArrow) {
             lastBtn->usePopupTexture(shouldSearchForLastPage());
         }
     }
@@ -118,6 +119,12 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         showFilteredText();
     }
 
+    void loadPage(GJSearchObject* searchObj) {
+        LevelBrowserLayer::loadPage(searchObj);
+
+        refreshButtonVisibility();
+    }
+
     bool init(GJSearchObject* searchObj) {
         if(!LevelBrowserLayer::init(searchObj)) return false;
 
@@ -139,13 +146,13 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
              * Last page button
             */
             if(!BetterInfo::isLocal(this->m_searchObject)){
-                auto lastBtn = CCMenuItemSpriteExtra::create(
-                    m_fields->m_biLastPageBtn = DoubleArrow::create(true, shouldSearchForLastPage()),
+                m_fields->m_biLastPageBtn = CCMenuItemSpriteExtra::create(
+                    m_fields->m_biLastPageBtnArrow = DoubleArrow::create(true, shouldSearchForLastPage()),
                     this,
                     menu_selector(BILevelBrowserLayer::onLevelBrowserLast)
                 );
-                lastBtn->setID("last-button"_spr);
-                pageMenu->addChild(lastBtn);
+                m_fields->m_biLastPageBtn->setID("last-button"_spr);
+                pageMenu->addChild(m_fields->m_biLastPageBtn);
             }
 
             /**
