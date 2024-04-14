@@ -36,7 +36,7 @@ std::string ServerUtils::getBaseURL() {
 std::string ServerUtils::getBasePostString() {
     auto ret =  fmt::format("gameVersion={}&binaryVersion={}&gdw={}&udid={}&uuid={}", 22, 40, 0, GameManager::sharedState()->m_playerUDID, GameManager::sharedState()->m_playerUserID.value());
 
-    if(GJAccountManager::sharedState()->m_accountID <= 0) ret += fmt::format("&accountID={}&gjp2={}", GJAccountManager::sharedState()->m_accountID, GJAccountManager::sharedState()->m_GJP2);
+    if(GJAccountManager::sharedState()->m_accountID > 0) ret += fmt::format("&accountID={}&gjp2={}", GJAccountManager::sharedState()->m_accountID, GJAccountManager::sharedState()->m_GJP2);
 
     return ret;
 }
@@ -52,7 +52,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
     if(searchObject->m_epicFilter) postString += "&epic=1";
     if(searchObject->m_legendaryFilter) postString += "&legendary=1";
     if(searchObject->m_mythicFilter) postString += "&mythic=1";
-    if(searchObject->m_searchType == SearchType::UsersLevels) postString += "&local=1";
+    if(searchObject->m_searchType == SearchType::UsersLevels) postString += fmt::format("&local={}", BetterInfo::stoi(searchObject->m_searchQuery) == GameManager::sharedState()->m_playerUserID);
     if(searchObject->m_songFilter) {
         postString += fmt::format("&song={}", searchObject->m_songID);
         if(searchObject->m_customSongFilter) postString += "&customSong=1";
