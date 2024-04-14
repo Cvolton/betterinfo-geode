@@ -820,6 +820,12 @@ UnlockType BetterInfo::iconTypeToUnlockType(IconType type) {
     return (UnlockType) result;
 }
 
+bool BetterInfo::isLevelSearchObject(GJSearchObject* object) {
+    if(object->m_searchType == SearchType::UsersLevels) return object->m_searchMode == 0;
+
+    return object->isLevelSearchObject();
+}
+
 AxisLayoutOptions* BetterInfo::copyLayoutOptions(CCNode* a) {
     return copyLayoutOptions(typeinfo_cast<AxisLayoutOptions*>(a->getLayoutOptions()));
 }

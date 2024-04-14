@@ -9,7 +9,8 @@
 
 using namespace geode::prelude;
 
-class BI_DLL $modify(BILevelBrowserLayer, LevelBrowserLayer) {
+class BI_DLL 
+$modify(BILevelBrowserLayer, LevelBrowserLayer) {
     DoubleArrow* m_biLastPageBtn = nullptr;
 
     static void onModify(auto& self) {
@@ -157,7 +158,7 @@ class BI_DLL $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             /**
              * Filter button
             */
-            bool isScreenWithoutFilterBtn = !m_searchObject->isLevelSearchObject() || m_searchObject->m_searchType == SearchType::MyLevels;
+            bool isScreenWithoutFilterBtn = !BetterInfo::isLevelSearchObject(m_searchObject) || m_searchObject->m_searchType == SearchType::MyLevels;
 
             auto filterSprite = CCSprite::createWithSpriteFrameName("GJ_plusBtn_001.png");
             filterSprite->setScale(0.7f);

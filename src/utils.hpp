@@ -82,6 +82,7 @@ namespace BetterInfo {
     BI_DLL CCMenuItemSpriteExtra* replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler);
 
     BI_DLL UnlockType iconTypeToUnlockType(IconType type);
+    BI_DLL bool isLevelSearchObject(GJSearchObject* object);
 
     BI_DLL AxisLayoutOptions* copyLayoutOptions(CCNode* a);
     BI_DLL AxisLayoutOptions* copyLayoutOptions(AxisLayoutOptions* a);
