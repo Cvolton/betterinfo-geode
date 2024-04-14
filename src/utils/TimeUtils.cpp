@@ -16,8 +16,10 @@
 using namespace std::chrono;
 
 std::string TimeUtils::timeToString(time_t input) {
-    auto tp = system_clock::from_time_t(input);
-    return fmt::format("{:%F %H:%M}", tp);
+    auto timeInfo = std::localtime(&input);
+    std::ostringstream ss;
+    ss << std::put_time(timeInfo, "%F %H:%M");
+    return ss.str();
 }
 
 std::string TimeUtils::isoTimeToString(const std::string& input) {
