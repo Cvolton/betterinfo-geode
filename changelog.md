@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.1.9</c> (2024-04-21)
+* <cg>Fixed</c> <cr>random crashes</c> caused by conflicts with other mods
+* <cg>Added</c> more <cj>skibidi rizz</c> (requested by Kynex7510)
+
 ## <cg>v4.1.8</c> (2024-04-15)
 * <cj>Jump to Last Page</c> button is now <cp>pink</c> if it opens <co>Last Page Search</c>
 * <cg>Made</c> the <cj>Filters popup</c> in <cj>Filtered Search</c> open immediately
