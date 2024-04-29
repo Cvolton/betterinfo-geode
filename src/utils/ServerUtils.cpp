@@ -41,6 +41,40 @@ std::string ServerUtils::getBasePostString() {
     return ret;
 }
 
+std::string ServerUtils::getSearchObjectKey(GJSearchObject* searchObject) {
+    if(searchObject->m_searchType == SearchType::Users) return fmt::format("{}_{}_{}", (int) SearchType::Users, searchObject->m_searchQuery, searchObject->m_page);
+
+    std::array<std::string, 3> stringKeys = {searchObject->m_searchQuery, searchObject->m_difficulty, searchObject->m_length};
+    std::array<int, 18> intKeys = {
+        searchObject->m_page,
+        searchObject->m_starFilter,
+        searchObject->m_uncompletedFilter,
+        searchObject->m_featuredFilter,
+        searchObject->m_songID,
+        searchObject->m_originalFilter,
+        searchObject->m_twoPlayerFilter,
+        searchObject->m_customSongFilter,
+        searchObject->m_songFilter,
+        searchObject->m_noStarFilter,
+        searchObject->m_coinsFilter,
+        searchObject->m_epicFilter,
+        searchObject->m_legendaryFilter,
+        searchObject->m_mythicFilter,
+        searchObject->m_completedFilter,
+        (int) searchObject->m_demonFilter,
+        searchObject->m_folder,
+        searchObject->m_searchMode
+    };
+
+    std::string ret = std::to_string((int) searchObject->m_searchType) + "_";
+
+    for(auto key : stringKeys) ret += (key + "_");
+    for(auto key : intKeys) ret += (std::to_string(key) + "_");
+
+    ret.pop_back();
+    return ret;
+}
+
 void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<Ref<GJGameLevel>>, bool)> callback, bool cacheLevels) {
     std::string completedLevels = "";
 
@@ -70,11 +104,16 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
         postString += fmt::format("&completedLevels={}", completedLevels);
     }
     //if(searchObject->m_searchType == SearchType::LevelListsOnClick) postString += "&inc=1";
+
+    // TODO: in theory this is not fully thread safe
+    // - it can crash if you follow someone while its iterating the followed list
+    // however i cannot think of a way to reproduce this in-game without doing it
+    // in code, so i will leave fixing this for later
     postString += GameLevelManager::sharedState()->writeSpecialFilters(searchObject);
 
     postString += "&secret=Wmfd2893gb7";
 
-    std::string key = searchObject->getKey();
+    std::string key = getSearchObjectKey(searchObject);
 
     web::AsyncWebRequest()
         .userAgent("")
