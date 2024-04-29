@@ -32,7 +32,7 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
 
     void onLevelBrowserRandom(CCObject* sender){
         if(this->m_searchObject == nullptr) return;
-        int pageMax = this->m_itemCount / BetterInfo::levelsPerPage(this->m_searchObject);
+        int pageMax = (this->m_itemCount - 1) / BetterInfo::levelsPerPage(this->m_searchObject);
 
         int pageToLoad = BetterInfo::randomNumber(0, pageMax);
 
