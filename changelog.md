@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.1.10</c> (2024-04-30)
+* <cg>Fixed</c> a <cr>crash</c> only 2 people ever got
+* <cg>Fixed</c> <cj>random button</c> sometimes jumping to an <co>empty page</c>
+
 ## <cg>v4.1.9</c> (2024-04-21)
 * <cg>Fixed</c> <cr>random crashes</c> caused by conflicts with other mods
 * <cg>Added</c> more <cj>skibidi rizz</c> (requested by Kynex7510)
