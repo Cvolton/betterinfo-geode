@@ -172,7 +172,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             //getting headers is currently not supported, gotta wait for new index...
             showCFError(response);
 
-            callback({}, false);
+            callback(std::make_shared<std::vector<Ref<GJGameLevel>>>(), false);
         });
 }
 

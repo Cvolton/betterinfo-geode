@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.1.12</c> (2024-05-25)
+* <cg>Fixed</c> the fix i dont even care anymore
+
 ## <cg>v4.1.11</c> (2024-05-25)
 * <cg>Fixed</c> another <cr>crash</c> only 2 people ever got
 
