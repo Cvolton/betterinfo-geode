@@ -122,15 +122,16 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
         .fetch(fmt::format("{}/getGJLevels21.php", getBaseURL()))
         .text()
         .then([callback, key, cacheLevels](web::SentAsyncWebRequest& request, const std::string& response) {
+            auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
+
             size_t hashes = std::count(response.begin(), response.end(), '#');
-            if(hashes < 4) return callback({}, false);
+            if(hashes < 4) return callback(levels, false);
 
             std::stringstream responseStream(response);
             std::string levelData;
             std::string userData;
             std::string songData;
             std::string pageData;
-            auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
             getline(responseStream, levelData, '#');
             getline(responseStream, userData, '#');
@@ -172,7 +173,9 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             //getting headers is currently not supported, gotta wait for new index...
             showCFError(response);
 
-            callback(std::make_shared<std::vector<Ref<GJGameLevel>>>(), false);
+            auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
+
+            callback(levels, false);
         });
 }
 
