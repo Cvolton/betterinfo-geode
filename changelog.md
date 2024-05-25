@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.1.11</c> (2024-05-25)
+* <cg>Fixed</c> another <cr>crash</c> only 2 people ever got
+
 ## <cg>v4.1.10</c> (2024-04-30)
 * <cg>Fixed</c> a <cr>crash</c> only 2 people ever got
 * <cg>Fixed</c> <cj>random button</c> sometimes jumping to an <co>empty page</c>
