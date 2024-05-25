@@ -75,7 +75,7 @@ std::string ServerUtils::getSearchObjectKey(GJSearchObject* searchObject) {
     return ret;
 }
 
-void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::vector<Ref<GJGameLevel>>, bool)> callback, bool cacheLevels) {
+void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJGameLevel>>>, bool)> callback, bool cacheLevels) {
     std::string completedLevels = "";
 
     std::string postString = fmt::format("{}&type={}&str={}&diff={}&len={}&page={}&total={}&uncompleted={}&onlyCompleted={}&featured={}&original={}&twoPlayer={}&coins={}",
@@ -130,7 +130,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             std::string userData;
             std::string songData;
             std::string pageData;
-            std::vector<Ref<GJGameLevel>> levels;
+            auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
             getline(responseStream, levelData, '#');
             getline(responseStream, userData, '#');
@@ -154,11 +154,11 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             std::string currentLevel;
             while(getline(levelStream, currentLevel, '|')) {
                 auto level = GJGameLevel::create(BetterInfo::responseToDict(currentLevel), false);
-                levels.push_back(level);
+                levels->push_back(level);
             }
 
             CCArray* levelArray = CCArray::create();
-            for(auto level : levels) levelArray->addObject(level);
+            for(auto level : *levels) levelArray->addObject(level);
 
             GameLevelManager::sharedState()->saveFetchedLevels(levelArray);
             if(cacheLevels) {

@@ -172,7 +172,7 @@ void LevelSearchViewLayer::queueLoad(float dt) {
     ServerUtils::getOnlineLevels(m_gjSearchObjLoaded, [this, key](auto levels, bool success) {
         if(success) {
             auto array = CCArray::create();
-            for(auto level : levels) {
+            for(auto level : *levels) {
                 array->addObject(level);
             }
             this->loadLevelsFinished(array, key.c_str());

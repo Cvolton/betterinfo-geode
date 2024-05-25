@@ -43,7 +43,10 @@ void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
     auto GLM = GameLevelManager::sharedState();
 
     size_t i = 0;
-    for(auto [key, currentLvl] : CCDictionaryExt<gd::string, GJGameLevel*>(dict)) {
+    cocos2d::CCDictElement* element = nullptr;
+    CCDICT_FOREACH(dict, element) {
+        auto key = element->getStrKey();
+        auto currentLvl = static_cast<GJGameLevel*>(element->getObject());
         auto idString = std::to_string(currentLvl->m_levelID);
         if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString) && objectExists("demon-difficulty-dict", idString) && getLevelName(currentLvl->m_levelID) != "") continue;
 
@@ -78,6 +81,8 @@ void BetterInfoCache::cacheLevel(GJGameLevel* level) {
 }
 
 void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchType, int levelsPerRequest) {
+    log::info("cacheLevels called from thread {}", thread::getName());
+
     //Search type 10 currently does not have a limit on level IDs, so we can do this all in one request
     bool first = true;
     std::stringstream levels;
@@ -100,47 +105,49 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchTyp
     //Limit to 20 requests, so we don't get too rate limited
     if(levelSets.size() > 20) levelSets.resize(20);
 
-    //Splitting up the request like this is required because GJSearchObject::create crashes if str is too long
-    //Status update: This was actually GLM getOnlineLevels, the issue is with CCDict max key length
-    //However we still need to split this up because we can request too many levels
-    //and we now use search types that do have a total level limit
-    std::vector<Ref<GJSearchObject>> searchObjects;
-    for(const auto& set : levelSets) {
-        auto searchObj = GJSearchObject::create(searchType, set);
-        searchObjects.push_back(searchObj);
-    }
-
-    std::thread([this, searchObjects] {
-        thread::setName("Level Cache");
-
-        using namespace std::chrono_literals;
-        for(auto& searchObj : searchObjects) {
-            ServerUtils::getOnlineLevels(
-                searchObj, 
-                [this](auto levels, bool) {
-                    std::thread([this, levels] {
-                        thread::setName("Level Cache (Inner)");
-                        for(auto level : levels) {
-                            cacheLevel(level);
-                        }
-                        doSave();
-                        Loader::get()->queueInMainThread([levels] {
-                            if(levels.size() > 0) log::debug("Cached {} levels", levels.size());
-                            // this is just a workaround to make sure the vector only gets destroyed in main thread
-                        });
-                    }).detach();
-                },
-                false
-            );
-
-            std::this_thread::sleep_for(1500ms);
+    Loader::get()->queueInMainThread([this, levelSets = std::move(levelSets), searchType]() mutable {
+        //Splitting up the request like this is required because GJSearchObject::create crashes if str is too long
+        //Status update: This was actually GLM getOnlineLevels, the issue is with CCDict max key length
+        //However we still need to split this up because we can request too many levels
+        //and we now use search types that do have a total level limit
+        auto searchObjects = std::make_shared<std::vector<Ref<GJSearchObject>>>();
+        for(const auto& set : levelSets) {
+            auto searchObj = GJSearchObject::create(searchType, set);
+            searchObjects->push_back(searchObj);
         }
-        
-        Loader::get()->queueInMainThread([searchObjects] {
-            if(searchObjects.size() > 0) log::debug("Finished caching levels");
-            // this is just a workaround to make sure the vector only gets destroyed in main thread
-        });
-    }).detach();
+
+        std::thread([this, searchObjects]() mutable {
+            thread::setName("Level Cache");
+
+            using namespace std::chrono_literals;
+            for(const auto& searchObj : *searchObjects) {
+                ServerUtils::getOnlineLevels(
+                    searchObj, 
+                    [this](auto levels, bool) {
+                        std::thread([this, levels] {
+                            thread::setName("Level Cache (Inner)");
+                            for(const auto& level : *levels) {
+                                cacheLevel(level);
+                            }
+                            doSave();
+                            Loader::get()->queueInMainThread([levels] {
+                                if(levels->size() > 0) log::debug("Cached {} levels", levels->size());
+                                // this is just a workaround to make sure the vector only gets destroyed in main thread
+                            });
+                        }).detach();
+                    },
+                    false
+                );
+
+                std::this_thread::sleep_for(1500ms);
+            }
+            
+            Loader::get()->queueInMainThread(std::move([searchObjects]() mutable {
+                if(searchObjects->size() > 0) log::debug("Finished caching levels");
+                // this is just a workaround to make sure the vector only gets destroyed in main thread
+            }));
+        }).detach();
+    });
 
 }
 
