@@ -81,8 +81,6 @@ void BetterInfoCache::cacheLevel(GJGameLevel* level) {
 }
 
 void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchType, int levelsPerRequest) {
-    log::info("cacheLevels called from thread {}", thread::getName());
-
     //Search type 10 currently does not have a limit on level IDs, so we can do this all in one request
     bool first = true;
     std::stringstream levels;
