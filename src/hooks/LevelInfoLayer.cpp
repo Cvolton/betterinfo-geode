@@ -124,6 +124,8 @@ class BI_DLL $modify(LevelInfoLayer) {
     }
 
     void onLevelInfo(CCObject* sender) {
+        static_assert(&LevelInfoLayer::onLevelInfo, "Hook not implemented");
+
         LevelProgressDialog::show(this->m_level);
     }
 };

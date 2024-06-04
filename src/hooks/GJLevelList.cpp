@@ -7,6 +7,8 @@ using namespace geode::prelude;
 
 class BI_DLL $modify(BIGJLevelList, GJLevelList) {
     void showListInfo() {
+        static_assert(&GJLevelList::showListInfo, "Hook not implemented");
+
         std::string desc = getUnpackedDescription();
 
         std::stringstream ss;

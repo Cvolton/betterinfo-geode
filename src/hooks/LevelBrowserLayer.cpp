@@ -107,6 +107,8 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
      * Hooks
      */
     void onGoToPage(CCObject* sender) {
+        static_assert(&LevelBrowserLayer::onGoToPage, "Hook not implemented");
+
         auto popup = SetIDPopup::create(m_searchObject->m_page + 1, 1, 999999, "Go to Page", "Go", true, 1, 60.f, false, false);
         popup->m_delegate = this;
         popup->show();

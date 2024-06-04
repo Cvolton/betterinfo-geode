@@ -58,6 +58,8 @@ class BI_DLL $modify(BIEditLevelLayer, EditLevelLayer) {
     }
 
     void onLevelInfo(CCObject* sender) {
+        static_assert(&EditLevelLayer::onLevelInfo, "Hook not implemented");
+
         LevelProgressDialog::show(this->m_level);
     }
 };

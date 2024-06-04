@@ -11,6 +11,8 @@ class BI_DLL $modify(LevelPage) {
     }
 
     void onInfo(CCObject* sender) {
+        static_assert(&LevelPage::onInfo, "Hook not implemented");
+
         LevelProgressDialog::show(this->m_level);
     }
 };
