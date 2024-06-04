@@ -20,8 +20,10 @@ public:
 };
 
 class BI_DLL $modify(BIMoreSearchLayer, MoreSearchLayer) {
-    CCMenuItemSpriteExtra* m_savedBtn = nullptr;
-    int m_songID = 0;
+    struct Fields {
+        CCMenuItemSpriteExtra* m_savedBtn = nullptr;
+        int m_songID = 0;
+    };
 
     bool shouldSavedBtnBeVisible(){
         return GameLevelManager::sharedState()->getBoolForKey("customsong_filter") && GameLevelManager::sharedState()->getBoolForKey("enable_songFilter");

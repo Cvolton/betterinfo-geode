@@ -6,7 +6,9 @@
 using namespace geode::prelude;
 
 class BI_DLL $modify(BILevelAreaInnerLayer, LevelAreaInnerLayer) {
-    CCMenu* m_menu = nullptr;
+    struct Fields {
+        CCMenu* m_menu = nullptr;
+    };
 
     /*
      * Callbacks

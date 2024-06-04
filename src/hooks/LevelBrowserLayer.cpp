@@ -11,8 +11,10 @@ using namespace geode::prelude;
 
 class BI_DLL 
 $modify(BILevelBrowserLayer, LevelBrowserLayer) {
-    CCMenuItemSpriteExtra* m_biLastPageBtn = nullptr;
-    DoubleArrow* m_biLastPageBtnArrow = nullptr;
+    struct Fields {
+        CCMenuItemSpriteExtra* m_biLastPageBtn = nullptr;
+        DoubleArrow* m_biLastPageBtnArrow = nullptr;
+    };
 
     static void onModify(auto& self) {
         (void) self.setHookPriority("LevelBrowserLayer::onGoToPage", 99999);

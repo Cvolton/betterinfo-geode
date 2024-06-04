@@ -22,7 +22,7 @@ Result<> BaseJsonManager::load() {
     std::unique_lock guard(m_jsonMutex);
 
     auto savedPath = Mod::get()->getSaveDir() / m_filename;
-    if (ghc::filesystem::exists(savedPath)) {
+    if (std::filesystem::exists(savedPath)) {
         auto result = utils::file::readString(savedPath);
         if (!result) {
             return Err(result.unwrapErr());

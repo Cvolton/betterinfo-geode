@@ -79,7 +79,7 @@ class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
             updatePopup->show();
         }
 
-        Mod::get()->setSavedValue<std::string>("last_launch_version", Mod::get()->getVersion().toString());
+        Mod::get()->setSavedValue<std::string>("last_launch_version", Mod::get()->getVersion().toVString());
 
         //showQuestExclamationMark();
 

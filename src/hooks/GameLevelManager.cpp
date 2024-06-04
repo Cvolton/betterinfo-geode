@@ -8,8 +8,10 @@
 using namespace geode::prelude;
 
 class BI_DLL $modify(GameLevelManager) {
-    bool skipSavedFilter = false;
-    Ref<CCArray> filteredLevels = nullptr;
+    struct Fields {
+        bool skipSavedFilter = false;
+        Ref<CCArray> filteredLevels = nullptr;
+    };
 
     /*
      * Helpers
@@ -235,7 +237,7 @@ class BI_DLL $modify(GameLevelManager) {
             auto value = header.substr(13);
             auto seconds = BetterInfo::stoi(value);
 
-            Notification::create(fmt::format(" Rate limited by RobTop's server\n Try again in {}", GameToolbox::getTimeString(seconds)), NotificationIcon::Warning, 5.f)->show();
+            Notification::create(fmt::format(" Rate limited by RobTop's server\n Try again in {}", GameToolbox::getTimeString(seconds, false)), NotificationIcon::Warning, 5.f)->show();
             return;
         }
 

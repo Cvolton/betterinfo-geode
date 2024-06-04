@@ -7,7 +7,9 @@
 using namespace geode::prelude;
 
 class BI_DLL $modify(BIRewardsPage, RewardsPage) {
-    CCLabelBMFont* m_timeLabel = nullptr;
+    struct Fields {
+        CCLabelBMFont* m_timeLabel = nullptr;
+    };
 
     /*
      * Callbacks
@@ -21,7 +23,7 @@ class BI_DLL $modify(BIRewardsPage, RewardsPage) {
 
         double time = 0xFFFFF - TimeUtils::getRobTopTime();
         m_fields->m_timeLabel->setString(
-            fmt::format("Time until timer bug: {}", GameToolbox::getTimeString(time)).c_str()
+            fmt::format("Time until timer bug: {}", GameToolbox::getTimeString(time, false)).c_str()
         );
     }
 

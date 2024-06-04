@@ -7,11 +7,13 @@
 using namespace geode::prelude;
 
 class BI_DLL $modify(BIChallengesPage, ChallengesPage) {
-    CCMenuItemSpriteExtra* m_nextArrowBtn;
-    CCMenuItemSpriteExtra* m_prevArrowBtn;
-    std::vector<ChallengeNode*> m_queuedNodes;
-    std::vector<CCNode*> m_queuedDots;
-    size_t m_page = 0;
+    struct Fields {
+        CCMenuItemSpriteExtra* m_nextArrowBtn;
+        CCMenuItemSpriteExtra* m_prevArrowBtn;
+        std::vector<ChallengeNode*> m_queuedNodes;
+        std::vector<CCNode*> m_queuedDots;
+        size_t m_page = 0;
+    };
 
     /*
      * Callbacks
@@ -196,7 +198,7 @@ class BI_DLL $modify(BIChallengesPage, ChallengesPage) {
                 double time = GameStatsManager::sharedState()->m_challengeTime;
                 bool useRobTopTime = time < 1048576;
                 if(!GameStatsManager::sharedState()->getChallenge(i)) time += 28800; // GDPS incompatible assumption
-                countdownLabel->setString(GameToolbox::getTimeString(time - (useRobTopTime ? TimeUtils::getRobTopTime() : TimeUtils::getFullDoubleTime())).c_str());
+                countdownLabel->setString(GameToolbox::getTimeString(time - (useRobTopTime ? TimeUtils::getRobTopTime() : TimeUtils::getFullDoubleTime()), false).c_str());
             }
         }
     }

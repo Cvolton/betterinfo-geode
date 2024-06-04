@@ -10,7 +10,9 @@
 using namespace geode::prelude;
 
 class BI_DLL $modify(BIInfoLayer, InfoLayer) {
-    ButtonSprite* m_pageBtn = nullptr;
+    struct Fields {
+        ButtonSprite* m_pageBtn = nullptr;
+    };
 
     static void onModify(auto& self) {
         auto res = self.setHookPriority("InfoLayer::onMore", 99999);

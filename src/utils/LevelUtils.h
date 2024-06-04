@@ -3,6 +3,8 @@
 #include <Geode/Geode.hpp>
 #include "../utils.hpp"
 
+#include <deque>
+
 using namespace geode::prelude;
 
 namespace LevelUtils {

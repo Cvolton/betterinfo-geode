@@ -23,9 +23,9 @@ void BetterInfoStats::migrateSaveData() {
     auto oldPath = dirs::getSaveDir() / "CCBetterInfoStats.dat";
     auto newPath = dirs::getSaveDir() / std::string(this->m_fileName); //it would be better to utilize Mod::get()->getSaveDir, however that can result in future issues
 
-    if(ghc::filesystem::exists(oldPath) && !ghc::filesystem::exists(newPath)) {
+    if(std::filesystem::exists(oldPath) && !std::filesystem::exists(newPath)) {
         log::info("CCBetterInfoStats exists in main GD folder but not in mod folder, migrating");
-        ghc::filesystem::rename(oldPath, newPath);
+        std::filesystem::rename(oldPath, newPath);
         
         this->getScheduler()->scheduleSelector(schedule_selector(BetterInfoStats::migrationPopup), this, 1, 0, 3, false);
     }

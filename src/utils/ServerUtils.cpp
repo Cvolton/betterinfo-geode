@@ -12,8 +12,8 @@ std::string ServerUtils::getBaseURL() {
     // in the main game executable
     char* originalUrl = nullptr;
     #ifdef GEODE_IS_WINDOWS
-        static_assert(GEODE_COMP_GD_VERSION == 22040, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0x410a74); //not a mistake
+        static_assert(GEODE_COMP_GD_VERSION == 22060, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x5251d0);
     #elif defined(GEODE_IS_MACOS)
         static_assert(GEODE_COMP_GD_VERSION == 22000, "Unsupported GD version");
         originalUrl = (char*)(base::get() + 0x83c079);
@@ -138,7 +138,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             getline(responseStream, songData, '#');
             getline(responseStream, pageData, '#');
 
-            MusicDownloadManager::sharedState()->createSongsInfo(songData);
+            MusicDownloadManager::sharedState()->createSongsInfo(songData, "");
 
             std::stringstream userStream(userData);
             std::string currentUser;
