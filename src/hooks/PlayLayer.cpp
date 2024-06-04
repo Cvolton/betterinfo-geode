@@ -12,7 +12,7 @@ using namespace geode::prelude;
 
 class BI_DLL $modify(BIPlayLayer, PlayLayer) {
 
-    inline static bool needsReset = false;
+    //inline static bool needsReset = false;
 
     void levelComplete(){
         PlayLayer::levelComplete();
@@ -41,13 +41,13 @@ class BI_DLL $modify(BIPlayLayer, PlayLayer) {
         PlayLayer::onQuit();
     }
 
-    void destroyPlayer(PlayerObject* player, GameObject* spike) {
+    /*void destroyPlayer(PlayerObject* player, GameObject* spike) {
         PlayLayer::destroyPlayer(player, spike);
 
-        /*if(!m_isDead || needsReset) return;
-        needsReset = true;*/
+        if(!m_isDead || needsReset) return;
+        needsReset = true;
 
-        /*log::info("death x: {}", player->m_position.x);
+        log::info("death x: {}", player->m_position.x);
         log::info("death y: {}", player->m_position.y);
         log::info("death rotation: {}", player->getRotation());
         log::info("percent: {}", m_lastDeathPercent);
@@ -56,11 +56,11 @@ class BI_DLL $modify(BIPlayLayer, PlayLayer) {
             .x = player->m_position.x,
             .y = player->m_position.y,
             .rotation = player->getRotation()
-        });*/
-    }
+        });
+    }*/
 
     void resetLevel(){
-        needsReset = false;
+        //needsReset = false;
 
         PlayLayer::resetLevel();
 
