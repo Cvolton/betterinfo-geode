@@ -17,37 +17,6 @@ class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
     }
 
     /*
-     * Helpers
-     */
-    /*void showQuestExclamationMark(){
-        auto menu = static_cast<CCMenu*>(this->getChildByID("creator-buttons-menu"));
-        auto GSM = GameStatsManager::sharedState();
-
-        bool showExclamation = false;
-        for(int i = 1; i < 4; i++){
-            GJChallengeItem* item = GSM->getChallenge(i);
-            if(item != nullptr && item->m_canClaim) showExclamation = true;
-        }
-
-        if(menu == nullptr || !showExclamation) return;
-
-        auto questBtn = static_cast<CCMenuItemSpriteExtra*>(menu->getChildByID("quests-button"));
-        if(questBtn == nullptr) return;
-
-        auto existingNode = questBtn->getChildByID("exclamation-mark"_spr);
-        if(existingNode != nullptr){
-            existingNode->setVisible(true);
-            return;
-        }
-
-        auto exMark = CCSprite::createWithSpriteFrameName("exMark_001.png");
-        exMark->setPosition({16.5,75});
-        exMark->setScale(0.7f);
-        exMark->setID("exclamation-mark"_spr);
-        questBtn->addChild(exMark);
-    }*/
-
-    /*
      * Hooks
      */
 
@@ -85,19 +54,4 @@ class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
 
         return true;
     }
-
-    void onChallenge(CCObject* sender) {
-        auto child = static_cast<CCNode*>(static_cast<CCNode*>(sender)->getChildByID("exclamation-mark"_spr));
-        if(child) {
-            child->setVisible(false);
-        }
-
-        CreatorLayer::onChallenge(sender);
-    }
-
-    /*void sceneWillResume(){
-        CreatorLayer::sceneWillResume();
-
-        showQuestExclamationMark();
-    }*/
 };
