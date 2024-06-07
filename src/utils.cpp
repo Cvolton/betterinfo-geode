@@ -634,7 +634,7 @@ std::string BetterInfo::getOSVersion() {
 
         NTSTATUS status = RtlGetVersion(&osVers);
 
-        return fmt::format("Windows {}.{}.{}", osVers.dwMajorVersion, osVers.dwMinorVersion, osVers.dwBuildNumber);
+        return fmt::format("Windows%20{}.{}.{}", osVers.dwMajorVersion, osVers.dwMinorVersion, osVers.dwBuildNumber);
     #else
         return GEODE_PLATFORM_NAME;
     #endif
@@ -645,28 +645,41 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
     if(hasBeenCalled) return;
     hasBeenCalled = true;
 
-    web::AsyncWebRequest().fetch(fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toString(true), Loader::get()->getVersion().toString(true), getWineVersion(), getOSVersion()))
-    .json().then([layer](const matjson::Value& info){
-        auto notice = info.try_get("notice");
-        if(notice == std::nullopt) return;
-        
-        if(info["notice"].is_string()) {
-            auto alert = FLAlertLayer::create("BetterInfo", info["notice"].as_string(), "OK");
-            alert->m_scene = layer;
-            alert->show();
-        }
-    }).expect([layer](const std::string& error){
-        log::warn("Fetching important notices failed: {}", error);
-    });
+    auto url = fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toString(true), getWineVersion(), getOSVersion());
+    static std::optional<web::WebTask> s_requestTask = std::nullopt;
+
+    s_requestTask = web::WebRequest().get(url).map(
+        [layer](web::WebResponse* response) {
+            if(!response->ok() || response->json().isErr()) {
+                log::warn("Fetching important notices failed: {} - {}", response->code(), response->string().unwrapOr("No response"));
+                return *response;
+            }
+
+            auto info = response->json().unwrap();
+
+            auto notice = info.try_get("notice");
+            if(notice == std::nullopt) return *response;
+            
+            if(info["notice"].is_string()) {
+                auto alert = FLAlertLayer::create("BetterInfo", info["notice"].as_string(), "OK");
+                alert->m_scene = layer;
+                alert->show();
+            }
+
+            return *response;
+        });
 }
 
 FLAlertLayer* BetterInfo::createUpdateDialog() {
+    //TODO: enable before real 420 release
+    return nullptr;
+
     auto versionResult = VersionInfo::parse(
         Mod::get()->getSavedValue<std::string>(
             "last_dialog_version",
             Mod::get()->getSavedValue<std::string>(
                 "last_launch_version",
-                Mod::get()->getVersion().toString()
+                Mod::get()->getVersion().toVString()
             )
         )
     );
@@ -688,7 +701,7 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
         "Ok",
         400,
         [](FLAlertLayer* me, bool btn2) {
-            Mod::get()->setSavedValue<std::string>("last_dialog_version", Mod::get()->getVersion().toString());
+            Mod::get()->setSavedValue<std::string>("last_dialog_version", Mod::get()->getVersion().toVString());
 
             if(!btn2) {
                 openInfoPopup(Mod::get());

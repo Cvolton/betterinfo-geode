@@ -27,7 +27,7 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
         return;
     }
 
-    web::AsyncWebRequest()
+    /*web::AsyncWebRequest()
         .userAgent("")
         .postRequest()
         .bodyRaw(fmt::format("gameVersion=21&binaryVersion=35&gdw=0&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", accountID, std::string(GameManager::sharedState()->m_playerUDID)))
@@ -36,7 +36,7 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
         .then([this, accountID](const std::string& response) {
             generateScores(response, accountID);
             sendScores(m_scoreDict[accountID], accountID);
-        });
+        });*/
 }
 
 void BetterInfoOnline::generateScores(const std::string& response, int accountID){

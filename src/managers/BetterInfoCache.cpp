@@ -252,7 +252,7 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
                 downloadingCV.wait(lock, []{ return !downloading; });
                 downloading = true;
 
-                web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).json().then([userID](const matjson::Value& data){
+                /*web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).json().then([userID](const matjson::Value& data){
                     log::debug("Restored green username for {}: {}", userID, data.dump(matjson::NO_INDENTATION));
                     std::string username;
 
@@ -266,7 +266,7 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
                     log::error("Error while getting username for {}: {}", userID, error);
                     downloading = false;
                     downloadingCV.notify_one();
-                });
+                });*/
             }).detach();
             m_attemptedUsernames.insert(userID);
         }
@@ -322,14 +322,14 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
     auto idString = std::to_string(levelID);
     if(!objectExists("upload-date-dict", idString)) {
         if(m_attemptedLevelDates.find(levelID) == m_attemptedLevelDates.end()) {
-            web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).json().then([levelID](const matjson::Value& data){
+            /*web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).json().then([levelID](const matjson::Value& data){
                 if(!data["approx"].is_object()) return;
                 if(!data["approx"]["estimation"].is_string()) return;
 
                 BetterInfoCache::sharedState()->storeUploadDate(levelID, data["approx"]["estimation"].as_string());
             }).expect([levelID](const std::string& error){
                 log::error("Error while getting exact upload date for level {}: {}", levelID, error);
-            });
+            });*/
             m_attemptedLevelDates.insert(levelID);
         }
         return "";
