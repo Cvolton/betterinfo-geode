@@ -100,10 +100,6 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
         BetterInfo::copyToClipboard(std::to_string(this->m_score->m_accountID).c_str(), this);
     }
 
-    void onProfilePageCopyPlayerName(CCObject* sender){
-        BetterInfo::copyToClipboard(this->m_score->m_userName.c_str(), this);
-    }
-
     /*
      * Hooks
      */
@@ -130,78 +126,6 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
 
             leftMenu->updateLayout();
         }
-
-        /*if(auto playerMenu = m_mainLayer->getChildByID("player-menu")) {
-            SimplePlayer* playerJetpack = SimplePlayer::create(m_score->m_playerJetpack);
-            playerJetpack->updatePlayerFrame(m_score->m_playerJetpack, IconType::Jetpack);
-            playerJetpack->setColor(GM->colorForIdx(m_score->m_color1));
-            playerJetpack->setSecondColor(GM->colorForIdx(m_score->m_color2));
-            if(m_score->m_special != 0) playerJetpack->enableCustomGlowColor(GM->colorForIdx(m_score->m_color3));
-            playerJetpack->updateColors();
-            playerJetpack->setScale(.95f);
-
-            auto jetpackContainer = CCNode::create();
-            jetpackContainer->setContentSize({40.6f, 42.6f});
-            jetpackContainer->addChild(playerJetpack);
-            playerJetpack->setPosition((jetpackContainer->getContentSize() / 2) - CCPoint(5,0));
-
-            playerMenu->addChild(jetpackContainer);
-            playerMenu->updateLayout();
-
-            this->m_buttons->addObject(jetpackContainer);
-        }*/
-
-
-        /*if(auto playerShip = m_mainLayer->getChildByID("player-ship")) {
-            CCPoint position = m_buttonMenu->convertToNodeSpace(playerShip->getPosition());
-            m_mainLayer->removeChild(playerShip);
-
-            auto shipContainer = CCNode::create();
-            shipContainer->setContentSize({50,50});
-            shipContainer->addChild(playerShip);
-            playerShip->setPosition(shipContainer->getContentSize() / 2);
-
-            SimplePlayer* playerJetpack = SimplePlayer::create(m_score->m_playerJetpack);
-            playerJetpack->updatePlayerFrame(m_score->m_playerJetpack, IconType::Jetpack);
-            playerJetpack->setColor(GM->colorForIdx(m_score->m_color1));
-            playerJetpack->setSecondColor(GM->colorForIdx(m_score->m_color2));
-            if(m_score->m_special != 0) playerJetpack->enableCustomGlowColor(GM->colorForIdx(m_score->m_color3));
-            playerJetpack->updateColors();
-
-            auto jetpackContainer = CCNode::create();
-            jetpackContainer->setContentSize({50,50});
-            jetpackContainer->addChild(playerJetpack);
-            playerJetpack->setPosition(jetpackContainer->getContentSize() / 2);
-
-            auto shipBtn = CCMenuItemToggler::create(
-                shipContainer, 
-                jetpackContainer, 
-                this,
-                nullptr
-            );
-            shipBtn->setPosition(position);
-            m_buttonMenu->addChild(shipBtn);
-            m_buttons->addObject(shipBtn);
-        }*/
-
-        if(auto usernameLabel = m_mainLayer->getChildByID("username-label")) {
-            usernameLabel->setVisible(false);
-        }
-
-        auto usernameNode = CCLabelBMFont::create(a2->m_userName.c_str(), "bigFont.fnt");
-        a2->m_modBadge > 0
-            ? usernameNode->limitLabelWidth(140.f, 0.9f, 0.0f)
-            : usernameNode->limitLabelWidth(160.0f, 0.8f, 0.0f);
-
-        auto usernameBtn = CCMenuItemSpriteExtra::create(
-            usernameNode,
-            this,
-            menu_selector(BIProfilePage::onProfilePageCopyPlayerName)
-        );
-        usernameBtn->setPosition({210,-10});
-        usernameBtn->setID("username-button"_spr);
-        m_buttonMenu->addChild(usernameBtn);
-        this->m_buttons->addObject(usernameBtn);
 
         if(auto playerStats = m_mainLayer->getChildByID("stats-menu")) {
             if(auto creatorIcon = playerStats->getChildByID("creator-points-icon")) {
