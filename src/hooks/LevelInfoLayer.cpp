@@ -28,7 +28,13 @@ class BI_DLL $modify(LevelInfoLayer) {
         /**
          * Add exact time label
         */
-        auto label = m_lengthLabel;
+        if(!m_exactLengthLabel->isVisible()) {
+            m_exactLengthLabel->setVisible(true);
+            m_exactLengthLabel->setPositionY(m_exactLengthLabel->getPositionY() + 6.f);
+            m_lengthLabel->setPositionY(m_lengthLabel->getPositionY() + 6.f);
+        }
+
+        /*auto label = m_lengthLabel;
         if(label) {
             auto bmFont = CCLabelBMFont::create("Loading", "bigFont.fnt");
             bmFont->setID("exact-time"_spr);
@@ -37,7 +43,7 @@ class BI_DLL $modify(LevelInfoLayer) {
             bmFont->setScale(0.325f);
             addChild(bmFont);
             label->setPositionY(label->getPositionY() + 6.f);
-        }
+        }*/
 
         return true;
     }
@@ -62,29 +68,11 @@ class BI_DLL $modify(LevelInfoLayer) {
         }).detach();
 
         /**
-         * Exact time label begin
-        */
-        this->retain();
-        /**
-         * Avoid updating the label if hide platformer time is enabled
-        */
-        if(m_level->isPlatformer() && Mod::get()->getSettingValue<bool>("hide-platformer-time")) {
-            m_lengthLabel->setPosition({m_lengthLabel->getPositionX(), m_lengthLabel->getPositionY() - 6.f});
-            Loader::get()->queueInMainThread([this]() {
-                if(auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("exact-time"_spr))) {
-                    bmFont->removeFromParent();
-                }
-
-                this->release();
-            });
-            return;
-        }
-
-        /**
          * Update exact time label
         */
-        auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("exact-time"_spr));
-        if(bmFont && m_lengthLabel) bmFont->setPosition({m_lengthLabel->getPositionX() + 1, m_lengthLabel->getPositionY() - 8.f});
+        this->retain();
+        //auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("exact-time"_spr));
+        //if(bmFont && m_lengthLabel) bmFont->setPosition({m_lengthLabel->getPositionX() + 1, m_lengthLabel->getPositionY() - 8.f});
 
         std::thread([this](){
             thread::setName("Exact Level Length");
@@ -94,10 +82,7 @@ class BI_DLL $modify(LevelInfoLayer) {
                 : TimeUtils::workingTime(m_level->isPlatformer() ? 0 : std::ceil(BetterInfo::timeForLevelString(m_level->m_levelString)));
             //since whatever is done by queueInMainThread is guaranteed to execute after init is finished, this shouldn't result in a race condition
             Loader::get()->queueInMainThread([this, wt]() {
-                auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("exact-time"_spr));
-                if(bmFont) {
-                    bmFont->setString(fmt::format("{}", wt).c_str());
-                }
+                m_exactLengthLabel->setString(fmt::format("{}", wt).c_str());
                 this->release();
             });
         }).detach();

@@ -2,9 +2,6 @@
 ## <cg>v4.2.0-alpha.1</c> (2024-06-07)
 * Initial 2.206 release (for Geode v3.0.0-alpha.1)
 
-Other notes:
-* LevelInfoLayer logic hasn't been updated to 2.206 yet, this means that both the vanilla label and the BI label for exact platformer time will appear at once.
-
 ## <cg>v4.1.13</c> (2024-05-25)
 * <cg>Fixed</c> the <cl>fix</c> of the <co>fix</c>
 
