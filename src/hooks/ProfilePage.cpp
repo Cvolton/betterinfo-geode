@@ -4,7 +4,6 @@
 #include "../utils.hpp"
 #include "../managers/BetterInfoOnline.h"
 #include "../layers/LeaderboardViewLayer.h"
-#include "../layers/StarsInfoPopup.h"
 #include "../layers/CreatorInfoPopup.h"
 
 using namespace geode::prelude;
@@ -72,10 +71,6 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
         auto scene = LeaderboardViewLayer::scene(score->m_accountID);
         auto transitionFade = CCTransitionFade::create(0.5, scene);
         CCDirector::sharedDirector()->pushScene(transitionFade);
-    }
-
-    void onProfilePageStar(CCObject* sender){
-        StarsInfoPopup::create()->show();
     }
 
     void onProfilePageCreator(CCObject* sender){
@@ -201,15 +196,6 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
             accountIDBtn->setID("accountid-button"_spr);
             m_buttonMenu->addChild(accountIDBtn);
             this->m_buttons->addObject(accountIDBtn);
-        } else {
-            #if GEODE_COMP_GD_VERSION <= 22040
-            if(auto playerStats = m_mainLayer->getChildByID("stats-menu")) {
-                if(auto starsIcon = playerStats->getChildByID("stars-icon")) {
-                    m_buttons->removeObject(starsIcon);
-                    m_buttons->addObject(BetterInfo::replaceWithButton(starsIcon, this, menu_selector(BIProfilePage::onProfilePageStar)));
-                }
-            }
-            #endif
         }
 
     }
