@@ -27,6 +27,21 @@ void BetterInfoOnline::loadScores(int accountID, bool force){
         return;
     }
 
+    static std::unordered_map<int, web::WebTask> tasks;
+    tasks.emplace(accountID, ServerUtils::getBaseRequest(false)
+        .bodyString(fmt::format("{}&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", ServerUtils::getBasePostString(false), accountID, std::string(GameManager::sharedState()->m_playerUDID)))
+        .post(fmt::format("{}/getGJScores20.php", ServerUtils::getBaseURL()))
+        .map([this, accountID](web::WebResponse* response) {
+            if(response->ok()) {
+                generateScores(response->string().unwrapOr(""), accountID);
+                sendScores(m_scoreDict[accountID], accountID);
+            }
+
+            return *response;
+        })
+    );
+    
+
     /*web::AsyncWebRequest()
         .userAgent("")
         .postRequest()

@@ -2,6 +2,7 @@
 
 #include "BaseJsonManager.h"
 #include "../delegates/UploadDateDelegate.h"
+#include <Geode/utils/web.hpp>
 
 class BI_DLL BetterInfoCache : public BaseJsonManager {
 	std::unordered_set<int> m_attemptedUsernames;

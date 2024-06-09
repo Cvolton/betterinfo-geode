@@ -1,8 +1,6 @@
 #include "BetterInfoCache.h"
 #include "../utils.hpp"
 
-#include <Geode/utils/web.hpp>
-
 bool BetterInfoCache::init(){
     if(!BaseJsonManager::init("cache.json")) return false;
     doSave();
@@ -239,34 +237,40 @@ void BetterInfoCache::storeDatesForLevel(GJGameLevel* level) {
 std::string BetterInfoCache::getUserName(int userID, bool download) {
     static std::mutex downloadingMutex;
     static std::condition_variable downloadingCV;
-    static bool downloading = false;
+    static std::optional<web::WebTask> downloadingTask;
     if(userID == 0) return ""; //this prevents the request from being sent on every account comments load
 
     auto idString = std::to_string(userID);
     if(!objectExists("username-dict", idString)) {
         if(download && m_attemptedUsernames.find(userID) == m_attemptedUsernames.end()) {
-            std::thread([userID] {
+            std::thread([userID, this] {
                 thread::setName("BI Username Downloader");
 
                 std::unique_lock lock(downloadingMutex);
-                downloadingCV.wait(lock, []{ return !downloading; });
-                downloading = true;
+                downloadingCV.wait(lock, []{ return !downloadingTask.has_value(); });
 
-                /*web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).json().then([userID](const matjson::Value& data){
-                    log::debug("Restored green username for {}: {}", userID, data.dump(matjson::NO_INDENTATION));
-                    std::string username;
+                downloadingTask = ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).map(
+                    [userID, this](web::WebResponse* response) {
+                        auto json = response->json();
+                        if(!response->ok() || json.isErr()) {
+                            log::error("Error while getting username for {}: {} - {}", userID, response->code(), response->string().unwrapOr("No response"));
+                            downloadingTask = std::nullopt;
+                            downloadingCV.notify_one();
+                            return *response;                            
+                        }
 
-                    if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
-                    else if(data["username"].is_string()) username = data["username"].as_string();
+                        auto data = json.unwrap();
+                        std::string username;
 
-                    BetterInfoCache::sharedState()->storeUserName(userID, username);
-                    downloading = false;
-                    downloadingCV.notify_one();
-                }).expect([userID](const std::string& error){
-                    log::error("Error while getting username for {}: {}", userID, error);
-                    downloading = false;
-                    downloadingCV.notify_one();
-                });*/
+                        if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
+                        else if(data["username"].is_string()) username = data["username"].as_string();
+
+                        storeUserName(userID, username);
+                        log::debug("Restored green username for {}: {}", userID, username);
+                        downloadingTask = std::nullopt;
+                        return *response;
+                    }
+                );
             }).detach();
             m_attemptedUsernames.insert(userID);
         }
@@ -322,14 +326,33 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
     auto idString = std::to_string(levelID);
     if(!objectExists("upload-date-dict", idString)) {
         if(m_attemptedLevelDates.find(levelID) == m_attemptedLevelDates.end()) {
-            /*web::AsyncWebRequest().fetch(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).json().then([levelID](const matjson::Value& data){
-                if(!data["approx"].is_object()) return;
-                if(!data["approx"]["estimation"].is_string()) return;
 
-                BetterInfoCache::sharedState()->storeUploadDate(levelID, data["approx"]["estimation"].as_string());
-            }).expect([levelID](const std::string& error){
-                log::error("Error while getting exact upload date for level {}: {}", levelID, error);
-            });*/
+            static std::mutex downloadingMutex;
+            static std::unordered_map<int, web::WebTask> tasks;
+
+            std::unique_lock lock(downloadingMutex);
+
+            if(tasks.find(levelID) != tasks.end()) {
+                return "";
+            }
+
+            tasks.emplace(levelID, ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).map(
+                [levelID, this](web::WebResponse* response) {
+                    auto json = response->json();
+                    if(!response->ok() || json.isErr()) {
+                        log::error("Error while getting exact upload date for level {}: {} - {}", levelID, response->code(), response->string().unwrapOr("No response"));
+                        return *response;
+                    }
+
+                    auto data = json.unwrap();
+                    if(!data["approx"].is_object()) return *response;
+                    if(!data["approx"]["estimation"].is_string()) return *response;
+
+                    storeUploadDate(levelID, data["approx"]["estimation"].as_string());
+                    return *response;
+                }
+            ));
+
             m_attemptedLevelDates.insert(levelID);
         }
         return "";

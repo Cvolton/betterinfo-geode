@@ -1,12 +1,14 @@
 #include "ServerUtils.h"
 #include "../utils.hpp"
 
-#include <Geode/utils/web.hpp>
-
 using namespace geode::prelude;
 
 static inline std::unordered_map<std::string, Ref<cocos2d::CCArray>> s_cache;
 static inline std::unordered_map<std::string, web::WebTask> s_requests;
+
+web::WebRequest ServerUtils::getBaseRequest(bool setUserAgent) {
+    return web::WebRequest().userAgent(setUserAgent ? fmt::format("BetterInfo {} / Geode {}", Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true)) : "");
+}
 
 std::string ServerUtils::getBaseURL() {
     // The addresses are pointing to "https://www.boomlings.com/database/getGJLevels21.php"
@@ -34,10 +36,16 @@ std::string ServerUtils::getBaseURL() {
     return ret;
 }
 
-std::string ServerUtils::getBasePostString() {
-    auto ret =  fmt::format("gameVersion={}&binaryVersion={}&gdw={}&udid={}&uuid={}", 22, 40, 0, GameManager::sharedState()->m_playerUDID, GameManager::sharedState()->m_playerUserID.value());
+std::string ServerUtils::getBasePostString(bool includeAccount) {
+    auto ret =  fmt::format("gameVersion={}&binaryVersion={}&gdw={}", 22, 42, 0);
 
-    if(GJAccountManager::sharedState()->m_accountID > 0) ret += fmt::format("&accountID={}&gjp2={}", GJAccountManager::sharedState()->m_accountID, GJAccountManager::sharedState()->m_GJP2);
+    if(includeAccount) {
+        auto GJAM = GJAccountManager::sharedState();
+        auto GM = GameManager::sharedState();
+        ret += fmt::format("&udid={}&uuid={}", GM->m_playerUDID, GM->m_playerUserID.value());
+        if(GJAM->m_accountID > 0) ret += fmt::format("&accountID={}&gjp2={}", GJAM->m_accountID, GJAM->m_GJP2);
+    }
+
 
     return ret;
 }
@@ -118,7 +126,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
     auto requestKey = fmt::format("getOnlineLevels_{}", key);
 
     if(s_requests.find(requestKey) == s_requests.end()) {
-        s_requests.emplace(requestKey, web::WebRequest().userAgent("").bodyString(postString).post(fmt::format("{}/getGJLevels21.php", getBaseURL())));
+        s_requests.emplace(requestKey, getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevels21.php", getBaseURL())));
     }
 
     auto task = s_requests[requestKey].map([callback, key, requestKey, cacheLevels](web::WebResponse* response) {
