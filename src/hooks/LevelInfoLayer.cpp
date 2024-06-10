@@ -83,6 +83,7 @@ class BI_DLL $modify(LevelInfoLayer) {
             //since whatever is done by queueInMainThread is guaranteed to execute after init is finished, this shouldn't result in a race condition
             Loader::get()->queueInMainThread([this, wt]() {
                 m_exactLengthLabel->setString(fmt::format("{}", wt).c_str());
+                m_exactLengthLabel->setVisible(true);
                 this->release();
             });
         }).detach();
