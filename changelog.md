@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.2.0-alpha.3</c> (2024-06-10)
+* Updated for Geode v3.0.0-alpha.2
+
 ## <cg>v4.2.0-alpha.2</c> (2024-06-10)
 * Enabled Android support again
 
