@@ -1,6 +1,9 @@
 # Changelog
-## <cg>v4.2.0-alpha.1</c> (2024-06-07)
-* Initial 2.206 release (for Geode v3.0.0-alpha.1)
+## <cg>v4.2.0-alpha.2</c> (2024-06-10)
+* Enabled Android support again
+
+## <cg>v4.2.0-alpha.1</c> (2024-06-10)
+* Initial 2.206 release (for Geode v3.0.0-alpha.1, Windows-only for now)
 
 ## <cg>v4.1.13</c> (2024-05-25)
 * <cg>Fixed</c> the <cl>fix</c> of the <co>fix</c>
