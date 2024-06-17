@@ -17,7 +17,11 @@ using namespace std::chrono;
 
 std::string TimeUtils::timeToString(time_t input) {
     struct tm timeInfo;
-    localtime_s(&timeInfo, &input);
+    #ifdef GEODE_IS_WINDOWS
+        localtime_s(&timeInfo, &input);
+    #else
+        localtime_r(&input, &timeInfo);
+    #endif
 
     std::ostringstream ss;
     ss << std::put_time(&timeInfo, "%F %H:%M");

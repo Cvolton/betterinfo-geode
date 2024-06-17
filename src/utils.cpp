@@ -615,11 +615,8 @@ std::string BetterInfo::getWineVersion() {
         {
             return fmt::format("Wine {}", pwine_get_version());
         }
-        else
-        {
-            return "";
-        }
-        return 0;
+        
+        return "";
 
     #else
     return "";
