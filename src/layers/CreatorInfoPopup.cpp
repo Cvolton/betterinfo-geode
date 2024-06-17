@@ -146,7 +146,7 @@ CCMenuItemSpriteExtra* CreatorInfoPopup::createTab(const char* text, const char*
     button->m_colorDip = .8f;
     button->m_colorEnabled = true;
     button->m_scaleMultiplier = 1.f;
-    button->setID(Mod::get()->expandSpriteName(fmt::format("tab-{}", tab).c_str()));
+    button->setID(fmt::format("tab-{}"_spr, tab).c_str());
     button->setEnabled(tab != m_tab);
     return button;
 }

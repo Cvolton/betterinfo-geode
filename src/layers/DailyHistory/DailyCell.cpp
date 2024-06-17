@@ -145,7 +145,7 @@ void DailyCell::loadFromData(CCObject* object) {
         coinSprite->setPosition({coinX += 6, 23});
         coinSprite->setAnchorPoint({0, 0.5f});
         coinSprite->setScale(0.7f);
-        coinSprite->setID(Mod::get()->expandSpriteName(fmt::format("coin-sprite-{}", i).c_str()));
+        coinSprite->setID(fmt::format("coin-sprite-{}"_spr, i).c_str());
         //coinSprite->setScale(0.35f);
         this->m_mainLayer->addChild(coinSprite);
     }

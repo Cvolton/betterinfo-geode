@@ -31,7 +31,7 @@ CCSprite* BetterInfo::createWithBISpriteFrameName(const char* name){
 }
 
 CCSprite* BetterInfo::createBISprite(const char* name){
-    name = Mod::get()->expandSpriteName(name);
+    name = Mod::get()->expandSpriteName(name).data();
     auto sprite = CCSprite::create(name);
     if(sprite) return sprite;
 

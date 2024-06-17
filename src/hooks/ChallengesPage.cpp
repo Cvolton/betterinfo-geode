@@ -90,7 +90,7 @@ class BI_DLL $modify(BIChallengesPage, ChallengesPage) {
             auto node = ChallengeNode::create(GameStatsManager::sharedState()->getQueuedChallenge(i), this, false);
             node->setVisible(false);
             node->setPosition({winSize.width / 2, (winSize.height / 2) + 85.f - (80.f * (i - 1))});
-            node->setID(Mod::get()->expandSpriteName(fmt::format("queued-quest-{}", i).c_str()));
+            node->setID(fmt::format("queued-quest-{}"_spr, i).c_str());
             m_mainLayer->addChild(node);
             m_fields->m_queuedNodes.push_back(node);
 
@@ -113,7 +113,7 @@ class BI_DLL $modify(BIChallengesPage, ChallengesPage) {
             dot->setColor({0,0,0});
             dot->setScale(1.4f);
             dot->setPosition({(winSize.width / 2) - 210 + 30, (winSize.height / 2) + 85.f - (80.f * (i - 1))});
-            dot->setID(Mod::get()->expandSpriteName(fmt::format("queued-dot-{}", i).c_str()));
+            dot->setID(fmt::format("queued-dot-{}"_spr, i).c_str());
             dot->setTag(i);
             m_mainLayer->addChild(dot);
             m_fields->m_queuedDots.push_back(dot);
