@@ -8,12 +8,8 @@ bool BetterInfoStats::init(){
     if(!init) return false;
 
     m_fileName = fmt::format("geode/mods/{}/CCBetterInfoStats.dat", Mod::get()->getID());
-    #ifdef GEODE_IS_ANDROID
-        this->m_fileName = "CCBetterInfoStats.dat";
-    #else
-        this->migrateSaveData();
-    #endif
-
+    
+    this->migrateSaveData();
     this->setup();
 
     return true;
