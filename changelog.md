@@ -1,12 +1,9 @@
 # Changelog
-## <cg>v4.2.0-alpha.3</c> (2024-06-10)
-* Updated for Geode v3.0.0-alpha.2
+## <cg>v4.2.0-beta.1</c> (2024-06-17)
+* Updated for Geode v3.0.0-beta.1 and GD 2.206
+* Mac support is temporarily disabled
 
-## <cg>v4.2.0-alpha.2</c> (2024-06-10)
-* Enabled Android support again
-
-## <cg>v4.2.0-alpha.1</c> (2024-06-10)
-* Initial 2.206 release (for Geode v3.0.0-alpha.1, Windows-only for now)
+[See v4.2.0 Alpha changelogs here](https://github.com/Cvolton/betterinfo-geode/blob/0b4fc2c76d6f81faaf1c939b8964515bffa15258/changelog.md)
 
 ## <cg>v4.1.13</c> (2024-05-25)
 * <cg>Fixed</c> the <cl>fix</c> of the <co>fix</c>
