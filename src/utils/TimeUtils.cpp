@@ -16,9 +16,11 @@
 using namespace std::chrono;
 
 std::string TimeUtils::timeToString(time_t input) {
-    auto timeInfo = std::localtime(&input);
+    struct tm timeInfo;
+    localtime_s(&timeInfo, &input);
+
     std::ostringstream ss;
-    ss << std::put_time(timeInfo, "%F %H:%M");
+    ss << std::put_time(&timeInfo, "%F %H:%M");
     return ss.str();
 }
 
