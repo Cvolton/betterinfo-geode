@@ -18,6 +18,7 @@ public:
 	Ref<cocos2d::CCDictionary> m_practiceAttemptDict = CCDictionary::create();
 
 	bool init();
+	void save();
 	void migrateSaveData();
 	void migrationPopup(float dt);
 	void encodeDataTo(DS_Dictionary* data);

@@ -7,7 +7,7 @@ bool BetterInfoStats::init(){
     bool init = CCNode::init();
     if(!init) return false;
 
-    this->m_fileName = fmt::format("geode/mods/{}/CCBetterInfoStats.dat", Mod::get()->getID());
+    m_fileName = fmt::format("geode/mods/{}/CCBetterInfoStats.dat", Mod::get()->getID());
     #ifdef GEODE_IS_ANDROID
         this->m_fileName = "CCBetterInfoStats.dat";
     #else
@@ -17,6 +17,11 @@ bool BetterInfoStats::init(){
     this->setup();
 
     return true;
+}
+
+void BetterInfoStats::save() {
+    m_saved = false;
+    GManager::save();
 }
 
 void BetterInfoStats::migrateSaveData() {
