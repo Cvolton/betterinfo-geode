@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.2.0-beta.2</c> (2024-06-19)
+* <cg>Fixed</c> <cj>additional level stats</c> <cr>not saving</c>
+
 ## <cg>v4.2.0-beta.1</c> (2024-06-17)
 * Updated for Geode v3.0.0-beta.1 and GD 2.206
 * Mac support is temporarily disabled
