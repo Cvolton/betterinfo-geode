@@ -1,10 +1,14 @@
 #include "ServerUtils.h"
 #include "../utils.hpp"
 
+#include <shared_mutex>
+
 using namespace geode::prelude;
 
 static inline std::unordered_map<std::string, Ref<cocos2d::CCArray>> s_cache;
 static inline std::unordered_map<std::string, web::WebTask> s_requests;
+
+static inline std::shared_mutex s_requestsMutex;
 
 web::WebRequest ServerUtils::getBaseRequest(bool setUserAgent) {
     return web::WebRequest().userAgent(setUserAgent ? fmt::format("BetterInfo {} / Geode {}", Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true)) : "");
@@ -84,6 +88,102 @@ std::string ServerUtils::getSearchObjectKey(GJSearchObject* searchObject) {
     return ret;
 }
 
+void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJLevelList>>>, bool)> callback, bool cacheLevels) {
+    std::string completedLevels = "";
+
+    std::string postString = fmt::format("{}&str={}&type={}&page={}",
+        getBasePostString(), searchObject->m_searchQuery, (int) searchObject->m_searchType, searchObject->m_page);
+
+    // TODO: in theory this is not fully thread safe
+    // - it can crash if you follow someone while its iterating the followed list
+    // however i cannot think of a way to reproduce this in-game without doing it
+    // in code, so i will leave fixing this for later
+    postString += GameLevelManager::sharedState()->writeSpecialFilters(searchObject);
+
+    postString += "&secret=Wmfd2893gb7";
+
+    std::string key = getSearchObjectKey(searchObject);
+    auto requestKey = fmt::format("getOnlineLevels_{}", key);
+
+    std::unique_lock lock(s_requestsMutex);
+    if(s_requests.find(requestKey) == s_requests.end()) {
+        s_requests.emplace(requestKey, getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevelLists.php", getBaseURL())));
+    }
+
+    auto task = s_requests[requestKey].map([callback, key, requestKey, cacheLevels](web::WebResponse* response) {
+        std::unique_lock lock(s_requestsMutex);
+        s_requests.erase(requestKey);
+        lock.unlock();
+
+        if(!response->ok()) {
+            //TODO: header error checking
+            showCFError(response->string().unwrapOr(""));
+
+            auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
+
+            callback(levels, false);
+
+            return *response;
+        }
+
+        auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
+
+        auto responseString = response->string().unwrapOr("");
+
+        size_t hashes = std::count(responseString.begin(), responseString.end(), '#');
+        if(hashes < 3) {
+            callback(levels, false);
+            return *response;
+        }
+
+        std::stringstream responseStream(responseString);
+        std::string levelData;
+        std::string userData;
+        std::string songData;
+        std::string pageData;
+
+        getline(responseStream, levelData, '#');
+        getline(responseStream, userData, '#');
+        getline(responseStream, pageData, '#');
+
+        MusicDownloadManager::sharedState()->createSongsInfo(songData, "");
+
+        std::stringstream userStream(userData);
+        std::string currentUser;
+        while(getline(userStream, currentUser, '|')) {
+            auto info = utils::string::split(currentUser, ":");
+
+            int userID = std::stoi(info[0]);
+            int accountID = std::stoi(info[2]);
+
+            if(userID > 0) GameLevelManager::sharedState()->storeUserName(userID, accountID, info[1]);
+        }
+
+        std::stringstream levelStream(levelData);
+        std::string currentLevel;
+        while(getline(levelStream, currentLevel, '|')) {
+            auto level = GJLevelList::create(BetterInfo::responseToDict(currentLevel));
+            levels->push_back(level);
+        }
+
+        CCArray* levelArray = CCArray::create();
+        for(auto level : *levels) levelArray->addObject(level);
+
+        GameLevelManager::sharedState()->saveFetchedLevels(levelArray);
+        if(cacheLevels) {
+            if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, pageData, key.c_str());
+            else s_cache[key] = levelArray;
+        }
+
+        callback(levels, true);
+
+        return *response;
+    });
+
+    s_requests.erase(requestKey);
+    s_requests.emplace(requestKey, task);
+}
+
 void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJGameLevel>>>, bool)> callback, bool cacheLevels) {
     std::string completedLevels = "";
 
@@ -125,15 +225,18 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
     std::string key = getSearchObjectKey(searchObject);
     auto requestKey = fmt::format("getOnlineLevels_{}", key);
 
+    std::unique_lock lock(s_requestsMutex);
     if(s_requests.find(requestKey) == s_requests.end()) {
         s_requests.emplace(requestKey, getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevels21.php", getBaseURL())));
     }
 
     auto task = s_requests[requestKey].map([callback, key, requestKey, cacheLevels](web::WebResponse* response) {
+        std::unique_lock lock(s_requestsMutex);
         s_requests.erase(requestKey);
+        lock.unlock();
 
         if(!response->ok()) {
-            //getting headers is currently not supported, gotta wait for new index...
+            //TODO: header error checking
             showCFError(response->string().unwrapOr(""));
 
             auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
