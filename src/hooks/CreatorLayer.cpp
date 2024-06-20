@@ -3,6 +3,9 @@
 
 #include "../utils.hpp"
 #include "../layers/CustomCreatorLayer.h"
+#include "../layers/FoundListsPopup.h"
+
+#include "../managers/BetterInfoCache.h"
 
 using namespace geode::prelude;
 
@@ -19,6 +22,34 @@ class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
     /*
      * Hooks
      */
+    void sceneWillResume() {
+        CreatorLayer::sceneWillResume();
+
+        auto menu = static_cast<CCMenu*>(this->getChildByID("creator-buttons-menu"));
+        auto GSM = GameStatsManager::sharedState();
+
+        bool showExclamation = BetterInfoCache::sharedState()->claimableListsCount() > 0;
+
+        if(menu == nullptr || !showExclamation) return;
+
+
+        auto listsBtn = static_cast<CCMenuItemSpriteExtra*>(menu->getChildByID("lists-button"));
+        if(listsBtn == nullptr) return;
+
+        auto listsSprite = listsBtn->getNormalImage();
+
+        auto existingNode = listsSprite->getChildByID("exclamation-mark"_spr);
+        if(existingNode != nullptr){
+            existingNode->setVisible(true);
+            return;
+        }
+
+        auto exMark = CCSprite::createWithSpriteFrameName("exMark_001.png");
+        exMark->setPosition({20,83.6f});
+        exMark->setScale(0.8f);
+        exMark->setID("exclamation-mark"_spr);
+        listsSprite->addChild(exMark);
+    }
 
     bool init() {
         if(!CreatorLayer::init()) return false;
@@ -53,5 +84,11 @@ class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
         //showQuestExclamationMark();
 
         return true;
+    }
+
+    void onTopLists(CCObject* sender) {
+        CreatorLayer::onTopLists(sender);
+
+        if(auto excl = static_cast<CCMenuItemSpriteExtra*>(sender)->getNormalImage()->getChildByID("exclamation-mark"_spr)) excl->setVisible(false);
     }
 };

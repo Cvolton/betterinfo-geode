@@ -1,6 +1,8 @@
 #include "BetterInfoCache.h"
 #include "../utils.hpp"
 
+#include "../layers/FoundListsPopup.h"
+
 bool BetterInfoCache::init(){
     if(!BaseJsonManager::init("cache.json")) return false;
     doSave();
@@ -10,10 +12,11 @@ bool BetterInfoCache::init(){
 
 void BetterInfoCache::finishLoading(){
     auto GLM = GameLevelManager::sharedState();
+    checkClaimableLists();
+    cacheRatedLists();
+
     checkLevelsFromDict(GLM->m_onlineLevels);
     checkLevelsFromDict(GLM->m_dailyLevels);
-
-    cacheRatedLists();
 }
 
 void BetterInfoCache::validateLoadedData() {
@@ -90,9 +93,9 @@ void BetterInfoCache::checkClaimableLists() {
     std::thread([this, completedLevels = std::move(completedLevels)] {
         thread::setName("BI Claimable List Checker");
 
-        log::info("Completed levels {}", completedLevels);
+        //log::info("Completed levels {}", completedLevels);
 
-        std::unordered_set<int> claimableLists;
+        std::unordered_set<int> completedLists;
 
         std::shared_lock guard(m_jsonMutex);
         for(auto [key, value] : m_json["list-info-dict"].as_object()) {
@@ -118,18 +121,22 @@ void BetterInfoCache::checkClaimableLists() {
             //log::info("Completed {} out of {} levels from list {}", completed, levelsToClaim, listID);
 
             if(completed >= levelsToClaim) {
-                claimableLists.insert(listID);
+                completedLists.insert(listID);
             }
         }
 
-        Loader::get()->queueInMainThread([this, claimableLists = std::move(claimableLists)] {
-            for(auto listID : claimableLists) {
+        Loader::get()->queueInMainThread([this, completedLists = std::move(completedLists)] {
+            for(auto listID : completedLists) {
                 auto list = GJLevelList::create();
                 list->m_listID = listID;
                 if(GameStatsManager::sharedState()->hasClaimedListReward(list)) continue;
+                if(m_claimableLists.contains(listID)) continue;
 
+                m_claimableLists.emplace(listID,nullptr);
                 log::info("Can claim reward for list {}", listID);
             }
+
+            downloadClaimableLists();
         });
     }).detach();
 }
@@ -146,6 +153,71 @@ void BetterInfoCache::cacheList(GJLevelList* list) {
     guard.unlock();
     //std::cout <<  ("Unlocking unique_lock storeLevelInfo") << std::endl;
     doSave();
+}
+
+void BetterInfoCache::tryShowClaimableListsPopup(CCLayer* scene) {
+    if(m_claimableLists.empty()) return;
+
+    auto popup = FoundListsPopup::create();
+    popup->m_scene = scene;
+    popup->show();
+}
+
+size_t BetterInfoCache::claimableListsCount() {
+    return m_claimableLists.size();
+}
+
+void BetterInfoCache::downloadClaimableLists() {
+    if(m_claimableLists.empty()) return;
+
+    for(auto [listID, _] : m_claimableLists) {
+        if(_ != nullptr) continue;
+
+        auto searchObj = GJSearchObject::create(SearchType::Search, std::to_string(listID));
+        ServerUtils::getLevelLists(
+            searchObj, 
+            [this](auto lists, bool) {
+                if(lists->empty()) return;
+                m_claimableLists[lists->at(0)->m_listID] = lists->at(0);
+                log::debug("Downloaded list {}", lists->at(0)->m_listID);
+            },
+            false
+        );
+    }
+}
+
+void BetterInfoCache::showClaimableLists() {
+    if(m_claimableLists.empty()) return;
+
+    // this is sort of an ugly workaround
+    // and im betting on nobody using this search type
+    // which is why the number was generated with random.org lol
+    auto searchObj = GJSearchObject::create((SearchType) 212156);
+    searchObj->m_searchMode = 1;
+    auto lists = CCArray::create();
+    for(auto [_, list] : m_claimableLists) {
+        lists->addObject(list);
+    }
+    GameLevelManager::sharedState()->storeSearchResult(lists, fmt::format("{}:{}:{}", lists->count(), 0, lists->count()), searchObj->getKey());
+
+    auto scene = LevelBrowserLayer::scene(searchObj);
+    auto transitionFade = CCTransitionFade::create(0.5, scene);
+    CCDirector::sharedDirector()->pushScene(transitionFade);
+}
+
+void BetterInfoCache::removeClaimedLists() {
+    std::unordered_set<int> toErase;
+
+    for(auto [listID, _] : m_claimableLists) {
+        if(_ == nullptr) continue;
+        if(GameStatsManager::sharedState()->hasClaimedListReward(_)) {
+            toErase.insert(listID);
+        }
+    }
+
+    for(auto listID : toErase) {
+        m_claimableLists.erase(listID);
+    }
 }
 
 void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {

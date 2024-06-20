@@ -7,6 +7,7 @@
 class BI_DLL BetterInfoCache : public BaseJsonManager {
 	std::unordered_set<int> m_attemptedUsernames;
 	std::unordered_set<int> m_attemptedLevelDates;
+	std::unordered_map<int, Ref<GJLevelList>> m_claimableLists;
 	std::unordered_map<int, int> m_coinCounts;
 	std::mutex m_coinCountsMutex;
 	inline static BetterInfoCache* s_instance = nullptr;
@@ -32,6 +33,12 @@ public:
 	void cacheRatedLists(int page = 0);
 	void cacheList(GJLevelList* list);
 	void checkClaimableLists();
+
+	void tryShowClaimableListsPopup(CCLayer* scene = nullptr);
+	size_t claimableListsCount();
+	void downloadClaimableLists();
+	void showClaimableLists();
+	void removeClaimedLists();
 
 	void checkLevelsFromDict(CCDictionary* dict);
 	void cacheLevel(GJGameLevel* level);

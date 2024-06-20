@@ -7,6 +7,8 @@
 #include "../layers/LevelFiltering/LevelSearchViewLayer.h"
 #include "../layers/LevelFiltering/ProfileSearchOptions.h"
 
+#include "../managers/BetterInfoCache.h"
+
 using namespace geode::prelude;
 
 class BI_DLL 
@@ -221,7 +223,7 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         */
         refreshButtonVisibility();
 
-        
+        if(m_searchObject->m_searchMode == 1 && m_searchObject->m_searchType == SearchType::Featured) BetterInfoCache::sharedState()->tryShowClaimableListsPopup(this);
 
         return true;
     }
