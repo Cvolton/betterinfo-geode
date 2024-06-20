@@ -12,6 +12,8 @@ void BetterInfoCache::finishLoading(){
     auto GLM = GameLevelManager::sharedState();
     checkLevelsFromDict(GLM->m_onlineLevels);
     checkLevelsFromDict(GLM->m_dailyLevels);
+
+    cacheRatedLists();
 }
 
 void BetterInfoCache::validateLoadedData() {
@@ -21,6 +23,7 @@ void BetterInfoCache::validateLoadedData() {
     validateIsObject("username-dict");
     validateIsObject("upload-date-dict");
     validateIsObject("level-info-dict");
+    validateIsObject("list-info-dict");
 }
 
 void BetterInfoCache::establishCachedDicts(){
@@ -33,6 +36,117 @@ void BetterInfoCache::establishCachedDicts(){
 }
 
 BetterInfoCache::BetterInfoCache(){}
+
+void BetterInfoCache::cacheRatedLists(int page) {
+    auto searchObj = GJSearchObject::create(SearchType::Awarded);
+    searchObj->m_searchMode = 1;
+    searchObj->m_page = page;
+
+    ServerUtils::getLevelLists(
+        searchObj, 
+        [this, page](auto lists, bool) {
+            std::thread([this, lists, page] {
+                thread::setName("BI Rated List Cache");
+
+                bool found = lists->empty();
+                for(auto list : *lists) {
+                    auto idString = std::to_string(list->m_listID);
+
+                    if(objectExists("list-info-dict", idString)) {
+                        found = true;
+                        break;
+                    }
+                    cacheList(list);
+                }
+
+                using namespace std::chrono_literals;
+                std::this_thread::sleep_for(100ms);
+                
+                
+                Loader::get()->queueInMainThread([this, found, page] {
+                    if(found) {
+                        log::debug("Finished caching rated lists");
+                        checkClaimableLists();
+                        return;
+                    }
+
+                    cacheRatedLists(page + 1);
+                });
+            }).detach();
+        },
+        true
+    );
+}
+
+void BetterInfoCache::checkClaimableLists() {
+    std::unordered_set<int> completedLevels;
+
+    auto GLM = GameLevelManager::sharedState();
+    for(auto [key, obj] : CCDictionaryExt<gd::string, GJGameLevel*>(GLM->m_onlineLevels)) {
+        if(obj->m_normalPercent < 100) continue;
+        completedLevels.insert(obj->m_levelID);
+    }
+
+    std::thread([this, completedLevels = std::move(completedLevels)] {
+        thread::setName("BI Claimable List Checker");
+
+        log::info("Completed levels {}", completedLevels);
+
+        std::unordered_set<int> claimableLists;
+
+        std::shared_lock guard(m_jsonMutex);
+        for(auto [key, value] : m_json["list-info-dict"].as_object()) {
+            if(!value.is_object()) continue;
+            if(!value["diamonds"].is_number()) continue;
+            if(!value["levels"].is_array()) continue;
+            if(!value["levels-to-claim"].is_number()) continue;
+
+            if(value["diamonds"].as_int() <= 0) continue;
+            
+            auto listID = BetterInfo::stoi(key);
+            auto levels = value["levels"].as_array();
+            auto levelsToClaim = value["levels-to-claim"].as_int();
+
+            //log::debug("Checking list {} with {} levels", listID, levels.size());
+
+            int completed = 0;
+            for(auto level : levels) {
+                if(!level.is_number()) continue;
+                if(completedLevels.find(level.as_int()) != completedLevels.end()) completed++;
+            }
+
+            //log::info("Completed {} out of {} levels from list {}", completed, levelsToClaim, listID);
+
+            if(completed >= levelsToClaim) {
+                claimableLists.insert(listID);
+            }
+        }
+
+        Loader::get()->queueInMainThread([this, claimableLists = std::move(claimableLists)] {
+            for(auto listID : claimableLists) {
+                auto list = GJLevelList::create();
+                list->m_listID = listID;
+                if(GameStatsManager::sharedState()->hasClaimedListReward(list)) continue;
+
+                log::info("Can claim reward for list {}", listID);
+            }
+        });
+    }).detach();
+}
+
+void BetterInfoCache::cacheList(GJLevelList* list) {
+    std::unique_lock guard(m_jsonMutex);
+    auto idString = std::to_string(list->m_listID);
+    if(!m_json["list-info-dict"][idString].is_object()) m_json["list-info-dict"][idString] = matjson::Object();
+
+    m_json["list-info-dict"][idString]["name"] = list->m_listName;
+    m_json["list-info-dict"][idString]["levels"] = list->m_levels;
+    m_json["list-info-dict"][idString]["levels-to-claim"] = list->m_levelsToClaim;
+    m_json["list-info-dict"][idString]["diamonds"] = list->m_diamonds;
+    guard.unlock();
+    //std::cout <<  ("Unlocking unique_lock storeLevelInfo") << std::endl;
+    doSave();
+}
 
 void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
     std::set<int> toDownloadRated;

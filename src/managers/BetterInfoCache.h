@@ -29,6 +29,10 @@ public:
 	    return s_instance;
 	}
 
+	void cacheRatedLists(int page = 0);
+	void cacheList(GJLevelList* list);
+	void checkClaimableLists();
+
 	void checkLevelsFromDict(CCDictionary* dict);
 	void cacheLevel(GJGameLevel* level);
 	void cacheLevels(std::set<int> toDownload, SearchType searchType, int levelsPerRequest);
