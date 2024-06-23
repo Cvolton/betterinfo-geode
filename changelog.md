@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.2.0-beta.3</c> (2024-06-23)
+* <cg>Fixed</c> <cr>crash</c> while <cl>refreshing leaderboards</c>
+
 ## <cg>v4.2.0-beta.2</c> (2024-06-19)
 * <cg>Fixed</c> <cj>additional level stats</c> <cr>not saving</c>
 
