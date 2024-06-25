@@ -79,7 +79,7 @@ void BetterInfoCache::cacheScoresResult(CCArray* scores) {
 
 void BetterInfoCache::cacheScore(GJUserScore* score) {
     auto object = matjson::Object();
-    object["username"] = score->m_userName;
+    object["username"] = std::string(score->m_userName);
     object["icon-type"] = (int) score->m_iconType;
     object["iconID"] = score->m_iconID;
     object["color-1"] = score->m_color1;
@@ -243,8 +243,8 @@ void BetterInfoCache::cacheList(GJLevelList* list) {
     auto idString = std::to_string(list->m_listID);
     if(!m_json["list-info-dict"][idString].is_object()) m_json["list-info-dict"][idString] = matjson::Object();
 
-    m_json["list-info-dict"][idString]["name"] = list->m_listName;
-    m_json["list-info-dict"][idString]["levels"] = list->m_levels;
+    m_json["list-info-dict"][idString]["name"] = std::string(list->m_listName);
+    m_json["list-info-dict"][idString]["levels"] = std::vector<int>(list->m_levels);
     m_json["list-info-dict"][idString]["levels-to-claim"] = list->m_levelsToClaim;
     m_json["list-info-dict"][idString]["diamonds"] = list->m_diamonds;
     guard.unlock();
