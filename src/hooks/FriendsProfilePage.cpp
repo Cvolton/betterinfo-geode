@@ -2,6 +2,7 @@
 #include <Geode/modify/FriendsProfilePage.hpp>
 
 #include "../utils.hpp"
+#include "../managers/BetterInfoCache.h"
 
 using namespace geode::prelude;
 
@@ -38,15 +39,13 @@ class BI_DLL $modify(BIFriendsProfilePage, FriendsProfilePage) {
 
     void setFollowList() {
         auto GLM = GameLevelManager::sharedState();
+        auto BICache = BetterInfoCache::sharedState();
         
         std::map<std::string, Ref<GJUserScore>> followedCreators;
         
         for(auto [key,trueString] : CCDictionaryExt<gd::string, CCString*>(GLM->m_followedCreators)) {
-            auto score = GJUserScore::create();
             auto id = BetterInfo::stoi(key);
-
-            score->m_accountID = id;
-            score->m_userName = GLM->tryGetUsername(id);
+            auto score = BICache->getCachedOrPlaceholderScore(id);
 
             std::string username = score->m_userName;
             while(followedCreators.contains(username)) {
@@ -64,6 +63,7 @@ class BI_DLL $modify(BIFriendsProfilePage, FriendsProfilePage) {
         getUserListFinished(followedCreatorsArray.inner(), UserListType::Friends);
 
         m_fields->m_isFollowed = true;
+        m_totalFriends->setString(fmt::format("Total Followed: {}", followedCreatorsArray.size()).c_str());
     }
 
     /*

@@ -57,8 +57,6 @@ void LeaderboardViewLayer::loadPage(){
 }
 
 void LeaderboardViewLayer::keyBackClicked() {
-    BetterInfoOnline::sharedState()->m_scoreDelegate = nullptr;
-
     BIViewLayer::keyBackClicked();
 }
 

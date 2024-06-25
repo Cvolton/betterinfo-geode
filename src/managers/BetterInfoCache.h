@@ -30,6 +30,13 @@ public:
 	    return s_instance;
 	}
 
+	void cacheFollowedCreators();
+	void cacheScoresResult(CCArray* scores);
+	void cacheScore(GJUserScore* score);
+
+	GJUserScore* getCachedOrPlaceholderScore(int accountID);
+	GJUserScore* getCachedScore(int accountID);
+
 	void cacheRatedLists(int page = 0);
 	void cacheList(GJLevelList* list);
 	void checkClaimableLists();

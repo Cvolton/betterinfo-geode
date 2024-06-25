@@ -1,4 +1,5 @@
 #include "BetterInfoCache.h"
+#include "BetterInfoOnline.h"
 #include "../utils.hpp"
 
 #include "../layers/FoundListsPopup.h"
@@ -15,6 +16,8 @@ void BetterInfoCache::finishLoading(){
     checkClaimableLists();
     cacheRatedLists();
 
+    cacheFollowedCreators();
+
     checkLevelsFromDict(GLM->m_onlineLevels);
     checkLevelsFromDict(GLM->m_dailyLevels);
 }
@@ -27,6 +30,7 @@ void BetterInfoCache::validateLoadedData() {
     validateIsObject("upload-date-dict");
     validateIsObject("level-info-dict");
     validateIsObject("list-info-dict");
+    validateIsObject("user-info-dict");
 }
 
 void BetterInfoCache::establishCachedDicts(){
@@ -39,6 +43,99 @@ void BetterInfoCache::establishCachedDicts(){
 }
 
 BetterInfoCache::BetterInfoCache(){}
+
+void BetterInfoCache::cacheFollowedCreators() {
+    std::unordered_set<int> followedCreators;
+    for(auto [key, obj] : CCDictionaryExt<gd::string, CCString*>(GameLevelManager::sharedState()->m_followedCreators)) {
+        followedCreators.insert(BetterInfo::stoi(key));
+    }
+
+    std::thread([this, followedCreators = std::move(followedCreators)] {
+        thread::setName("BI Followed Creators Cache");
+
+        for(auto accountID : followedCreators) {
+            if(objectExists("user-info-dict", std::to_string(accountID))) continue;
+            
+            Loader::get()->queueInMainThread([accountID] {
+                BetterInfoOnline::sharedState()->loadScores(accountID, false, nullptr, nullptr);
+            });
+
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(500ms);
+        }
+    }).detach();
+}
+
+void BetterInfoCache::cacheScoresResult(CCArray* scores) {
+    auto BIOnline = BetterInfoOnline::sharedState();
+
+    auto GLM = GameLevelManager::sharedState();
+    for(auto score : CCArrayExt<GJUserScore*>(scores)) {
+        if(!GLM->m_followedCreators->objectForKey(std::to_string(score->m_accountID))) continue;
+
+        cacheScore(score);
+    }
+}
+
+void BetterInfoCache::cacheScore(GJUserScore* score) {
+    auto object = matjson::Object();
+    object["username"] = score->m_userName;
+    object["icon-type"] = (int) score->m_iconType;
+    object["iconID"] = score->m_iconID;
+    object["color-1"] = score->m_color1;
+    object["color-2"] = score->m_color2;
+    object["accountID"] = score->m_accountID;
+    object["cached"] = std::time(nullptr);
+
+    std::thread([this, object, accountID = score->m_accountID] {
+        thread::setName("BI Score Cache");
+
+        std::unique_lock guard(m_jsonMutex);
+        m_json["user-info-dict"][std::to_string(accountID)] = object;
+        guard.unlock();
+        doSave();
+    }).detach();
+    storeUserName(score->m_userID, score->m_userName);
+}
+
+GJUserScore* BetterInfoCache::getCachedOrPlaceholderScore(int accountID) {
+    auto score = getCachedScore(accountID);
+    if(score) return score;
+
+    auto GLM = GameLevelManager::sharedState();
+
+    score = GJUserScore::create();
+    score->m_userName = GLM->tryGetUsername(accountID);
+    score->m_iconType = IconType::Cube;
+    score->m_iconID = 1;
+    score->m_color1 = 0;
+    score->m_color2 = 0;
+    score->m_accountID = accountID;
+    return score;
+}
+
+GJUserScore* BetterInfoCache::getCachedScore(int accountID) {
+    auto idString = std::to_string(accountID);
+    if(!objectExists("user-info-dict", idString)) return nullptr;
+
+    std::shared_lock guard(m_jsonMutex);
+    auto it = m_json["user-info-dict"].as_object().find(idString);
+    if(it == m_json["user-info-dict"].as_object().end()) return nullptr;
+
+    auto object = it->second.as_object();
+    if(!object.contains("username") || !object.contains("icon-type") || !object.contains("iconID") || !object.contains("color-1") || !object.contains("color-2") || !object.contains("accountID")) return nullptr;
+    if(!object["username"].is_string() || !object["icon-type"].is_number() || !object["iconID"].is_number() || !object["color-1"].is_number() || !object["color-2"].is_number() || !object["accountID"].is_number()) return nullptr;
+
+    auto score = GJUserScore::create();
+    score->m_userName = object["username"].as_string();
+    score->m_iconType = (IconType) object["icon-type"].as_int();
+    score->m_iconID = object["iconID"].as_int();
+    score->m_color1 = object["color-1"].as_int();
+    score->m_color2 = object["color-2"].as_int();
+    score->m_accountID = object["accountID"].as_int();
+    return score;
+
+}
 
 void BetterInfoCache::cacheRatedLists(int page) {
     auto searchObj = GJSearchObject::create(SearchType::Awarded);

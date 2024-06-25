@@ -219,10 +219,4 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
 
         BetterInfoOnline::sharedState()->loadScores(id, false, this);
     }
-
-    void onClose(CCObject* sender) {
-        BetterInfoOnline::sharedState()->m_scoreProfilePage = nullptr;
-
-        ProfilePage::onClose(sender);
-    }
 };
