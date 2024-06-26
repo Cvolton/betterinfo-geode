@@ -64,6 +64,8 @@ class BI_DLL $modify(BIFriendsProfilePage, FriendsProfilePage) {
 
         m_fields->m_isFollowed = true;
         m_totalFriends->setString(fmt::format("Total Followed: {}", followedCreatorsArray.size()).c_str());
+
+        GLM->m_userListDelegate = nullptr;
     }
 
     /*
