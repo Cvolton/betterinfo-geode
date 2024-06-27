@@ -48,6 +48,7 @@ class BI_DLL $modify(BIFriendsProfilePage, FriendsProfilePage) {
             auto score = BICache->getCachedOrPlaceholderScore(id);
 
             std::string username = score->m_userName;
+            BetterInfo::strToLower(username);
             while(followedCreators.contains(username)) {
                 username += " ";
             }
