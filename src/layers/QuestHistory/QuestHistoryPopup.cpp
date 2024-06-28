@@ -45,14 +45,18 @@ bool QuestHistoryPopup::init(){
     listLayer->setPosition((winSize / 2) - (listLayer->getContentSize() / 2) - CCPoint(6, 0));
     m_mainLayer->addChild(listLayer);
 
-    listLayer->getChildByID("top-border")->setScaleX(0.8f);
-    listLayer->getChildByID("bottom-border")->setScaleX(0.8f);
+    if(auto top = listLayer->getChildByID("top-border")) top->setScaleX(0.8f);
+    if(auto bottom = listLayer->getChildByID("bottom-border")) bottom->setScaleX(0.8f);
 
-    listLayer->getChildByID("right-border")->setScaleX(0.8f);
-    listLayer->getChildByID("right-border")->setPositionX(277.65);
+    if(auto right = listLayer->getChildByID("right-border")) {
+        right->setScaleX(0.8f);
+        right->setPositionX(277.65);
+    }
 
-    listLayer->getChildByID("left-border")->setScaleX(0.8f);
-    listLayer->getChildByID("left-border")->setPositionX(-5.45);
+    if(auto left = listLayer->getChildByID("left-border")) {
+        left->setScaleX(0.8f);
+        left->setPositionX(-5.45);
+    }
 
     auto scrollbar = Scrollbar::create(listView->m_tableView);
     scrollbar->setPosition({(winSize.width / 2) + (listLayer->getScaledContentSize().width / 2) + 10 - 6, winSize.height / 2});

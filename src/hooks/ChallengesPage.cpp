@@ -70,7 +70,9 @@ class BI_DLL $modify(BIChallengesPage, ChallengesPage) {
     }
     
     void onQuestHistory(cocos2d::CCObject* sender) {
-        QuestHistoryPopup::create()->show();
+        auto popup = QuestHistoryPopup::create();
+        popup->m_scene = this;
+        popup->show();
     }
 
     void reloadQuests() {
