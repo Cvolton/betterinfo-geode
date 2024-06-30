@@ -12,6 +12,8 @@ bool BetterInfoCache::init(){
 }
 
 void BetterInfoCache::finishLoading(){
+    auto now = BetterInfo::timeInMs();
+
     auto GLM = GameLevelManager::sharedState();
     checkClaimableLists();
     cacheRatedLists();
@@ -20,6 +22,8 @@ void BetterInfoCache::finishLoading(){
 
     checkLevelsFromDict(GLM->m_onlineLevels);
     checkLevelsFromDict(GLM->m_dailyLevels);
+
+    log::debug("Finished 2nd stage loading BetterInfoCache in {} ms", BetterInfo::timeInMs() - now);
 }
 
 void BetterInfoCache::validateLoadedData() {
@@ -318,31 +322,44 @@ void BetterInfoCache::removeClaimedLists() {
 }
 
 void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
-    std::set<int> toDownloadRated;
-    std::set<int> toDownloadUnrated;
+    auto dictExt = CCDictionaryExt<gd::string, GJGameLevel*>(dict);
 
-    auto GLM = GameLevelManager::sharedState();
-
-    size_t i = 0;
-    cocos2d::CCDictElement* element = nullptr;
-    CCDICT_FOREACH(dict, element) {
-        auto key = element->getStrKey();
-        auto currentLvl = static_cast<GJGameLevel*>(element->getObject());
-        auto idString = std::to_string(currentLvl->m_levelID);
-        if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString) && objectExists("demon-difficulty-dict", idString) && getLevelName(currentLvl->m_levelID) != "") continue;
-
-        auto levelFromSaved = LevelUtils::getLevelFromSaved(currentLvl->m_levelID);
-        if(levelFromSaved != nullptr && std::string(levelFromSaved->m_levelName) != "") cacheLevel(levelFromSaved);
-        else {
-            if(levelFromSaved && levelFromSaved->m_stars > 0) toDownloadRated.insert(currentLvl->m_levelID);
-            else toDownloadUnrated.insert(currentLvl->m_levelID);
-        }
+    auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
+    for(auto [key, level] : dictExt) {
+        levels->push_back(level);
     }
 
-    if(!toDownloadRated.empty()) cacheLevels(toDownloadRated, SearchType::MapPackOnClick, 2500);
-    if(!toDownloadUnrated.empty()) cacheLevels(toDownloadUnrated, SearchType::Type26, 100);
+    std::thread([this, levels]{
+        thread::setName("BI Level Cache Check");
 
-    log::debug("Caching {} rated and {} unrated levels", toDownloadRated.size(), toDownloadUnrated.size());
+        std::set<int> toDownloadRated;
+        std::set<int> toDownloadUnrated;
+
+        auto GLM = GameLevelManager::sharedState();
+
+        size_t i = 0;
+        cocos2d::CCDictElement* element = nullptr;
+        for(auto currentLvl : *levels) {
+            auto idString = std::to_string(currentLvl->m_levelID);
+            if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString) && objectExists("demon-difficulty-dict", idString) && getLevelName(currentLvl->m_levelID) != "") continue;
+
+            auto levelFromSaved = LevelUtils::getLevelFromSaved(currentLvl->m_levelID);
+            if(levelFromSaved != nullptr && std::string(levelFromSaved->m_levelName) != "") cacheLevel(levelFromSaved);
+            else {
+                if(levelFromSaved && levelFromSaved->m_stars > 0) toDownloadRated.insert(currentLvl->m_levelID);
+                else toDownloadUnrated.insert(currentLvl->m_levelID);
+            }
+        }
+
+        if(!toDownloadRated.empty()) cacheLevels(toDownloadRated, SearchType::MapPackOnClick, 2500);
+        if(!toDownloadUnrated.empty()) cacheLevels(toDownloadUnrated, SearchType::Type26, 100);
+
+        log::debug("Caching {} rated and {} unrated levels", toDownloadRated.size(), toDownloadUnrated.size());
+
+        Loader::get()->queueInMainThread([levels] {
+            log::info("Finished checking {} levels from dict", levels->size());
+        });
+    }).detach();
 }
 
 void BetterInfoCache::cacheLevel(GJGameLevel* level) {

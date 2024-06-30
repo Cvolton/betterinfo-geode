@@ -23,11 +23,7 @@ void BI_DLL loadManagers() {
 }
 
 void BI_DLL finishLoadingManagers() {
-    std::thread([] {
-        thread::setName("BI Manager Loader II");
-        BetterInfoCache::sharedState()->finishLoading();
-    }).detach();
-    
+    BetterInfoCache::sharedState()->finishLoading();
 }
 
 class BI_DLL $modify(MenuLayer) {
