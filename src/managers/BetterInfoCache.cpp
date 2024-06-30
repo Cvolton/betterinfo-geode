@@ -247,7 +247,12 @@ void BetterInfoCache::cacheList(GJLevelList* list) {
     auto idString = std::to_string(list->m_listID);
     if(!m_json["list-info-dict"][idString].is_object()) m_json["list-info-dict"][idString] = matjson::Object();
 
-    m_json["list-info-dict"][idString]["name"] = std::string(list->m_listName);
+    auto name = std::string(list->m_listName);
+    for(auto it = name.begin(); it < name.end(); it++) {
+        if(*it < 0x20) *it = ' ';
+    }
+
+    m_json["list-info-dict"][idString]["name"] = name;
     m_json["list-info-dict"][idString]["levels"] = std::vector<int>(list->m_levels);
     m_json["list-info-dict"][idString]["levels-to-claim"] = list->m_levelsToClaim;
     m_json["list-info-dict"][idString]["diamonds"] = list->m_diamonds;
