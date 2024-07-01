@@ -1,8 +1,6 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LevelListCell.hpp>
 
-#include "../managers/BetterInfoCache.h"
-#include "../layers/UnregisteredProfileLayer.h"
 #include "../utils.hpp"
 
 using namespace geode::prelude;
@@ -15,6 +13,8 @@ class BI_DLL $modify(BILevelListCell, LevelListCell) {
     void loadFromList(GJLevelList* list) {
 
         LevelListCell::loadFromList(list);
+
+        if(list->m_listType == GJLevelType::Editor) return;
 
         //TODO: layout for ID node in Node ID mod
 
