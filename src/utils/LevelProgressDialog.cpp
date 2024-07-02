@@ -38,50 +38,51 @@ void LevelProgressDialog::show(GJGameLevel* level){
         return;
     }
 
-    std::ostringstream contentStream, secondStream;
+    std::ostringstream contentStream, secondStream, toMergeStream;
     contentStream << "<cg>Total Attempts</c>: " << level->m_attempts
         << "\n<cl>Total Jumps</c>: " << level->m_jumps
         << "\n<cy>Clicks (best att.)</c>: " << level->m_clicks
         << "\n<cr>Time (best att.)</c>: " << TimeUtils::workingTime(level->m_attemptTime);
 
+    auto stats = BetterInfoStats::sharedState();
+    if(level->isPlatformer()) {
+        toMergeStream << "<cp>Best Time</c>: " << TimeUtils::platformerTime(level->m_bestTime)
+        << "\n<co>Best Points</c>: " << level->m_bestPoints;
+    } else {
+        toMergeStream << "<cp>Normal</c>: " << level->m_normalPercent
+        << "%\n<co>Practice</c>: " << level->m_practicePercent << "%";
+        if(level->m_orbCompletion != level->m_normalPercent) toMergeStream << "\n<cj>Orbs</c>: " << level->m_orbCompletion << "%";
+        if(level->m_newNormalPercent2 != level->m_orbCompletion) toMergeStream << "\n<cr>Leaderboard</c>: " << level->m_newNormalPercent2 << "%";
+    }
+
     if(level->m_levelType != GJLevelType::Editor){
-        auto stats = BetterInfoStats::sharedState();
         //auto statsV2 = BetterInfoStatsV2::sharedState();
-
-        if(level->isPlatformer()) {
-            contentStream << "\n<cp>Best Time</c>: " << TimeUtils::platformerTime(level->m_bestTime)
-            << "\n<co>Best Points</c>: " << level->m_bestPoints;
-        } else {
-            contentStream << "\n<cp>Normal</c>: " << level->m_normalPercent
-            << "%\n<co>Practice</c>: " << level->m_practicePercent << "%";
-            if(level->m_orbCompletion != level->m_normalPercent) contentStream << "\n<cj>Orbs</c>: " << level->m_orbCompletion << "%";
-            if(level->m_newNormalPercent2 != level->m_orbCompletion) contentStream << "\n<cr>Leaderboard</c>: " << level->m_newNormalPercent2 << "%";
-
-        }
-
-        auto normalAttempts = stats->getAttempts(level, false);
-        auto practiceAttempts = stats->getAttempts(level, true);
-        //auto commonFail = statsV2->getCommonFail(level);
-        secondStream << "<cp>Attempts (normal)</c>: " << normalAttempts << "\n";
-        secondStream << "<co>Attempts (practice)</c>: " << practiceAttempts << "\n";
-        if((normalAttempts + practiceAttempts) != level->m_attempts) secondStream << "<cy>Attempts (unknown)</c>: " << (level->m_attempts - practiceAttempts - normalAttempts) << "\n";
-        secondStream << "\n";
-        if(stats->getPlay(level, false) != 0) secondStream << "<cg>First played</c>: " << TimeUtils::timeToString(stats->getPlay(level, false)) << "\n";
-        if(stats->getPlay(level, true) != 0) secondStream << "<cl>Last played</c>: " << TimeUtils::timeToString(stats->getPlay(level, true)) << "\n";
-        if(stats->getCompletion(level, false) > 0) secondStream << "<cp>Completed</c>: " << TimeUtils::timeToString(stats->getCompletion(level, false)) << "\n";
-        if(stats->getCompletion(level, true) > 0) secondStream << "<co>Completed (practice)</c>: " << TimeUtils::timeToString(stats->getCompletion(level, true)) << "\n";
-        //secondStream << "<co>Common fail:</c> " << commonFail.first << "% (" << commonFail.second << "x)\n";
+        contentStream << "\n" << toMergeStream.str() << "\n";
     }else{
         contentStream << "\n<cp>Objects</c>: " << level->m_objectCount
             << "\n<cr>In Editor</c>: " << TimeUtils::workingTime(level->m_workingTime) << "\n";
         if(level->m_workingTime2) contentStream << "<cr>Editor (C)</c>: " << TimeUtils::workingTime(level->m_workingTime2) << "\n";
-        ;
+
+        secondStream << toMergeStream.str() << "\n\n";
     }
+
+    auto normalAttempts = stats->getAttempts(level, false);
+    auto practiceAttempts = stats->getAttempts(level, true);
+    //auto commonFail = statsV2->getCommonFail(level);
+    secondStream << "<cp>Attempts (normal)</c>: " << normalAttempts << "\n";
+    secondStream << "<co>Attempts (practice)</c>: " << practiceAttempts << "\n";
+    if((normalAttempts + practiceAttempts) != level->m_attempts) secondStream << "<cy>Attempts (unknown)</c>: " << (level->m_attempts - practiceAttempts - normalAttempts) << "\n";
+    secondStream << "\n";
+    if(stats->getPlay(level, false) != 0) secondStream << "<cg>First played</c>: " << TimeUtils::timeToString(stats->getPlay(level, false)) << "\n";
+    if(stats->getPlay(level, true) != 0) secondStream << "<cl>Last played</c>: " << TimeUtils::timeToString(stats->getPlay(level, true)) << "\n";
+    if(stats->getCompletion(level, false) > 0) secondStream << "<cp>Completed</c>: " << TimeUtils::timeToString(stats->getCompletion(level, false)) << "\n";
+    if(stats->getCompletion(level, true) > 0) secondStream << "<co>Completed (practice)</c>: " << TimeUtils::timeToString(stats->getCompletion(level, true)) << "\n";
+    //secondStream << "<co>Common fail:</c> " << commonFail.first << "% (" << commonFail.second << "x)\n";
 
     std::string progresses;
     if(std::string(level->m_personalBests) != ""){
         progresses = printableProgress(level->m_personalBests, level->m_newNormalPercent2);
-        contentStream << "\n\n<cy>Progresses</c>: " << progresses;
+        contentStream << "\n<cy>Progresses</c>: " << progresses;
     }
 
     std::vector<std::string> contents;

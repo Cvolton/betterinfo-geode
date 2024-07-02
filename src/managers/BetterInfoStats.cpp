@@ -96,8 +96,6 @@ void BetterInfoStats::logCompletion(GJGameLevel* level, bool practice) {
 }
 
 void BetterInfoStats::logCompletion(GJGameLevel* level, bool practice, time_t timestamp) {
-    if(level->m_levelType == GJLevelType::Editor) return;
-
     auto dict = practice ? m_practiceDict : m_normalDict;
     dict->setObject(CCString::create(std::to_string(timestamp).c_str()), keyForLevel(level));
     
@@ -114,8 +112,6 @@ time_t BetterInfoStats::getCompletion(GJGameLevel* level, bool practice) {
 }
 
 void BetterInfoStats::logPlay(GJGameLevel* level) {
-    if(level->m_levelType == GJLevelType::Editor) return;
-    
     auto idString = keyForLevel(level);
     auto timeString = CCString::create(std::to_string(std::time(nullptr)).c_str());
     m_lastPlayedDict->setObject(timeString, idString);
@@ -139,12 +135,10 @@ std::string BetterInfoStats::keyForLevel(GJGameLevel* level) {
     auto type = static_cast<int>(level->m_levelType);
     if(!type) type = 3;
 
-    return fmt::format("{}_{}_{}_{}", level->m_levelID.value(), type, level->m_dailyID.value(), level->m_gauntletLevel);
+    return fmt::format("{}_{}_{}_{}", EditorIDs::getID(level), type, level->m_dailyID.value(), level->m_gauntletLevel);
 }
 
 void BetterInfoStats::logAttempt(GJGameLevel* level, bool practice) {
-    if(level->m_levelType == GJLevelType::Editor) return;
-
     auto dict = practice ? m_practiceAttemptDict : m_normalAttemptDict;
     dict->setObject(CCString::create(std::to_string(getAttempts(level, practice) + 1).c_str()), keyForLevel(level));
 }
