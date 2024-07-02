@@ -16,6 +16,7 @@ public:
 	Ref<cocos2d::CCDictionary> m_lastPlayedDict = CCDictionary::create();
 	Ref<cocos2d::CCDictionary> m_normalAttemptDict = CCDictionary::create();
 	Ref<cocos2d::CCDictionary> m_practiceAttemptDict = CCDictionary::create();
+	Ref<cocos2d::CCDictionary> m_listFolderAssignmentsDict = CCDictionary::create();
 
 	bool init();
 	void save();
@@ -31,6 +32,7 @@ public:
 	    }
 	    return s_instance;
 	}
+	void establishListFolders();
 	void logCompletion(GJGameLevel* level, bool practice);
 	void logCompletion(GJGameLevel* level, bool practice, time_t timestamp);
 	time_t getCompletion(GJGameLevel* level, bool practice);
@@ -39,4 +41,7 @@ public:
 	std::string keyForLevel(GJGameLevel* level);
 	void logAttempt(GJGameLevel* level, bool practice);
 	int getAttempts(GJGameLevel* level, bool practice);
+	std::string keyForList(GJLevelList* list);
+	void setListFolder(GJLevelList* list, int folder);
+	int getListFolder(GJLevelList* list);
 };

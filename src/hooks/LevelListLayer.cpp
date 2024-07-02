@@ -4,6 +4,7 @@
 #include "../utils.hpp"
 
 #include "../managers/BetterInfoCache.h"
+#include "../managers/BetterInfoStats.h"
 #include "../ui/FolderButton.h"
 
 using namespace geode::prelude;
@@ -27,6 +28,7 @@ $modify(BILevelListLayer, LevelListLayer) {
 
         auto folderButton = FolderButton::create([this](int id) {
             m_levelList->m_folder = id;
+            BetterInfoStats::sharedState()->setListFolder(m_levelList, id);
         });
         folderButton->setDisplayFolder(m_levelList->m_folder);
         folderButton->setIsCreated(m_levelList->m_listType == GJLevelType::Editor);

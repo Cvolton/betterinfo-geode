@@ -28,6 +28,11 @@
             "id": "cvolton.misc_bugfixes",
             "version": "v1.1.3",
             "importance": "required"
+        },
+        {
+            "id": "cvolton.editor-ids",
+            "version": "v1.0.0-beta.1",
+            "importance": "required"
         }
     ],
     "settings": {
