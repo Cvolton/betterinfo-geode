@@ -3,7 +3,7 @@
 
 #include "../utils.hpp"
 
-#include <cvolton.editor-ids/include/EditorIDs.hpp>
+#include <cvolton.level-id-api/include/EditorIDs.hpp>
 
 using namespace geode::prelude;
 

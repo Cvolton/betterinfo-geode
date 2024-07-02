@@ -30,7 +30,7 @@
             "importance": "required"
         },
         {
-            "id": "cvolton.editor-ids",
+            "id": "cvolton.level-id-api",
             "version": "v1.0.0-beta.1",
             "importance": "required"
         }

@@ -2,7 +2,7 @@
 #include "../utils.hpp"
 
 #include <fmt/format.h>
-#include <cvolton.editor-ids/include/EditorIDs.hpp>
+#include <cvolton.level-id-api/include/EditorIDs.hpp>
 
 bool BetterInfoStats::init(){
     bool init = CCNode::init();
