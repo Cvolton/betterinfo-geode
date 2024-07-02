@@ -3,6 +3,8 @@
 
 #include "../utils.hpp"
 
+#include <cvolton.editor-ids/include/EditorIDs.hpp>
+
 using namespace geode::prelude;
 
 class BI_DLL $modify(BIGJLevelList, GJLevelList) {
