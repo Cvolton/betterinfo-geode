@@ -127,7 +127,7 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
         idTextNode->setPosition({346,m_height - 1});
         if(m_level->m_dailyID == 0 && Loader::get()->isModLoaded("n.level-pronouns")) {
             if(m_compactView) idTextNode->setPositionX(idTextNode->getPositionX() - 23.f);
-            else idTextNode->setPositionY(idTextNode->getPositionY() - 9.f);
+            else idTextNode->setPositionY(idTextNode->getPositionY() - 6.f);
         }
         idTextNode->setAnchorPoint({1,1});
         idTextNode->setScale(m_compactView ? 0.45f : 0.6f);
