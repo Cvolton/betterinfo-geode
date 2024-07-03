@@ -3,6 +3,7 @@
 
 #include "../utils.hpp"
 #include "../ui/DoubleArrow.h"
+#include "../ui/FolderButton.h"
 #include "../layers/LevelBrowserEndLayer.h"
 #include "../layers/LevelFiltering/LevelSearchViewLayer.h"
 #include "../layers/LevelFiltering/ProfileSearchOptions.h"
@@ -149,6 +150,36 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             pageMenu->addChild(randomBtn);
 
             /**
+             * Folder button
+            */
+            if(!searchObj->isLevelSearchObject()) {
+                if(searchObj->m_searchType == SearchType::MyLists || searchObj->m_searchType == SearchType::FavouriteLists) {
+                    /*m_folderBtn = CCMenuItemSpriteExtra::create(
+                        CCSprite::createWithSpriteFrameName("gj_folderBtn_001.png"), 
+                        nullptr, 
+                        this,
+                        menu_selector(LevelBrowserLayer::onGoToFolder)
+                    );
+
+                    m_folderText = CCLabelBMFont::create("0", "bigFont.fnt");
+                    m_folderText->setPosition(m_folderBtn->getNormalImage()->getContentSize() / 2);
+                    m_folderText->setScale(.55f);
+                    m_folderBtn->getNormalImage()->addChild(m_folderText);
+
+                    pageMenu->insertBefore(m_folderBtn, pageMenu->getChildByID("last-page-button"));*/
+
+                    auto folderBtn = FolderButton::create([this](int id) {
+                        m_searchObject->m_folder = id;
+                        LevelBrowserLayer::loadPage(m_searchObject);
+                    });
+                    folderBtn->setDisplayFolder(m_searchObject->m_folder);
+                    folderBtn->setIsCreated(m_searchObject->m_searchType == SearchType::MyLists);
+
+                    pageMenu->insertBefore(folderBtn, pageMenu->getChildByID("last-page-button"));
+                }
+            }
+
+            /**
              * Last page button
             */
             if(!BetterInfo::isLocal(this->m_searchObject)){
@@ -226,6 +257,20 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         if(m_searchObject->m_searchMode == 1 && m_searchObject->m_searchType == SearchType::Featured) BetterInfoCache::sharedState()->tryShowClaimableListsPopup(this);
 
         return true;
+    }
+
+    gd::string getSearchTitle() {
+        if(m_searchObject->m_folder > 0 && (m_searchObject->m_searchType == SearchType::MyLists || m_searchObject->m_searchType == SearchType::FavouriteLists)) {
+            auto folderName = GameLevelManager::sharedState()->getFolderName(m_searchObject->m_folder, m_searchObject->m_searchType == SearchType::MyLists);
+
+            auto mainTitle = m_searchObject->m_searchType == SearchType::MyLists ? "My Lists" : "Favorite Lists";
+
+            if(folderName.empty()) return fmt::format("{} ({})", mainTitle, m_searchObject->m_folder);
+
+            return fmt::format("{} ({}: {})", mainTitle, m_searchObject->m_folder, folderName);
+        }
+
+        return LevelBrowserLayer::getSearchTitle();
     }
 
     /*void onInfo(CCObject* sender) {
