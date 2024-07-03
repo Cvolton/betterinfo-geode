@@ -1,13 +1,18 @@
 # Changelog
-## <cg>v4.2.0-beta.3</c> (2024-06-23)
-* <cg>Fixed</c> <cr>crash</c> while <cl>refreshing leaderboards</c>
+## <cg>v4.2.0</c> (2024-07-00)
+* <cg>Added</c> <cl>derated counter</c> to <co>Demons Info</c> on profiles
+* <cg>Added</c> <cl>notification</c> when you can claim a <co>rated list reward</c>
+* <cg>Added</c> <cl>followed user list</c> to <co>friends menu</c>
+* <cg>Added</c> <cl>list folders</c>
+* <cg>Added</c> more <cl>Level Progress</c> information to <co>Editor levels</c>
+  * "Editor Level IDs API" mod is now required by BI to allow this
+* <cg>Fixed</c> various <cr>stability issues</c>
 
-## <cg>v4.2.0-beta.2</c> (2024-06-19)
-* <cg>Fixed</c> <cj>additional level stats</c> <cr>not saving</c>
+From previous alpha/beta releases:
+* <cg>Updated</c> for Geode 3.0.0 and GD 2.206
+  * Mac support is temporarily disabled
 
-## <cg>v4.2.0-beta.1</c> (2024-06-17)
-* Updated for Geode v3.0.0-beta.1 and GD 2.206
-* Mac support is temporarily disabled
+[See v4.2.0 Beta changelogs here](https://github.com/Cvolton/betterinfo-geode/blob/v4.2.0-beta.3/changelog.md)
 
 [See v4.2.0 Alpha changelogs here](https://github.com/Cvolton/betterinfo-geode/blob/0b4fc2c76d6f81faaf1c939b8964515bffa15258/changelog.md)
 
