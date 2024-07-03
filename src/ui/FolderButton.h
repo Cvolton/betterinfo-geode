@@ -17,6 +17,7 @@ public:
     static FolderButton* create(const std::function<void(int)>& callback);
     void setDisplayFolder(int folderID);
     void setIsCreated(bool isCreated);
+    void setPopupLabel(std::string_view label);
     void activate();
     void setIDPopupClosed(SetIDPopup*, int);
 };

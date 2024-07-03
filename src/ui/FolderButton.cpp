@@ -35,6 +35,10 @@ void FolderButton::setIsCreated(bool isCreated) {
     m_isCreated = isCreated;
 }
 
+void FolderButton::setPopupLabel(std::string_view label) {
+    m_popupLabel = label;
+}
+
 void FolderButton::activate() {
     CCMenuItemSpriteExtra::activate();
 
