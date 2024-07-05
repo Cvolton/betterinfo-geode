@@ -701,22 +701,7 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
             Mod::get()->setSavedValue<std::string>("last_dialog_version", Mod::get()->getVersion().toVString());
 
             if(!btn2) {
-                openInfoPopup(Mod::get());
-
-                // since none of the functions related to the dialog are exported
-                // we have to traverse to the changelog button and press it ourselves
-
-                auto popup = CCScene::get()->getChildren()->objectAtIndex(CCScene::get()->getChildrenCount() - 1);
-                if(auto alert = typeinfo_cast<FLAlertLayer*>(popup)) {
-                    if(auto menu = getChildOfType<CCMenu>(alert->m_mainLayer, 0)) {
-                        // this means changelog is missing
-                        if(!getChildOfType<CCMenuItemToggler>(menu, 1)) return;
-
-                        if(auto changelog = getChildOfType<CCMenuItemToggler>(menu, 0)) {
-                            changelog->activate();
-                        }
-                    }
-                }
+                openChangelogPopup(Mod::get());
             }
         },
         false
