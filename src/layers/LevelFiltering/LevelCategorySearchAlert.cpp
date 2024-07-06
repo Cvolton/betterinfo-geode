@@ -114,7 +114,7 @@ bool LevelCategorySearchAlert::init(){
     this->addChild(m_mainLayer);
 
     cocos2d::extension::CCScale9Sprite* bg = cocos2d::extension::CCScale9Sprite::create("GJ_square01.png", { 0.0f, 0.0f, 80.0f, 80.0f });
-    bg->setContentSize({ 360.0f, 190.0f });
+    bg->setContentSize({ 374.0f, 190.0f });
     m_mainLayer->addChild(bg, -1);
     bg->setPosition({ winSize.width / 2, winSize.height / 2 });
     bg->setID("background-square"_spr);
@@ -130,7 +130,7 @@ bool LevelCategorySearchAlert::init(){
     m_buttonMenu->setID("button-menu"_spr);
     m_mainLayer->addChild(m_buttonMenu, 10);
     m_buttonMenu->addChild(closeButton);
-    closeButton->setPosition({-170.5f, 79});
+    closeButton->setPosition({-176.5f, 79});
     closeButton->setSizeMult(1.2f);
 
     auto searchTitle = CCLabelBMFont::create("Search", "bigFont.fnt");
@@ -141,7 +141,7 @@ bool LevelCategorySearchAlert::init(){
 
     auto separator = CCSprite::createWithSpriteFrameName("floorLine_001.png");
     separator->setPosition({285,207});
-    separator->setScaleX(0.75f);
+    separator->setScaleX(0.8f);
     separator->setOpacity(100);
     separator->setID("separator"_spr);
     m_mainLayer->addChild(separator);
@@ -195,7 +195,7 @@ bool LevelCategorySearchAlert::init(){
 
     //auto coinsButton = createButton(m_buttonMenu, "C. With Coins", menu_selector(LevelCategorySearchAlert::onCoins), -57, -64, (int)(120*0.6), 44*0.6f, 0.6f);
     auto coinsButton = BetterInfo::createSearchButton(this, "C. With Coins", "usercoin_small01_001.png", menu_selector(LevelCategorySearchAlert::onCoins), .325f, 1.1f);
-    coinsButton->setPosition({-58.5, -64});
+    coinsButton->setPosition({-58.5, -62});
     coinsButton->setID("coins-button"_spr);
     auto coinsSearchBtn = static_cast<SearchButton*>(coinsButton->getNormalImage());
     coinsSearchBtn->m_icon->setPositionX(coinsSearchBtn->m_icon->getPositionX() - 1);
@@ -204,7 +204,7 @@ bool LevelCategorySearchAlert::init(){
 
     //auto noCoinsButton = createButton(m_buttonMenu, "C. Without Coins", menu_selector(LevelCategorySearchAlert::onNoCoins), 57, -64, (int)(120*0.6), 44*0.6f, 0.6f);
     auto noCoinsButton = BetterInfo::createSearchButton(this, "C. W/o Coins", "usercoin_small01_001.png", menu_selector(LevelCategorySearchAlert::onNoCoins), .35f, 1.1f);
-    noCoinsButton->setPosition({58.5, -64});
+    noCoinsButton->setPosition({58.5, -62});
     noCoinsButton->setID("no-coins-button"_spr);
     static_cast<SearchButton*>(noCoinsButton->getNormalImage())->m_icon->setColor({165, 165, 165});
     auto noCoinsSearchBtn = static_cast<SearchButton*>(noCoinsButton->getNormalImage());
