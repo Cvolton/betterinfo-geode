@@ -36,6 +36,13 @@ void LevelCategorySearchAlert::onFavorites(cocos2d::CCObject* sender) {
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
 
+void LevelCategorySearchAlert::onFolder(cocos2d::CCObject* sender) {
+    auto popup = SetFolderPopup::create(0, false, "Go to Folder");
+    popup->m_delegate = this;
+    popup->m_scene = this;
+    popup->show();
+}
+
 void LevelCategorySearchAlert::onCompleted(cocos2d::CCObject* sender) {
     BISearchObject searchObj;
     searchObj.completed = true;
@@ -76,6 +83,15 @@ void LevelCategorySearchAlert::onNoCoins(cocos2d::CCObject* sender) {
     BISearchObject searchObj;
     searchObj.uncompletedCoins = true;
     searchObj.completed = true;
+
+    auto browserLayer = LevelSearchViewLayer::scene(LevelUtils::completedDeque(), searchObj);
+    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
+    CCDirector::sharedDirector()->pushScene(transitionFade);
+}
+
+void LevelCategorySearchAlert::setIDPopupClosed(SetIDPopup* popup, int value) {
+    BISearchObject searchObj;
+    searchObj.folder = value;
 
     auto browserLayer = LevelSearchViewLayer::scene(LevelUtils::completedDeque(), searchObj);
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
@@ -132,15 +148,23 @@ bool LevelCategorySearchAlert::init(){
 
     //auto playedButton = createButton(m_buttonMenu, "Played", menu_selector(LevelCategorySearchAlert::onPlayed), -57, 18, (int)(120*0.6), 44*0.6f, 0.6f);
     auto playedButton = BetterInfo::createSearchButton(this, "Played", "BI_playIcon_001.png"_spr, menu_selector(LevelCategorySearchAlert::onPlayed), .5f, .35f);
-    playedButton->setPosition({-58.5, 18});
+    playedButton->setPosition({-117, 18});
     playedButton->setID("played-button"_spr);
     m_buttonMenu->addChild(playedButton);
 
     //auto favoriteButton = createButton(m_buttonMenu, "Favorites", menu_selector(LevelCategorySearchAlert::onFavorites), 57, 18, (int)(120*0.6), 44*0.6f, 0.6f);
     auto favoriteButton = BetterInfo::createSearchButton(this, "Favorites", "gj_heartOn_001.png", menu_selector(LevelCategorySearchAlert::onFavorites), .45f, .6f);
-    favoriteButton->setPosition({58.5, 18});
+    favoriteButton->setPosition({0, 18});
     favoriteButton->setID("favorite-button"_spr);
     m_buttonMenu->addChild(favoriteButton);
+
+    auto folderButton = BetterInfo::createSearchButton(this, "Folder", "folderIcon_001.png", menu_selector(LevelCategorySearchAlert::onFolder), .45f, .525f);
+    folderButton->setPosition({117, 18});
+    folderButton->setID("folder-button"_spr);
+    auto folderSearchBtn = static_cast<SearchButton*>(folderButton->getNormalImage());
+    folderSearchBtn->m_icon->setPositionX(folderSearchBtn->m_icon->getPositionX() + 1);
+    folderSearchBtn->m_icon->setPositionY(folderSearchBtn->m_icon->getPositionY() + 1);
+    m_buttonMenu->addChild(folderButton);
 
     //auto completedButton = createButton(m_buttonMenu, "Completed", menu_selector(LevelCategorySearchAlert::onCompleted), -114, -22, (int)(120*0.6), 44*0.6f, 0.6f);
     auto completedButton = BetterInfo::createSearchButton(this, "Completed", "GJ_completesIcon_001.png", menu_selector(LevelCategorySearchAlert::onCompleted), .45f, .5f);
