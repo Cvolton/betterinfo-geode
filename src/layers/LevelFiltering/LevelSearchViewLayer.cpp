@@ -346,7 +346,7 @@ void LevelSearchViewLayer::optimizeSearchObject() {
     if(m_searchObj.featured && m_gjSearchObjOptimized->m_starFilter == true) m_gjSearchObjOptimized->m_featuredFilter = true;
     if(m_searchObj.original) m_gjSearchObjOptimized->m_originalFilter = true;
     if(m_searchObj.twoPlayer) m_gjSearchObjOptimized->m_twoPlayerFilter = true;
-    if(m_searchObj.coins) m_gjSearchObjOptimized->m_coinsFilter = true;
+    //if(m_searchObj.coins) m_gjSearchObjOptimized->m_coinsFilter = true;
     if(m_searchObj.epic) m_gjSearchObjOptimized->m_epicFilter = true;
     if(m_searchObj.noStar) m_gjSearchObjOptimized->m_noStarFilter = true;
     //TODO: song filters

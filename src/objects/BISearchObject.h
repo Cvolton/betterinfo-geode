@@ -31,8 +31,9 @@ struct BISearchObject {
         bool featured = false;
         bool original = false;
         bool twoPlayer = false;
-        bool coins = false;
+        RangeItem coins = {false, 1, 3};
         bool noCoins = false;
+        bool verifiedCoins = false;
         bool epic = false;
         bool legendary = false;
         bool mythic = false;

@@ -31,6 +31,7 @@ public:
     void onIdRange(cocos2d::CCObject* sender);
     void onGameVersionRange(cocos2d::CCObject* sender);
     void onFolder(cocos2d::CCObject* sender);
+    void onCoins(cocos2d::CCObject* sender);
     void onStarRange(cocos2d::CCObject* sender);
     void onPercentage(cocos2d::CCObject* sender);
     void onPercentageOrbs(cocos2d::CCObject* sender);
@@ -55,4 +56,5 @@ public:
     void setSearchObject(const BISearchObject& searchObj);
     void setFromRangeItem(const std::string& option, const BISearchObject::RangeItem& item);
     void setToRangeItem(BISearchObject::RangeItem& item, const std::string& option) const;
+    void keyDown(enumKeyCodes key);
 };

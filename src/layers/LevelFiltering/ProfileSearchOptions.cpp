@@ -1,4 +1,5 @@
 #include "ProfileSearchOptions.h"
+#include "Geode/cocos/robtop/keyboard_dispatcher/CCKeyboardDelegate.h"
 #include "ProfileSearchOptionsSongSelect.h"
 #include "IDRangePopup.h"
 #include "GameVersionPopup.h"
@@ -67,6 +68,11 @@ void ProfileSearchOptions::onPercentageLeaderboard(cocos2d::CCObject* sender)
 void ProfileSearchOptions::onGameVersionRange(cocos2d::CCObject* sender)
 {
     GameVersionPopup::create(this, getOptionInt("gameversion_min"), getOptionInt("gameversion_max"), 5)->show();
+}
+
+void ProfileSearchOptions::onCoins(cocos2d::CCObject* sender)
+{
+    IDRangePopup::create(this, getOptionInt("coins_min"), getOptionInt("coins_max"), "Coins", 7)->show();
 }
 
 void ProfileSearchOptions::onFolder(cocos2d::CCObject* sender)
@@ -225,17 +231,18 @@ void ProfileSearchOptions::drawTogglesPrimary(){
     createButtonToggle("diff_auto", CCSprite::createWithSpriteFrameName("difficulty_auto_btn_001.png"), 187, -70, .9f);
 
     //40 -60, 170 -60, 300 -60, 40 -110
-    createToggle("nofeatured", "Not Featured");
-    createToggle("noepic", "Not Epic");
-    createToggle("original", "Original");
-    createToggle("coins", "Coins");
-    createToggle("nocoins", "No Coins");
-    createToggle("song", "Song", menu_selector(ProfileSearchOptions::onSong));
-    createToggle("nostar", "No Star");
     createToggle("featured", "Featured");
     createToggle("epic", "Epic");
     createToggle("legendary", "Legendary");
     createToggle("mythic", "Mythic");
+    createToggle("original", "Original");
+    createToggle("song", "Song", menu_selector(ProfileSearchOptions::onSong));
+    createToggle("nofeatured", "Not Featured");
+    createToggle("noepic", "Not Epic");
+    createToggle("nostar", "No Star");
+    createToggle("coins", "Has Coins", menu_selector(ProfileSearchOptions::onCoins)); //TODO: implement
+    createToggle("nocoins", "No Coins");
+    createToggle("verifiedcoins", "Verified Coins");
 }
 
 void ProfileSearchOptions::drawTogglesSecondary(){
@@ -329,6 +336,9 @@ void ProfileSearchOptions::onIDRangeFinished(int min, int max, int additional) {
         case 6:
             option = "folder";
             break;
+        case 7:
+            option = "coins";
+            break;
     }
 
     setOptionInt(fmt::format("{}_min", option), min);
@@ -405,12 +415,13 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
     setToRangeItem(searchObj.percentage, "percentage");
     setToRangeItem(searchObj.percentageOrbs, "percentageorbs");
     setToRangeItem(searchObj.percentageLeaderboard, "percentageleaderboard");
+    setToRangeItem(searchObj.coins, "coins");
 
     searchObj.featured = getOption("featured");
     searchObj.original = getOption("original");
     searchObj.twoPlayer = getOption("twoplayer");
-    searchObj.coins = getOption("coins");
     searchObj.noCoins = getOption("nocoins");
+    searchObj.verifiedCoins = getOption("verifiedcoins");
     searchObj.epic = getOption("epic");
     searchObj.legendary = getOption("legendary");
     searchObj.mythic = getOption("mythic");
@@ -471,11 +482,12 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
     setFromRangeItem("percentage", searchObj.percentage);
     setFromRangeItem("percentageorbs", searchObj.percentageOrbs);
     setFromRangeItem("percentageleaderboard", searchObj.percentageLeaderboard);
+    setFromRangeItem("coins", searchObj.coins);
     setOption("featured", searchObj.featured);
     setOption("original", searchObj.original);
     setOption("twoplayer", searchObj.twoPlayer);
-    setOption("coins", searchObj.coins);
     setOption("nocoins", searchObj.noCoins);
+    setOption("verifiedcoins", searchObj.verifiedCoins);
     setOption("epic", searchObj.epic);
     setOption("legendary", searchObj.legendary);
     setOption("mythic", searchObj.mythic);
@@ -509,4 +521,20 @@ void ProfileSearchOptions::setFromRangeItem(const std::string& option, const BIS
 
 void ProfileSearchOptions::setToRangeItem(BISearchObject::RangeItem& item, const std::string& option) const {
     item = {getOption(option), getOptionInt(fmt::format("{}_min", option)), getOptionInt(fmt::format("{}_max", option))};
+}
+
+void ProfileSearchOptions::keyDown(enumKeyCodes key) {
+    switch(key) {
+        case KEY_Left:
+        case CONTROLLER_Left:
+            if(m_prevBtn->isVisible()) onPrev(nullptr);
+            break;
+        case KEY_Right:
+        case CONTROLLER_Right:
+            if(m_nextBtn->isVisible()) onNext(nullptr);
+            break;
+        default:
+            CvoltonOptionsLayer::keyDown(key);
+            break;
+    }
 }

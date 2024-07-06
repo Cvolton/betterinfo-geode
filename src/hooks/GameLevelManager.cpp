@@ -17,10 +17,10 @@ class BI_DLL $modify(GameLevelManager) {
      * Helpers
      */
 
-    bool validateRangeOption(const std::string& option, int value) {
+    bool validateRangeOption(const std::string& option, int value, int defaultMin = 0, int defaultMax = 0) {
         if(Mod::get()->getSavedValue<bool>(option)) {
-            int min = Mod::get()->getSavedValue<int>(fmt::format("{}_min", option));
-            int max = Mod::get()->getSavedValue<int>(fmt::format("{}_max", option));
+            int min = Mod::get()->getSavedValue<int>(fmt::format("{}_min", option), defaultMin);
+            int max = Mod::get()->getSavedValue<int>(fmt::format("{}_max", option), defaultMax);
             if(min != 0 && value < min) return false;
             if(max != 0 && value > max) return false;
         }
@@ -184,7 +184,7 @@ class BI_DLL $modify(GameLevelManager) {
                 if(!Mod::get()->getSavedValue<bool>("user_search_song_custom") && (level->m_audioTrack != Mod::get()->getSavedValue<int>("user_search_song_id") || level->m_songID != 0)) continue;
             }
             if(Mod::get()->getSavedValue<bool>("user_search_nostar") && level->m_stars != 0) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_coins") && (level->m_coins == 0 || level->m_coinsVerified == 0)) continue;
+            if(Mod::get()->getSavedValue<bool>("user_search_verifiedcoins") && (level->m_coinsVerified == 0)) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_nocoins") && (level->m_coins != 0)) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_twoplayer") && !(level->m_twoPlayerMode)) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_copied") && level->m_originalLevel == 0) continue;
@@ -199,6 +199,7 @@ class BI_DLL $modify(GameLevelManager) {
             if(!validateRangeOption("user_search_percentageorbs", level->m_orbCompletion)) continue;
             if(!validateRangeOption("user_search_percentageleaderboard", level->m_newNormalPercent2)) continue;
             if(!validateRangeOption("user_search_gameversion", level->m_gameVersion)) continue;
+            if(!validateRangeOption("user_search_coins", level->m_coins, 1, 3)) continue;
 
             bool hasAllCoins = LevelUtils::levelHasCollectedCoins(level);
             if(Mod::get()->getSavedValue<bool>("user_search_completedcoins") && (!hasAllCoins || level->m_coins == 0)) continue;
