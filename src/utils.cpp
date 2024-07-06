@@ -1,5 +1,6 @@
 #include "utils.hpp"
 #include "Geode/Enums.hpp"
+#include "Geode/utils/VersionInfo.hpp"
 
 #include <random>
 #include <fmt/format.h>
@@ -670,7 +671,7 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
 
 FLAlertLayer* BetterInfo::createUpdateDialog() {
     //TODO: enable before real 420 release
-    return nullptr;
+    //return nullptr;
 
     auto versionResult = VersionInfo::parse(
         Mod::get()->getSavedValue<std::string>(
@@ -681,23 +682,24 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
             )
         )
     );
-    if(versionResult.isOk() && versionResult->getMinor() == Mod::get()->getVersion().getMinor()) return nullptr;
+    //if(versionResult.isOk() && versionResult->getMinor() == Mod::get()->getVersion().getMinor()) return nullptr;
+    if(versionResult.isOk() && ComparableVersionInfo::parse(">=4.2.0")->compare(versionResult.value())) return nullptr;
 
     return createQuickPopup(
         "BetterInfo",
         "<cg>BetterInfo has updated!</c>\n"
         "\n"
-        "<cy>Changelog:</c> <cg>v4.1.0</c> (2024-02-28)\n"
-        "- <cg>Added</c> <cj>Creator Point Breakdown</c> to <co>Profiles</c>\n"
-        "- <cg>Added</c> <cj>Queued Quests view</c> and <co>Quests History</c>\n"
-        "- <cg>Added</c> <cj>\"Found in\"</c> to <co>Icon Info</c>\n"
-        "- <cg>Improved</c> <co>Chest Reward History</c>\n"
+        "<cy>Changelog:</c> <cg>v4.2.0</c> (2024-07-00)\n"
+        "- <cg>Added</c> <cl>list folders</c>\n"
+        "- <cg>Added</c> <cl>notification</c> when you can claim a <co>rated list reward</c>\n"
+        "- <cg>Added</c> <cl>followed user list</c> to <co>friends menu</c>\n"
+        "- <cg>Added</c> <cl>Coin Count</c> and <cl>Folder</c> filters to <cj>Filtered Search</c>\n"
+        "- <cg>Added</c> more <cl>Level Progress</c> information to <co>Editor levels</c>\n"
         "- <cr>More!</c> Click \"<cy>More Info</c>\" for the <co>whole list</c>!\n"
-        "\n"
-        "This update is largely based on your suggestions!\n",
+        "\n",
         "More Info",
         "Ok",
-        400,
+        420,
         [](FLAlertLayer* me, bool btn2) {
             Mod::get()->setSavedValue<std::string>("last_dialog_version", Mod::get()->getVersion().toVString());
 

@@ -1,9 +1,9 @@
 # Changelog
 ## <cg>v4.2.0</c> (2024-07-00)
+* <cg>Added</c> <cl>list folders</c>
 * <cg>Added</c> <cl>derated counter</c> to <co>Demons Info</c> on profiles
 * <cg>Added</c> <cl>notification</c> when you can claim a <co>rated list reward</c>
 * <cg>Added</c> <cl>followed user list</c> to <co>friends menu</c>
-* <cg>Added</c> <cl>list folders</c>
 * <cg>Added</c> more <cl>Level Progress</c> information to <co>Editor levels</c>
   * "Editor Level IDs API" mod is now required by BI to allow this
 * <cg>Added</c> <cl>Coin Count</c> and <cl>Folder</c> filters to <cj>Filtered Search</c>
