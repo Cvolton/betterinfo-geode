@@ -232,7 +232,7 @@ View Leaderboard As:
 * Green usernames are now loaded from GDHistory directly
 
 # BetterInfo Standalone
-## <cg>v2.4.10</c> - 2023-12-09
+## <cg>v2.4.10</c> (2023-12-09)
 - <cg>Added</c> <cj>demon difficulty</c> to <co>Weekly History</c>
 - <cg>Added</c> <cj>highlighting</c> to <co>View Leaderboard As</c>
 - <cg>Fixed</c> <cj>level names</c> in <co>Daily History</c>
@@ -242,7 +242,7 @@ View Leaderboard As:
 Remember how 2.2 was supposed to be in October...
 Sorry, I mean November...
     
-## <cg>v2.4.9</c> - 2023-10-18
+## <cg>v2.4.9</c> (2023-10-18)
 - <cg>Fixed</c> <co>chest history</c> <cj>icons</c>
 - <cg>Fixed</c> <cj>submitting coins</c> to old <co>daily levels leaderboards</c>
 
@@ -250,72 +250,72 @@ BetterInfo is now also available on Geode with a few more minor features added i
 
 Thank you all for using BI, see you in 2.2 :) --Cvolton
     
-## <cg>v2.4.8</c> - 2023-08-19
+## <cg>v2.4.8</c> (2023-08-19)
 - Fixed a potential crash caused by filtered level search
     
-## <cg>v2.4.7</c> - 2023-07-30
+## <cg>v2.4.7</c> (2023-07-30)
 - Removed "Name Contains", "No ID Search" and "No Forced Star" due to server-side changes
 - Removed "GDW Most Liked" due to server-side changes
 - Using a faster search method for some filtered searches
     
-## <cg>v2.4.6</c> - 2023-06-11
+## <cg>v2.4.6</c> (2023-06-11)
 - Added "no coins" filter (thanks _tz and RandomB)
 - Bugfixes & improvements
     
-## <cg>v2.4.5</c> - 2023-02-03
+## <cg>v2.4.5</c> (2023-02-03)
 - Songs not served from NG highlighted in orange/red/brown/pink/whatever that color is now (idk its a weird shade, i copied it from gdbrowser)
 - Fixed a crash when exiting user leaderboards
 - Fixed a crash when exiting filtered level search
     
-## <cg>v2.4.4</c> - 2023-01-16
+## <cg>v2.4.4</c> (2023-01-16)
 - Added visible comment IDs (optional)
 - Fixed a crash when viewing some level descriptions
 - Bugfixes & improvements
     
-## <cg>v2.4.3</c> - 2022-11-21
+## <cg>v2.4.3</c> (2022-11-21)
 - Increased delay between requests to reduce/prevent rate-limit IP bans
 - Bugfixes & improvements
     
-## <cg>v2.4.2</c> - 2022-10-26
+## <cg>v2.4.2</c> (2022-10-26)
 - <co>RobTop Bug Fix:</c> Made <cr>unloadable</c> profiles <cg>loadable</c> (but still not searchable)
 - <cy>Delayed</c> <cj>auto submit to leaderboards</c> to <co>level exit</c> (+1s)
 - <cg>Added</c> a <co>time left indicator</c> to <cj>Finding Last Page</c>
 - Bugfixes & improvements
     
-## <cg>v2.4.1</c> - 2022-08-24
+## <cg>v2.4.1</c> (2022-08-24)
 - <cg>Fixed</c> <cr>spacebar crash</c> in <cj>paginated alerts</c>
 - <cg>Added</c> the ability to <co>change pages</c> using <cy>left/right keys</c> in <cj>paginated alerts</c>
 - Click <cy>level IDs</c> in <co>created levels</c> to go to the <cj>uploaded version</c> of the level
 - Bugfixes & improvements
     
-## <cg>v2.4.0</c> - 2022-08-17
+## <cg>v2.4.0</c> (2022-08-17)
 - <cg>Added</c> <co>custom</c> <cj>level search filtering</c>
 - <cg>Added</c> <co>played & completed</c> <cj>level search</c>
 - <cj>No ID search</c> <cg>can</c> now be <co>combined</c> with other BI filters
 - Bugfixes & improvements
     
-## <cg>v2.3.3-r3</c> - 2022-07-31
+## <cg>v2.3.3-r3</c> (2022-07-31)
 - Fixed a PlayLayer crash (this update is silently pushed into wrapper without notifying users updating from original 2.3.3)
 
-## <cg>v2.3.3</c> - 2022-07-31
+## <cg>v2.3.3</c> (2022-07-31)
 - <cg>Added</c> separate <cj>normal & practice mode</c> <co>attempts</c>
 - <cg>Replaced</c> <cj>scrolling alerts</c> with <co>paginated</c> ones
 - <cg>Fixed</c> a <cr>startup crash</c> for people with <cl>more</c> than ~450 <co>daily levels</c>
 - <cg>Fixed</c> <cj>auto submit to leaderboards</c> <cr>not</c> submitting coins
 - <cg>:)</c>
     
-## <cg>v2.3.2</c> - 2022-07-22
+## <cg>v2.3.2</c> (2022-07-22)
 - Added <cj>even more</c> <co>Saved Filters</c> (again)
 - Added <cj>first/last played, completed dates</c> to <co>Level Stats</c>
 - Added <cj>auto submit to level leaderboards</c> (<cr>disabled</c> by default, <cg>enable</c> in the BI settings)
 - Bugfixes & improvements
 
-## <cg>v2.3.1</c> - 2022-06-28
+## <cg>v2.3.1</c> (2022-06-28)
 - Added <cj>even more</c> <co>Saved Filters</c>
 - Added a <co>percentage</c> <cj>Completed Mode</c>
 - Bugfixes & improvements
     
-## <cg>v2.3.0</c> - 2022-06-26
+## <cg>v2.3.0</c> (2022-06-26)
 - Added <cj>Claimed Chest</c> <co>history</c>
 - Added <cj>more</c> <cj>Saved Filters</c>
 - Added <co>Live</c> <cj>Comment Chat</c> <co>refreshing</c>
@@ -323,25 +323,25 @@ Thank you all for using BI, see you in 2.2 :) --Cvolton
 - Added a <cj>white level ID option</c>
 - Introduced the auto updater!
 
-## <cg>v2.2.4</c> - 2022-06-15
+## <cg>v2.2.4</c> (2022-06-15)
 - Fixed Copy to Clipboard crashes
 - Fixed conflicts with other mods
 - Fixed UI misalignments
 
-## <cg>v2.2.3</c> - 2022-06-05
+## <cg>v2.2.3</c> (2022-06-05)
 - Moved star filter from profiles to level browser
 - Added Copy to clipboard for Extended Level Info and User Profiles
 - Bugfixes & improvements
 
-## <cg>v2.2.2</c> - 2022-05-28
+## <cg>v2.2.2</c> (2022-05-28)
 - Added full Daily and Weekly History (The Safe from 2.2)
 - Bugfixes & improvements
 
-## <cg>v2.2.1</c> - 2022-05-23
+## <cg>v2.2.1</c> (2022-05-23)
 - Added star filter for user levels
 - Bugfixes & improvements
 
-## <cg>v2.2.0</c> - 2022-05-16
+## <cg>v2.2.0</c> (2022-05-16)
 - Added more advanced level search options
 - Added jump to last page in level search
 - Added saved levels filters
@@ -349,13 +349,13 @@ Thank you all for using BI, see you in 2.2 :) --Cvolton
 - Fixed crashes related to missing resources
 - Other bugfixes & improvements
 
-## <cg>v2.1.1</c> - 2022-04-25
+## <cg>v2.1.1</c> (2022-04-25)
 - Fixed misalignments in Daily level history
 - Added bootups to own user info
 - Added a refresh button for leaderboards
 - Other bugfixes & improvements
 
-## <cg>v2.1.0</c> - 2022-04-15
+## <cg>v2.1.0</c> (2022-04-15)
 New:
   - View Daily/Weekly level history
   - Clicks & best time in level stats
@@ -368,11 +368,11 @@ Fixes:
   - Better progresses calculation
   - Fixed certain layering issues
 
-## <cg>v2.0.1</c> - 2022-04-01
+## <cg>v2.0.1</c> (2022-04-01)
 - Fixed a crash related to rendering usernames longer than 15 characters
 - Added a workaround for layering issues with the custom green profile dialog
 
-## <cg>v2.0.0</c> - 2022-04-01
+## <cg>v2.0.0</c> (2022-04-01)
 Features:
 - Profiles for unregistered users
   - Browse levels made by green users
@@ -397,15 +397,15 @@ Features:
   - Settings (disable green username fix, update check and/or extended level info)
 
 # Clickable Green Usernames + Similar Mod (more-button)
-## <cg>v1.0.2</c> - 2022-03-28
+## <cg>v1.0.2</c> (2022-03-28)
 - Fixed green username positioning in comments
 
-## <cg>v1.0.1</c> - 2022-02-18
+## <cg>v1.0.1</c> (2022-02-18)
 * Fix similar button showing on user comment pages
 * Fix name alignment with small comments mode off
 Features
 
-## <cg>v1.0.0</c> - 2022-02-18
+## <cg>v1.0.0</c> (2022-02-18)
 * Browse green user levels by clicking their names anywhere
 * Find similar levels by clicking the "Similar" button to the level info screen.
   * Real feature scrapped from the game!
