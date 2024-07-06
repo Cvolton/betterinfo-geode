@@ -363,7 +363,7 @@ void LevelSearchViewLayer::resetUnloadedLevels() {
             !m_searchObj.completed && !m_searchObj.completedOrbs && !m_searchObj.completedLeaderboard &&
             !m_searchObj.uncompleted && !m_searchObj.uncompletedOrbs && !m_searchObj.uncompletedLeaderboard &&
             !m_searchObj.percentage.enabled && !m_searchObj.percentageOrbs.enabled && !m_searchObj.percentageLeaderboard.enabled &&
-            !m_searchObj.idRange.enabled && !m_searchObj.favorite
+            !m_searchObj.idRange.enabled && !m_searchObj.favorite && m_searchObj.folder <= 0
         )
     ) {
         m_unloadedLevels = m_allLevels;

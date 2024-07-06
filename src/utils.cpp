@@ -349,7 +349,6 @@ bool BetterInfo::levelMatchesObject(GJGameLevel* level, const BISearchObject& se
     if(searchObj.epic && level->m_isEpic != 1) return false;
     if(searchObj.legendary && level->m_isEpic != 2) return false;
     if(searchObj.mythic && level->m_isEpic != 3) return false;
-        //TODO: searchObj.folder
     if(searchObj.song) {
         if(!searchObj.songCustom && level->m_audioTrack != searchObj.songID) return false;
         if(searchObj.songCustom && level->m_songID != searchObj.songID) return false;
@@ -391,6 +390,7 @@ bool BetterInfo::levelProgressMatchesObject(GJGameLevel* level, const BISearchOb
 
     if(searchObj.downloaded && (!levelFromSaved || std::string(levelFromSaved->m_levelString).empty())) return false;
     if(searchObj.favorite && (!levelFromSaved || !levelFromSaved->m_levelFavorited)) return false;
+    if(searchObj.folder > 0 && (!levelFromSaved || levelFromSaved->m_levelFolder != searchObj.folder)) return false;
 
     return true;
 }

@@ -4,12 +4,13 @@
 #include "../../delegates/IDRangeDelegate.h"
 #include "../../delegates/BISearchObjectDelegate.h"
 #include "../../objects/BISearchObject.h"
+#include "Geode/binding/SetIDPopupDelegate.hpp"
 
 #include <Geode/Geode.hpp>
 
 using namespace geode::prelude;
 
-class BI_DLL ProfileSearchOptions : public CvoltonOptionsLayer, public SongDialogCloseDelegate, public IDRangeDelegate {
+class BI_DLL ProfileSearchOptions : public CvoltonOptionsLayer, public SongDialogCloseDelegate, public IDRangeDelegate, public SetIDPopupDelegate {
     std::unordered_map<std::string, bool> m_options;
     std::unordered_map<std::string, int> m_optionInts;
     Ref<LevelBrowserLayer> m_levelBrowserLayer = nullptr;
@@ -29,6 +30,7 @@ public:
     void onSong(cocos2d::CCObject* sender);
     void onIdRange(cocos2d::CCObject* sender);
     void onGameVersionRange(cocos2d::CCObject* sender);
+    void onFolder(cocos2d::CCObject* sender);
     void onStarRange(cocos2d::CCObject* sender);
     void onPercentage(cocos2d::CCObject* sender);
     void onPercentageOrbs(cocos2d::CCObject* sender);
@@ -43,6 +45,7 @@ public:
     void drawTogglesTerciary();
     void onSongDialogClosed(bool custom, int songID);
     void onIDRangeFinished(int min, int max, int additional);
+    void setIDPopupClosed(SetIDPopup*, int);
     bool getOption(const std::string& option) const;
     int getOptionInt(const std::string& option) const;
     bool toggleOption(const std::string& option);

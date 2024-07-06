@@ -2,9 +2,9 @@
 
 #include "../../utils.hpp"
 
-IDRangePopup* IDRangePopup::create(IDRangeDelegate* delegate, int min, int max, const char* text, int additional){
+IDRangePopup* IDRangePopup::create(IDRangeDelegate* delegate, int min, int max, const char* text, int additional, bool single){
     auto ret = new IDRangePopup();
-    if (ret && ret->init(delegate, min, max, text, additional)) {
+    if (ret && ret->init(delegate, min, max, text, additional, single)) {
         //robert 1 :D
         ret->autorelease();
     } else {
@@ -22,7 +22,7 @@ void IDRangePopup::onClose(cocos2d::CCObject* sender)
     CvoltonAlertLayerStub::onClose(sender);
 }
 
-bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char* text, int additional){
+bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char* text, int additional, bool single){
     if(!CvoltonAlertLayerStub::init({240.0f, 150.0f}, .8f, 0x96)) return false;
 
     this->m_delegate = delegate;
@@ -31,7 +31,7 @@ bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char*
 
     createTitle(text, .45f, .9f);
 
-    m_minNode = CCTextInputNode::create(100, 30, "Min", "bigFont.fnt");
+    m_minNode = CCTextInputNode::create(100, 30, single ? "Value" : "Min", "bigFont.fnt");
     m_minNode->setLabelPlaceholderColor({0x75, 0xAA, 0xF0});
     if(min != 0) m_minNode->setString(std::to_string(min).c_str());
     m_minNode->setAllowedChars("0123456789");
@@ -68,6 +68,13 @@ bool IDRangePopup::init(IDRangeDelegate* delegate, int min, int max, const char*
     maxBg->setScale(0.6f);
     //createTextLabel("Advanced Options", {(winSize.width / 2), (winSize.height / 2) + 125}, 1.f, m_pLayer, "bigFont.fnt");
     this->m_additional = additional;
+
+    if(single) {
+        maxBg->setVisible(false);
+        m_maxNode->setVisible(false);
+        minBg->setPositionY((minBg->getPositionY() + maxBg->getPositionY()) / 2);
+        m_minNode->setPositionY((m_minNode->getPositionY() + m_maxNode->getPositionY()) / 2);
+    }
 
     return true;
 }

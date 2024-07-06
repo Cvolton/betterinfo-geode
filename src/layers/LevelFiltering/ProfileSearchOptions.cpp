@@ -69,6 +69,14 @@ void ProfileSearchOptions::onGameVersionRange(cocos2d::CCObject* sender)
     GameVersionPopup::create(this, getOptionInt("gameversion_min"), getOptionInt("gameversion_max"), 5)->show();
 }
 
+void ProfileSearchOptions::onFolder(cocos2d::CCObject* sender)
+{
+    auto popup = SetFolderPopup::create(getOptionInt("folder_min"), false, "Go to Folder");
+    popup->m_scene = this;
+    popup->m_delegate = this;
+    popup->show();
+}
+
 void ProfileSearchOptions::onNext(cocos2d::CCObject* sender)
 {
     m_page += 1;
@@ -290,6 +298,7 @@ void ProfileSearchOptions::drawTogglesTerciary(){
     createToggle("completedcoins", "C. Coins"); 
     createToggle("uncompletedcoins", "Uc. Coins");
     if(m_prefix.empty()) createToggle("favorite", "Favorited");
+    if(m_prefix.empty()) createToggle("folder", "Folder", menu_selector(ProfileSearchOptions::onFolder));
 }
 
 void ProfileSearchOptions::onSongDialogClosed(bool custom, int songID){
@@ -317,12 +326,19 @@ void ProfileSearchOptions::onIDRangeFinished(int min, int max, int additional) {
         case 5:
             option = "gameversion";
             break;
+        case 6:
+            option = "folder";
+            break;
     }
 
     setOptionInt(fmt::format("{}_min", option), min);
     setOptionInt(fmt::format("{}_max", option), max);
     
     reloadBrowser();
+}
+
+void ProfileSearchOptions::setIDPopupClosed(SetIDPopup* popup, int value) {
+    onIDRangeFinished(value, INT_MIN, 6);
 }
 
 bool ProfileSearchOptions::getOption(const std::string& option) const {
@@ -398,7 +414,7 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
     searchObj.epic = getOption("epic");
     searchObj.legendary = getOption("legendary");
     searchObj.mythic = getOption("mythic");
-    searchObj.folder = 0;
+    searchObj.folder = getOption("folder") ? getOptionInt("folder_min") : 0;
     searchObj.song = getOption("song");
     searchObj.songCustom = getOption("song_custom");
     searchObj.songID = getOptionInt("song_id");
@@ -463,6 +479,8 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
     setOption("epic", searchObj.epic);
     setOption("legendary", searchObj.legendary);
     setOption("mythic", searchObj.mythic);
+    setOptionInt("folder_min", searchObj.folder);
+    if(searchObj.folder > 0) setOption("folder", true);
     //searchObj.folder = 0;
     setOption("song", searchObj.song);
     setOption("song_custom", searchObj.songCustom);

@@ -8,9 +8,9 @@ class BI_DLL IDRangePopup : public CvoltonAlertLayerStub {
     CCTextInputNode* m_maxNode = nullptr;
     int m_additional = 0;
 public:
-    static IDRangePopup* create(IDRangeDelegate* delegate, int min, int max, const char* text, int additional = 0);
+    static IDRangePopup* create(IDRangeDelegate* delegate, int min, int max, const char* text, int additional = 0, bool single = false);
     void onClose(cocos2d::CCObject* sender);
-    bool init(IDRangeDelegate* delegate, int min, int max, const char* text, int additional = 0);
+    bool init(IDRangeDelegate* delegate, int min, int max, const char* text, int additional = 0, bool single = false);
     int minID();
     int maxID();
 };
