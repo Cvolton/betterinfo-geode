@@ -766,6 +766,33 @@ CCMenuItemSpriteExtra* BetterInfo::replaceWithButton(CCNode* node, CCNode* self,
     return button;
 }
 
+//https://github.com/geode-sdk/DevTools/blob/0b12d41a6906dd352b50fd363f6dea28121c3a57/src/pages/Tree.cpp#L10
+std::string getNodeNameImpl(CCObject* node) {
+#ifdef GEODE_IS_WINDOWS
+    return typeid(*node).name() + 6;
+#else 
+    {
+        std::string ret;
+
+        int status = 0;
+        auto demangle = abi::__cxa_demangle(typeid(*node).name(), 0, 0, &status);
+        if (status == 0) {
+            ret = demangle;
+        }
+        free(demangle);
+
+        return ret;
+    }
+#endif
+}
+
+std::string BetterInfo::getNodeName(CCObject* node, bool spr) {
+    auto nodeName = getNodeNameImpl(node);
+
+    if(spr) nodeName = Mod::get()->expandSpriteName(nodeName);
+    return nodeName;
+}
+
 UnlockType BetterInfo::iconTypeToUnlockType(IconType type) {
     //the actual func doesnt work for an unknown reason
     int result = 0;

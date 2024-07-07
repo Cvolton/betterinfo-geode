@@ -80,6 +80,7 @@ namespace BetterInfo {
 
     BI_DLL bool isSprite(CCSprite* sprite, const char* name);
     BI_DLL CCMenuItemSpriteExtra* replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler);
+    BI_DLL std::string getNodeName(CCObject* node, bool spr);
 
     BI_DLL UnlockType iconTypeToUnlockType(IconType type);
     BI_DLL bool isLevelSearchObject(GJSearchObject* object);

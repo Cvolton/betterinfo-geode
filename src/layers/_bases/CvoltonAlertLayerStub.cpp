@@ -3,6 +3,8 @@
 bool CvoltonAlertLayerStub::init(CCPoint contentSize, float closeBtnScale, uint8_t alpha, int squareNumber){
 	bool init = FLAlertLayer::init(alpha);
     if(!init) return false;
+    
+    this->setID(BetterInfo::getNodeName(this, true));
 
     m_alertSize = contentSize;
 

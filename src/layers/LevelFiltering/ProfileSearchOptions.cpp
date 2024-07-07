@@ -165,6 +165,7 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
         RowLayout::create()
             ->setGap(20.f)
     );
+    m_lenMenu->setID("length-menu"_spr);
     m_mainLayer->addChild(m_lenMenu);
 
     drawToggles();
