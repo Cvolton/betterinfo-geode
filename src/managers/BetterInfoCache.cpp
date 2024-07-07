@@ -292,6 +292,8 @@ size_t BetterInfoCache::claimableListsCount() {
 void BetterInfoCache::downloadClaimableLists() {
     if(m_claimableLists.empty()) return;
 
+    size_t listNum = 0;
+
     for(auto [listID, _] : m_claimableLists) {
         if(_ != nullptr) continue;
 
@@ -318,7 +320,7 @@ void BetterInfoCache::showClaimableLists() {
     searchObj->m_searchMode = 1;
     auto lists = CCArray::create();
     for(auto [_, list] : m_claimableLists) {
-        lists->addObject(list);
+        if(list) lists->addObject(list);
     }
     GameLevelManager::sharedState()->storeSearchResult(lists, fmt::format("{}:{}:{}", lists->count(), 0, lists->count()), searchObj->getKey());
 
