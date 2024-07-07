@@ -119,6 +119,7 @@ bool CustomCreatorLayer::init() {
     egg->m_baseScale = .35f;
     egg->setPosition({59, (winSize.height / 2) - 16});
     if(BetterInfo::randomNumber(9, 21) == 15 || BetterInfo::randomNumber(9, 21) == 17) menu->addChild(egg);*/
+    if(BetterInfo::randomNumber(69, 1337) < 420) label->setString(fmt::format("{} 4.2.Q", label->getString()).c_str());
 
     buttonsMenu->updateLayout();
     bottomMenu->updateLayout();
