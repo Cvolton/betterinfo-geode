@@ -1,11 +1,11 @@
 #pragma once
 #include <Geode/Geode.hpp>
 #include "../../utils.hpp"
+#include "../_bases/CvoltonAlertLayerStub.h"
 
 using namespace geode::prelude;
 
-//TODO: use CvoltonAlertLayerStub
-class BI_DLL LevelCategorySearchAlert : public FLAlertLayer, public SetIDPopupDelegate {
+class BI_DLL LevelCategorySearchAlert : public CvoltonAlertLayerStub, public SetIDPopupDelegate {
 public:
     static LevelCategorySearchAlert* create();
     void onClose(cocos2d::CCObject* sender);

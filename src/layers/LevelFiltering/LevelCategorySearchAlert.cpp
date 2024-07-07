@@ -99,39 +99,7 @@ void LevelCategorySearchAlert::setIDPopupClosed(SetIDPopup* popup, int value) {
 }
 
 bool LevelCategorySearchAlert::init(){
-    bool init = cocos2d::CCLayerColor::initWithColor({0x00, 0x00, 0x00, 0x4B});
-    if(!init) return false;
-
-    cocos2d::CCDirector* director = cocos2d::CCDirector::sharedDirector();
-    //director->getTouchDispatcher()->incrementForcePrio(2);
-
-    setTouchEnabled(true);
-    setKeypadEnabled(true);
-
-    cocos2d::CCSize winSize = director->getWinSize();
-    m_mainLayer = cocos2d::CCLayer::create();
-
-    this->addChild(m_mainLayer);
-
-    cocos2d::extension::CCScale9Sprite* bg = cocos2d::extension::CCScale9Sprite::create("GJ_square01.png", { 0.0f, 0.0f, 80.0f, 80.0f });
-    bg->setContentSize({ 374.0f, 190.0f });
-    m_mainLayer->addChild(bg, -1);
-    bg->setPosition({ winSize.width / 2, winSize.height / 2 });
-    bg->setID("background-square"_spr);
-
-    auto closeButton = CCMenuItemSpriteExtra::create(
-        CCSprite::createWithSpriteFrameName("GJ_closeBtn_001.png"),
-        this,
-        menu_selector(LevelCategorySearchAlert::onClose)
-    );
-    closeButton->setID("close-button"_spr);
-
-    m_buttonMenu = CCMenu::create();
-    m_buttonMenu->setID("button-menu"_spr);
-    m_mainLayer->addChild(m_buttonMenu, 10);
-    m_buttonMenu->addChild(closeButton);
-    closeButton->setPosition({-176.5f, 79});
-    closeButton->setSizeMult(1.2f);
+    if(!CvoltonAlertLayerStub::init({ 374.0f, 190.0f })) return false;
 
     auto searchTitle = CCLabelBMFont::create("Search", "bigFont.fnt");
     searchTitle->setPosition({0,71});
