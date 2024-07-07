@@ -117,8 +117,11 @@ CCLabelBMFont* LevelBrowserEndLayer::createTextLabel(const std::string text, con
     return bmFont;
 }
 
-void LevelBrowserEndLayer::loadLevelsFinished(cocos2d::CCArray*, const char* test){
-    if(m_levelBrowserLayer) m_min = m_levelBrowserLayer->m_searchObject->m_page;
+void LevelBrowserEndLayer::loadLevelsFinished(cocos2d::CCArray* levels, const char* key){
+    if(m_levelBrowserLayer) {
+        if(m_levelBrowserLayer->m_searchObject->getKey() != std::string_view(key)) return;
+        m_min = m_levelBrowserLayer->m_searchObject->m_page;
+    }
     if(m_infoLayer) m_min = m_infoLayer->m_page;
 
     if(m_max == 0) {
@@ -147,9 +150,12 @@ void LevelBrowserEndLayer::loadLevelsFinished(cocos2d::CCArray* result, const ch
     //lists overload
     loadLevelsFinished(result, test);
 }
-void LevelBrowserEndLayer::loadLevelsFailed(const char* test){
+void LevelBrowserEndLayer::loadLevelsFailed(const char* key){
 
-    if(m_levelBrowserLayer) m_max = m_levelBrowserLayer->m_searchObject->m_page;
+    if(m_levelBrowserLayer) {
+        m_max = m_levelBrowserLayer->m_searchObject->m_page;
+        if(m_levelBrowserLayer->m_searchObject->getKey() != std::string_view(key)) return;
+    }
     if(m_infoLayer) m_max = m_infoLayer->m_page;
 
     if(m_requestsToMax == 0) {
@@ -219,16 +225,18 @@ void LevelBrowserEndLayer::getOnlineLevels() {
     auto GLM = GameLevelManager::sharedState();
 
     CCArray* storedLevels = nullptr;
+    std::string key;
 
     if(m_levelBrowserLayer) {
-        storedLevels = GLM->getStoredOnlineLevels(m_levelBrowserLayer->m_searchObject->getKey());
+        key = m_levelBrowserLayer->m_searchObject->getKey();
     } else if(m_infoLayer) {
-        storedLevels = GLM->getStoredOnlineLevels(GLM->getCommentKey(m_infoLayer->getID(), m_infoLayer->m_page, GameManager::sharedState()->getGameVariable("0069"), m_infoLayer->m_mode).c_str());
+        key = GLM->getCommentKey(m_infoLayer->getID(), m_infoLayer->m_page, GameManager::sharedState()->getGameVariable("0069"), m_infoLayer->m_mode);
     }
+    storedLevels = GLM->getStoredOnlineLevels(key.c_str());
 
     if(storedLevels) {
         m_updateLabel = false;
-        loadLevelsFinished(storedLevels, "");
+        loadLevelsFinished(storedLevels, key.c_str());
     } else {
         m_updateLabel = true;
         this->getScheduler()->scheduleSelector(schedule_selector(LevelBrowserEndLayer::onQueueDownload), this, 1, 0, 0.25f, false);
