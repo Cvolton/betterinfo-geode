@@ -292,22 +292,25 @@ size_t BetterInfoCache::claimableListsCount() {
 void BetterInfoCache::downloadClaimableLists() {
     if(m_claimableLists.empty()) return;
 
-    size_t listNum = 0;
+    std::thread([this] {
+        for(auto [listID, _] : m_claimableLists) {
+            if(_ != nullptr) continue;
 
-    for(auto [listID, _] : m_claimableLists) {
-        if(_ != nullptr) continue;
+            auto searchObj = GJSearchObject::create(SearchType::Search, std::to_string(listID));
+            ServerUtils::getLevelLists(
+                searchObj, 
+                [this](auto lists, bool) {
+                    if(lists->empty()) return;
+                    m_claimableLists[lists->at(0)->m_listID] = lists->at(0);
+                    log::debug("Downloaded list {}", lists->at(0)->m_listID);
+                },
+                false
+            );
 
-        auto searchObj = GJSearchObject::create(SearchType::Search, std::to_string(listID));
-        ServerUtils::getLevelLists(
-            searchObj, 
-            [this](auto lists, bool) {
-                if(lists->empty()) return;
-                m_claimableLists[lists->at(0)->m_listID] = lists->at(0);
-                log::debug("Downloaded list {}", lists->at(0)->m_listID);
-            },
-            false
-        );
-    }
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(1000ms);
+        }
+    }).detach();
 }
 
 void BetterInfoCache::showClaimableLists() {
