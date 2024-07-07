@@ -1,5 +1,5 @@
 # Changelog
-## <cg>v4.2.0</c> (2024-07-00)
+## <cg>v4.2.0</c> (2024-07-07)
 * <cg>Added</c> <cl>list folders</c>
 * <cg>Added</c> <cl>derated counter</c> to <co>Demons Info</c> on profiles
 * <cg>Added</c> <cl>notification</c> when you can claim a <co>rated list reward</c>
@@ -15,6 +15,8 @@
 From previous alpha/beta releases:
 * <cg>Updated</c> for Geode 3.0.0 and GD 2.206
   * Mac support is temporarily disabled
+
+Also the changelogs of pre-Geode versions of BetterInfo have been added for your reading pleasure.
 
 [See v4.2.0 Beta changelogs here](https://github.com/Cvolton/betterinfo-geode/blob/v4.2.0-beta.3/changelog.md)
 
