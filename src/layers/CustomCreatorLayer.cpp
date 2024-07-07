@@ -48,7 +48,7 @@ bool CustomCreatorLayer::init() {
     );
     addChild(bottomMenu);
 
-    auto label = CCLabelBMFont::create(Mod::get()->getName().c_str(), "goldFont.fnt");
+    auto label = CCLabelBMFont::create(BetterInfo::randomNumber(0, 69) == 42 ? "BetterInfq" : Mod::get()->getName().c_str(), "goldFont.fnt");
     label->setPosition({winSize.width / 2, winSize.height - 25});
     label->setID("title-label"_spr);
 
@@ -120,7 +120,7 @@ bool CustomCreatorLayer::init() {
     egg->m_baseScale = .35f;
     egg->setPosition({59, (winSize.height / 2) - 16});
     if(BetterInfo::randomNumber(9, 21) == 15 || BetterInfo::randomNumber(9, 21) == 17) menu->addChild(egg);*/
-    if(BetterInfo::randomNumber(69, 1337) < 420) {
+    if(BetterInfo::randomNumber(0, 1337) > 6 && BetterInfo::randomNumber(0, 1337) < 9) {
         auto newLabel = CCMenuItemSpriteExtra::create(
             CCLabelBMFont::create("42Q", "goldFont.fnt"),
             this,
