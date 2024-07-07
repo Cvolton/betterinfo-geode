@@ -106,7 +106,7 @@ void LevelSearchViewLayer::reload() {
 
     resetUnloadedLevels();
 
-    m_data = CCArray::create();
+    setData(CCArray::create());
     scheduleUpdate();
 
     loadPage(true);
@@ -149,8 +149,12 @@ void LevelSearchViewLayer::startLoading(){
     if(!searchObj) return;
 
     while(auto key = ServerUtils::getStoredOnlineLevels(searchObj->getKey())) {
-        searchObj->m_page += 1;
         loadLevelsFinished(key, "");
+        
+        //recursive loop for played type
+        if(!m_gjSearchObj) return startLoading();
+        
+        searchObj->m_page += 1;
     }
 
     m_gjSearchObjLoaded = searchObj;
