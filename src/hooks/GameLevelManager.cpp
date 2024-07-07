@@ -231,21 +231,22 @@ class BI_DLL $modify(GameLevelManager) {
         auto headerVector = response->getResponseHeader();
         auto header = std::string(headerVector->begin(), headerVector->end());
 
-        auto headers = utils::string::split(header, "\n");
-        for(auto& header : headers) {
-            if(header.size() < 14 || !header.starts_with("Retry-After")) continue;
-
-            auto value = header.substr(13);
-            auto seconds = BetterInfo::stoi(value);
-
-            Notification::create(fmt::format(" Rate limited by RobTop's server\n Try again in {}", GameToolbox::getTimeString(seconds, false)), NotificationIcon::Warning, 5.f)->show();
-            return;
-        }
-
         auto dataVector = response->getResponseData();
         if(dataVector->size() > 11 && dataVector->at(0) == 'e') {
+            auto headers = utils::string::split(header, "\n");
+            for(auto& header : headers) {
+                if(header.size() < 14 || !header.starts_with("Retry-After")) continue;
+
+                auto value = header.substr(13);
+                auto seconds = BetterInfo::stoi(value);
+
+                ServerUtils::showRateLimitError(seconds);
+                return;
+            }
+
             auto data = std::string(dataVector->begin(), dataVector->end());
             ServerUtils::showCFError(data);
         }
+        
     }
 };

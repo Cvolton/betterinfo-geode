@@ -116,8 +116,11 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
         lock.unlock();
 
         if(!response->ok()) {
-            //TODO: header error checking
-            showCFError(response->string().unwrapOr(""));
+            if(response->header("retry-after").has_value()) {
+                showRateLimitError(std::stoi(response->header("retry-after").value()));
+            } else {
+                showCFError(response->string().unwrapOr(""));
+            }
 
             auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
 
@@ -236,8 +239,11 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
         lock.unlock();
 
         if(!response->ok()) {
-            //TODO: header error checking
-            showCFError(response->string().unwrapOr(""));
+            if(response->header("retry-after").has_value()) {
+                showRateLimitError(std::stoi(response->header("retry-after").value()));
+            } else {
+                showCFError(response->string().unwrapOr(""));
+            }
 
             auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
@@ -341,4 +347,9 @@ bool ServerUtils::showCFError(const std::string& data) {
         return true;
     }
     return false;
+}
+
+bool ServerUtils::showRateLimitError(int seconds) {
+    Notification::create(fmt::format(" Rate limited by RobTop's server\n Try again in {}", GameToolbox::getTimeString(seconds, false)), NotificationIcon::Warning, 5.f)->show();
+    return true;
 }

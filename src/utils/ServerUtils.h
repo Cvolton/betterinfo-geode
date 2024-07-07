@@ -17,4 +17,5 @@ namespace ServerUtils {
     BI_DLL cocos2d::CCArray* getStoredOnlineLevels(const std::string& key);
     BI_DLL void resetCache();
     BI_DLL bool showCFError(const std::string& data);
+    BI_DLL bool showRateLimitError(int seconds);
 }
