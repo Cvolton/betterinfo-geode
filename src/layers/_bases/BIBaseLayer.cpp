@@ -108,8 +108,10 @@ void BIBaseLayer::onEnterTransitionDidFinish() {
     //workaround for no esc catching bug
     size_t i = 0;
     while(Ref<FLAlertLayer> alert = getChildOfType<FLAlertLayer>(this, i++)) {
-        alert->removeFromParent();
+        alert->retain();
+        alert->removeFromParentAndCleanup(false);
         alert->m_noElasticity = true;
         alert->show();
+        alert->release();
     }
 }
