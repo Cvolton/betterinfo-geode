@@ -160,7 +160,7 @@ void LevelSearchViewLayer::startLoading(){
     m_gjSearchObjLoaded = searchObj;
     // this amounts to 80 requests per second, which is 20 below the server limit
     auto time = 0.75 - (TimeUtils::getFullDoubleTime() - m_lastLoadTime);
-    log::info("Time: {}", time);
+    //log::info("Time: {}", time);
     if(time < 0) {
         time = 0;
         this->queueLoad(0);
