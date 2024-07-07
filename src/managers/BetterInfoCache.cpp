@@ -292,10 +292,15 @@ size_t BetterInfoCache::claimableListsCount() {
 void BetterInfoCache::downloadClaimableLists() {
     if(m_claimableLists.empty()) return;
 
-    std::thread([this] {
-        for(auto [listID, _] : m_claimableLists) {
-            if(_ != nullptr) continue;
+    std::vector<int> toDownload;
+    for(auto [listID, _] : m_claimableLists) {
+        if(_ != nullptr) continue;
 
+        toDownload.push_back(listID);
+    }
+
+    std::thread([this, toDownload = std::move(toDownload)] {
+        for(auto listID : toDownload) {
             auto searchObj = GJSearchObject::create(SearchType::Search, std::to_string(listID));
             ServerUtils::getLevelLists(
                 searchObj, 
