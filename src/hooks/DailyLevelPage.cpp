@@ -3,6 +3,7 @@
 
 #include "../utils.hpp"
 #include "../layers/DailyHistory/DailyViewLayer.h"
+#include "Geode/Enums.hpp"
 
 using namespace geode::prelude;
 
@@ -31,8 +32,10 @@ class BI_DLL $modify(BIDailyLevelPage, DailyLevelPage) {
 
         //2.21: event levels
         std::ostringstream currentDaily;
-        currentDaily << "Current: #" << ((m_type == GJTimedLevelType::Weekly) ? GM->m_weeklyID % 100000 : GM->m_dailyID);
-        auto currentDailyNode = CCLabelBMFont::create(currentDaily.str().c_str(), "chatFont.fnt");
+        int id = m_type == GJTimedLevelType::Event ? GM->m_eventID : 
+                 m_type == GJTimedLevelType::Weekly ? GM->m_weeklyID % 100000 :
+                    GM->m_dailyID;
+        auto currentDailyNode = CCLabelBMFont::create(fmt::format("Current: #{}", id).c_str(), "chatFont.fnt");
         currentDailyNode->setPosition({(winSize.width / 2) + 183, (winSize.height / 2) + 51});
         currentDailyNode->setAnchorPoint({1,0});
         currentDailyNode->setScale(0.6f);
