@@ -7,6 +7,7 @@
 * <cg>Added</c> more <cl>Level Progress</c> information to <co>Editor levels</c>
   * "Editor Level IDs API" mod is now required by BI to allow this
 * <cg>Added</c> <cl>Coin Count</c> and <cl>Folder</c> filters to <cj>Filtered Search</c>
+* <cg>Added</c> <cl>Show Level IDs</c> option to the <cj>Mod Settings</c>
 * <cg>Fixed</c> issues caused by <cl>No Transition</c> in mod menus
 * <cg>Fixed</c> various <cr>stability issues</c>
 * Other bugfixes & improvements

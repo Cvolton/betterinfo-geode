@@ -134,7 +134,7 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
         idTextNode->setColor({51,51,51});
         idTextNode->setOpacity(152);
         idTextNode->setID("level-id-label"_spr);
-        m_mainLayer->addChild(idTextNode);
+        if(Mod::get()->getSettingValue<bool>("show-level-ids")) m_mainLayer->addChild(idTextNode);
         if(m_level->m_dailyID > 0 || Mod::get()->getSettingValue<bool>("white-id")){
             idTextNode->setColor({255,255,255});
             idTextNode->setOpacity(200);
@@ -154,7 +154,7 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
             dailyTextNode->setColor({255,255,255});
             dailyTextNode->setOpacity(200);
             dailyTextNode->setID("daily-id-label"_spr);
-            m_mainLayer->addChild(dailyTextNode);
+            if(Mod::get()->getSettingValue<bool>("show-level-ids")) m_mainLayer->addChild(dailyTextNode);
 
             m_level->retain();
             std::thread([level = m_level](){

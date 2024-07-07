@@ -41,7 +41,7 @@ class BI_DLL $modify(BIDailyLevelPage, DailyLevelPage) {
         currentDailyNode->setScale(0.6f);
         currentDailyNode->setColor({255,255,255});
         currentDailyNode->setOpacity(200);
-        layer->addChild(currentDailyNode);
+        if(Mod::get()->getSettingValue<bool>("show-level-ids")) layer->addChild(currentDailyNode);
         currentDailyNode->setID("current-daily-text"_spr);
     }
 

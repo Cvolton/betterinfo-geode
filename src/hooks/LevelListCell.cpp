@@ -30,6 +30,6 @@ class BI_DLL $modify(BILevelListCell, LevelListCell) {
             idTextNode->setOpacity(200);
         }
 
-        m_mainLayer->addChild(idTextNode);
+        if(Mod::get()->getSettingValue<bool>("show-level-ids")) m_mainLayer->addChild(idTextNode);
     }
 };

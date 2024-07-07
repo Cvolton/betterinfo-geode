@@ -36,9 +36,15 @@
         }
     ],
     "settings": {
-        "show-comment-ids": {
-            "name": "Show comment IDs",
-            "description": "Whether comment IDs should be shown in comment cells",
+        "auto-submit": {
+            "name": "Auto submit to leaderboards",
+            "description": "Automatically submits your level score to the level leaderboards upon exiting a level",
+            "type": "bool",
+            "default": false
+        },
+        "alt-button": {
+            "name": "Alternative button texture",
+            "description": "BI :)",
             "type": "bool",
             "default": false
         },
@@ -54,23 +60,23 @@
             "type": "bool",
             "default": true
         },
-        "alt-button": {
-            "name": "Alternative button texture",
-            "description": "BI :)",
-            "type": "bool",
-            "default": false
-        },
-        "auto-submit": {
-            "name": "Auto submit to leaderboards",
-            "description": "Automatically submits your level score to the level leaderboards upon exiting a level",
-            "type": "bool",
-            "default": false
-        },
         "white-id": {
             "name": "White Level ID text",
             "description": "Displays level IDs in level search white instead of grey. Useful if you have transparent lists",
             "type": "bool",
             "default": false
+        },
+        "show-comment-ids": {
+            "name": "Show comment IDs",
+            "description": "Whether comment IDs should be shown in comment cells",
+            "type": "bool",
+            "default": false
+        },
+        "show-level-ids": {
+            "name": "Show level IDs",
+            "description": "Whether level IDs should be shown in level cells",
+            "type": "bool",
+            "default": true
         }
     },
     "resources": {
