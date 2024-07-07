@@ -241,7 +241,7 @@ void ProfileSearchOptions::drawTogglesPrimary(){
     createToggle("nofeatured", "Not Featured");
     createToggle("noepic", "Not Epic");
     createToggle("nostar", "No Star");
-    createToggle("coins", "Has Coins", menu_selector(ProfileSearchOptions::onCoins)); //TODO: implement
+    createToggle("coins", "Has Coins", menu_selector(ProfileSearchOptions::onCoins));
     createToggle("nocoins", "No Coins");
     createToggle("verifiedcoins", "Verified Coins");
 }
