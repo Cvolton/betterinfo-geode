@@ -9,6 +9,7 @@
 * <cg>Added</c> <cl>Coin Count</c> and <cl>Folder</c> filters to <cj>Filtered Search</c>
 * <cg>Fixed</c> issues caused by <cl>No Transition</c> in mod menus
 * <cg>Fixed</c> various <cr>stability issues</c>
+* Other bugfixes & improvements
 
 From previous alpha/beta releases:
 * <cg>Updated</c> for Geode 3.0.0 and GD 2.206

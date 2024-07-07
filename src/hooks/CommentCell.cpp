@@ -51,15 +51,13 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
     void loadFromComment(GJComment* b) {
         CommentCell::loadFromComment(b);
 
-        if(!Mod::get()->setSavedValue("comment-id-alert-shown", true)) showCommentIDsAlert();
-
         auto winSize = CCDirector::sharedDirector()->getWinSize();
         bool smallCommentsMode = this->m_height == 36; //this is how robtop does the check
 
         /**
          * Add comment ID
          */
-        if(Mod::get()->getSettingValue<bool>("show-comment-ids")) {
+        if(!b->m_commentDeleted && Mod::get()->getSettingValue<bool>("show-comment-ids")) {
             auto idText = CCLabelBMFont::create(fmt::format("#{}", b->m_commentID).c_str(), "chatFont.fnt");
             idText->setPosition(smallCommentsMode ? CCPoint(332, 12.5) : CCPoint(329, 21.5));
             idText->setAnchorPoint({1, .5f});
