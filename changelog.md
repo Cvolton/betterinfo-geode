@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.2.1</c> (2024-07-08)
+* <cg>Adjusted</c> internal rate-limits for BetterInfo caching
+* Other bugfixes & improvements
+
 ## <cg>v4.2.0</c> (2024-07-07)
 * <cg>Added</c> <cl>list folders</c>
 * <cg>Added</c> <cl>derated counter</c> to <co>Demons Info</c> on profiles
