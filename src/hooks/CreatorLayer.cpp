@@ -33,7 +33,7 @@ class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
         if(menu == nullptr || !showExclamation) return;
 
 
-        auto listsBtn = static_cast<CCMenuItemSpriteExtra*>(menu->getChildByID("lists-button"));
+        auto listsBtn = static_cast<CCMenuItemSpriteExtra*>(menu->getChildByIDRecursive("lists-button"));
         if(listsBtn == nullptr) return;
 
         auto listsSprite = listsBtn->getNormalImage();
