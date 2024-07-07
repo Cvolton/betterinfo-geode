@@ -1,4 +1,5 @@
 #include "CustomCreatorLayer.h"
+#include "Geode/cocos/label_nodes/CCLabelBMFont.h"
 #include "LevelIDLayer.h"
 #include "LevelFiltering/LevelSearchViewLayer.h"
 #include "LevelFiltering/LevelCategorySearchAlert.h"
@@ -119,7 +120,20 @@ bool CustomCreatorLayer::init() {
     egg->m_baseScale = .35f;
     egg->setPosition({59, (winSize.height / 2) - 16});
     if(BetterInfo::randomNumber(9, 21) == 15 || BetterInfo::randomNumber(9, 21) == 17) menu->addChild(egg);*/
-    if(BetterInfo::randomNumber(69, 1337) < 420) label->setString(fmt::format("{} 4.2.Q", label->getString()).c_str());
+    if(BetterInfo::randomNumber(69, 1337) < 420) {
+        auto newLabel = CCMenuItemSpriteExtra::create(
+            CCLabelBMFont::create("42Q", "goldFont.fnt"),
+            this,
+            menu_selector(CustomCreatorLayer::onEgg)
+        );
+        newLabel->setPosition({label->getPositionX() + (label->getScaledContentWidth() / 2) + 2, label->getPositionY() - 3});   
+        newLabel->setRotation(90.f);
+        newLabel->setID("42q-label"_spr);
+        newLabel->setScale(0.35f);
+        newLabel->m_baseScale = 0.35f;
+        newLabel->setPosition(menu->convertToNodeSpace(newLabel->getPosition()));
+        menu->addChild(newLabel);
+    }
 
     buttonsMenu->updateLayout();
     bottomMenu->updateLayout();
@@ -130,7 +144,7 @@ bool CustomCreatorLayer::init() {
 void CustomCreatorLayer::onEgg(CCObject* object) {
     FLAlertLayer::create(
         "BetterInfo", 
-        "BetterInfo 413 :)",
+        "BetterInfo 420",
         "OK"
     )->show();
 }
