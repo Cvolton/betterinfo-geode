@@ -2,11 +2,11 @@
 
 #include <Geode/Geode.hpp>
 #include "../utils.hpp"
+#include "_bases/CvoltonAlertLayerStub.h"
 
 using namespace geode::prelude;
 
-//TODO: use CvoltonAlertLayerStub
-class BI_DLL CustomLevelSearchLayer : public FLAlertLayer {
+class BI_DLL CustomLevelSearchLayer : public CvoltonAlertLayerStub {
     Ref<GJGameLevel> m_level = nullptr;
 public:
     static CustomLevelSearchLayer* create(GJGameLevel* level);
