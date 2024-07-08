@@ -38,6 +38,8 @@ class BI_DLL $modify(BIFriendsProfilePage, FriendsProfilePage) {
     }
 
     void setFollowList() {
+        m_type = UserListType::Blocked;
+
         auto GLM = GameLevelManager::sharedState();
         auto BICache = BetterInfoCache::sharedState();
         
@@ -61,7 +63,7 @@ class BI_DLL $modify(BIFriendsProfilePage, FriendsProfilePage) {
             followedCreatorsArray.push_back(score);
         }
 
-        getUserListFinished(followedCreatorsArray.inner(), UserListType::Friends);
+        getUserListFinished(followedCreatorsArray.inner(), UserListType::Blocked);
 
         m_fields->m_isFollowed = true;
         m_totalFriends->setString(fmt::format("Total Followed: {}", followedCreatorsArray.size()).c_str());
