@@ -89,6 +89,7 @@ void BetterInfoOnline::sendScoreToProfilePage(cocos2d::CCArray* scores, int acco
         auto score = static_cast<GJUserScore*>(obj);
         score->m_messageState = 2;
         score->m_friendStatus = 1;
+        score->m_glowEnabled = score->m_special == 2;
         if(score->m_accountID == accountID) {
             score->m_globalRank = score->m_playerRank;
             switch(score->m_iconType) {

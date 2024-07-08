@@ -4,6 +4,7 @@
 
 #include "../layers/FoundListsPopup.h"
 #include "Geode/utils/general.hpp"
+#include <shared_mutex>
 
 bool BetterInfoCache::init(){
     if(!BaseJsonManager::init("cache.json")) return false;
@@ -74,7 +75,10 @@ void BetterInfoCache::cacheFollowedCreators() {
         thread::setName("BI Followed Creators Cache");
 
         for(auto accountID : followedCreators) {
-            if(objectExists("user-info-dict", std::to_string(accountID))) continue;
+            if(objectExists("user-info-dict", std::to_string(accountID))) {
+                std::shared_lock guard(m_jsonMutex);
+                if(m_json["user-info-dict"][std::to_string(accountID)].contains("special")) continue;
+            };
             
             Loader::get()->queueInMainThread([accountID] {
                 BetterInfoOnline::sharedState()->loadScores(accountID, false, nullptr, nullptr);
@@ -104,6 +108,7 @@ void BetterInfoCache::cacheScore(GJUserScore* score) {
     object["iconID"] = score->m_iconID;
     object["color-1"] = score->m_color1;
     object["color-2"] = score->m_color2;
+    object["special"] = score->m_special;
     object["accountID"] = score->m_accountID;
     object["cached"] = std::time(nullptr);
 
@@ -130,6 +135,7 @@ GJUserScore* BetterInfoCache::getCachedOrPlaceholderScore(int accountID) {
     score->m_iconID = 1;
     score->m_color1 = 0;
     score->m_color2 = 0;
+    score->m_special = 0;
     score->m_accountID = accountID;
     return score;
 }
@@ -153,8 +159,11 @@ GJUserScore* BetterInfoCache::getCachedScore(int accountID) {
     score->m_color1 = object["color-1"].as_int();
     score->m_color2 = object["color-2"].as_int();
     score->m_accountID = object["accountID"].as_int();
-    return score;
 
+    if(!object.contains("special") || !object["special"].is_number()) return score;
+
+    score->m_special = object["special"].as_int();
+    return score;
 }
 
 void BetterInfoCache::cacheRatedLists(int page) {
