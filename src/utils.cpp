@@ -226,6 +226,7 @@ bool BetterInfo::isSavedFiltered() {
         if(Mod::get()->getSavedValue<bool>(option)) return true;
     }
 
+
     return false;
 }
 
@@ -690,7 +691,7 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
         "BetterInfo",
         "<cg>BetterInfo has updated!</c>\n"
         "\n"
-        "<cy>Changelog:</c> <cg>v4.2.0</c> (2024-07-00)\n"
+        "<cy>Changelog:</c> <cg>v4.2.0</c> (2024-07-07)\n"
         "- <cg>Added</c> <cl>list folders</c>\n"
         "- <cg>Added</c> <cl>notification</c> when you can claim a <co>rated list reward</c>\n"
         "- <cg>Added</c> <cl>followed user list</c> to <co>friends menu</c>\n"
