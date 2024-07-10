@@ -1,4 +1,10 @@
 # Changelog
+## <cg>v4.2.3</c> (2024-07-11)
+* <cg>Added</c> <cl>Unverified Coins</c> filter to <co>Filtered Search</c>
+* <cg>Fixed</c> <cl>No Coins</c> filter in <co>Filtered Search</c>
+* <cg>Fixed</c> <cl>Followed List</c> granting <co>Friends Achievements</c>
+* <cg>Fixed</c> <cl>Icon Glow</c> in <co>Followed List</c>
+
 ## <cg>v4.2.1 / v4.2.2</c> (2024-07-08)
 * <cg>Adjusted</c> internal rate-limits for BetterInfo caching
 * Other bugfixes & improvements
