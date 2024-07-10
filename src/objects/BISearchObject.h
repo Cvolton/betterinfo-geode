@@ -34,6 +34,7 @@ struct BISearchObject {
         RangeItem coins = {false, 1, 3};
         bool noCoins = false;
         bool verifiedCoins = false;
+        bool unverifiedCoins = false;
         bool epic = false;
         bool legendary = false;
         bool mythic = false;

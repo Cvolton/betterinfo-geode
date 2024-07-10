@@ -185,6 +185,7 @@ class BI_DLL $modify(GameLevelManager) {
             }
             if(Mod::get()->getSavedValue<bool>("user_search_nostar") && level->m_stars != 0) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_verifiedcoins") && (level->m_coinsVerified == 0)) continue;
+            if(Mod::get()->getSavedValue<bool>("user_search_unverifiedcoins") && (level->m_coinsVerified)) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_nocoins") && level->m_coins != 0) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_twoplayer") && !(level->m_twoPlayerMode)) continue;
             if(Mod::get()->getSavedValue<bool>("user_search_copied") && level->m_originalLevel == 0) continue;

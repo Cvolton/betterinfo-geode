@@ -281,6 +281,7 @@ void ProfileSearchOptions::drawTogglesSecondary(){
     if(!m_prefix.empty()) createToggle("ldm", "LDM");
     createToggle("twoplayer", "2-Player");
     createToggle("gameversion", "Game Ver.", menu_selector(ProfileSearchOptions::onGameVersionRange));
+    createToggle("unverifiedcoins", "Unverified Coins");
     
 }
 
@@ -423,6 +424,7 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
     searchObj.twoPlayer = getOption("twoplayer");
     searchObj.noCoins = getOption("nocoins");
     searchObj.verifiedCoins = getOption("verifiedcoins");
+    searchObj.unverifiedCoins = getOption("unverifiedcoins");
     searchObj.epic = getOption("epic");
     searchObj.legendary = getOption("legendary");
     searchObj.mythic = getOption("mythic");
@@ -489,6 +491,7 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
     setOption("twoplayer", searchObj.twoPlayer);
     setOption("nocoins", searchObj.noCoins);
     setOption("verifiedcoins", searchObj.verifiedCoins);
+    setOption("unverifiedcoins", searchObj.unverifiedCoins);
     setOption("epic", searchObj.epic);
     setOption("legendary", searchObj.legendary);
     setOption("mythic", searchObj.mythic);

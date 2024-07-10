@@ -219,7 +219,7 @@ bool BetterInfo::isSavedFiltered() {
         "user_search_uncompletedleaderboard", "user_search_percentage", "user_search_percentageorbs",
         "user_search_percentageleaderboard", "user_search_starrange", "user_search_completedcoins",
         "user_search_uncompletedcoins", "user_search_legendary", "user_search_mythic",
-        "user_search_gameversion", "user_search_verifiedcoins"
+        "user_search_gameversion", "user_search_verifiedcoins", "user_search_unverifiedcoins"
     };
 
     for(auto option : options) {
@@ -347,6 +347,7 @@ bool BetterInfo::levelMatchesObject(GJGameLevel* level, const BISearchObject& se
     if(searchObj.twoPlayer && !level->m_twoPlayerMode) return false;
     if(!validateRangeItem(searchObj.coins, level->m_coins)) return false;
     if(searchObj.noCoins && level->m_coins != 0) return false;
+    if(searchObj.unverifiedCoins && level->m_coinsVerified) return false;
     if(searchObj.verifiedCoins && !level->m_coinsVerified) return false;
     if(searchObj.epic && level->m_isEpic != 1) return false;
     if(searchObj.legendary && level->m_isEpic != 2) return false;
