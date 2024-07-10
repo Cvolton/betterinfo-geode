@@ -346,7 +346,7 @@ bool BetterInfo::levelMatchesObject(GJGameLevel* level, const BISearchObject& se
     if(searchObj.original && level->m_originalLevel > 0) return false;
     if(searchObj.twoPlayer && !level->m_twoPlayerMode) return false;
     if(!validateRangeItem(searchObj.coins, level->m_coins)) return false;
-    if(searchObj.noCoins && level->m_coins == 0) return false;
+    if(searchObj.noCoins && level->m_coins != 0) return false;
     if(searchObj.verifiedCoins && !level->m_coinsVerified) return false;
     if(searchObj.epic && level->m_isEpic != 1) return false;
     if(searchObj.legendary && level->m_isEpic != 2) return false;
