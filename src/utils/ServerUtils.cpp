@@ -22,10 +22,10 @@ std::string ServerUtils::getBaseURL() {
         static_assert(GEODE_COMP_GD_VERSION == 22060, "Unsupported GD version");
         originalUrl = (char*)(base::get() + 0x5251d0);
     #elif defined(GEODE_IS_ARM_MAC)
-        static_assert(GEODE_COMP_GD_VERSION == 22600, "Unsupported GD version");
+        static_assert(GEODE_COMP_GD_VERSION == 22060, "Unsupported GD version");
         originalUrl = (char*)(base::get() + 0x78bf98);
     #elif defined(GEODE_IS_INTEL_MAC)
-        static_assert(GEODE_COMP_GD_VERSION == 22600, "Unsupported GD version");
+        static_assert(GEODE_COMP_GD_VERSION == 22060, "Unsupported GD version");
         originalUrl = (char*)(base::get() + 0x875058);
     #elif defined(GEODE_IS_ANDROID64)
         static_assert(GEODE_COMP_GD_VERSION == 22060, "Unsupported GD version");
