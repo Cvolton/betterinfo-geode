@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.2.4</c> (2024-07-14)
+* <cg>Fixed</c> <cr>incorrect orb counts</c> in <co>Daily History</c>
+* <cg>Enabled</c> <cp>macOS</c> support
+  * Experimental, may not get all future updates
+
 ## <cg>v4.2.3</c> (2024-07-11)
 * <cg>Added</c> <cl>Unverified Coins</c> filter to <co>Filtered Search</c>
 * <cg>Fixed</c> <cl>No Coins</c> filter in <co>Filtered Search</c>
