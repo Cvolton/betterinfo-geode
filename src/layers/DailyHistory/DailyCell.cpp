@@ -90,8 +90,8 @@ void DailyCell::loadFromData(CCObject* object) {
     orbSprite->setID("orb-sprite"_spr);
     this->m_mainLayer->addChild(orbSprite);
 
-    int orbsMax = (GSM->getAwardedCurrencyForLevel(level) * 125) / 100;
-    int orbsCollectible = GSM->getBaseCurrencyForLevel(level);
+    int orbsMax = (GSM->getBaseCurrencyForLevel(level) * 125) / 100;
+    int orbsCollectible = GSM->getAwardedCurrencyForLevel(level);
     auto orb = CCLabelBMFont::create(CCString::createWithFormat("%i/%i", orbsCollectible, orbsMax)->getCString(), "bigFont.fnt");
     if(orbsCollectible == orbsMax){ 
         orb = CCLabelBMFont::create(CCString::createWithFormat("%i", orbsCollectible)->getCString(), "bigFont.fnt");
