@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.2.4</c> (2024-07-24)
+* <cg>Fixed</c> <cr>a crash</c> when opening <co>Extended Level Info</c> on <cp>M1 macOS</c>
+
 ## <cg>v4.2.4</c> (2024-07-14)
 * <cg>Fixed</c> <cr>incorrect orb counts</c> in <co>Daily History</c>
 * <cg>Enabled</c> <cp>macOS</c> support
