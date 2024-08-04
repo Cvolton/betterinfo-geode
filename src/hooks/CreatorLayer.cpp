@@ -20,10 +20,11 @@ class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
     }
 
     /*
-     * Hooks
+     * Helpers
      */
-    void sceneWillResume() {
-        CreatorLayer::sceneWillResume();
+    void checkListsExclamation() {
+        //this needs to be ran from init as well
+        //bc sceneWillResume is inlined into init on mac
 
         auto menu = static_cast<CCMenu*>(this->getChildByID("creator-buttons-menu"));
         auto GSM = GameStatsManager::sharedState();
@@ -49,6 +50,15 @@ class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
         exMark->setScale(0.8f);
         exMark->setID("exclamation-mark"_spr);
         listsSprite->addChild(exMark);
+    }
+
+    /*
+     * Hooks
+     */
+    void sceneWillResume() {
+        CreatorLayer::sceneWillResume();
+
+        this->checkListsExclamation();        
     }
 
     bool init() {
@@ -82,6 +92,7 @@ class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
         Mod::get()->setSavedValue<std::string>("last_launch_version", Mod::get()->getVersion().toVString());
 
         //showQuestExclamationMark();
+        this->checkListsExclamation();
 
         return true;
     }
