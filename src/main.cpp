@@ -26,6 +26,27 @@ void BI_DLL finishLoadingManagers() {
     BetterInfoCache::sharedState()->finishLoading();
 }
 
+void BI_DLL fixLevelLists() {
+    log::info("Deleting level lists created by Mac bug");
+
+    auto LLM = LocalLevelManager::sharedState();
+    auto lists = CCArrayExt<GJLevelList*>(LLM->m_localLists);
+
+    std::vector<GJLevelList*> blanks;
+
+    for(auto list : lists) {
+        if(list->m_listID == 0 && list->m_listName.empty() && list->m_levels.empty() && list->m_levelsString.empty()) {
+            blanks.push_back(list);
+        }
+    }
+
+    if(blanks.size() > 10) {
+        for(auto list : blanks) {
+            LLM->m_localLists->removeObject(list);
+        }
+    }
+}
+
 class BI_DLL $modify(MenuLayer) {
     bool init() {
         if(!MenuLayer::init()) return false;
@@ -36,6 +57,7 @@ class BI_DLL $modify(MenuLayer) {
         if(!managersLoaded) {
             managersLoaded = true;
             finishLoadingManagers();
+            fixLevelLists();
         }
 
         return true;
