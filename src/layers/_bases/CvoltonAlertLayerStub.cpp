@@ -14,6 +14,7 @@ bool CvoltonAlertLayerStub::init(CCPoint contentSize, float closeBtnScale, uint8
     bg->setPosition({ winSize.width / 2, winSize.height / 2 });
     bg->setID("background"_spr);
     m_mainLayer->addChild(bg, -1);
+    m_mainLayer->setID("main-layer"_spr);
 
     m_buttonMenu = CCMenu::create();
     m_buttonMenu->setID("button-menu"_spr);
