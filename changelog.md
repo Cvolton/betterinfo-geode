@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.2.6</c> (2024-08-04)
+* <cg>Fixed</c> the following <cr>issues</c> on <cp>macOS</c>
+  * <cg>Fixed</c> <cr>a crash</c> when opening <cl>level filters</c>
+  * <cg>Fixed</c> the game creating <cr>10 empty created lists</c> on every startup
+
 ## <cg>v4.2.5</c> (2024-07-24)
 * <cg>Fixed</c> <cr>a crash</c> when opening <co>Extended Level Info</c> on <cp>M1 macOS</c>
 
