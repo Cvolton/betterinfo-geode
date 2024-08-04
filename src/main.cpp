@@ -35,7 +35,7 @@ void BI_DLL fixLevelLists() {
     std::vector<GJLevelList*> blanks;
 
     for(auto list : lists) {
-        if(list->m_listID == 0 && list->m_listName.empty() && list->m_levels.empty() && list->m_levelsString.empty()) {
+        if(list->m_listID == 0 && list->m_listName.empty() && (list->m_levels.size() == 0) && list->m_levelsString.empty()) {
             blanks.push_back(list);
         }
     }
