@@ -106,7 +106,7 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
     postString += "&secret=Wmfd2893gb7";
 
     std::string key = getSearchObjectKey(searchObject);
-    auto requestKey = fmt::format("getOnlineLevels_{}", key);
+    auto requestKey = fmt::format("getLevelLists_{}", key);
 
     std::unique_lock lock(s_requestsMutex);
     if(s_requests.find(requestKey) == s_requests.end()) {
@@ -175,7 +175,7 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
         CCArray* levelArray = CCArray::create();
         for(auto level : *levels) levelArray->addObject(level);
 
-        GameLevelManager::sharedState()->saveFetchedLevels(levelArray);
+        GameLevelManager::sharedState()->saveFetchedLevelLists(levelArray);
         if(cacheLevels) {
             if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, pageData, key.c_str());
             else s_cache[key] = levelArray;
