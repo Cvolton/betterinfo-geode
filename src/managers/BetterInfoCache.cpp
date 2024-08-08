@@ -302,11 +302,14 @@ size_t BetterInfoCache::claimableListsCount() {
 void BetterInfoCache::downloadClaimableLists() {
     if(m_claimableLists.empty()) return;
 
+    static std::set<int> downloadingLists;
     std::vector<int> toDownload;
     for(auto [listID, _] : m_claimableLists) {
         if(_ != nullptr) continue;
+        if(downloadingLists.contains(listID)) continue;
 
         toDownload.push_back(listID);
+        downloadingLists.insert(listID);
     }
 
     std::thread([this, toDownload = std::move(toDownload)] {

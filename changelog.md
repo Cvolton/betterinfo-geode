@@ -1,5 +1,5 @@
 # Changelog
-## <cg>v4.2.7</c> (2024-08-04)
+## <cg>v4.2.7</c> (2024-08-08)
 * <cg>Fixed</c> <cr>a crash</c> when <cj>Last Page Search</c> reaches infinite pages
 * <cg>Fixed</c> a rare <cr>startup crash</c> caused by <cj>Level Lists</c>
 * <cg>Changed</c> <cj>Creator Point Breakdown</c> so it doesn't consider Legendary levels Epic
