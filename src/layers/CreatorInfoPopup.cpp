@@ -317,9 +317,9 @@ int CreatorInfoPopup::levelsForDifficulty(int difficulty, bool platformer){
 
         if(m_tab == 1 && level->m_stars <= 0) continue;
         if(m_tab == 2 && level->m_featured <= 0) continue;
-        if(m_tab == 3 && level->m_isEpic <= 0) continue;
-        if(m_tab == 4 && level->m_isEpic <= 1) continue;
-        if(m_tab == 5 && level->m_isEpic <= 2) continue;
+        if(m_tab == 3 && level->m_isEpic != 1) continue;
+        if(m_tab == 4 && level->m_isEpic != 2) continue;
+        if(m_tab == 5 && level->m_isEpic != 3) continue;
 
         if(platformer != level->isPlatformer()) continue;
         total += 1;
