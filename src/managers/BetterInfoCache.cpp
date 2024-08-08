@@ -181,7 +181,8 @@ void BetterInfoCache::cacheRatedLists(int page) {
                 for(auto list : *lists) {
                     auto idString = std::to_string(list->m_listID);
 
-                    if(objectExists("list-info-dict", idString)) {
+                    //811 is the first rated list, GDPS users can cope
+                    if(objectExists("list-info-dict", idString) && objectExists("list-info-dict", "811")) {
                         found = true;
                         break;
                     }

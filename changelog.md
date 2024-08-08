@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.2.7</c> (2024-08-04)
+* <cg>Fixed</c> <cr>a crash</c> when <cj>Last Page Search</c> reaches infinite pages
+* <cg>Fixed</c> a rare <cr>startup crash</c> caused by <cj>Level Lists</c>
+* Other bugfixes & improvements
+
 ## <cg>v4.2.6</c> (2024-08-04)
 * <cg>Fixed</c> the following <cr>issues</c> on <cp>macOS</c>
   * <cg>Fixed</c> <cr>a crash</c> when opening <cl>level filters</c>
