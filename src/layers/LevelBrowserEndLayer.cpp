@@ -197,14 +197,17 @@ void LevelBrowserEndLayer::updateDisplay(){
 
     m_lastLoad = std::time(nullptr);
 
-    auto maximumStr = m_requestsToMax <= 0 ? "" : CCString::createWithFormat(" / %i", m_requestsToMax * 2)->getCString();
+    std::string maximumStr = m_requestsToMax <= 0 ? std::string("") : fmt::format(" / {}", m_requestsToMax * 2);
 
     int page = 0;
     if(m_levelBrowserLayer) page = m_levelBrowserLayer->m_searchObject->m_page;
     if(m_infoLayer) page = m_infoLayer->m_page;
 
+
+    auto labelString = fmt::format("<cg>Minimum</c>: {}\n<cy>Current</c>: {}\n<cr>Maximum</c>: {}\n<cl>Requests</c>: {}{}", m_min, page, m_max, ++m_requests, maximumStr);
+    if(m_min == page) return;
     m_textLabel->setString(
-        CCString::createWithFormat("<cg>Minimum</c>: %i\n<cy>Current</c>: %i\n<cr>Maximum</c>: %i\n<cl>Requests</c>: %i%s", m_min, page, m_max, ++m_requests, maximumStr)->getCString()
+        labelString.c_str()
     );
     m_textLabel->setScale(1.f);
     onTimer(0);
@@ -226,13 +229,23 @@ void LevelBrowserEndLayer::getOnlineLevels() {
 
     CCArray* storedLevels = nullptr;
     std::string key;
+    int page = 0;
 
     if(m_levelBrowserLayer) {
         key = m_levelBrowserLayer->m_searchObject->getKey();
+        page = m_levelBrowserLayer->m_searchObject->m_page;
     } else if(m_infoLayer) {
         key = GLM->getCommentKey(m_infoLayer->getID(), m_infoLayer->m_page, GameManager::sharedState()->getGameVariable("0069"), m_infoLayer->m_mode);
+        page = m_infoLayer->m_page;
     }
     storedLevels = GLM->getStoredOnlineLevels(key.c_str());
+
+    if(page < 0) {
+        Loader::get()->queueInMainThread([this]{
+            onClose(nullptr);
+        });
+        return;
+    }
 
     if(storedLevels) {
         m_updateLabel = false;
