@@ -1,5 +1,6 @@
 //stolen from https://github.com/Alphalaneous/Projected-Stars/blob/main/src/ParticleHelper.hpp
 #pragma once
+#include "Geode/cocos/cocoa/CCDictionary.h"
 #include <Geode/Geode.hpp>
 
 using namespace geode::prelude;
@@ -10,6 +11,7 @@ public:
     static CCParticleSystemQuad* createStarParticles(int maxParticles) {
 
         auto dict = CCDictionary::createWithContentsOfFileThreadSafe("dragEffect.plist");
+        if(!dict) dict = CCDictionary::create();
 
         dict->setObject(CCString::create("1"), "emitterType");
         dict->setObject(CCString::create("-1"), "duration");
