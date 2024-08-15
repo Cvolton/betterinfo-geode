@@ -346,13 +346,13 @@ bool ServerUtils::showCFError(const std::string& data) {
                 message = fmt::format("  A server error has occurred.\n  (error code: {})", error);
                 break;
         }
-        Notification::create(message, NotificationIcon::Error, 5.f)->show();
+        BetterInfo::showUnimportantNotification(message, NotificationIcon::Error, 5.f);
         return true;
     }
     return false;
 }
 
 bool ServerUtils::showRateLimitError(int seconds) {
-    Notification::create(fmt::format(" Rate limited by RobTop's server\n Try again in {}", GameToolbox::getTimeString(seconds, false)), NotificationIcon::Warning, 5.f)->show();
+    BetterInfo::showUnimportantNotification(fmt::format(" Rate limited by RobTop's server\n Try again in {}", GameToolbox::getTimeString(seconds, false)), NotificationIcon::Warning, 5.f);
     return true;
 }

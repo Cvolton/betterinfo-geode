@@ -886,3 +886,19 @@ long long BetterInfo::strtol(std::string_view str) {
     std::from_chars(str.data(), str.data() + str.size(), result);
     return result;
 }
+
+static std::vector<Ref<Notification>> notifications;
+void BetterInfo::showUnimportantNotification(const std::string& content, NotificationIcon icon, float time) {
+    if(GJBaseGameLayer::get()) return;
+
+    auto notif = Notification::create(content, icon, time);
+    notifications.push_back(notif);
+    notif->show();
+}
+
+void BetterInfo::cancelUnimportantNotifications() {
+    for(auto& notification : notifications) {
+        notification->cancel();
+    }
+    notifications.clear();
+}

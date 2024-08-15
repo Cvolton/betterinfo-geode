@@ -91,4 +91,7 @@ namespace BetterInfo {
     BI_DLL int stoi(std::string_view str);
     BI_DLL float stof(std::string_view str);
     BI_DLL long long strtol(std::string_view str);
+
+    BI_DLL void showUnimportantNotification(const std::string& content, NotificationIcon icon, float time = 5.f);
+    BI_DLL void cancelUnimportantNotifications();
 }
