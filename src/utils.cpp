@@ -887,18 +887,26 @@ long long BetterInfo::strtol(std::string_view str) {
     return result;
 }
 
-static std::vector<Ref<Notification>> notifications;
+static std::vector<Ref<Notification>> s_notifications;
 void BetterInfo::showUnimportantNotification(const std::string& content, NotificationIcon icon, float time) {
     if(GJBaseGameLayer::get()) return;
 
     auto notif = Notification::create(content, icon, time);
-    notifications.push_back(notif);
+    s_notifications.push_back(notif);
     notif->show();
+
+    std::thread([notif, time] {
+        //assume up to 2 notifications are scheduled outside of this - if this fails nothing much really happens, they just wont be removed immediately
+        std::this_thread::sleep_for(std::chrono::seconds((int) (time + (s_notifications.size() + 2))));
+        Loader::get()->queueInMainThread([notif] {
+            s_notifications.erase(std::remove(s_notifications.begin(), s_notifications.end(), notif), s_notifications.end());
+        });
+    }).detach();
 }
 
 void BetterInfo::cancelUnimportantNotifications() {
-    for(auto& notification : notifications) {
+    for(auto& notification : s_notifications) {
         notification->cancel();
     }
-    notifications.clear();
+    s_notifications.clear();
 }
