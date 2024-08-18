@@ -896,8 +896,9 @@ void BetterInfo::showUnimportantNotification(const std::string& content, Notific
     notif->show();
 
     std::thread([notif, time] {
-        //assume up to 2 notifications are scheduled outside of this - if this fails nothing much really happens, they just wont be removed immediately
-        std::this_thread::sleep_for(std::chrono::seconds((int) (time + (s_notifications.size() + 2))));
+        //assume up to 4 notifications are scheduled outside of this - if this fails nothing much really happens, they just wont be removed immediately
+        //assume notifications are not longer than 5s
+        std::this_thread::sleep_for(std::chrono::seconds((int) (5 * (s_notifications.size() + 4))));
         Loader::get()->queueInMainThread([notif] {
             s_notifications.erase(std::remove(s_notifications.begin(), s_notifications.end(), notif), s_notifications.end());
         });
