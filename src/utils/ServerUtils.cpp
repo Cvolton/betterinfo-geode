@@ -114,6 +114,8 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
     }
 
     auto task = s_requests[requestKey].map([callback, key, requestKey, cacheLevels](web::WebResponse* response) {
+        auto GLM = GameLevelManager::sharedState();
+
         std::unique_lock lock(s_requestsMutex);
         s_requests.erase(requestKey);
         lock.unlock();
@@ -145,14 +147,11 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
         std::stringstream responseStream(responseString);
         std::string levelData;
         std::string userData;
-        std::string songData;
         std::string pageData;
 
         getline(responseStream, levelData, '#');
         getline(responseStream, userData, '#');
         getline(responseStream, pageData, '#');
-
-        MusicDownloadManager::sharedState()->createSongsInfo(songData, "");
 
         std::stringstream userStream(userData);
         std::string currentUser;
@@ -162,7 +161,7 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
             int userID = std::stoi(info[0]);
             int accountID = std::stoi(info[2]);
 
-            if(userID > 0) GameLevelManager::sharedState()->storeUserName(userID, accountID, info[1]);
+            if(userID > 0) GLM->storeUserName(userID, accountID, info[1]);
         }
 
         std::stringstream levelStream(levelData);
@@ -173,11 +172,13 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
         }
 
         CCArray* levelArray = CCArray::create();
-        for(auto level : *levels) levelArray->addObject(level);
+        for(auto level : *levels) {
+            levelArray->addObject(level);
+            GLM->updateSavedLevelList(level);
+        }
 
-        GameLevelManager::sharedState()->saveFetchedLevelLists(levelArray);
         if(cacheLevels) {
-            if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, pageData, key.c_str());
+            if(key.length() < 255) GLM->storeSearchResult(levelArray, pageData, key.c_str());
             else s_cache[key] = levelArray;
         }
 

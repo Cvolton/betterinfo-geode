@@ -45,6 +45,20 @@ void BI_DLL fixLevelLists() {
             LLM->m_localLists->removeObject(list);
         }
     }
+
+    log::info("Deleting level lists semi-favorited by incorrectly expecting 2.200 behavior");
+    auto GLM = GameLevelManager::sharedState();
+
+    std::vector<gd::string> toRemove;
+
+    auto lists2 = CCDictionaryExt<gd::string, GJLevelList*>(GLM->m_favoriteLists);
+    for(auto [key,value] : lists2) {
+        if(!value->m_favorite) toRemove.push_back(key);
+    }
+
+    for(auto key : toRemove) {
+        GLM->m_favoriteLists->removeObjectForKey(key);
+    }
 }
 
 class BI_DLL $modify(MenuLayer) {
