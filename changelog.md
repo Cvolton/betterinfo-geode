@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.2.8</c> (2024-08-19)
+* <cg>Fixed</c> <cr>a crash</c> caused by the user recklessly deleting resources
+* <cg>Fixed</c> <cr>a visual glitch</c> where <cl>unfavorited lists</c> appear in <co>favorited lists tab</c>
+
 ## <cg>v4.2.7</c> (2024-08-08)
 * <cg>Fixed</c> <cr>a crash</c> when <cj>Last Page Search</c> reaches infinite pages
 * <cg>Fixed</c> a rare <cr>startup crash</c> caused by <cj>Level Lists</c>

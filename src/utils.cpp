@@ -907,7 +907,7 @@ void BetterInfo::showUnimportantNotification(const std::string& content, Notific
 
 void BetterInfo::cancelUnimportantNotifications() {
     for(auto& notification : s_notifications) {
-        notification->cancel();
+        //notification->cancel();
     }
     s_notifications.clear();
 }
