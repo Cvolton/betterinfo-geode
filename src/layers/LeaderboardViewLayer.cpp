@@ -78,3 +78,7 @@ void LeaderboardViewLayer::onLeaderboardFinished(cocos2d::CCArray* scores) {
     loadPage();
     hideCircle();
 }
+
+LeaderboardViewLayer::~LeaderboardViewLayer() {
+    BetterInfoOnline::sharedState()->cancelScoresRequest(this);
+}

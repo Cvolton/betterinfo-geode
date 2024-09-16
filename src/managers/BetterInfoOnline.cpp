@@ -26,6 +26,8 @@ void BetterInfoOnline::loadScores(int accountID, bool force, BILeaderboardDelega
         return;
     }
 
+    m_delegates.insert(delegate);
+
     static std::unordered_map<int, web::WebTask> tasks;
     tasks.emplace(accountID, ServerUtils::getBaseRequest(false)
         .bodyString(fmt::format("{}&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", ServerUtils::getBasePostString(false), accountID, std::string(GameManager::sharedState()->m_playerUDID)))
@@ -33,7 +35,10 @@ void BetterInfoOnline::loadScores(int accountID, bool force, BILeaderboardDelega
         .map([this, accountID, delegate, profilePage](web::WebResponse* response) {
             if(response->ok()) {
                 generateScores(response->string().unwrapOr(""), accountID);
-                sendScores(m_scoreDict[accountID], accountID, delegate, profilePage);
+                if(m_delegates.contains(delegate)) {
+                    sendScores(m_scoreDict[accountID], accountID, delegate, profilePage);
+                    m_delegates.erase(delegate);
+                }
                 BetterInfoCache::sharedState()->cacheScoresResult(m_scoreDict[accountID]);
             }
 
@@ -128,4 +133,8 @@ void BetterInfoOnline::sendScoreToProfilePage(cocos2d::CCArray* scores, int acco
             break;
         }
     }
+}
+
+void BetterInfoOnline::cancelScoresRequest(BILeaderboardDelegate* delegate){
+    m_delegates.erase(delegate);
 }

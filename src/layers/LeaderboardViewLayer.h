@@ -15,4 +15,6 @@ public:
     static cocos2d::CCScene* scene(int accountID);
 
     void onLeaderboardFinished(cocos2d::CCArray* scores);
+
+    ~LeaderboardViewLayer();
 };
