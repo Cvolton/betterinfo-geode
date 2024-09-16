@@ -1,5 +1,5 @@
 {
-    "geode": "3.4.0",
+    "geode": "3.7.1",
     "version": "v4.2.8",
     "gd": {
         "win": "2.206",
@@ -21,7 +21,7 @@
     "dependencies": [
         {
             "id": "geode.node-ids",
-            "version": "v1.13.1",
+            "version": "v1.14.0",
             "importance": "required"
         },
         {

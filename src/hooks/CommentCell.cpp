@@ -93,31 +93,29 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
             /**
              * Add username button
             */
-            if(b->m_accountID == 0) if(auto usernameLabel = static_cast<CCLabelBMFont*>(m_mainLayer->getChildByID("username-label"))) {
-                auto content = std::string_view(usernameLabel->getString());
-                if(content == "" || content == "-") {
-                    usernameLabel->setString(fmt::format("- (ID: {})", b->m_userID).c_str());
+            if(auto usernameMenu = menu->getChildByIDRecursive("username-menu")) {
+                if(b->m_accountID == 0) if(auto usernameLabel = typeinfo_cast<CCLabelBMFont*>(usernameMenu->getChildByID("username-button"))) {
+                    auto content = std::string_view(usernameLabel->getString());
+                    if(content == "" || content == "-") {
+                        usernameLabel->setString(fmt::format("- (ID: {})", b->m_userID).c_str());
+                    }
+
+                    usernameLabel->removeFromParent();
+
+                    auto buttonButton = CCMenuItemSpriteExtra::create(
+                        usernameLabel,
+                        this,
+                        menu_selector(BICommentCell::onProfilePage)
+                    );
+                    buttonButton->setSizeMult(1.2f);
+                    //buttonButton->setPosition(position + CCPoint(usernameLabel->getScaledContentSize().width / 2, 0));
+                    buttonButton->setEnabled(true);
+                    buttonButton->setID("username-button"); //using vanilla style node ID because this is a replacement for a vanilla feature
+
+                    usernameMenu->addChild(buttonButton);
+                    usernameMenu->updateLayout();
                 }
-
-                CCPoint position = menu->convertToNodeSpace(m_mainLayer->convertToWorldSpace(usernameLabel->getPosition()));
-                usernameLabel->removeFromParent();
-
-
-                auto buttonButton = CCMenuItemSpriteExtra::create(
-                    usernameLabel,
-                    this,
-                    menu_selector(BICommentCell::onProfilePage)
-                );
-                buttonButton->setSizeMult(1.2f);
-                buttonButton->setPosition(position + CCPoint(usernameLabel->getScaledContentSize().width / 2, 0));
-                buttonButton->setEnabled(true);
-                buttonButton->setID("username-button"); //using vanilla style node ID because this is a replacement for a vanilla feature
-
-                menu->addChild(buttonButton);
             }
-
-            
         }
-
     }
 };
