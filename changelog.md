@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.2.9</c> (2024-09-17)
+* <cg>Hidden</c> <cl>Rate Limit Notifications</c> while <co>Playing</c> or <co>Editing</c> levels
+* <cg>Fixed</c> <cr>a crash</c> when exiting <cl>View Leaderboard As</c> too early
+* <cg>Updated</c> for changes in <co>Node IDs</c> 1.14.0
+
 ## <cg>v4.2.8</c> (2024-08-19)
 * <cg>Fixed</c> <cr>a crash</c> caused by the user recklessly deleting resources
 * <cg>Fixed</c> <cr>a visual glitch</c> where <cl>unfavorited lists</c> appear in <co>favorited lists tab</c>
