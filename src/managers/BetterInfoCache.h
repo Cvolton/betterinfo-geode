@@ -39,6 +39,7 @@ public:
 
 	void cacheRatedLists(int page = 0);
 	void cacheList(GJLevelList* list);
+	void cacheListAsync(GJLevelList* list);
 	void checkClaimableLists();
 
 	void tryShowClaimableListsPopup(CCLayer* scene = nullptr);

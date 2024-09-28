@@ -287,6 +287,19 @@ void BetterInfoCache::cacheList(GJLevelList* list) {
     doSave();
 }
 
+void BetterInfoCache::cacheListAsync(GJLevelList* list) {
+    list->retain();
+    std::thread([this, list] {
+        thread::setName("BI List Cache");
+
+        cacheList(list);
+
+        Loader::get()->queueInMainThread([list] {
+            list->release();
+        });
+    }).detach();
+}
+
 void BetterInfoCache::tryShowClaimableListsPopup(CCLayer* scene) {
     if(m_claimableLists.empty()) return;
 
@@ -321,6 +334,7 @@ void BetterInfoCache::downloadClaimableLists() {
                     [this](auto lists, bool) {
                         if(lists->empty()) return;
                         m_claimableLists[lists->at(0)->m_listID] = lists->at(0);
+                        cacheListAsync(lists->at(0));
                         log::debug("Downloaded list {}", lists->at(0)->m_listID);
                     },
                     false
