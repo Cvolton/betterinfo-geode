@@ -250,6 +250,14 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             }
         }
 
+        if(m_searchObject->m_searchMode == 0 && m_searchObject->m_searchType == SearchType::HallOfFame) {
+            auto winSize = CCDirector::sharedDirector()->getWinSize();
+            auto label = CCSprite::create("hallOfFameLabel_001.png"_spr);
+            label->setPosition({(winSize.width / 2), (winSize.height / 2) + 24 + 110});
+            label->setID("header-sprite"); //substitutes a vanilla feature, therefore vanilla style ID
+            this->addChild(label, 2);
+        }
+
         /**
          * Ending steps
         */
