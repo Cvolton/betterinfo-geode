@@ -314,16 +314,18 @@ void BetterInfoCache::downloadClaimableLists() {
 
     std::thread([this, toDownload = std::move(toDownload)] {
         for(auto listID : toDownload) {
-            auto searchObj = GJSearchObject::create(SearchType::Search, std::to_string(listID));
-            ServerUtils::getLevelLists(
-                searchObj, 
-                [this](auto lists, bool) {
-                    if(lists->empty()) return;
-                    m_claimableLists[lists->at(0)->m_listID] = lists->at(0);
-                    log::debug("Downloaded list {}", lists->at(0)->m_listID);
-                },
-                false
-            );
+            Loader::get()->queueInMainThread([this, listID] {
+                auto searchObj = GJSearchObject::create(SearchType::Search, std::to_string(listID));
+                ServerUtils::getLevelLists(
+                    searchObj, 
+                    [this](auto lists, bool) {
+                        if(lists->empty()) return;
+                        m_claimableLists[lists->at(0)->m_listID] = lists->at(0);
+                        log::debug("Downloaded list {}", lists->at(0)->m_listID);
+                    },
+                    false
+                );log::debug("Downloading list {}", listID);
+            });
 
             using namespace std::chrono_literals;
             std::this_thread::sleep_for(1000ms);
