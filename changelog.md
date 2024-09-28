@@ -1,4 +1,11 @@
 # Changelog
+## <cg>v4.2.10</c> (2024-09-28)
+* <cg>Added</c> <cl>Hall of Fame Label</c> to <co>Hall of Fame</c>
+* <cg>Fixed</c> <cr>a rare crash</c> that could happen on startup
+* <cg>Fixed</c> <cl>claimable lists</c> possibly showing <cr>unrated lists</c>
+* <cg>Fixed</c> <cl>claimable lists</c> sometimes showing <cr>an empty list</c> of lists
+* <cg>Removed</c> <cl>unnecessary buttons</c> from <co>claimable lists</c> 
+
 ## <cg>v4.2.9</c> (2024-09-17)
 * <cg>Hidden</c> <cl>Rate Limit Notifications</c> while <co>Playing</c> or <co>Editing</c> levels
 * <cg>Fixed</c> <cr>a crash</c> when exiting <cl>View Leaderboard As</c> too early
