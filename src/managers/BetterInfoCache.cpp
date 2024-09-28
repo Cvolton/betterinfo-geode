@@ -347,9 +347,24 @@ void BetterInfoCache::showClaimableLists() {
     }
     GameLevelManager::sharedState()->storeSearchResult(lists, fmt::format("{}:{}:{}", lists->count(), 0, lists->count()), searchObj->getKey());
 
+    //fallback code path for when cache fails to load any lists in time
+    if(lists->count() == 0 && m_claimableLists.size() > 0) {
+        searchObj = GJSearchObject::create(SearchType::Search, std::to_string(m_claimableLists.begin()->first));
+        searchObj->m_searchMode = 1;
+    }
+
     auto scene = LevelBrowserLayer::scene(searchObj);
     auto transitionFade = CCTransitionFade::create(0.5, scene);
     CCDirector::sharedDirector()->pushScene(transitionFade);
+
+    if(auto LBL = getChildOfType<LevelBrowserLayer>(scene, 0)) {
+        LBL->m_refreshBtn->setVisible(false);
+        if(auto starButton = LBL->getChildByIDRecursive("star-button"_spr)) {
+            auto parent = starButton->getParent();
+            starButton->removeFromParent();
+            parent->updateLayout();
+        }
+    }
 }
 
 void BetterInfoCache::removeClaimedLists() {
