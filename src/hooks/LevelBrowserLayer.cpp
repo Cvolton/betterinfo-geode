@@ -95,7 +95,7 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     }
 
     bool canBeLocalFiltered() {
-        return BetterInfo::isLocal(m_searchObject) && m_searchObject->isLevelSearchObject() && m_searchObject->m_searchType != SearchType::MyLevels;
+        return BetterInfo::isLocal(m_searchObject) && m_searchObject->isLevelSearchObject() && m_searchObject->m_searchType != SearchType::MyLevels && m_searchObject->m_searchMode == 0;
     }
 
     void showFilteredText() {
