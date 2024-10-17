@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.2.11</c> (2024-10-18)
+* <cg>Fixed</c> <cr>incorrect popup ordering</c> in <co>Filtered Search</c>
+* <cg>Removed</c> <cl>filter button</c> from <co>Favorite Lists</c> \
+(it didn't work anyway)
+
 ## <cg>v4.2.10</c> (2024-09-28)
 * <cg>Added</c> <cl>Hall of Fame Label</c> to <co>Hall of Fame</c>
 * <cg>Fixed</c> <cr>a rare crash</c> that could happen on startup
