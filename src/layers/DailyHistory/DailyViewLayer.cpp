@@ -28,8 +28,9 @@ bool DailyViewLayer::init(GJTimedLevelType timedType) {
     for(auto [key, level] : CCDictionaryExt<gd::string, GJGameLevel*>(GLM->m_dailyLevels)){
         if(level == nullptr) continue;
 
-        //2.21: support event levels
-        if(timedType == GJTimedLevelType::Weekly && level->m_dailyID >= 100000){
+        if(timedType == GJTimedLevelType::Event && level->m_dailyID >= 200000){
+            m_data->addObject(level);
+        } else if(timedType == GJTimedLevelType::Weekly && level->m_dailyID >= 100000 && level->m_dailyID < 200000){
             m_data->addObject(level);
         } else if(timedType == GJTimedLevelType::Daily && level->m_dailyID < 100000){
             m_data->addObject(level);

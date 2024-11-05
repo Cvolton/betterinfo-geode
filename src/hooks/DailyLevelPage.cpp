@@ -30,9 +30,8 @@ class BI_DLL $modify(BIDailyLevelPage, DailyLevelPage) {
         auto GM = GameLevelManager::sharedState();
         auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-        //2.21: event levels
         std::ostringstream currentDaily;
-        int id = m_type == GJTimedLevelType::Event ? GM->m_eventID : 
+        int id = m_type == GJTimedLevelType::Event ? GM->m_eventID % 200000 : 
                  m_type == GJTimedLevelType::Weekly ? GM->m_weeklyID % 100000 :
                     GM->m_dailyID;
         auto currentDailyNode = CCLabelBMFont::create(fmt::format("Current: #{}", id).c_str(), "chatFont.fnt");
