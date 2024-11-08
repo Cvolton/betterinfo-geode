@@ -14,9 +14,18 @@ class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
      * Callbacks
      */
     void onCustomCreatorLayer(CCObject* sender){
-        auto browserLayer = CustomCreatorLayer::scene();
+        /*auto browserLayer = CustomCreatorLayer::scene();
         auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
-        CCDirector::sharedDirector()->pushScene(transitionFade);
+        CCDirector::sharedDirector()->pushScene(transitionFade);*/
+
+        auto GLM = GameLevelManager::sharedState();
+
+        //GLM->m_eventIDUnk = 200001;
+        //GLM->m_eventIDUnk = 0;
+        //GLM->m_eventTimeLeft = 10;
+
+        DailyLevelPage::create(GJTimedLevelType::Event)->show();
+        GLM->onGetGJDailyLevelStateCompleted("200001|10|DnPpScFxLfncPCAsBCAcDAA0eBA==|30277190f6c65bbde4b548ab562303aed7ab50e7", "event_state");
     }
 
     /*

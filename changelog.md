@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.2.12</c> (2024-11-09)
+* <cg>Added</c> proper support for <co>Event Levels</c>
+This is the last release for GD 2.206
+
 ## <cg>v4.2.11</c> (2024-10-18)
 * <cg>Fixed</c> <cr>incorrect popup ordering</c> in <co>Filtered Search</c>
 * <cg>Removed</c> <cl>filter button</c> from <co>Favorite Lists</c> \
