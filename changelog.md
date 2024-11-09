@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.2.13</c> (2024-11-09)
+* <cg>Fixed</c> an <cr>oversight</c> that made the <cl>BI button</c> open <co>Event Levels</c> instead
+This is the actual last release for GD 2.206
+
 ## <cg>v4.2.12</c> (2024-11-09)
 * <cg>Added</c> proper support for <co>Event Levels</c>
 This is the last release for GD 2.206
