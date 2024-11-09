@@ -1,8 +1,8 @@
 {
-    "geode": "3.8.1",
+    "geode": "3.9.0",
     "version": "v4.2.13",
     "gd": {
-        "win": "2.206",
+        "win": "2.2073",
         "android": "2.206",
         "mac": "2.206"
     },
@@ -10,7 +10,9 @@
     "name": "BetterInfo",
     "developer": "Cvolton",
     "description": "betterinfo geode real (not fake)",
-    "repository": "https://github.com/cvolton/betterinfo-geode",
+	"links": {
+		"source": "https://github.com/cvolton/betterinfo-geode"
+	},
     "tags": [
         "online",
         "enhancement",
