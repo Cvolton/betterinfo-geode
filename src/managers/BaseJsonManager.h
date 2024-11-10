@@ -16,7 +16,7 @@ protected:
 
 public:
 	std::string m_filename;
-	matjson::Value m_json = matjson::Object();
+	matjson::Value m_json = matjson::Value();
 	std::shared_mutex m_jsonMutex;
 
 	bool init(const char* filename);

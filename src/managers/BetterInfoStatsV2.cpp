@@ -26,9 +26,9 @@ auto& BetterInfoStatsV2::levelObject(GJGameLevel* gjLevel) {
 
     auto idStr = std::to_string(gjLevel->m_levelID.value());
     auto& levels = m_json[key];
-    if(!levels[idStr].is_object()) levels[idStr] = matjson::Object();
+    if(!levels[idStr].isObject()) levels[idStr] = matjson::Value();
     auto& level = levels[idStr];
-    if(!level["attempts"].is_array()) level["attempts"] = matjson::Array();
+    if(!level["attempts"].isArray()) level["attempts"] = std::vector<int>();
     return level;
 }
 
@@ -36,21 +36,24 @@ void BetterInfoStatsV2::logDeath(GJGameLevel* level, bool practice, LevelDeath d
     if(practice) return;
     if(level->m_levelType == GJLevelType::Editor) return;
 
-    levelObject(level)["attempts"].as_array().push_back(death);
+    if(auto array = levelObject(level)["attempts"].asArray()) {
+        array.unwrap().push_back(death);
+    }
+
     doSave();
 }
 
 std::pair<int, int> BetterInfoStatsV2::getCommonFail(GJGameLevel* gjLevel) {
     std::unordered_map<int, int> fails;
 
-    auto attempts = levelObject(gjLevel)["attempts"].as_array();
+    auto attempts = levelObject(gjLevel)["attempts"].asArray().unwrapOr(std::vector<matjson::Value>());
     if(attempts.size() == 0) return {0,0};
     
     for(auto& attempt : attempts) {
-        if(!attempt.is_object()) continue;
-        if(!attempt["percentage"].is_number()) continue;
+        if(!attempt.isObject()) continue;
+        if(!attempt["percentage"].isNumber()) continue;
 
-        fails[attempt["percentage"].as_int()] += 1;
+        fails[attempt["percentage"].asInt().unwrapOr(0)] += 1;
     }
 
     auto max = std::max_element(

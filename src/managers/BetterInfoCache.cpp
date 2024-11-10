@@ -58,8 +58,8 @@ void BetterInfoCache::establishCachedDicts(){
     std::shared_lock guard(m_jsonMutex);
     std::unique_lock lock(m_coinCountsMutex);
 
-    for(auto [key, value] : m_json["coin-count-dict"].as_object()) {
-        if(value.is_number()) m_coinCounts[BetterInfo::stoi(key)] = value.as_int();
+    for(auto [key, value] : m_json["coin-count-dict"]) {
+        if(value.isNumber()) m_coinCounts[BetterInfo::stoi(key)] = value.asInt().unwrapOr(0);
     }
 }
 
@@ -102,15 +102,16 @@ void BetterInfoCache::cacheScoresResult(CCArray* scores) {
 }
 
 void BetterInfoCache::cacheScore(GJUserScore* score) {
-    auto object = matjson::Object();
-    object["username"] = std::string(score->m_userName);
-    object["icon-type"] = (int) score->m_iconType;
-    object["iconID"] = score->m_iconID;
-    object["color-1"] = score->m_color1;
-    object["color-2"] = score->m_color2;
-    object["special"] = score->m_special;
-    object["accountID"] = score->m_accountID;
-    object["cached"] = std::time(nullptr);
+    auto object = matjson::makeObject({
+        { "username", score->m_userName },
+        { "icon-type", (int) score->m_iconType },
+        { "iconID", score->m_iconID },
+        { "color-1", score->m_color1 },
+        { "color-2", score->m_color2 },
+        { "special", score->m_special },
+        { "accountID", score->m_accountID },
+        { "cached", std::time(nullptr) }
+    });
 
     std::thread([this, object, accountID = score->m_accountID] {
         thread::setName("BI Score Cache");
@@ -145,24 +146,19 @@ GJUserScore* BetterInfoCache::getCachedScore(int accountID) {
     if(!objectExists("user-info-dict", idString)) return nullptr;
 
     std::shared_lock guard(m_jsonMutex);
-    auto it = m_json["user-info-dict"].as_object().find(idString);
-    if(it == m_json["user-info-dict"].as_object().end()) return nullptr;
+    if(!m_json["user-info-dict"].contains(idString)) return nullptr;
 
-    auto object = it->second.as_object();
+    auto object = m_json["user-info-dict"][idString];
     if(!object.contains("username") || !object.contains("icon-type") || !object.contains("iconID") || !object.contains("color-1") || !object.contains("color-2") || !object.contains("accountID")) return nullptr;
-    if(!object["username"].is_string() || !object["icon-type"].is_number() || !object["iconID"].is_number() || !object["color-1"].is_number() || !object["color-2"].is_number() || !object["accountID"].is_number()) return nullptr;
 
     auto score = GJUserScore::create();
-    score->m_userName = object["username"].as_string();
-    score->m_iconType = (IconType) object["icon-type"].as_int();
-    score->m_iconID = object["iconID"].as_int();
-    score->m_color1 = object["color-1"].as_int();
-    score->m_color2 = object["color-2"].as_int();
-    score->m_accountID = object["accountID"].as_int();
-
-    if(!object.contains("special") || !object["special"].is_number()) return score;
-
-    score->m_special = object["special"].as_int();
+    score->m_userName = object["username"].asString().unwrapOr(GameLevelManager::sharedState()->tryGetUsername(accountID));
+    score->m_iconType = (IconType) object["icon-type"].asInt().unwrapOr(0);
+    score->m_iconID = object["iconID"].asInt().unwrapOr(1);
+    score->m_color1 = object["color-1"].asInt().unwrapOr(0);
+    score->m_color2 = object["color-2"].asInt().unwrapOr(0);
+    score->m_accountID = object["accountID"].asInt().unwrapOr(0);
+    score->m_special = object["special"].asInt().unwrapOr(0);
     return score;
 }
 
@@ -220,32 +216,23 @@ void BetterInfoCache::checkClaimableLists() {
     std::thread([this, completedLevels = std::move(completedLevels)] {
         thread::setName("BI Claimable List Checker");
 
-        //log::info("Completed levels {}", completedLevels);
-
         std::unordered_set<int> completedLists;
 
         std::shared_lock guard(m_jsonMutex);
-        for(auto [key, value] : m_json["list-info-dict"].as_object()) {
-            if(!value.is_object()) continue;
-            if(!value["diamonds"].is_number()) continue;
-            if(!value["levels"].is_array()) continue;
-            if(!value["levels-to-claim"].is_number()) continue;
-
-            if(value["diamonds"].as_int() <= 0) continue;
+        for(auto [key, value] : m_json["list-info-dict"]) {
+            if(value["diamonds"].asInt().unwrapOr(0) <= 0) continue;
             
             auto listID = BetterInfo::stoi(key);
-            auto levels = value["levels"].as_array();
-            auto levelsToClaim = value["levels-to-claim"].as_int();
+            auto levels = value["levels"].asArray().unwrapOr(std::vector<matjson::Value>());
+            auto levelsToClaim = value["levels-to-claim"].asInt().unwrapOr(0);
 
-            //log::debug("Checking list {} with {} levels", listID, levels.size());
+            if(levelsToClaim <= 0) continue;
 
             int completed = 0;
             for(auto level : levels) {
-                if(!level.is_number()) continue;
-                if(completedLevels.find(level.as_int()) != completedLevels.end()) completed++;
+                if(!level.isNumber()) continue;
+                if(completedLevels.find(level.asInt().unwrapOr(-1)) != completedLevels.end()) completed++;
             }
-
-            //log::info("Completed {} out of {} levels from list {}", completed, levelsToClaim, listID);
 
             if(completed >= levelsToClaim) {
                 completedLists.insert(listID);
@@ -271,7 +258,7 @@ void BetterInfoCache::checkClaimableLists() {
 void BetterInfoCache::cacheList(GJLevelList* list) {
     std::unique_lock guard(m_jsonMutex);
     auto idString = std::to_string(list->m_listID);
-    if(!m_json["list-info-dict"][idString].is_object()) m_json["list-info-dict"][idString] = matjson::Object();
+    if(!m_json["list-info-dict"][idString].isObject()) m_json["list-info-dict"][idString] = matjson::Value();
 
     auto name = std::string(list->m_listName);
     for(auto it = name.begin(); it < name.end(); it++) {
@@ -283,7 +270,6 @@ void BetterInfoCache::cacheList(GJLevelList* list) {
     m_json["list-info-dict"][idString]["levels-to-claim"] = list->m_levelsToClaim;
     m_json["list-info-dict"][idString]["diamonds"] = list->m_diamonds;
     guard.unlock();
-    //std::cout <<  ("Unlocking unique_lock storeLevelInfo") << std::endl;
     doSave();
 }
 
@@ -526,26 +512,18 @@ std::string BetterInfoCache::getLevelName(int levelID) {
     auto idString = std::to_string(levelID);
     if(!objectExists("level-name-dict", idString)) return "Unknown";
 
-    //std::cout <<  ("Locking shared_lock getLevelName") << std::endl;
     std::shared_lock guard(m_jsonMutex);
-    //std::cout <<  ("Unlocking shared_lock getLevelName") << std::endl;
-    auto it = m_json["level-name-dict"].as_object().find(idString);
-    if(it == m_json["level-name-dict"].as_object().end()) return "Unknown";
-    if(!it->second.is_string()) return "Unknown (malformed JSON)";
-    return it->second.as_string();
+    if(!m_json["level-name-dict"].contains(idString)) return "Unknown";
+    
+    return m_json["level-name-dict"][idString].asString().unwrapOr("Unknown (malformed JSON)");
 }
 
 int BetterInfoCache::getDemonDifficulty(int levelID) {
     auto idString = std::to_string(levelID);
     if(!objectExists("demon-difficulty-dict", idString)) return 0;
 
-    //std::cout <<  ("Locking shared_lock getDemonDifficulty") << std::endl;
     std::shared_lock guard(m_jsonMutex);
-    //std::cout <<  ("Unlocking shared_lock getDemonDifficulty") << std::endl;
-    auto it = m_json["demon-difficulty-dict"].as_object().find(idString);
-    if(it == m_json["demon-difficulty-dict"].as_object().end()) return 0;
-    if(!it->second.is_number()) return 0;
-    return it->second.as_int();
+    return m_json["demon-difficulty-dict"][idString].asInt().unwrapOr(0);
 }
 
 void BetterInfoCache::storeUserName(int userID, const std::string& username) {
@@ -579,7 +557,7 @@ void BetterInfoCache::storeLevelInfo(int levelID, const std::string& field, cons
     //std::cout <<  ("Locking unique_lock storeLevelInfo") << std::endl;
     std::unique_lock guard(m_jsonMutex);
     auto idString = std::to_string(levelID);
-    if(!m_json["level-info-dict"][idString].is_object()) m_json["level-info-dict"][idString] = matjson::Object();
+    if(!m_json["level-info-dict"][idString].isObject()) m_json["level-info-dict"][idString] = matjson::Value();
 
     m_json["level-info-dict"][idString][field] = value;
     guard.unlock();
@@ -588,17 +566,10 @@ void BetterInfoCache::storeLevelInfo(int levelID, const std::string& field, cons
 }
 
 std::string BetterInfoCache::getLevelInfo(int levelID, const std::string& field) {
-    //std::cout <<  ("Locking shared_lock getLevelInfo") << std::endl;
     std::shared_lock guard(m_jsonMutex);
-    //std::cout <<  ("Unlocking shared_lock getLevelInfo") << std::endl;
     
     auto idString = std::to_string(levelID);
-    if(m_json["level-info-dict"].as_object().find(idString) == m_json["level-info-dict"].as_object().end()) return "";
-
-    auto it = m_json["level-info-dict"][idString].as_object().find(field);
-    if(it == m_json["level-info-dict"][idString].as_object().end() || !(it->second.is_string())) return "";
-
-    return m_json["level-info-dict"][idString][field].as_string();
+    return m_json["level-info-dict"][idString][field].asString().unwrapOr("");
 }
 
 void BetterInfoCache::storeDatesForLevel(GJGameLevel* level) {
@@ -637,8 +608,7 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
                         auto data = json.unwrap();
                         std::string username;
 
-                        if(data["non_player_username"].is_string()) username = data["non_player_username"].as_string();
-                        else if(data["username"].is_string()) username = data["username"].as_string();
+                        username = data["non_player_username"].asString().unwrapOr(data["username"].asString().unwrapOr(""));
 
                         storeUserName(userID, username);
                         log::debug("Restored green username for {}: {}", userID, username);
@@ -652,13 +622,8 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
         return "";
     }
 
-    //std::cout <<  ("Locking shared_lock getUserName") << std::endl;
     std::shared_lock guard(m_jsonMutex);
-    //std::cout <<  ("Unlocking shared_lock getUserName") << std::endl;
-    auto it = m_json["username-dict"].as_object().find(idString);
-    if(it == m_json["username-dict"].as_object().end()) return "";
-    if(!it->second.is_string()) return "";
-    return it->second.as_string();
+    return m_json["username-dict"][idString].asString().unwrapOr("");
 }
 
 int BetterInfoCache::getCoinCount(int levelID) {
@@ -671,10 +636,11 @@ int BetterInfoCache::getCoinCount(int levelID) {
     auto idString = std::to_string(levelID);
     if(!objectExists("coin-count-dict", idString)) return 3;
 
-    auto it = m_json["coin-count-dict"].as_object().find(idString);
-    if(it == m_json["coin-count-dict"].as_object().end()) return 3;
-    if(!it->second.is_number()) return 3;
-    return m_coinCounts[levelID] = it->second.as_int();
+    if(auto res = m_json["coin-count-dict"][idString].asInt()) {
+        return m_coinCounts[levelID] = res.unwrap();
+    }
+
+    return 3;
 }
 
 void BetterInfoCache::storeUploadDate(int levelID, const std::string& date) {
@@ -720,10 +686,13 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
                     }
 
                     auto data = json.unwrap();
-                    if(!data["approx"].is_object()) return *response;
-                    if(!data["approx"]["estimation"].is_string()) return *response;
+                    if(!data["approx"].isObject()) return *response;
+                    if(!data["approx"]["estimation"].isString()) return *response;
 
-                    storeUploadDate(levelID, data["approx"]["estimation"].as_string());
+                    auto res = data["approx"]["estimation"].asString();
+                    if(!res) return *response;
+
+                    storeUploadDate(levelID, res.unwrap());
                     return *response;
                 }
             ));
@@ -733,11 +702,6 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
         return "";
     }
 
-    //std::cout <<  ("Locking unique_lock getUploadDate") << std::endl;
     std::shared_lock guard(m_jsonMutex);
-    //std::cout <<  ("Unlocking unique_lock getUploadDate") << std::endl;
-    auto it = m_json["upload-date-dict"].as_object().find(idString);
-    if(it == m_json["upload-date-dict"].as_object().end()) return "";
-    if(!it->second.is_string()) return "";
-    return it->second.as_string();
+    return m_json["upload-date-dict"][idString].asString().unwrapOr("");
 }

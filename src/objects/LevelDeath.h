@@ -11,22 +11,22 @@ struct LevelDeath {
 
 template <>
 struct matjson::Serialize<LevelDeath> {
-    static LevelDeath from_json(const matjson::Value& value) {
-        return LevelDeath {
-            .percentage = value["percentage"].as_int(),
-            .x = (float) value["x"].as_double(),
-            .y = (float) value["y"].as_double(),
-            .rotation = (float) value["rotation"].as_double(),
-            .time = value["time"].as_int()
-        };
+    static geode::Result<LevelDeath> fromJson(const matjson::Value& value) {
+        return geode::Ok(LevelDeath {
+            .percentage = (int) value["percentage"].asInt().unwrapOr(0),
+            .x = (float) value["x"].asDouble().unwrapOr(0),
+            .y = (float) value["y"].asDouble().unwrapOr(0),
+            .rotation = (float) value["rotation"].asDouble().unwrapOr(0),
+            .time = value["time"].as<time_t>().unwrapOr(0)
+        });
     }
-    static matjson::Value to_json(const LevelDeath& death) {
-        return matjson::Object {
+    static matjson::Value toJson(const LevelDeath& death) {
+        return matjson::makeObject({
             { "percentage", death.percentage },
             { "x", death.x },
             { "y", death.y },
             { "rotation", death.rotation },
             { "time", death.time }
-        };
+        });
     }
 };

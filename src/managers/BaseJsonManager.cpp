@@ -29,14 +29,14 @@ Result<> BaseJsonManager::load() {
         }
 
         std::string error;
-        auto parsed = matjson::parse(result.unwrap(), error);
-        if (!parsed.has_value()) {
-            return Err("Unable to parse: {}", error);
+        auto parsed = matjson::parse(result.unwrap());
+        if (!parsed) {
+            return Err("Unable to parse: {}", parsed.err());
         }
-        m_json = parsed.value();
+        m_json = parsed.unwrap();
 
-        if (!m_json.is_object()) {
-            m_json = matjson::Object();
+        if (!m_json.isObject()) {
+            m_json = matjson::Value();
             return Err("Not an object");
         }
     }
@@ -52,7 +52,8 @@ Result<> BaseJsonManager::load() {
 Result<> BaseJsonManager::save() {
     //std::cout <<  ("Locking shared_lock save") << std::endl;
     std::shared_lock guard(m_jsonMutex);
-    std::string savedStr = m_json.dump(matjson::NO_INDENTATION);
+    //TODO: v4 this func will change
+    std::string savedStr = m_json.dump(matjson::NO_INDENTATION).unwrap();
 
     auto res2 = utils::file::writeString(Mod::get()->getSaveDir() / m_filename, savedStr);
     if (!res2) {
@@ -111,7 +112,7 @@ void BaseJsonManager::validateLoadedData() {
 
 void BaseJsonManager::validateIsObject(const char* key) {
     // no mutex because this is only intended to be called from funcs that already lock it
-    if(!m_json[key].is_object()) m_json[key] = matjson::Object();
+    if(!m_json[key].isObject()) m_json[key] = matjson::Value();
 }
 
 BaseJsonManager::BaseJsonManager(){}
@@ -119,5 +120,5 @@ BaseJsonManager::BaseJsonManager(){}
 bool BaseJsonManager::objectExists(const char* dict, const std::string& key) {
     std::shared_lock guard(m_jsonMutex);
     
-    return m_json[dict].as_object().find(key) != m_json[dict].as_object().end();
+    return m_json[dict].contains(key);
 }

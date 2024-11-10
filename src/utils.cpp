@@ -657,12 +657,8 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
             }
 
             auto info = response->json().unwrap();
-
-            auto notice = info.try_get("notice");
-            if(notice == std::nullopt) return *response;
-            
-            if(info["notice"].is_string()) {
-                auto alert = FLAlertLayer::create("BetterInfo", info["notice"].as_string(), "OK");
+            if(auto res = info["notice"].asString()) {
+                auto alert = FLAlertLayer::create("BetterInfo", res.unwrap(), "OK");
                 alert->m_scene = layer;
                 alert->show();
             }
@@ -685,7 +681,7 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
         )
     );
     //if(versionResult.isOk() && versionResult->getMinor() == Mod::get()->getVersion().getMinor()) return nullptr;
-    if(versionResult.isOk() && ComparableVersionInfo::parse(">=4.2.0")->compare(versionResult.value())) return nullptr;
+    if(versionResult.isOk() && ComparableVersionInfo::parse(">=4.2.0").unwrap().compare(versionResult.unwrap())) return nullptr;
 
     return createQuickPopup(
         "BetterInfo",
