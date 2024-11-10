@@ -77,16 +77,6 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
         CreatorInfoPopup::create(m_score->m_userID)->show();
     }
 
-    void onProfilePageReload(CCObject* sender){
-        auto GLM = GameLevelManager::sharedState();
-
-        auto score = this->m_score;
-        GLM->resetStoredUserInfo(score->m_accountID);
-        GLM->resetAccountComments(score->m_accountID);
-
-        GLM->getGJUserInfo(this->m_accountID);
-    }
-
     void onProfilePageCopyUserID(CCObject* sender){
         BetterInfo::copyToClipboard(std::to_string(this->m_score->m_userID).c_str(), this);
     }
@@ -156,18 +146,6 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
             leaderboardButton->setPosition({46, -12});
             m_buttonMenu->addChild(leaderboardButton);
             this->m_buttons->addObject(leaderboardButton);
-
-            auto refreshSprite = CCSprite::createWithSpriteFrameName("GJ_updateBtn_001.png");
-            auto refreshButton = CCMenuItemSpriteExtra::create(
-                refreshSprite,
-                this,
-                menu_selector(BIProfilePage::onProfilePageReload)
-            );
-            refreshButton->setID("refresh-button"_spr);
-            m_buttonMenu->addChild(refreshButton);
-            refreshButton->setPosition({0, -269});
-            refreshButton->setSizeMult(1.2f);
-            this->m_buttons->addObject(refreshButton);
 
             auto userIDNode = CCLabelBMFont::create(CCString::createWithFormat("User ID: %i", a2->m_userID)->getCString(), "chatFont.fnt");
             userIDNode->setScale(0.6f);
