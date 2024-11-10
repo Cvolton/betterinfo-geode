@@ -25,6 +25,14 @@ std::string RewardCell::getDisplayName() {
     }
 
     /**
+     * Vault chests
+    */
+    if(key[0] == 'o' && std::string_view(key).starts_with("o_secret")) {
+        key = key.substr(9);
+        return fmt::format("Vault Code {}", key);
+    }
+
+    /**
      * Other chests
     */
     std::array<const char*, 11> chestNames = {"Basement", "Demon Guardian", "Chamber of Time", "50 chests", "100 chests", "200 chests", "Facebook", "Twitter", "YouTube", "Twitch", "Discord"};
@@ -65,7 +73,7 @@ std::string RewardCell::getDisplayName() {
         key = key.substr(1);
 
         auto level = typeinfo_cast<GJGameLevel*>(GameLevelManager::sharedState()->m_dailyLevels->objectForKey(key));
-        if(level) return fmt::format("{}: {}", BetterInfo::stoi(key) - 100000, BetterInfoCache::sharedState()->getLevelName(level->m_levelID));
+        if(level) return fmt::format("{}: {}", BetterInfo::stoi(key) % 100000, BetterInfoCache::sharedState()->getLevelName(level->m_levelID));
 
         return key;
     }

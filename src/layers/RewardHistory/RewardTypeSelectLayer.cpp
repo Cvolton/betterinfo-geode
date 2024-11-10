@@ -61,11 +61,15 @@ void RewardTypeSelectLayer::onOther(cocos2d::CCObject* sender)
             }},
             {"Gauntlet", "chest_03_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKey().size() > 0 && item->getKey()[0] == 'g'; }},
             {"Path", "chest_04_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKey().size() > 0 && item->getKey()[0] == 'p'; }},
-            {"Other", "chest_06_02_001.png", [](BIGJRewardItem* item) -> bool {
-                return item->getKey().size() == 0
-                    || !(item->getKey()[0] == 'g' || item->getKey()[0] == 'p'
-                    || (item->getKey().size() == 4 && item->getKey()[0] == '0' && item->getKey()[1] == '0' &&
-                        item->getKeyInt() >= 12 && item->getKeyInt() <= 21)
+            {"Vault", "chest_05_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKey().size() > 0 && item->getKey()[0] == 'o' && std::string_view(item->getKey()).starts_with("o_secret"); }},
+            {"Event", "chest_06_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKey().size() > 0 && item->getKey()[0] == 'd'; }},
+            {"Other", "chest_07_02_001.png", [](BIGJRewardItem* item) -> bool {
+                return item->getKey().size() == 0 || !(
+                        item->getKey()[0] == 'g' || item->getKey()[0] == 'p'
+                        || (item->getKey().size() == 4 && item->getKey()[0] == '0' && item->getKey()[1] == '0' &&
+                            item->getKeyInt() >= 12 && item->getKeyInt() <= 21)
+                        || (item->getKey().size() > 0 && item->getKey()[0] == 'o' && std::string_view(item->getKey()).starts_with("o_secret"))
+                        || (item->getKey().size() > 0 && item->getKey()[0] == 'd')
                     ); 
             }},
         }
