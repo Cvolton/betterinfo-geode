@@ -371,7 +371,7 @@ void BetterInfoCache::showClaimableLists() {
     auto transitionFade = CCTransitionFade::create(0.5, scene);
     CCDirector::sharedDirector()->pushScene(transitionFade);
 
-    if(auto LBL = getChildOfType<LevelBrowserLayer>(scene, 0)) {
+    if(auto LBL = scene->getChildByType<LevelBrowserLayer>(0)) {
         LBL->m_refreshBtn->setVisible(false);
         if(auto starButton = LBL->getChildByIDRecursive("star-button"_spr)) {
             auto parent = starButton->getParent();
@@ -565,7 +565,7 @@ void BetterInfoCache::storeUserName(int userID, const std::string& username) {
         doSave();
 
         Loader::get()->queueInMainThread([]() {
-            auto levelBrowserLayer = getChildOfType<LevelBrowserLayer>(CCDirector::sharedDirector()->getRunningScene(), 0);
+            auto levelBrowserLayer = CCDirector::sharedDirector()->getRunningScene()->getChildByType<LevelBrowserLayer>(0);
             if(levelBrowserLayer) BetterInfo::reloadUsernames(levelBrowserLayer);
         });
     }).detach();

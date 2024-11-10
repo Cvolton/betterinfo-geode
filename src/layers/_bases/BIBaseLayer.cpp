@@ -111,7 +111,7 @@ void BIBaseLayer::onEnterTransitionDidFinish() {
     std::vector<Ref<FLAlertLayer>> alerts;
 
     size_t i = 0;
-    while(auto alert = getChildOfType<FLAlertLayer>(this, i++)) {
+    while(auto alert = this->getChildByType<FLAlertLayer>(i++)) {
         alerts.push_back(alert);
     }
 

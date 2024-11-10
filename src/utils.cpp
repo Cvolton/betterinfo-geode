@@ -416,13 +416,13 @@ std::vector<GJGameLevel*> BetterInfo::completedLevelsInStarRange(int min, int ma
 void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    auto listLayer = getChildOfType<GJListLayer>(levelBrowserLayer, 0);
+    auto listLayer = levelBrowserLayer->getChildByType<GJListLayer>(0);
     if(!listLayer) return;
-    auto listView = getChildOfType<CustomListView>(listLayer, 0);
+    auto listView = listLayer->getChildByType<CustomListView>(0);
     if(!listView) return;
-    auto tableView = getChildOfType<TableView>(listView, 0);
+    auto tableView = listView->getChildByType<TableView>(0);
     if(!tableView) return;
-    auto contentLayer = getChildOfType<CCContentLayer>(tableView, 0);
+    auto contentLayer = tableView->getChildByType<CCContentLayer>(0);
     if(!contentLayer) return;
     auto children = CCArrayExt<CCNode*>(contentLayer->getChildren());
 
