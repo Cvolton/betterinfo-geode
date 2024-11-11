@@ -46,7 +46,10 @@ void BetterInfoStatsV2::logDeath(GJGameLevel* level, bool practice, LevelDeath d
 std::pair<int, int> BetterInfoStatsV2::getCommonFail(GJGameLevel* gjLevel) {
     std::unordered_map<int, int> fails;
 
-    auto attempts = levelObject(gjLevel)["attempts"].asArray().unwrapOr(std::vector<matjson::Value>());
+    auto attemptsRes = levelObject(gjLevel)["attempts"].asArray();
+    if(!attemptsRes) return {0,0};
+
+    auto attempts = attemptsRes.unwrap();
     if(attempts.size() == 0) return {0,0};
     
     for(auto& attempt : attempts) {

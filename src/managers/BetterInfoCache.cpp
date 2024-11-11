@@ -223,7 +223,10 @@ void BetterInfoCache::checkClaimableLists() {
             if(value["diamonds"].asInt().unwrapOr(0) <= 0) continue;
             
             auto listID = BetterInfo::stoi(key);
-            auto levels = value["levels"].asArray().unwrapOr(std::vector<matjson::Value>());
+            auto levelsRes = value["levels"].asArray();
+            if(!levelsRes) continue;
+
+            auto levels = levelsRes.unwrap();
             auto levelsToClaim = value["levels-to-claim"].asInt().unwrapOr(0);
 
             if(levelsToClaim <= 0) continue;

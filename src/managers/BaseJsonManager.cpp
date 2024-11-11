@@ -23,17 +23,7 @@ Result<> BaseJsonManager::load() {
 
     auto savedPath = Mod::get()->getSaveDir() / m_filename;
     if (std::filesystem::exists(savedPath)) {
-        auto result = utils::file::readString(savedPath);
-        if (!result) {
-            return Err(result.unwrapErr());
-        }
-
-        std::string error;
-        auto parsed = matjson::parse(result.unwrap());
-        if (!parsed) {
-            return Err("Unable to parse: {}", parsed.err());
-        }
-        m_json = parsed.unwrap();
+        GEODE_UNWRAP_INTO(m_json, utils::file::readJson(savedPath));
 
         if (!m_json.isObject()) {
             m_json = matjson::Value();
@@ -53,7 +43,7 @@ Result<> BaseJsonManager::save() {
     //std::cout <<  ("Locking shared_lock save") << std::endl;
     std::shared_lock guard(m_jsonMutex);
     //TODO: v4 this func will change
-    std::string savedStr = m_json.dump(matjson::NO_INDENTATION).unwrap();
+    std::string savedStr = m_json.dump(matjson::NO_INDENTATION);
 
     auto res2 = utils::file::writeString(Mod::get()->getSaveDir() / m_filename, savedStr);
     if (!res2) {
