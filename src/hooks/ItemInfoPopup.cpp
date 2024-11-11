@@ -10,13 +10,14 @@ class BI_DLL $modify(BIItemInfoPopup, ItemInfoPopup) {
     /*
      * Callbacks
      */
-    int chestIDToKeys(int chestID) {
-        if(chestID > 5000) return 100;
-        if(chestID > 4000) return 50;
-        if(chestID > 3000) return 25;
-        if(chestID > 2000) return 10;
-        if(chestID > 1000) return 5;
-        return 1;
+    const char* chestIDToKeys(int chestID) {
+        if(chestID > 6000) return "golden";
+        if(chestID > 5000) return "100";
+        if(chestID > 4000) return "50";
+        if(chestID > 3000) return "25";
+        if(chestID > 2000) return "10";
+        if(chestID > 1000) return "5";
+        return "1";
     }
 
     void onChestReveal(CCObject* sender){
