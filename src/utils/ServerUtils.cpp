@@ -19,7 +19,7 @@ std::string ServerUtils::getBaseURL() {
     // in the main game executable
     char* originalUrl = nullptr;
     #ifdef GEODE_IS_WINDOWS
-        static_assert(GEODE_COMP_GD_VERSION == 22073, "Unsupported GD version");
+        static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
         originalUrl = (char*)(base::get() + 0x53ea48);
     #elif defined(GEODE_IS_ARM_MAC)
         static_assert(GEODE_COMP_GD_VERSION == 22060, "Unsupported GD version");
