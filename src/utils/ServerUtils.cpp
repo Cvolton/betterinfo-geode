@@ -191,7 +191,7 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
     s_requests.emplace(requestKey, task);
 }
 
-void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJGameLevel>>>, bool)> callback, bool cacheLevels) {
+void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJGameLevel>>>, bool success, bool explicitError)> callback, bool cacheLevels) {
     std::string completedLevels = "";
 
     std::string postString = fmt::format("{}&type={}&str={}&diff={}&len={}&page={}&total={}&uncompleted={}&onlyCompleted={}&featured={}&original={}&twoPlayer={}&coins={}",
@@ -251,7 +251,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
 
             auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
-            callback(levels, false);
+            callback(levels, false, false);
 
             return *response;
         }
@@ -260,9 +260,14 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
 
         auto responseString = response->string().unwrapOr("");
 
+        if(responseString == "-1") {
+            callback(levels, false, true);
+            return *response;
+        }
+
         size_t hashes = std::count(responseString.begin(), responseString.end(), '#');
         if(hashes < 4) {
-            callback(levels, false);
+            callback(levels, false, false);
             return *response;
         }
 
@@ -306,7 +311,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             else s_cache[key] = levelArray;
         }
 
-        callback(levels, true);
+        callback(levels, true, false);
 
         return *response;
     });

@@ -49,6 +49,8 @@ public:
 	void removeClaimedLists();
 
 	void checkLevelsFromDict(CCDictionary* dict);
+	void markLevelAsFailed(int id);
+	bool isLevelFailed(int id);
 	void cacheLevel(GJGameLevel* level);
 	void cacheLevels(std::set<int> toDownload, SearchType searchType, int levelsPerRequest);
 

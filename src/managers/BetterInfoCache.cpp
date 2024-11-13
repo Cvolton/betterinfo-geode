@@ -52,6 +52,7 @@ void BetterInfoCache::validateLoadedData() {
     validateIsObject("level-info-dict");
     validateIsObject("list-info-dict");
     validateIsObject("user-info-dict");
+    validateIsObject("failed-levels-dict");
 }
 
 void BetterInfoCache::establishCachedDicts(){
@@ -410,6 +411,7 @@ void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
             auto levelFromSaved = LevelUtils::getLevelFromSaved(currentLvl->m_levelID);
             if(levelFromSaved != nullptr && std::string(levelFromSaved->m_levelName) != "") cacheLevel(levelFromSaved);
             else {
+                if(isLevelFailed(currentLvl->m_levelID)) continue;
                 if(levelFromSaved && levelFromSaved->m_stars > 0) toDownloadRated.insert(currentLvl->m_levelID);
                 else toDownloadUnrated.insert(currentLvl->m_levelID);
             }
@@ -424,6 +426,23 @@ void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
             log::info("Finished checking {} levels from dict", levels->size());
         });
     }).detach();
+}
+
+void BetterInfoCache::markLevelAsFailed(int id) {
+    auto idString = std::to_string(id);
+
+    //std::cout <<  ("Locking unique_lock cacheLevel") << std::endl;
+    std::unique_lock guard(m_jsonMutex);
+    m_json["failed-levels-dict"][idString] = m_json["failed-levels-dict"][idString].asInt().unwrapOr(0) + 1;
+    //std::cout <<  ("Unlocking unique_lock cacheLevel") << std::endl;
+}
+
+bool BetterInfoCache::isLevelFailed(int id) {
+    auto idString = std::to_string(id);
+    if(!objectExists("failed-levels-dict", idString)) return false;
+
+    std::shared_lock guard(m_jsonMutex);
+    return m_json["failed-levels-dict"][idString].asInt().unwrapOr(0) >= 5;
 }
 
 void BetterInfoCache::cacheLevel(GJGameLevel* level) {
@@ -481,17 +500,28 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchTyp
 
             using namespace std::chrono_literals;
             for(const auto& searchObj : *searchObjects) {
+                auto levelsVector = utils::string::split(searchObj->m_searchQuery, ",");
+                std::unordered_set<int> levelsSet;
+
+                for(auto level : levelsVector) {
+                    levelsSet.insert(BetterInfo::stoi(level));
+                }
+
                 ServerUtils::getOnlineLevels(
                     searchObj, 
-                    [this](auto levels, bool) {
-                        std::thread([this, levels] {
+                    [this, levelsSet = std::move(levelsSet)](auto levels, bool success, bool explicitError) mutable {
+                        std::thread([this, levels, levelsSet = std::move(levelsSet), success, explicitError] mutable {
                             thread::setName("Level Cache (Inner)");
                             for(const auto& level : *levels) {
                                 cacheLevel(level);
+                                levelsSet.erase(level->m_levelID.value());
+                            }
+                            if(success || explicitError) for(const auto& id : levelsSet) {
+                                markLevelAsFailed(id);
                             }
                             doSave();
-                            Loader::get()->queueInMainThread([levels] {
-                                if(levels->size() > 0) log::debug("Cached {} levels", levels->size());
+                            Loader::get()->queueInMainThread([levels, failed = levelsSet.size()] {
+                                if(levels->size() > 0) log::debug("Cached {} levels; Failed to cache {}", levels->size(), failed);
                                 // this is just a workaround to make sure the vector only gets destroyed in main thread
                             });
                         }).detach();

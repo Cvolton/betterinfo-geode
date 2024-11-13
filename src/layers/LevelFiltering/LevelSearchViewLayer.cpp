@@ -173,7 +173,7 @@ void LevelSearchViewLayer::startLoading(){
 void LevelSearchViewLayer::queueLoad(float dt) {
     this->retain();
     std::string key = m_gjSearchObjLoaded->getKey();
-    ServerUtils::getOnlineLevels(m_gjSearchObjLoaded, [this, key](auto levels, bool success) {
+    ServerUtils::getOnlineLevels(m_gjSearchObjLoaded, [this, key](auto levels, bool success, bool explicitError) {
         if(success) {
             auto array = CCArray::create();
             for(auto level : *levels) {
