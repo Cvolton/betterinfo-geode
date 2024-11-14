@@ -104,7 +104,7 @@ void BetterInfoCache::cacheScoresResult(CCArray* scores) {
 
 void BetterInfoCache::cacheScore(GJUserScore* score) {
     auto object = matjson::makeObject({
-        { "username", score->m_userName },
+        { "username", std::string(score->m_userName) },
         { "icon-type", (int) score->m_iconType },
         { "iconID", score->m_iconID },
         { "color-1", score->m_color1 },
