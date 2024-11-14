@@ -22,17 +22,17 @@ std::string ServerUtils::getBaseURL() {
         static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
         originalUrl = (char*)(base::get() + 0x53ea48);
     #elif defined(GEODE_IS_ARM_MAC)
-        static_assert(GEODE_COMP_GD_VERSION == 22060, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0x78bf98);
+        static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x7749fb);
     #elif defined(GEODE_IS_INTEL_MAC)
-        static_assert(GEODE_COMP_GD_VERSION == 22060, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0x875058);
+        static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x8516bf);
     #elif defined(GEODE_IS_ANDROID64)
-        static_assert(GEODE_COMP_GD_VERSION == 22060, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0xE8D270);
+        static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0xEA2988);
     #elif defined(GEODE_IS_ANDROID32)
-        static_assert(GEODE_COMP_GD_VERSION == 22060, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0x944A78);
+        static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x952E9E);
     #else
         static_assert(false, "Unsupported platform");
     #endif

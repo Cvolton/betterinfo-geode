@@ -3,8 +3,8 @@
     "version": "v4.2.13",
     "gd": {
         "win": "2.2074",
-        "android": "2.206",
-        "mac": "2.206"
+        "android": "2.2074",
+        "mac": "2.2074"
     },
     "id": "cvolton.betterinfo",
     "name": "BetterInfo",
