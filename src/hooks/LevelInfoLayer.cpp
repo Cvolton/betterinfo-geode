@@ -12,8 +12,8 @@ using namespace geode::prelude;
 
 class BI_DLL $modify(LevelInfoLayer) {
     static void onModify(auto& self) {
-        (void) self.setHookPriority("LevelInfoLayer::onViewProfile", 99999);
-        (void) self.setHookPriority("LevelInfoLayer::onLevelInfo", 99999);
+        (void) self.setHookPriority("LevelInfoLayer::onViewProfile", Priority::VeryLatePre);
+        (void) self.setHookPriority("LevelInfoLayer::onLevelInfo", Priority::VeryLatePre);
     }
 
     bool init(GJGameLevel* level, bool challenge) {

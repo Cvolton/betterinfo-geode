@@ -15,7 +15,7 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
     };
 
     static void onModify(auto& self) {
-        auto res = self.setHookPriority("LevelCell::onViewProfile", 99999);
+        auto res = self.setHookPriority("LevelCell::onViewProfile", Priority::VeryLatePre);
     }
 
     /*void showDesc() {

@@ -20,7 +20,7 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     };
 
     static void onModify(auto& self) {
-        (void) self.setHookPriority("LevelBrowserLayer::onGoToPage", 99999);
+        (void) self.setHookPriority("LevelBrowserLayer::onGoToPage", Priority::VeryLatePre);
     }
 
     /*

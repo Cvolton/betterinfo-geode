@@ -7,7 +7,7 @@ using namespace geode::prelude;
 
 class BI_DLL $modify(BIEditLevelLayer, EditLevelLayer) {
     static void onModify(auto& self) {
-        (void) self.setHookPriority("EditLevelLayer::onLevelInfo", 99999);
+        (void) self.setHookPriority("EditLevelLayer::onLevelInfo", Priority::VeryLatePre);
     }
 
     /*

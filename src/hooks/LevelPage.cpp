@@ -7,7 +7,7 @@ using namespace geode::prelude;
 
 class BI_DLL $modify(LevelPage) {
     static void onModify(auto& self) {
-        auto res = self.setHookPriority("LevelPage::onInfo", 99999);
+        auto res = self.setHookPriority("LevelPage::onInfo", Priority::VeryLatePre);
     }
 
     void onInfo(CCObject* sender) {

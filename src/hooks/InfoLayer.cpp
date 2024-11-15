@@ -15,8 +15,8 @@ class BI_DLL $modify(BIInfoLayer, InfoLayer) {
     };
 
     static void onModify(auto& self) {
-        (void) self.setHookPriority("InfoLayer::onMore", 99999);
-        (void) self.setHookPriority("InfoLayer::onLevelInfo", 99999);
+        (void) self.setHookPriority("InfoLayer::onMore", Priority::VeryLatePre);
+        (void) self.setHookPriority("InfoLayer::onLevelInfo", Priority::VeryLatePre);
     }
 
     void onJumpToPageLayer(CCObject* sender) {
