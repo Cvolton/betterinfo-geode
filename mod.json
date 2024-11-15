@@ -42,7 +42,8 @@
             "name": "Auto submit to leaderboards",
             "description": "Automatically submits your level score to the level leaderboards upon exiting a level",
             "type": "bool",
-            "default": false
+            "default": false,
+            "platforms": ["desktop"]
         },
         "alt-button": {
             "name": "Alternative button texture",
