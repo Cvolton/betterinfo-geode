@@ -20,28 +20,37 @@ class BI_DLL $modify(BIItemInfoPopup, ItemInfoPopup) {
         return "1";
     }
 
-    void onChestReveal(CCObject* sender){
-        auto button = typeinfo_cast<CCMenuItemSpriteExtra*>(sender);
-        if(!button) return;
-
+    void updateLabelString(CCMenuItemSpriteExtra* button, const char* string) {
         auto label = typeinfo_cast<CCLabelBMFont*>(button->getNormalImage());
         if(!label) return;
 
         auto size = label->getScaledContentSize();
 
+        label->setString(string);
+        auto newSize = label->getScaledContentSize();
+        auto offset = (size - newSize) / 2;
+        button->setPosition(button->getPosition() - offset);
+        button->setEnabled(false);
+    }
+
+    void onChestReveal(CCObject* sender){
+        auto button = typeinfo_cast<CCMenuItemSpriteExtra*>(sender);
+        if(!button) return;
+
         for(auto [key, chest] : CCDictionaryExt<int, GJRewardItem*>(GameStatsManager::sharedState()->m_allTreasureRoomChests)) {
             for(auto reward : CCArrayExt<GJRewardObject*>(chest->m_rewardObjects)) {
                 if(reward->m_specialRewardItem == SpecialRewardItem::CustomItem) {
                     if(reward->m_itemID == m_itemID && reward->m_unlockType == m_unlockType) {
-                        label->setString(fmt::format("Found in:\na {} key chest", chestIDToKeys(key)).c_str());
-                        auto newSize = label->getScaledContentSize();
-                        auto offset = (size - newSize) / 2;
-                        button->setPosition(button->getPosition() - offset);
-                        button->setEnabled(false);
+                        updateLabelString(button, fmt::format("Found in:\na {} key chest", chestIDToKeys(key)).c_str());
                         return;
                     }
                 }
             }
+        }
+
+        if(GameStatsManager::sharedState()->m_wraithIcons.contains(std::pair(m_unlockType, m_itemID))) {
+            updateLabelString(button, "Found in:\na wraith chest");
+            return;
         }
     }
 
@@ -52,7 +61,8 @@ class BI_DLL $modify(BIItemInfoPopup, ItemInfoPopup) {
     bool init(int iconID, UnlockType unlockType) {
         if(!ItemInfoPopup::init(iconID, unlockType)) return false;
 
-        if(GameStatsManager::sharedState()->getItemUnlockState(iconID, unlockType) == 2) {
+        auto state = GameStatsManager::sharedState()->getItemUnlockState(iconID, unlockType);
+        if(state == 2 || state == 3) {
             auto clickToReveal = CCLabelBMFont::create("Found in:\n(Click to Reveal)", "goldFont.fnt");
             clickToReveal->setScale(.4f);
             auto revealButton = CCMenuItemSpriteExtra::create(
