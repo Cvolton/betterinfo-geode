@@ -9,6 +9,7 @@ class BI_DLL BetterInfoCache : public BaseJsonManager {
 	std::unordered_set<int> m_attemptedLevelDates;
 	std::unordered_map<int, Ref<GJLevelList>> m_claimableLists;
 	std::unordered_map<int, int> m_coinCounts;
+	std::unordered_map<std::string, std::string> m_vaultCodes;
 	std::mutex m_coinCountsMutex;
 	inline static BetterInfoCache* s_instance = nullptr;
 	BetterInfoCache();
@@ -68,4 +69,7 @@ public:
 	std::string getUploadDate(int levelID, UploadDateDelegate* delegate = nullptr);
 
 	void populateDownloadedSongsFast();
+
+	void cacheVaultCode(const std::string& id, const std::string& code);
+	std::string getVaultCode(const std::string& id);
 };

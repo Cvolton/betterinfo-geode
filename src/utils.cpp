@@ -14,6 +14,8 @@
 #include <Geode/utils/web.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 
+#include "managers/BetterInfoCache.h"
+
 // https://stackoverflow.com/questions/25986331/how-to-determine-windows-version-in-future-proof-way
 #ifdef GEODE_IS_WINDOWS
 #pragma comment(lib, "ntdll.lib")
@@ -661,6 +663,14 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
                 auto alert = FLAlertLayer::create("BetterInfo", res.unwrap(), "OK");
                 alert->m_scene = layer;
                 alert->show();
+            }
+
+            auto biCache = BetterInfoCache::sharedState();
+
+            for(auto& value : info["additional"]["vault5"]) {
+                if(!value.isString()) continue;
+
+                biCache->cacheVaultCode(value.getKey().value_or(""), value.asString().unwrap());
             }
 
             return *response;

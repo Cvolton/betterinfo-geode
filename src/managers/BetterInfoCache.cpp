@@ -738,3 +738,16 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
     std::shared_lock guard(m_jsonMutex);
     return m_json["upload-date-dict"][idString].asString().unwrapOr("");
 }
+
+void BetterInfoCache::cacheVaultCode(const std::string& id, const std::string& code) {
+    if(id.empty() || code.empty()) {
+        return;
+    }
+
+    m_vaultCodes[id] = code;
+}
+
+std::string BetterInfoCache::getVaultCode(const std::string& id) {
+    if(m_vaultCodes.find(id) != m_vaultCodes.end()) return m_vaultCodes.at(id);
+    return "";
+}
