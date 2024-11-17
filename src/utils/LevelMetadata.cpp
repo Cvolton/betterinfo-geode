@@ -3,6 +3,15 @@
 #include <sstream>
 #include <iomanip>
 
+bool isRobTopStyleDate(const std::string& date){
+    std::array<const char*, 7> times = {"second", "minute", "hour", "day", "week", "month", "year"};
+    for(auto time : times) if(date.contains(time)) {
+        return true;
+    }
+
+    return false;
+}
+
 std::string LevelMetadata::getGameVersionName(int version){
     if(version < 1 || version > 99) return std::string("NA");
 
@@ -24,10 +33,13 @@ std::string LevelMetadata::getGameVersionName(int version){
     return contentStream.str();
 }
 
-std::string LevelMetadata::stringDate(std::string date){
+std::string LevelMetadata::stringDate(const std::string& date){
     if(date == "") return "NA";
     std::ostringstream stream;
-    stream << date << " ago";
+
+    stream << date;
+    if(isRobTopStyleDate(date)) stream << " ago";
+
     return stream.str();
 }
 
@@ -84,6 +96,8 @@ std::string LevelMetadata::zeroIfNA(int value){
 }
 
 std::string LevelMetadata::addPlus(std::string date) {
+    if(!isRobTopStyleDate(date)) return date;
+
     auto spaceIt = date.find_first_of(' ');
     if(spaceIt != std::string::npos) date.insert(date.cbegin() + spaceIt, '+');
     return date;

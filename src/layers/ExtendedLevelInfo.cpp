@@ -1,16 +1,11 @@
 #include "ExtendedLevelInfo.h"
-#include "UnregisteredProfileLayer.h"
-#include "PaginatedFLAlert.h"
 #include "../utils.hpp"
-#include "../managers/BetterInfoStats.h"
 //#include "../managers/BetterInfoStatsV2.h"
 #include "../managers/BetterInfoCache.h"
 
-#include <deque>
 #include <algorithm>
 #include <thread>
 #include <string>
-#include <iterator>
 
 ExtendedLevelInfo* ExtendedLevelInfo::create(GJGameLevel* level){
     auto ret = new ExtendedLevelInfo();
@@ -96,8 +91,8 @@ void ExtendedLevelInfo::refreshInfoTexts() {
 
     m_primary = infoText.str();
     infoText.str("");
-    infoText << "\n<cj>Uploaded</c>: " << TimeUtils::isoTimeToString(m_uploadDateEstimated)
-        << "\n<cg>Objects</c>: " << LevelMetadata::zeroIfNA(m_level->m_objectCount)
+    if(!ServerUtils::isGDPS()) infoText << "\n<cj>Uploaded</c>: " << TimeUtils::isoTimeToString(m_uploadDateEstimated);
+    infoText << "\n<cg>Objects</c>: " << LevelMetadata::zeroIfNA(m_level->m_objectCount)
         << "\n<cg>Objects (est.)</c>: " << LevelMetadata::zeroIfNA(m_objectsEstimated) //i have no idea what the 0 and 11 mean, i just copied them from PlayLayer::init
         << "\n<cy>Feature Score</c>: " << LevelMetadata::zeroIfNA(m_level->m_featured)
         << "\n<co>Two-player</c>: " << LevelMetadata::boolString(m_level->m_twoPlayerMode)

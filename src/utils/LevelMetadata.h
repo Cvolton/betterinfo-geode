@@ -5,7 +5,7 @@
 
 namespace LevelMetadata {
     BI_DLL std::string getGameVersionName(int version);
-    BI_DLL std::string stringDate(std::string date);
+    BI_DLL std::string stringDate(const std::string& date);
     BI_DLL const char* getDifficultyIcon(int stars);
     BI_DLL const char* getDemonDifficultyIcon(int demonDifficulty);
     BI_DLL std::string passwordString(int password);

@@ -8,6 +8,7 @@
 using namespace geode::prelude;
 
 namespace ServerUtils {
+    BI_DLL bool isGDPS();
     BI_DLL web::WebRequest getBaseRequest(bool setUserAgent = true);
     BI_DLL std::string getBaseURL();
     BI_DLL std::string getBasePostString(bool includeAccount = true);

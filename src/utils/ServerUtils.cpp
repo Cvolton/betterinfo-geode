@@ -9,12 +9,28 @@ static inline std::unordered_map<std::string, Ref<cocos2d::CCArray>> s_cache;
 static inline std::unordered_map<std::string, web::WebTask> s_requests;
 
 static inline std::shared_mutex s_requestsMutex;
+static bool s_isGDPS = false;
+
+bool ServerUtils::isGDPS() {
+    return getBaseURL() != "https://www.boomlings.com/database";
+}
 
 web::WebRequest ServerUtils::getBaseRequest(bool setUserAgent) {
     return web::WebRequest().userAgent(setUserAgent ? fmt::format("BetterInfo {} / Geode {}", Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true)) : "");
 }
 
 std::string ServerUtils::getBaseURL() {
+    // A cleaner solution for this would be a Server API dependency
+    // however I'd rather avoid depending on a mod that 90% of users
+    // don't actually use
+    if(Loader::get()->isModLoaded("km7dev.gdps-switcher")) {
+        auto url = Loader::get()->getLoadedMod("km7dev.gdps-switcher")->getSavedValue<std::string>("server");
+        if(!url.empty()) {
+            while(url.ends_with("/")) url.pop_back();
+            return url;
+        }
+    }
+
     // The addresses are pointing to "https://www.boomlings.com/database/getGJLevels21.php"
     // in the main game executable
     char* originalUrl = nullptr;
