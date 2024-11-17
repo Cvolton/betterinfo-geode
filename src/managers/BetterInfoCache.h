@@ -20,6 +20,7 @@ public:
 
 	bool init();
 	void finishLoading();
+	void thirdStageLoading();
 
 	void validateLoadedData();
 	void establishCachedDicts();

@@ -22,25 +22,17 @@ void BetterInfoCache::finishLoading(){
     cacheFollowedCreators();
 
     log::debug("Finished 2nd stage loading BetterInfoCache in {} ms", BetterInfo::timeInMs() - now);
+}
 
-    std::thread([this] {
-        thread::setName("BI 3rd Stage Sleep");
-        using namespace std::chrono_literals;
-        std::this_thread::sleep_for(120000ms);
+void BetterInfoCache::thirdStageLoading() {
+    auto now = BetterInfo::timeInMs();
+    log::debug("Starting 3rd stage loading BetterInfoCache");
 
-        Loader::get()->queueInMainThread([this] {
-            auto now = BetterInfo::timeInMs();
-            log::debug("Starting 3rd stage loading BetterInfoCache");
+    auto GLM = GameLevelManager::sharedState();
+    checkLevelsFromDict(GLM->m_onlineLevels);
+    checkLevelsFromDict(GLM->m_dailyLevels);
 
-            auto GLM = GameLevelManager::sharedState();
-            checkLevelsFromDict(GLM->m_onlineLevels);
-            checkLevelsFromDict(GLM->m_dailyLevels);
-
-            log::debug("Finished 3rd stage loading BetterInfoCache in {} ms", BetterInfo::timeInMs() - now);
-        });
-    }).detach();
-
-    
+    log::debug("Finished 3rd stage loading BetterInfoCache in {} ms", BetterInfo::timeInMs() - now);
 }
 
 void BetterInfoCache::validateLoadedData() {
@@ -88,6 +80,10 @@ void BetterInfoCache::cacheFollowedCreators() {
             using namespace std::chrono_literals;
             std::this_thread::sleep_for(5000ms);
         }
+
+        Loader::get()->queueInMainThread([this] {
+            thirdStageLoading();
+        });
     }).detach();
 }
 
