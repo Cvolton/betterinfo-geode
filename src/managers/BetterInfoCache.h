@@ -7,6 +7,7 @@
 class BI_DLL BetterInfoCache : public BaseJsonManager {
 	std::unordered_set<int> m_attemptedUsernames;
 	std::unordered_set<int> m_attemptedLevelDates;
+	std::unordered_map<int, Ref<GJLevelList>> m_updatedCachedLists;
 	std::unordered_map<int, Ref<GJLevelList>> m_claimableLists;
 	std::unordered_map<int, int> m_coinCounts;
 	std::unordered_map<std::string, std::string> m_vaultCodes;
@@ -38,6 +39,7 @@ public:
 	GJUserScore* getCachedOrPlaceholderScore(int accountID);
 	GJUserScore* getCachedScore(int accountID);
 
+	void cacheRatedListsFromMegaResponse(const std::string& megaResponse);
 	void cacheRatedLists(int page = 0);
 	void cacheList(GJLevelList* list);
 	void cacheListAsync(GJLevelList* list);

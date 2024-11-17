@@ -16,8 +16,8 @@ bool BetterInfoCache::init(){
 void BetterInfoCache::finishLoading(){
     auto now = BetterInfo::timeInMs();
 
-    checkClaimableLists();
-    cacheRatedLists();
+    //checkClaimableLists();
+    //cacheRatedLists();
 
     cacheFollowedCreators();
 
@@ -163,6 +163,46 @@ GJUserScore* BetterInfoCache::getCachedScore(int accountID) {
     return score;
 }
 
+void BetterInfoCache::cacheRatedListsFromMegaResponse(const std::string& megaResponse) {
+    if(megaResponse.empty() || ServerUtils::isGDPS()) return cacheRatedLists();
+
+    auto GLM = GameLevelManager::sharedState();
+
+    size_t hashes = std::count(megaResponse.begin(), megaResponse.end(), '#');
+    if(hashes < 3) return cacheRatedLists();
+
+    std::stringstream responseStream(megaResponse);
+    std::string levelData;
+    std::string userData;
+
+    getline(responseStream, levelData, '#');
+    getline(responseStream, userData, '#');
+
+    std::stringstream userStream(userData);
+    std::string currentUser;
+    while(getline(userStream, currentUser, '|')) {
+        auto info = utils::string::split(currentUser, ":");
+
+        int userID = std::stoi(info[0]);
+        int accountID = std::stoi(info[2]);
+
+        if(userID > 0) GLM->storeUserName(userID, accountID, info[1]);
+    }
+
+    std::stringstream levelStream(levelData);
+    std::string currentLevel;
+    while(getline(levelStream, currentLevel, '|')) {
+        auto level = GJLevelList::create(BetterInfo::responseToDict(currentLevel));
+        GLM->updateSavedLevelList(level);
+        cacheListAsync(level);
+        m_updatedCachedLists.emplace(level->m_listID, level);
+    }
+
+    log::debug("Cached rated lists from mega response");
+
+    checkClaimableLists();
+}
+
 void BetterInfoCache::cacheRatedLists(int page) {
     auto searchObj = GJSearchObject::create(SearchType::Awarded);
     searchObj->m_searchMode = 1;
@@ -183,6 +223,7 @@ void BetterInfoCache::cacheRatedLists(int page) {
                         found = true;
                         break;
                     }
+                    m_updatedCachedLists.emplace(list->m_listID, list);
                     cacheList(list);
                 }
 
@@ -250,10 +291,16 @@ void BetterInfoCache::checkClaimableLists() {
                 if(GameStatsManager::sharedState()->hasClaimedListReward(list)) continue;
                 if(m_claimableLists.contains(listID)) continue;
 
-                m_claimableLists.emplace(listID,nullptr);
+                if(m_updatedCachedLists.contains(listID)) {
+                    m_claimableLists.emplace(listID, m_updatedCachedLists[listID]);
+                    m_updatedCachedLists.erase(listID);
+                } else {
+                    m_claimableLists.emplace(listID, nullptr);
+                }
                 log::info("Can claim reward for list {}", listID);
             }
 
+            m_updatedCachedLists.clear();
             downloadClaimableLists();
         });
     }).detach();
@@ -328,7 +375,8 @@ void BetterInfoCache::downloadClaimableLists() {
                         log::debug("Downloaded list {}", lists->at(0)->m_listID);
                     },
                     false
-                );log::debug("Downloading list {}", listID);
+                );
+                log::debug("Downloading list {}", listID);
             });
 
             using namespace std::chrono_literals;

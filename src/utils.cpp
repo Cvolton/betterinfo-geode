@@ -653,8 +653,11 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
 
     s_requestTask = web::WebRequest().get(url).map(
         [layer](web::WebResponse* response) {
+            auto biCache = BetterInfoCache::sharedState();
+
             if(!response->ok() || response->json().isErr()) {
                 log::warn("Fetching important notices failed: {} - {}", response->code(), response->string().unwrapOr("No response"));
+                biCache->cacheRatedLists();
                 return *response;
             }
 
@@ -665,12 +668,18 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
                 alert->show();
             }
 
-            auto biCache = BetterInfoCache::sharedState();
-
             for(auto& value : info["additional"]["vault5"]) {
                 if(!value.isString()) continue;
 
                 biCache->cacheVaultCode(value.getKey().value_or(""), value.asString().unwrap());
+            }
+
+            if(auto res = info["additional"]["rated_lists"]["content"].asString()) {
+                log::debug("Attempting to cache rated lists from megaresponse");
+                biCache->cacheRatedListsFromMegaResponse(res.unwrap());
+            } else {
+                log::debug("Attempting to cache rated lists from server");
+                biCache->cacheRatedLists();
             }
 
             return *response;
@@ -678,9 +687,6 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
 }
 
 FLAlertLayer* BetterInfo::createUpdateDialog() {
-    //TODO: enable before real 420 release
-    //return nullptr;
-
     auto versionResult = VersionInfo::parse(
         Mod::get()->getSavedValue<std::string>(
             "last_dialog_version",
