@@ -48,10 +48,15 @@ class BI_DLL $modify(BIItemInfoPopup, ItemInfoPopup) {
             }
         }
 
+        #ifndef GEODE_IS_ANDROID
         if(GameStatsManager::sharedState()->m_wraithIcons.contains(std::pair(m_unlockType, m_itemID))) {
             updateLabelString(button, "Found in:\na wraith chest");
             return;
         }
+        #else
+        // use wraith chest as fallback on android because the set is not implemented in gd stl
+        updateLabelString(button, "Found in:\na wraith chest");
+        #endif
     }
 
     /*
