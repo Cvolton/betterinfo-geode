@@ -19,8 +19,16 @@ RewardTypeSelectLayer* RewardTypeSelectLayer::create(){
 
 void RewardTypeSelectLayer::onDaily(cocos2d::CCObject* sender)
 {
-    auto browserLayer = RewardViewLayer::scene(GameStatsManager::sharedState()->m_dailyChests, "Daily");
-    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
+    auto groupLayer = RewardGroupLayer::scene(
+        "Daily",
+        GameStatsManager::sharedState()->m_dailyChests,
+        {
+            {"Small", "chest_01_02_001.png", [](BIGJRewardItem* item) -> bool { return item->m_rewardType == GJRewardType::Small; }},
+            {"Large", "chest_02_02_001.png", [](BIGJRewardItem* item) -> bool { return item->m_rewardType == GJRewardType::Large; }},
+            {"Other???", "chest_03_02_001.png", [](BIGJRewardItem* item) -> bool { return item->m_rewardType != GJRewardType::Small && item->m_rewardType != GJRewardType::Large; }},
+        }
+    );
+    auto transitionFade = CCTransitionFade::create(0.5, groupLayer);
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
 
