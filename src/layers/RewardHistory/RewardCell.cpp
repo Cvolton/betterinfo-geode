@@ -121,40 +121,46 @@ void RewardCell::loadFromData(CCObject* object) {
     CCSprite* chest = CCSprite::createWithSpriteFrameName(chestTexture);
     chest->setPosition({25, 22});
     chest->setScale(chestSize);
-    this->m_mainLayer->addChild(chest);
+    m_mainLayer->addChild(chest);
 
     auto title = CCLabelBMFont::create(getDisplayName().c_str(), "bigFont.fnt");
     title->setAnchorPoint({ 0.0f, .5f });
     title->setPosition(rowX, 31.5f);
     title->limitLabelWidth(356-rowX, .65f, .4f);
-    this->m_mainLayer->addChild(title);
+    m_mainLayer->addChild(title);
 
+    auto menu = CCMenu::create();
+    menu->setPosition(rowX, rowY);
+    m_mainLayer->addChild(menu);
 
     CCObject* obj;
-    CCSprite* lastSprite = nullptr;
+    CCNode* lastSprite = nullptr;
     CCLabelBMFont* lastText = nullptr;
     CCARRAY_FOREACH(m_rewardItem->m_rewardObjects, obj){
         auto rewardObj = static_cast<GJRewardObject*>(obj);
 
         lastSprite = itemToSprite(rewardObj->m_specialRewardItem);
         if(rewardObj->m_specialRewardItem == SpecialRewardItem::CustomItem) {
-            lastSprite = GJItemIcon::createBrowserItem(rewardObj->m_unlockType, rewardObj->m_itemID);
-            lastSprite->setScale(0.5f);
+            auto icon = GJItemIcon::createBrowserItem(rewardObj->m_unlockType, rewardObj->m_itemID);
+            auto btn = CCMenuItemSpriteExtra::create(icon, this, menu_selector(RewardCell::onIcon));
+            btn->setScale(0.5f);
+            btn->m_baseScale = 0.5f;
+            lastSprite = btn;
         }
-        if(lastText == nullptr) lastSprite->setPosition({rowX + 1, rowY});
-        else lastSprite->setPosition({lastText->getPositionX() + (lastText->getContentSize().width * lastText->getScaleX()) + 11.f, rowY});
-        lastSprite->setAnchorPoint({0, 0.5f});
-        this->m_mainLayer->addChild(lastSprite);
+        if(lastText == nullptr) lastSprite->setPosition({1 + (lastSprite->getScaledContentWidth() / 2), 0});
+        else lastSprite->setPosition({lastText->getPositionX() + lastText->getScaledContentWidth() + (lastSprite->getScaledContentWidth() / 2) + 11.f, 0});
+        //lastSprite->setAnchorPoint({0, 0.5f});
+        menu->addChild(lastSprite);
 
         lastText = CCLabelBMFont::create(CCString::createWithFormat("%i", rewardObj->m_total)->getCString(), "bigFont.fnt");
-        lastText->setAnchorPoint({ 0.0f, 0.5f });
-        lastText->setPosition({lastSprite->getPositionX() + ((lastSprite->getContentSize().width) * lastSprite->getScaleX()) + 5, rowY});
+        lastText->setAnchorPoint({ 0.f, 0.5f });
+        lastText->setPosition({lastSprite->getPositionX() + (lastSprite->getScaledContentWidth() / 2) + 5, 0});
         lastText->setScale(.325f);
-        this->m_mainLayer->addChild(lastText);
+        menu->addChild(lastText);
     }
 
-    this->m_mainLayer->setVisible(true);
-    this->m_backgroundLayer->setOpacity(255);
+    m_mainLayer->setVisible(true);
+    m_backgroundLayer->setOpacity(255);
 }
 
 RewardCell::RewardCell(const char* name, CCSize size) :
@@ -198,4 +204,14 @@ CCSprite* RewardCell::itemToSprite(SpecialRewardItem item) {
     sprite->setScale(scale);
 
     return sprite;
+}
+
+void RewardCell::onIcon(CCObject* sender) {
+    auto btn = typeinfo_cast<CCMenuItemSpriteExtra*>(sender);
+    if(!btn) return;
+
+    auto icon = typeinfo_cast<GJItemIcon*>(btn->getNormalImage());
+    if(!icon) return;
+
+    ItemInfoPopup::create(icon->m_unlockID, icon->m_unlockType)->show();
 }

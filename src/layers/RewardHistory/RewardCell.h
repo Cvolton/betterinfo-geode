@@ -14,4 +14,5 @@ class BI_DLL RewardCell : public GenericListCell {
         void loadFromData(CCObject* object);
         static RewardCell* create(const char* key, cocos2d::CCSize size);
         static CCSprite* itemToSprite(SpecialRewardItem item);
+        void onIcon(CCObject* sender);
 };
