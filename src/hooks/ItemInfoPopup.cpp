@@ -66,8 +66,9 @@ class BI_DLL $modify(BIItemInfoPopup, ItemInfoPopup) {
     bool init(int iconID, UnlockType unlockType) {
         if(!ItemInfoPopup::init(iconID, unlockType)) return false;
 
-        auto state = GameStatsManager::sharedState()->getItemUnlockState(iconID, unlockType);
-        if(state == 2 || state == 3) {
+        auto GSM = GameStatsManager::sharedState();
+        auto state = GSM->getItemUnlockState(iconID, unlockType);
+        if(state == 2 GEODE_DESKTOP(|| (state == 3 && GSM->m_wraithIcons.contains(std::pair(unlockType, iconID))))) { //state 3 disabled on android because of gd::set
             auto clickToReveal = CCLabelBMFont::create("Found in:\n(Click to Reveal)", "goldFont.fnt");
             clickToReveal->setScale(.4f);
             auto revealButton = CCMenuItemSpriteExtra::create(
