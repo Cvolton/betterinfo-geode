@@ -36,6 +36,7 @@ void RewardTypeSelectLayer::onTreasure(cocos2d::CCObject* sender)
             {"25 Key", "chest_04_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKeyInt() >= 3000 && item->getKeyInt() < 4000; }},
             {"50 Key", "chest_05_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKeyInt() >= 4000 && item->getKeyInt() < 5000; }},
             {"100 Key", "chest_06_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKeyInt() >= 5000 && item->getKeyInt() < 6000; }},
+            {"Gold Key", "chest_09_02_001.png", [](BIGJRewardItem* item) -> bool { return item->getKeyInt() >= 6000 && item->getKeyInt() < 7000; }},
         }
     );
     auto transitionFade = CCTransitionFade::create(0.5, groupLayer);

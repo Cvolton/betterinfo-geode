@@ -11,7 +11,7 @@ class BI_DLL $modify(BIItemInfoPopup, ItemInfoPopup) {
      * Callbacks
      */
     const char* chestIDToKeys(int chestID) {
-        if(chestID > 6000) return "golden";
+        if(chestID > 6000) return "gold";
         if(chestID > 5000) return "100";
         if(chestID > 4000) return "50";
         if(chestID > 3000) return "25";

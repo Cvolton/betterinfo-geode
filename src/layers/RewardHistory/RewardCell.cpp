@@ -92,6 +92,7 @@ std::string RewardCell::getDisplayName() {
         if(chestID < 4000) return "25 Key Chest";
         if(chestID < 5000) return "50 Key Chest";
         if(chestID < 6000) return "100 Key Chest";
+        if(chestID < 7000) return "Gold Key Chest";
     }
 
     return key;
@@ -115,6 +116,7 @@ void RewardCell::loadFromData(CCObject* object) {
         case GJRewardType::Key25Treasure: chestTexture = "chest_06_02_001.png"; chestSize = 0.275f; break;
         case GJRewardType::Key50Treasure: chestTexture = "chest_07_02_001.png"; chestSize = 0.275f; break;
         case GJRewardType::Key100Treasure: chestTexture = "chest_08_02_001.png"; chestSize = 0.275f; break;
+        case GJRewardType::Gold: chestTexture = "chest_09_02_001.png"; chestSize = 0.275f; break;
     }
     CCSprite* chest = CCSprite::createWithSpriteFrameName(chestTexture);
     chest->setPosition({25, 22});
