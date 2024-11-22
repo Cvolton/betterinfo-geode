@@ -19,7 +19,7 @@ $on_mod(Loaded) {
     Loader::get()->queueInMainThread([] {
         auto tab = MenuTab::find("BetterInfo");
 
-        GEODE_DESKTOP(createSettingTab("auto-submit", tab));
+        createSettingTab("auto-submit", tab);
         createSettingTab("show-comment-ids", tab);
         createSettingTab("show-level-ids", tab);
         createSettingTab("white-id", tab);

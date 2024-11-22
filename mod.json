@@ -40,10 +40,9 @@
     "settings": {
         "auto-submit": {
             "name": "Auto submit to leaderboards",
-            "description": "Automatically submits your level score to the level leaderboards upon exiting a level",
+            "description": "Automatically submits your level score to the level leaderboards upon exiting a level\n\n(force disabled for classic levels on mobile until RobTop fixes his anticheat)",
             "type": "bool",
-            "default": false,
-            "platforms": ["desktop"]
+            "default": false
         },
         "alt-button": {
             "name": "Alternative button texture",
