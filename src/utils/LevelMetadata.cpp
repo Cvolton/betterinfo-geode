@@ -17,30 +17,24 @@ std::string LevelMetadata::getGameVersionName(int version){
 
     switch(version){
         case 10:
-            return std::string("1.7");
+            return "1.7";
         case 11:
-            return std::string("Early 1.8");
+            return "Early 1.8";
     }
-
-    std::stringstream contentStream;
 
     if(version > 17){
-        double newVersion = (double)version / 10.0;
-        contentStream << std::fixed << std::setprecision(1) << newVersion;
-    }else{
-        contentStream << "1." << (version-1);
+        return fmt::format("{:.1f}", (double)version / 10.0);
+    }else if(version > 1 && version < 10){
+        return fmt::format("1.{}", version - 1);
     }
-    return contentStream.str();
+
+    return fmt::format("Unknown ({})", version);
 }
 
 std::string LevelMetadata::stringDate(const std::string& date){
     if(date == "") return "NA";
-    std::ostringstream stream;
 
-    stream << date;
-    if(isRobTopStyleDate(date)) stream << " ago";
-
-    return stream.str();
+    return fmt::format("{}{}", date, isRobTopStyleDate(date) ? " ago" : "");
 }
 
 const char* LevelMetadata::getDifficultyIcon(int stars){

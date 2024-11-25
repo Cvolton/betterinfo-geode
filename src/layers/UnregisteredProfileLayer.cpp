@@ -114,10 +114,10 @@ bool UnregisteredProfileLayer::init(GJUserScore* score, CCNode* invoker){
     );
     commentBtn->setID("comment-button"_spr);
 
-    std::ostringstream userIDText;
-    userIDText << "User ID: " << m_score->m_userID << "\nAccount ID: None";
-
-    auto userIDTextNode = CCLabelBMFont::create(userIDText.str().c_str(), "bigFont.fnt");
+    auto userIDTextNode = CCLabelBMFont::create(
+        fmt::format("User ID: {}\nAccount ID: None", m_score->m_userID).c_str(), 
+        "bigFont.fnt"
+    );
     userIDTextNode->setAnchorPoint({0,0});
     userIDTextNode->setScale(0.45f);
     userIDTextNode->setID("userid-text-node"_spr);

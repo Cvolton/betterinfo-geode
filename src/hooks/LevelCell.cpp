@@ -146,11 +146,16 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
             const int maxDaily = 100000;
             const int maxWeekly = 200000;
 
-            std::ostringstream dailyText;
-            dailyText << ((m_level->m_dailyID >= maxWeekly) ? "Event" : 
-                ((m_level->m_dailyID >= maxDaily) ? "Weekly" : "Daily")) 
-                << " #" << (m_level->m_dailyID % maxDaily);
-            auto dailyTextNode = CCLabelBMFont::create(dailyText.str().c_str(), "chatFont.fnt");
+            auto dailyTextNode = CCLabelBMFont::create(
+                fmt::format(
+                    "{} #{}",
+                    m_level->m_dailyID >= maxWeekly ? "Event"
+                        : m_level->m_dailyID >= maxDaily ? "Weekly" 
+                        : "Daily",
+                    m_level->m_dailyID % maxDaily
+                ).c_str(), 
+                "chatFont.fnt"
+            );
             dailyTextNode->setPosition({363,89});
             dailyTextNode->setAnchorPoint({1,0});
             dailyTextNode->setScale(0.6f);

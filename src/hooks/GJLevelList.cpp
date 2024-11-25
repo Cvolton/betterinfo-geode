@@ -11,15 +11,13 @@ class BI_DLL $modify(BIGJLevelList, GJLevelList) {
     void showListInfo() {
         static_assert(&GJLevelList::showListInfo, "Hook not implemented");
 
-        std::string desc = getUnpackedDescription();
+        std::string info = getUnpackedDescription() + "\n\n";
+        if(info.empty()) info = "(No description provided)\n\n";
 
-        std::stringstream ss;
-        ss << (desc.empty() ? std::string("(No description provided)") : desc) << "\n\n";
+        if(m_listID > 0) info += fmt::format("List ID: <cy>{}</c>\n", m_listID);
+        if(m_uploadDate > 0) info += fmt::format("Uploaded: <cy>{} ago</c> <cl>({})</c>\n", TimeUtils::timestampToHumanReadable(m_uploadDate), TimeUtils::timeToString(m_uploadDate));
+        if(m_updateDate > 0) info += fmt::format("Updated: <cy>{} ago</c> <cl>({})</c>", TimeUtils::timestampToHumanReadable(m_updateDate), TimeUtils::timeToString(m_updateDate));
 
-        if(m_listID > 0) ss << "List ID: <cy>" << m_listID << "</c>\n";
-        if(m_uploadDate > 0) ss << "Uploaded: <cy>" << TimeUtils::timestampToHumanReadable(m_uploadDate) << " ago</c> <cl>(" << TimeUtils::timeToString(m_uploadDate) << ")</c>\n";
-        if(m_updateDate > 0) ss << "Updated: <cy>" << TimeUtils::timestampToHumanReadable(m_updateDate) << " ago</c> <cl>(" << TimeUtils::timeToString(m_updateDate) << ")</c>";
-
-        FLAlertLayer::create(nullptr, "List Info", ss.str().c_str(), "OK", nullptr, 380.f)->show();
+        FLAlertLayer::create(nullptr, "List Info", info.c_str(), "OK", nullptr, 380.f)->show();
     }
 };
