@@ -63,6 +63,15 @@ bool CustomCreatorLayer::init() {
     featuredBtn->setSizeMult(1.2f);
     featuredBtn->setID("featured-button"_spr);
 
+    auto featuredLiteBtn = CCMenuItemSpriteExtra::create(
+        BetterInfo::createWithBISpriteFrameName("BI_featuredLiteBtn_001.png"),
+        this,
+        menu_selector(CustomCreatorLayer::onFeaturedLite)
+    );
+    buttonsMenu->addChild(featuredLiteBtn);
+    featuredLiteBtn->setSizeMult(1.2f);
+    featuredLiteBtn->setID("featured-lite-button"_spr);
+
     auto fameBtn = CCMenuItemSpriteExtra::create(
         BetterInfo::createBISprite("GJ_fameBtn_001.png"),
         this,
@@ -177,6 +186,15 @@ void CustomCreatorLayer::onSearchID(CCObject* object) {
 
 void CustomCreatorLayer::onFeatured(CCObject* object) {
     auto searchObject = GJSearchObject::create(SearchType::FeaturedGDW);
+    auto browserLayer = LevelBrowserLayer::scene(searchObject);
+
+    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
+
+    CCDirector::sharedDirector()->pushScene(transitionFade);
+}
+
+void CustomCreatorLayer::onFeaturedLite(CCObject* object) {
+    auto searchObject = GJSearchObject::create(SearchType::FeaturedLite);
     auto browserLayer = LevelBrowserLayer::scene(searchObject);
 
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);

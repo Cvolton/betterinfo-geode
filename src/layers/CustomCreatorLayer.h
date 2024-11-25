@@ -11,6 +11,7 @@ protected:
     virtual bool init();
     void onBack(cocos2d::CCObject*);
     void onFeatured(cocos2d::CCObject*);
+    void onFeaturedLite(cocos2d::CCObject*);
     void onMostLiked(cocos2d::CCObject*);
     void onDaily(cocos2d::CCObject*);
     void onWeekly(cocos2d::CCObject*);
