@@ -16,6 +16,8 @@ using namespace geode::prelude;
 #include <Geode/modify/FRequestProfilePage.hpp>
 class BI_DLL $modify(FRequestProfilePage) {
 	void setupCommentsBrowser(cocos2d::CCArray* requests) {
+		static_assert(&FRequestProfilePage::setupCommentsBrowser, "Hook not implemented");
+
 		if(m_listLayer) {
 			auto director = cocos2d::CCDirector::sharedDirector();
 			auto touchDispatcher = director->getTouchDispatcher();
