@@ -5,6 +5,8 @@
 
 using namespace geode::prelude;
 
+static bool s_lastRequestSent = false;
+
 /*class BI_DLL $modify(CustomListView) {
 	static CustomListView* create(cocos2d::CCArray* a, TableViewCellDelegate* b, float c, float d, int e, BoomListType f, float g) {
 		if(f == BoomListType::User) f = BoomListType::Request;
@@ -45,15 +47,82 @@ class BI_DLL $modify(FRequestProfilePage) {
 };
 
 #include <Geode/modify/FriendRequestPopup.hpp>
-class BI_DLL $modify(FriendRequestPopup) {
+class BI_DLL $modify(BIFriendRequestPopup, FriendRequestPopup) {
+	struct Fields {
+		bool m_sent = false;
+	};
+
+	/**
+	 * Callbacks
+	 */
+	void onCancel(cocos2d::CCObject* sender) {
+		if(!m_fields->m_sent) return;
+
+		auto GLM = GameLevelManager::sharedState();
+		GLM->m_uploadActionDelegate = this;
+		if(GLM->deleteFriendRequests(m_request->m_accountID, nullptr, true)) {
+			m_popup = UploadActionPopup::create(this, "Removing Friend Request...");
+			m_popup->m_delegate = this;
+			m_popup->show();
+		}
+	}
+
+	/**
+	 * Hooks
+	 */
+
 	void onClose(cocos2d::CCObject* sender) {
 		Ref request = m_request;
 		auto id = request->m_requestID;
-		request->m_requestID = 0;
+		if(m_fields->m_sent) request->m_requestID = 0;
 
 		FriendRequestPopup::onClose(sender);
 
 		request->m_requestID = id;
+	}
+
+	bool init(GJFriendRequest* request) {
+		m_fields->m_sent = s_lastRequestSent;
+		s_lastRequestSent = false;
+
+		if(!FriendRequestPopup::init(request)) return false;
+
+		if(m_fields->m_sent) {
+			if(auto menu = m_mainLayer->getChildByID("bottom-menu")) {
+				if(auto acceptBtn = menu->getChildByID("accept-button")) acceptBtn->removeFromParent();
+				if(auto removeBtn = menu->getChildByID("remove-button")) removeBtn->removeFromParent();
+				if(auto blockBtn = menu->getChildByID("block-button")) blockBtn->removeFromParent();
+
+				auto removeBtn = CCMenuItemSpriteExtra::create(
+					ButtonSprite::create(
+						"Cancel",
+						65,
+						0,
+						0.55f,
+						true,
+						"bigFont.fnt",
+						"GJ_button_04.png",
+						26
+					),
+					this,
+					menu_selector(BIFriendRequestPopup::onCancel)
+				);
+				removeBtn->setID("remove-button"); //imitating a vanilla node
+
+				menu->addChild(removeBtn);
+				menu->updateLayout();
+			}
+
+			if(auto username = typeinfo_cast<CCLabelBMFont*>(m_mainLayer->getChildByID("username-label"))) {
+				std::string text = username->getString();
+				if(text.length() > 5) {
+					text = "To:" + text.substr(5);
+					username->setString(text.c_str());
+				}
+			}
+		}
+
+		return true;
 	}
 };
 
@@ -99,5 +168,11 @@ class BI_DLL $modify(GJRequestCell) {
 
 	void markAsRead() {
 		if(!isParentSent()) return GJRequestCell::markAsRead();
+	}
+
+	void onViewFriendRequest(cocos2d::CCObject* sender) {
+		s_lastRequestSent = isParentSent();
+
+		GJRequestCell::onViewFriendRequest(sender);
 	}
 };
