@@ -258,6 +258,15 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             this->addChild(label, 2);
         }
 
+        // 2.208: remove
+        if(m_searchObject->m_searchMode == 0 && m_searchObject->m_searchType == SearchType::FeaturedLite) {
+            auto winSize = CCDirector::sharedDirector()->getWinSize();
+            auto label = CCSprite::create("weeklyLevelsLabel_001.png"_spr);
+            label->setPosition({(winSize.width / 2), (winSize.height / 2) + 24 + 110});
+            label->setID("header-sprite"); //substitutes a vanilla feature, therefore vanilla style ID
+            this->addChild(label, 2);
+        }
+
         /**
          * Ending steps
         */
@@ -278,6 +287,9 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
 
             return fmt::format("{} ({}: {})", mainTitle, m_searchObject->m_folder, folderName);
         }
+
+        // 2.208: remove
+        if(m_searchObject->m_searchType == SearchType::FeaturedLite) return "";
 
         return LevelBrowserLayer::getSearchTitle();
     }
