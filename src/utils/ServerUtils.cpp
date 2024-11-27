@@ -1,5 +1,6 @@
 #include "ServerUtils.h"
 #include "../utils.hpp"
+#include "../integrations/ServerAPIEvents.hpp"
 
 #include <shared_mutex>
 
@@ -20,11 +21,8 @@ web::WebRequest ServerUtils::getBaseRequest(bool setUserAgent) {
 }
 
 std::string ServerUtils::getBaseURL() {
-    // A cleaner solution for this would be a Server API dependency
-    // however I'd rather avoid depending on a mod that 90% of users
-    // don't actually use
-    if(Loader::get()->isModLoaded("km7dev.gdps-switcher")) {
-        auto url = Loader::get()->getLoadedMod("km7dev.gdps-switcher")->getSavedValue<std::string>("server");
+    if(Loader::get()->isModLoaded("km7dev.server_api")) {
+        auto url = ServerAPIEvents::getCurrentServer().url;
         if(!url.empty()) {
             while(url.ends_with("/")) url.pop_back();
             return url;
