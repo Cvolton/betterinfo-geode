@@ -13,6 +13,11 @@ void createSettingTab(const char* settingID, MenuTab& tab) {
     }).setDescription(setting->getDescription().value_or(""));
 
     eclipse::config::set<bool>(Mod::get()->expandSpriteName(settingID).data(), Mod::get()->getSettingValue<bool>(settingID));
+
+    listenForSettingChanges(settingID, [settingID](bool value)
+    {
+        eclipse::config::set<bool>(Mod::get()->expandSpriteName(settingID).data(), Mod::get()->getSettingValue<bool>(settingID));
+    });
 }
 
 $on_mod(Loaded) {
