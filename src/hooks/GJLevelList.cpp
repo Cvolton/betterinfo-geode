@@ -11,7 +11,7 @@ class BI_DLL $modify(BIGJLevelList, GJLevelList) {
     void showListInfo() {
         static_assert(&GJLevelList::showListInfo, "Hook not implemented");
 
-        std::string info = getUnpackedDescription() + "\n\n";
+        std::string info = std::string(getUnpackedDescription()) + "\n\n";
         if(info.empty()) info = "(No description provided)\n\n";
 
         if(m_listID > 0) info += fmt::format("List ID: <cy>{}</c>\n", m_listID);
