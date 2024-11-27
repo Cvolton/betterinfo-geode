@@ -3,8 +3,9 @@
 void createSettingTabQOL(const char* settingID, QOLModExt::WindowExt* wnd)
 {
     auto setting = Mod::get()->getSetting(settingID);
+    auto modID = fmt::format("{}{}", ""_spr, setting->getName());
 
-    auto mod = QOLModExt::createModule(fmt::format("{}{}", ""_spr, setting->getName()));
+    auto mod = QOLModExt::createModule(modID);
     mod->setName(setting->getDisplayName());
     mod->setDescription(setting->getDescription().value_or(""));
     mod->setEnabled(Mod::get()->getSettingValue<bool>(settingID));
@@ -14,6 +15,11 @@ void createSettingTabQOL(const char* settingID, QOLModExt::WindowExt* wnd)
     });
 
     wnd->addModule(mod);
+
+    listenForSettingChanges(settingID, [modID](bool value)
+    {
+        QOLModExt::setModuleEnabled(modID, value);
+    });
 }
 
 $on_mod(Loaded)
