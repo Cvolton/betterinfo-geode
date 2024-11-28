@@ -1,4 +1,16 @@
 # Changelog
+## <cg>v4.3.0</c> (2024-11-00)
+* <cg>Added</c> <cl>Featured Lite</c> (Weekly Levels) to <co>BI menu</c>
+* <cg>Added</c> <cl>more info</c> for <co>sent friend requests and messages</c>
+* <cg>Added</c> <co>integration</c> with <co>Eclipse Menu</c> and <co>QOLmod</c>
+* <cg>Disabled</c> <cj>auto submit to leaderboards</c> for <co>classic levels</c> on <cp>mobile devices</c>
+  * This is because Rob's anti-cheat marks all level completions from mobile as cheated, which means you can't appear in top 100 if you submit a score like this
+* <cg>Made</c> <cl>player icons</c> in <co>chest history</c> clickable
+* <cg>Improved</c> <cl>GDPS support</c>
+* <cg>Improved</c> the <cl>reliability</c> of <co>rated list reward notifications</c>
+* <cg>Updated</c> for Geode 4.0.0 and GD 2.207
+* Other bugfixes & improvements
+
 ## <cg>v4.2.13</c> (2024-11-09)
 * <cg>Fixed</c> an <cr>oversight</c> that made the <cl>BI button</c> open <co>Event Levels</c> instead
 This is the actual last release for GD 2.206
