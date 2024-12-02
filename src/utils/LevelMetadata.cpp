@@ -24,7 +24,7 @@ std::string LevelMetadata::getGameVersionName(int version){
 
     if(version > 17){
         return fmt::format("{:.1f}", (double)version / 10.0);
-    }else if(version > 1 && version < 10){
+    }else if(version > 0 && version < 10){
         return fmt::format("1.{}", version - 1);
     }
 
