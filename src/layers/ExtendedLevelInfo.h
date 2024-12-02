@@ -12,6 +12,7 @@ class BI_DLL ExtendedLevelInfo : public CvoltonAlertLayerStub, public UploadDate
     std::string m_secondary;
     std::string m_fileSizeCompressed = "NA";
     std::string m_fileSizeUncompressed = "NA";
+    std::string m_maxGameVersion = "NA";
     std::string m_uploadDateEstimated = "NA";
     Ref<GJGameLevel> m_level;
     TextArea* m_info;

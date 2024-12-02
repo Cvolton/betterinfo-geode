@@ -540,7 +540,6 @@ uint64_t BetterInfo::timeInMs() {
 }
 
 float BetterInfo::timeForLevelString(const std::string& levelString) {
-        std::string epicString;
     try {
         auto a = timeInMs();
 
@@ -571,8 +570,6 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
             objectStream.seekg(0);*/
             std::stringstream objectStream(currentObject);
             while(getline(objectStream, currentKey, ',')) {
-                epicString += currentKey + "\n";
-
                 if(i % 2 == 0) keyID = currentKey;
                 else {
                     if(keyID == "1") objID = BetterInfo::stoi(currentKey);
@@ -601,6 +598,65 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
         log::error("An exception has occured while calculating time for levelString: {}", e.what());
         return 0;
     }
+}
+
+int BetterInfo::maxObjectIDForDecompressedLevelString(const std::string& levelString) {
+    try {
+        std::stringstream responseStream(levelString);
+        std::string currentObject;
+        std::string currentKey;
+        std::string keyID;
+
+        int maxID = 0;
+
+        while(getline(responseStream, currentObject, ';')){
+            size_t i = 0;
+            int objID = 0;
+            float xPos = 0;
+
+            std::stringstream objectStream(currentObject);
+            while(getline(objectStream, currentKey, ',')) {
+                if(i % 2 == 0) keyID = currentKey;
+                else {
+                    if(keyID == "1") objID = BetterInfo::stoi(currentKey);
+                }
+                i++;
+
+                if(objID != 0) break;
+            }
+
+            if(objID > maxID) maxID = objID;
+        }
+
+        return maxID;
+    } catch(std::exception e) {
+        log::error("An exception has occured while calculating time for levelString: {}", e.what());
+        return 0;
+    }
+}
+
+std::string BetterInfo::gameVerForDecompressedLevelString(const std::string& levelString) {
+    const std::map<int, const char*> maximums = {
+        {43, "1.0"},
+        {46, "1.1"},
+        {47, "1.2"},
+        {84, "1.3"},
+        {104, "1.4"},
+        {141, "1.5"},
+        {199, "1.6"},
+        {285, "1.7"},
+        {505, "1.8"},
+        {744, "1.9"},
+        {1329, "2.0"},
+        {1911, "2.1"},
+        {4539, "2.2"}
+    };
+    
+    for(const auto& [key, value] : maximums) {
+        if(maxObjectIDForDecompressedLevelString(levelString) <= key) return value;
+    }
+
+    return "2.3+";
 }
 
 bool BetterInfo::controllerConnected() {

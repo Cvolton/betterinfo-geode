@@ -93,9 +93,10 @@ void ExtendedLevelInfo::refreshInfoTexts() {
     infoText.str("");
     if(!ServerUtils::isGDPS()) infoText << "\n<cj>Uploaded</c>: " << TimeUtils::isoTimeToString(m_uploadDateEstimated);
     infoText << "\n<cg>Objects</c>: " << LevelMetadata::zeroIfNA(m_level->m_objectCount)
-        << "\n<cg>Objects (est.)</c>: " << LevelMetadata::zeroIfNA(m_objectsEstimated) //i have no idea what the 0 and 11 mean, i just copied them from PlayLayer::init
+        << "\n<cg>Objects (est.)</c>: " << LevelMetadata::zeroIfNA(m_objectsEstimated)
         << "\n<cy>Feature Score</c>: " << LevelMetadata::zeroIfNA(m_level->m_featured)
         << "\n<co>Two-player</c>: " << LevelMetadata::boolString(m_level->m_twoPlayerMode)
+        << "\n<cp>Game Ver (est.)</c>: " << m_maxGameVersion
         << "\n<cr>Size</c>: " << m_fileSizeCompressed << " / " << m_fileSizeUncompressed;
     ;
 
@@ -123,6 +124,7 @@ void ExtendedLevelInfo::setupAdditionalInfo() {
         m_objectsEstimated = std::count(levelString.begin(), levelString.end(), ';');
         m_fileSizeCompressed = BetterInfo::fileSize(m_level->m_levelString.size());
         m_fileSizeUncompressed = BetterInfo::fileSize(levelString.size());
+        m_maxGameVersion = BetterInfo::gameVerForDecompressedLevelString(levelString);
         refreshInfoTexts();
         Loader::get()->queueInMainThread([this]() {
             this->loadPage(this->m_page);
