@@ -195,6 +195,7 @@ CCSprite* RewardCell::itemToSprite(SpecialRewardItem item) {
         case SpecialRewardItem::MetalShard: textureName = "shard0203ShardSmall_001.png"; break;
         case SpecialRewardItem::LightShard: textureName = "shard0204ShardSmall_001.png"; break;
         case SpecialRewardItem::SoulShard: textureName = "shard0205ShardSmall_001.png"; break;
+        case SpecialRewardItem::GoldKey: textureName = "GJ_bigGoldKey_001.png"; scale = .5f; break;
         default: scale = 0.7f;
     }
 
