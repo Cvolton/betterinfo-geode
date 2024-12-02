@@ -136,7 +136,7 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
 
         if(!response->ok()) {
             if(response->header("retry-after").has_value()) {
-                showRateLimitError(std::stoi(response->header("retry-after").value()));
+                showRateLimitError(BetterInfo::stoi(response->header("retry-after").value()));
             } else {
                 showCFError(response->string().unwrapOr(""));
             }
@@ -172,8 +172,8 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
         while(getline(userStream, currentUser, '|')) {
             auto info = utils::string::split(currentUser, ":");
 
-            int userID = std::stoi(info[0]);
-            int accountID = std::stoi(info[2]);
+            int userID = BetterInfo::stoi(info[0]);
+            int accountID = BetterInfo::stoi(info[2]);
 
             if(userID > 0) GLM->storeUserName(userID, accountID, info[1]);
         }
@@ -258,7 +258,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
 
         if(!response->ok()) {
             if(response->header("retry-after").has_value()) {
-                showRateLimitError(std::stoi(response->header("retry-after").value()));
+                showRateLimitError(BetterInfo::stoi(response->header("retry-after").value()));
             } else {
                 showCFError(response->string().unwrapOr(""));
             }
@@ -303,8 +303,8 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
         while(getline(userStream, currentUser, '|')) {
             auto info = utils::string::split(currentUser, ":");
 
-            int userID = std::stoi(info[0]);
-            int accountID = std::stoi(info[2]);
+            int userID = BetterInfo::stoi(info[0]);
+            int accountID = BetterInfo::stoi(info[2]);
 
             if(userID > 0) GameLevelManager::sharedState()->storeUserName(userID, accountID, info[1]);
         }

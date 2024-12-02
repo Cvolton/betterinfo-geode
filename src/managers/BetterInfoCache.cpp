@@ -179,8 +179,8 @@ void BetterInfoCache::cacheRatedListsFromMegaResponse(const std::string& megaRes
     while(getline(userStream, currentUser, '|')) {
         auto info = utils::string::split(currentUser, ":");
 
-        int userID = std::stoi(info[0]);
-        int accountID = std::stoi(info[2]);
+        int userID = BetterInfo::stoi(info[0]);
+        int accountID = BetterInfo::stoi(info[2]);
 
         if(userID > 0) GLM->storeUserName(userID, accountID, info[1]);
     }
