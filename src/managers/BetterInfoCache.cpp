@@ -178,6 +178,7 @@ void BetterInfoCache::cacheRatedListsFromMegaResponse(const std::string& megaRes
     std::string currentUser;
     while(getline(userStream, currentUser, '|')) {
         auto info = utils::string::split(currentUser, ":");
+        if(info.size() < 3) continue;
 
         int userID = BetterInfo::stoi(info[0]);
         int accountID = BetterInfo::stoi(info[2]);

@@ -171,6 +171,7 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
         std::string currentUser;
         while(getline(userStream, currentUser, '|')) {
             auto info = utils::string::split(currentUser, ":");
+            if(info.size() < 3) continue;
 
             int userID = BetterInfo::stoi(info[0]);
             int accountID = BetterInfo::stoi(info[2]);
@@ -302,6 +303,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
         std::string currentUser;
         while(getline(userStream, currentUser, '|')) {
             auto info = utils::string::split(currentUser, ":");
+            if(info.size() < 3) continue;
 
             int userID = BetterInfo::stoi(info[0]);
             int accountID = BetterInfo::stoi(info[2]);
