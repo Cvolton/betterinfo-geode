@@ -296,3 +296,18 @@ CCLabelBMFont* ExtendedLevelInfo::createTextLabel(const std::string text, const 
     menu->addChild(bmFont);
     return bmFont;
 }
+
+void ExtendedLevelInfo::keyDown(enumKeyCodes key) {
+    switch(key) {
+        case KEY_Left:
+        case CONTROLLER_Left:
+            if(m_prevBtn->isVisible()) onPrev(nullptr);
+            break;
+        case KEY_Right:
+        case CONTROLLER_Right:
+            if(m_nextBtn->isVisible()) onNext(nullptr);
+            break;
+        default:
+            FLAlertLayer::keyDown(key);
+    }
+}
