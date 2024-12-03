@@ -66,7 +66,7 @@ class BI_DLL $modify(BIFriendsProfilePage, FriendsProfilePage) {
         getUserListFinished(followedCreatorsArray.inner(), UserListType::Blocked);
 
         m_fields->m_isFollowed = true;
-        m_totalFriends->setString(fmt::format("Total Followed: {}", followedCreatorsArray.size()).c_str());
+        m_totalFriends->setString(fmt::format("Total followed: {}", followedCreatorsArray.size()).c_str());
 
         GLM->m_userListDelegate = nullptr;
     }
