@@ -94,9 +94,9 @@ void ExtendedLevelInfo::refreshInfoTexts() {
     if(!ServerUtils::isGDPS()) infoText << "\n<cj>Uploaded</c>: " << TimeUtils::isoTimeToString(m_uploadDateEstimated);
     infoText << "\n<cg>Objects</c>: " << LevelMetadata::zeroIfNA(m_level->m_objectCount)
         << "\n<cg>Objects (est.)</c>: " << LevelMetadata::zeroIfNA(m_objectsEstimated)
-        << "\n<cy>Feature Score</c>: " << LevelMetadata::zeroIfNA(m_level->m_featured)
+        << "\n<cy>Game Ver (est.)</c>: " << m_maxGameVersion
+        << "\n<cc>Feature Score</c>: " << LevelMetadata::zeroIfNA(m_level->m_featured)
         << "\n<co>Two-player</c>: " << LevelMetadata::boolString(m_level->m_twoPlayerMode)
-        << "\n<cp>Game Ver (est.)</c>: " << m_maxGameVersion
         << "\n<cr>Size</c>: " << m_fileSizeCompressed << " / " << m_fileSizeUncompressed;
     ;
 
