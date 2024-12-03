@@ -630,13 +630,13 @@ int BetterInfo::maxObjectIDForDecompressedLevelString(const std::string& levelSt
 
         return maxID;
     } catch(std::exception e) {
-        log::error("An exception has occured while calculating time for levelString: {}", e.what());
+        log::error("An exception has occured while calculating max object ID for levelString: {}", e.what());
         return 0;
     }
 }
 
 std::string BetterInfo::gameVerForDecompressedLevelString(const std::string& levelString) {
-    const std::map<int, const char*> maximums = {
+    const std::map<int, std::string> maximums = {
         {43, "1.0"},
         {46, "1.1"},
         {47, "1.2"},
@@ -651,12 +651,61 @@ std::string BetterInfo::gameVerForDecompressedLevelString(const std::string& lev
         {1911, "2.1"},
         {4539, "2.2"}
     };
+
+    auto maxObjectID = maxObjectIDForDecompressedLevelString(levelString);
+    auto gameVerObject = gameVerObjectForLevelStringHeader(levelString);
     
-    for(const auto& [key, value] : maximums) {
-        if(maxObjectIDForDecompressedLevelString(levelString) <= key) return value;
+    for(auto [key, value] : maximums) {
+        if(maxObjectID <= key) {
+            if(gameVerObject > key && maximums.contains(gameVerObject)) value = fmt::format("{} / {}", value, maximums.at(gameVerObject));
+
+            return value;
+        }
     }
 
     return "2.3+";
+}
+
+int BetterInfo::gameVerObjectForLevelStringHeader(const std::string& levelString) {
+    //returning max object id for the first game version
+    //where such a header is possible
+    const std::map<int, std::set<std::string>> uniques = {
+        {43, {"kS1","kS2","kS3","kS4","kS5","kS6","kA1"}},
+        {285, {"kS7","kS8","kS9","kS10","kS11","kS12","kS13","kS14","kS15","kS16","kS17","kS18","kS19","kS20","kA2","kA3","kA4","kA5","kA6","kA7"}},
+        {505, {"kA8","kA9","kA10","kA11"}},
+        {744, {"kS29","kS30","kS31","kS32","kS33","kS34","kS35","kS36","kS37","kA13","kA14","kA15","kA16"}},
+        {1329, {"kS38","kS39","kA17","kA18"}},
+        {4539, {"kA19","kA20","kA21","kA22","kA23","kA24","kA25","kA26","kA27","kA28","kA29","kA31","kA32","kA33","kA34","kA35","kA36","kA37","kA38","kA39","kA40","kA41","kA42","kA43","kA44"}}
+    };
+
+    try {
+        std::stringstream responseStream(levelString);
+        std::string levelHeader;
+        std::string currentKey;
+        std::set<std::string> keys;
+
+        getline(responseStream, levelHeader, ';');
+        std::stringstream objectStream(levelHeader);
+
+        int i = 0;
+        while(getline(objectStream, currentKey, ',')) {
+            if(i % 2 == 0) keys.insert(currentKey);
+            i++;
+        }
+
+        for(auto it = uniques.rbegin(); it != uniques.rend(); it++) {
+            for(auto& key : keys) {
+                if(it->second.contains(key)) return it->first;
+            }
+        }
+
+        return 0;
+    } catch(std::exception e) {
+        log::error("An exception has occured while calculating max object ID for levelString: {}", e.what());
+        return 0;
+    }
+
+    return 0;
 }
 
 bool BetterInfo::controllerConnected() {

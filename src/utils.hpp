@@ -71,6 +71,7 @@ namespace BetterInfo {
     BI_DLL float timeForLevelString(const std::string& levelString);
     BI_DLL int maxObjectIDForDecompressedLevelString(const std::string& levelString);
     BI_DLL std::string gameVerForDecompressedLevelString(const std::string& levelString);
+    BI_DLL int gameVerObjectForLevelStringHeader(const std::string& levelString);
 
     BI_DLL bool controllerConnected();
 
