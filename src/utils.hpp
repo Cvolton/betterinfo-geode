@@ -53,7 +53,7 @@ namespace BetterInfo {
     BI_DLL std::string fixNullByteCrash(std::string input);
     
     BI_DLL void copyToClipboard(const char* text);
-    BI_DLL void copyToClipboard(const char* text, CCLayer* parent);
+    BI_DLL void copyToClipboard(const char* text, CCNode* parent);
 
     BI_DLL std::string getSongUrl(int audioID);
     BI_DLL bool isNewGrounds(int audioID);

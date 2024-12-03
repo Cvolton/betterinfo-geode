@@ -278,7 +278,7 @@ void BetterInfo::copyToClipboard(const char* text){
     clipboard::write(text);
 }
 
-void BetterInfo::copyToClipboard(const char* text, CCLayer* parent){
+void BetterInfo::copyToClipboard(const char* text, CCNode* parent){
     copyToClipboard(text);
 
     Notification::create("Copied to clipboard", NotificationIcon::None)->show();

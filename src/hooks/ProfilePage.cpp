@@ -50,19 +50,63 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
         auto score = this->m_score;
         auto GM = GameManager::sharedState();
 
+        CCMenuItemSpriteExtra* userButton = nullptr;
+        CCMenuItemSpriteExtra* accountButton = nullptr;
+        CCMenuItemSpriteExtra* bootupsButton = nullptr;
+
         std::ostringstream contentStream;
-        if(score->m_userID == GM->m_playerUserID) contentStream << "<cy>User ID:</c> " << score->m_userID
-            << "\n<cr>Account ID:</c> " << score->m_accountID
-            << "\n\n";//Leaderboard Icon: " << StaticStringHelper::getIconType(score->getIconType()) (is not sent)
+        if(score->m_userID == GM->m_playerUserID) {
+            contentStream << "\n\n\n";
+
+            userButton = CCMenuItemExt::createSpriteExtra(
+                TextArea::create(fmt::format("<cy>User ID:</c> {}", score->m_userID), "chatFont.fnt", 1, 200, {0.5,0.5}, 20, false),
+                [id = score->m_userID](CCObject* sender){
+                    BetterInfo::copyToClipboard(std::to_string(id).c_str(), CCScene::get());
+                }
+            );
+            userButton->setPosition({-2, 175});
+            userButton->setContentSize({200, 20});
+            userButton->getNormalImage()->setPosition(userButton->getContentSize() / 2);
+            userButton->setID("user-id-button"_spr);
+
+            accountButton = CCMenuItemExt::createSpriteExtra(
+                TextArea::create(fmt::format("<cr>Account ID:</c> {}", score->m_accountID), "chatFont.fnt", 1, 200, {0.5,0.5}, 20, false),
+                [id = score->m_accountID](CCObject* sender){
+                    BetterInfo::copyToClipboard(std::to_string(id).c_str(), CCScene::get());
+                }
+            );
+            accountButton->setPosition({-2, 155});
+            accountButton->setContentSize({200, 20});
+            accountButton->getNormalImage()->setPosition(accountButton->getContentSize() / 2);
+            accountButton->setID("account-id-button"_spr);
+        }
+
         contentStream << "<cg>Friend Requests:</c> " << StaticStringHelper::getFriendRequestType(score->m_friendStatus)
             << "\n<cl>Private Messages:</c> " << StaticStringHelper::getMessageType(score->m_messageState)
             << "\n<cp>Comment History:</c> " << StaticStringHelper::getMessageType(score->m_commentHistoryStatus)
             << "\n";
-        if(score->m_userID == GM->m_playerUserID) contentStream << "\n<co>Bootups:</c> " << GM->m_bootups;
+        if(score->m_userID == GM->m_playerUserID) {
+            contentStream << "\n\n";
+
+            bootupsButton = CCMenuItemExt::createSpriteExtra(
+                TextArea::create(fmt::format("<co>Bootups:</c> {}", GM->m_bootups), "chatFont.fnt", 1, 200, {0.5,0.5}, 20, false),
+                [id = GM->m_bootups](CCObject* sender){
+                    BetterInfo::copyToClipboard(std::to_string(id).c_str(), CCScene::get());
+                }
+            );
+            bootupsButton->setPosition({0, 35});
+            bootupsButton->setContentSize({200, 20});
+            bootupsButton->getNormalImage()->setPosition(bootupsButton->getContentSize() / 2);
+            bootupsButton->setID("bootups-button"_spr);
+        }
 
         //if(score->m_userID == cvoltonID) contentStream << "\n\nThis user is epic!";
 
-        FLAlertLayer::create("User Info", contentStream.str(), "OK")->show();
+        auto alert = FLAlertLayer::create("User Info", contentStream.str(), "OK");
+        if(userButton) alert->m_buttonMenu->addChild(userButton);
+        if(accountButton) alert->m_buttonMenu->addChild(accountButton);
+        if(bootupsButton) alert->m_buttonMenu->addChild(bootupsButton);
+        alert->show();
     }
 
     void onProfilePageLeaderboard(CCObject* sender){
