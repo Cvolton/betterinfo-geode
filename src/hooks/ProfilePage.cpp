@@ -5,6 +5,7 @@
 #include "../managers/BetterInfoOnline.h"
 #include "../layers/LeaderboardViewLayer.h"
 #include "../layers/CreatorInfoPopup.h"
+#include "../ui/CopyableLabel.h"
 
 using namespace geode::prelude;
 
@@ -58,26 +59,12 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
         if(score->m_userID == GM->m_playerUserID) {
             contentStream << "\n\n\n";
 
-            userButton = CCMenuItemExt::createSpriteExtra(
-                TextArea::create(fmt::format("<cy>User ID:</c> {}", score->m_userID), "chatFont.fnt", 1, 200, {0.5,0.5}, 20, false),
-                [id = score->m_userID](CCObject* sender){
-                    BetterInfo::copyToClipboard(std::to_string(id).c_str(), CCScene::get());
-                }
-            );
+            userButton = CopyableLabel::create("cy", "User ID", std::to_string(score->m_userID));
             userButton->setPosition({-2, 175});
-            userButton->setContentSize({200, 20});
-            userButton->getNormalImage()->setPosition(userButton->getContentSize() / 2);
             userButton->setID("user-id-button"_spr);
 
-            accountButton = CCMenuItemExt::createSpriteExtra(
-                TextArea::create(fmt::format("<cr>Account ID:</c> {}", score->m_accountID), "chatFont.fnt", 1, 200, {0.5,0.5}, 20, false),
-                [id = score->m_accountID](CCObject* sender){
-                    BetterInfo::copyToClipboard(std::to_string(id).c_str(), CCScene::get());
-                }
-            );
+            accountButton = CopyableLabel::create("cr", "Account ID", std::to_string(score->m_accountID));
             accountButton->setPosition({-2, 155});
-            accountButton->setContentSize({200, 20});
-            accountButton->getNormalImage()->setPosition(accountButton->getContentSize() / 2);
             accountButton->setID("account-id-button"_spr);
         }
 
@@ -88,15 +75,8 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
         if(score->m_userID == GM->m_playerUserID) {
             contentStream << "\n\n";
 
-            bootupsButton = CCMenuItemExt::createSpriteExtra(
-                TextArea::create(fmt::format("<co>Bootups:</c> {}", GM->m_bootups), "chatFont.fnt", 1, 200, {0.5,0.5}, 20, false),
-                [id = GM->m_bootups](CCObject* sender){
-                    BetterInfo::copyToClipboard(std::to_string(id).c_str(), CCScene::get());
-                }
-            );
+            bootupsButton = CopyableLabel::create("co", "Bootups", std::to_string(GM->m_bootups));
             bootupsButton->setPosition({0, 35});
-            bootupsButton->setContentSize({200, 20});
-            bootupsButton->getNormalImage()->setPosition(bootupsButton->getContentSize() / 2);
             bootupsButton->setID("bootups-button"_spr);
         }
 
