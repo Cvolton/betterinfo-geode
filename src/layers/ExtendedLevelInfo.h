@@ -14,6 +14,8 @@ class BI_DLL ExtendedLevelInfo : public CvoltonAlertLayerStub, public UploadDate
     std::string m_fileSizeUncompressed = "NA";
     std::string m_maxGameVersion = "NA";
     std::string m_uploadDateEstimated = "NA";
+    std::vector<std::string> m_primaryValues;
+    std::vector<std::string> m_secondaryValues;
     Ref<GJGameLevel> m_level;
     TextArea* m_info;
     CCMenuItemSpriteExtra* m_prevBtn;
@@ -26,6 +28,7 @@ public:
     void onCopyName(cocos2d::CCObject* sender);
     void onCopyAuthor(cocos2d::CCObject* sender);
     void onCopyDesc(cocos2d::CCObject* sender);
+    void onCopyInfo(cocos2d::CCObject* sender);
     void onNext(cocos2d::CCObject* sender);
     void onPrev(cocos2d::CCObject* sender);
     void onUploadDateLoaded(int levelID, const std::string& date);

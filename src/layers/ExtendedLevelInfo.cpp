@@ -2,6 +2,7 @@
 #include "../utils.hpp"
 //#include "../managers/BetterInfoStatsV2.h"
 #include "../managers/BetterInfoCache.h"
+#include "../ui/CopyableLabel.h"
 
 #include <algorithm>
 #include <thread>
@@ -42,6 +43,14 @@ void ExtendedLevelInfo::onCopyDesc(cocos2d::CCObject* sender)
     BetterInfo::copyToClipboard(m_level->getUnpackedLevelDescription().c_str(), this);
 }
 
+void ExtendedLevelInfo::onCopyInfo(cocos2d::CCObject* sender)
+{
+    auto& info = m_page % 2 == 0 ? m_primaryValues : m_secondaryValues;
+    if(info.size() <= sender->getTag()) return;
+
+    BetterInfo::copyToClipboard(info[sender->getTag()].c_str(), this);
+}
+
 void ExtendedLevelInfo::onNext(cocos2d::CCObject* sender)
 {
     loadPage(m_page+1);
@@ -74,30 +83,59 @@ void ExtendedLevelInfo::loadPage(int page) {
 void ExtendedLevelInfo::refreshInfoTexts() {
     auto cache = BetterInfoCache::sharedState();
 
+    std::ostringstream infoText;
+
+    m_primaryValues.clear();
+    m_secondaryValues.clear();
+
+    //first page
     auto uploadDateStd = std::string(m_level->m_uploadDate);
     auto updateDateStd = std::string(m_level->m_updateDate);
     int levelPassword = m_level->m_password;
-    std::ostringstream infoText;
-    infoText << "\n<cj>Uploaded</c>: " << LevelMetadata::stringDate(!uploadDateStd.empty() ? uploadDateStd : LevelMetadata::addPlus(cache->getLevelInfo(m_level->m_levelID, "upload-date")))
-        << "\n<cj>Updated</c>: " << LevelMetadata::stringDate(!updateDateStd.empty() ? updateDateStd :  LevelMetadata::addPlus(cache->getLevelInfo(m_level->m_levelID, "update-date")))
+
+    m_primaryValues.push_back(LevelMetadata::stringDate(!uploadDateStd.empty() ? uploadDateStd : LevelMetadata::addPlus(cache->getLevelInfo(m_level->m_levelID, "upload-date"))));
+    m_primaryValues.push_back(LevelMetadata::stringDate(!updateDateStd.empty() ? updateDateStd : LevelMetadata::addPlus(cache->getLevelInfo(m_level->m_levelID, "update-date"))));
+    m_primaryValues.push_back(LevelMetadata::zeroIfNA(m_level->m_originalLevel));
+    m_primaryValues.push_back(LevelMetadata::getGameVersionName(m_level->m_gameVersion));
+    m_primaryValues.push_back(LevelMetadata::passwordString(levelPassword));
+    m_primaryValues.push_back(TimeUtils::workingTime(m_level->m_workingTime));
+    m_primaryValues.push_back(TimeUtils::workingTime(m_level->m_workingTime2));
+
+    infoText << "\n<cj>Uploaded</c>: " << m_primaryValues[0]
+        << "\n<cj>Updated</c>: " << m_primaryValues[1]
         //<< "\n<cy>Stars Requested</c>: " << m_level->m_starsRequested
-        << "\n<cg>Original</c>: " << LevelMetadata::zeroIfNA(m_level->m_originalLevel)
+        << "\n<cg>Original</c>: " << m_primaryValues[2]
         //<< "\n<cg>Feature score</c>: " << LevelMetadata::zeroIfNA(m_level->m_featured)
-        << "\n<cy>Game Version</c>: " << LevelMetadata::getGameVersionName(m_level->m_gameVersion)
+        << "\n<cy>Game Version</c>: " << m_primaryValues[3]
         //<< "\nFeature Score</c>: " << m_level->m_featured
-        << "\n<co>Password</c>: " << LevelMetadata::passwordString(levelPassword)
-        << "\n<cr>In Editor</c>: " << TimeUtils::workingTime(m_level->m_workingTime)
-        << "\n<cr>Editor (C)</c>: " << TimeUtils::workingTime(m_level->m_workingTime2);
+        << "\n<co>Password</c>: " << m_primaryValues[4]
+        << "\n<cr>In Editor</c>: " << m_primaryValues[5]
+        << "\n<cr>Editor (C)</c>: " << m_primaryValues[6];
 
     m_primary = infoText.str();
+
+    //second page
+    size_t offset = 0;
+
     infoText.str("");
-    if(!ServerUtils::isGDPS()) infoText << "\n<cj>Uploaded</c>: " << TimeUtils::isoTimeToString(m_uploadDateEstimated);
-    infoText << "\n<cg>Objects</c>: " << LevelMetadata::zeroIfNA(m_level->m_objectCount)
-        << "\n<cg>Objects (est.)</c>: " << LevelMetadata::zeroIfNA(m_objectsEstimated)
-        << "\n<cy>Game Ver (est.)</c>: " << m_maxGameVersion
-        << "\n<cc>Feature Score</c>: " << LevelMetadata::zeroIfNA(m_level->m_featured)
-        << "\n<co>Two-player</c>: " << LevelMetadata::boolString(m_level->m_twoPlayerMode)
-        << "\n<cr>Size</c>: " << m_fileSizeCompressed << " / " << m_fileSizeUncompressed;
+    if(!ServerUtils::isGDPS()) {
+        m_secondaryValues.push_back(TimeUtils::isoTimeToString(m_uploadDateEstimated));
+        infoText << "\n<cj>Uploaded</c>: " << m_secondaryValues[offset++];
+    }
+
+    m_secondaryValues.push_back(LevelMetadata::zeroIfNA(m_level->m_objectCount));
+    m_secondaryValues.push_back(LevelMetadata::zeroIfNA(m_objectsEstimated));
+    m_secondaryValues.push_back(m_maxGameVersion);
+    m_secondaryValues.push_back(LevelMetadata::zeroIfNA(m_level->m_featured));
+    m_secondaryValues.push_back(LevelMetadata::boolString(m_level->m_twoPlayerMode));
+    m_secondaryValues.push_back(m_fileSizeCompressed + " / " + m_fileSizeUncompressed);
+
+    infoText << "\n<cg>Objects</c>: " << m_secondaryValues[offset++]
+        << "\n<cg>Objects (est.)</c>: " << m_secondaryValues[offset++]
+        << "\n<cy>Game Ver (est.)</c>: " << m_secondaryValues[offset++]
+        << "\n<cc>Feature Score</c>: " << m_secondaryValues[offset++]
+        << "\n<co>Two-player</c>: " << m_secondaryValues[offset++]
+        << "\n<cr>Size</c>: " << m_secondaryValues[offset++];
     ;
 
     m_secondary = infoText.str();
@@ -135,6 +173,8 @@ void ExtendedLevelInfo::setupAdditionalInfo() {
 
 bool ExtendedLevelInfo::init(GJGameLevel* level){
     if(!CvoltonAlertLayerStub::init({440.0f, 290.0f})) return false;
+
+    auto winSize = CCDirector::sharedDirector()->getWinSize();
 
     this->m_level = level;
 
@@ -283,6 +323,35 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
     m_nextBtn->setPosition({195,-53});
     m_nextBtn->setID("next-button"_spr);
     m_buttonMenu->addChild(m_nextBtn);
+
+    /*
+        copy buttons
+    */
+    auto copyMenu = CCMenu::create();
+    copyMenu->setLayout(
+        ColumnLayout::create()
+            ->setAxisReverse(true)
+            ->setGap(-1.5f)
+    );
+    copyMenu->setContentSize({170,148});
+    copyMenu->setPosition({winSize.width / 2 - 83, winSize.height / 2 - 56});
+    copyMenu->setID("copy-menu"_spr);
+    copyMenu->setZOrder(11);
+    m_mainLayer->addChild(copyMenu);
+
+    for(size_t i = 0; i < 7; i++) {
+        auto btn = CCMenuItemSpriteExtra::create(
+            ButtonSprite::create("h", 170, true, "bigFont.fnt", "GJ_button_01.png", 20, 1),
+            this,
+            menu_selector(ExtendedLevelInfo::onCopyInfo)
+        );
+        btn->getNormalImage()->setVisible(false);
+        btn->setTag(i);
+        btn->setID(fmt::format("copy-button-{}"_spr, i));
+        copyMenu->addChild(btn);
+    }
+
+    copyMenu->updateLayout();
 
     loadPage(0);
 
