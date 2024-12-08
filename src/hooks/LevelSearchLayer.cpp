@@ -15,8 +15,10 @@ class BI_DLL $modify(BILevelSearchLayer, LevelSearchLayer) {
         bool isID = !str.empty() && it == str.end();
 
         if(Mod::get()->getSavedValue<bool>("search_trim")) {
-            str.erase(0, str.find_first_not_of(' '));
-            str.erase(str.find_last_not_of(' ') + 1);
+            for(char c : {'\n', '\t', '\r', ' '}) {
+                str.erase(0, str.find_first_not_of(c));
+                str.erase(str.find_last_not_of(c) + 1);
+            }
         }
 
         //if(Mod::get()->getSavedValue<bool>("search_no_id") && isID && type == SearchType::Search) str = str + "%25";
