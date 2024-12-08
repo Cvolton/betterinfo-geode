@@ -1004,6 +1004,10 @@ long long BetterInfo::strtol(std::string_view str) {
     return result;
 }
 
+std::string BetterInfo::numberComma(int number) {
+    return fmt::format(std::locale("en_US.UTF-8"), "{:L}", number);
+}
+
 static std::vector<Ref<Notification>> s_notifications;
 void BetterInfo::showUnimportantNotification(const std::string& content, NotificationIcon icon, float time) {
     if(GJBaseGameLayer::get()) return;

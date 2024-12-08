@@ -152,7 +152,7 @@ void RewardCell::loadFromData(CCObject* object) {
         //lastSprite->setAnchorPoint({0, 0.5f});
         menu->addChild(lastSprite);
 
-        lastText = CCLabelBMFont::create(CCString::createWithFormat("%i", rewardObj->m_total)->getCString(), "bigFont.fnt");
+        lastText = CCLabelBMFont::create(BetterInfo::numberComma(rewardObj->m_total).c_str(), "bigFont.fnt");
         lastText->setAnchorPoint({ 0.f, 0.5f });
         lastText->setPosition({lastSprite->getPositionX() + (lastSprite->getScaledContentWidth() / 2) + 5, 0});
         lastText->setScale(.325f);

@@ -51,7 +51,7 @@ void RewardCategoryCell::loadFromData(CCObject* object) {
         lastSprite->setAnchorPoint({0, 0.5f});
         this->m_mainLayer->addChild(lastSprite);
 
-        lastText = CCLabelBMFont::create(fmt::format(std::locale("en_US.UTF-8"), "{:L}", count).c_str(), "bigFont.fnt");
+        lastText = CCLabelBMFont::create(BetterInfo::numberComma(count).c_str(), "bigFont.fnt");
         lastText->setAnchorPoint({ 0.0f, 0.5f });
         lastText->setPosition({lastSprite->getPositionX() + ((lastSprite->getContentSize().width) * lastSprite->getScaleX()) + 5, rowY});
         lastText->setScale(.325f);
