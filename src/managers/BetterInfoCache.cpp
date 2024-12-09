@@ -555,7 +555,7 @@ void BetterInfoCache::cacheLevels(std::set<int> toDownload, SearchType searchTyp
                 ServerUtils::getOnlineLevels(
                     searchObj, 
                     [this, levelsSet = std::move(levelsSet)](auto levels, bool success, bool explicitError) mutable {
-                        std::thread([this, levels, levelsSet = std::move(levelsSet), success, explicitError] mutable {
+                        std::thread([this, levels, levelsSet = std::move(levelsSet), success, explicitError]() mutable {
                             thread::setName("Level Cache (Inner)");
                             for(const auto& level : *levels) {
                                 cacheLevel(level);

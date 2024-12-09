@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <Geode/Geode.hpp>
+
 //stolen from https://github.com/EclipseMenu/EclipseMenu/blob/333be6481bbd483c8e17cd04d9239708252f3f96/include/eclipse.hpp
 //EPL 2.0 https://choosealicense.com/licenses/epl-2.0/
 

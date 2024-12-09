@@ -1,5 +1,4 @@
 #include "eclipse.hpp"
-#include <Geode/Geode.hpp>
 
 using namespace eclipse;
 using namespace geode::prelude;
