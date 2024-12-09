@@ -3,9 +3,11 @@
 * <cg>Added</c> <cl>Featured Lite</c> (Weekly Levels) to <co>BI menu</c>
 * <cg>Added</c> <cl>more info</c> for <co>sent friend requests and messages</c>
 * <cg>Added</c> <co>integration</c> with <co>Eclipse Menu</c> and <co>QOLmod</c>
+* <cg>Added</c> <co>estimated game version</c> to <co>Extended Level Info</c>
 * <cg>Disabled</c> <cj>auto submit to leaderboards</c> for <co>classic levels</c> on <cp>mobile devices</c>
   * This is because Rob's anti-cheat marks all level completions from mobile as cheated, which means you can't appear in top 100 if you submit a score like this
 * <cg>Made</c> <cl>player icons</c> in <co>chest history</c> clickable
+* <cg>Made</c> <cl>Extended Level Info</c> and <cl>User Profile Info</c> details copyable
 * <cg>Improved</c> <cl>GDPS support</c>
 * <cg>Improved</c> the <cl>reliability</c> of <co>rated list reward notifications</c>
 * <cg>Updated</c> for Geode 4.0.0 and GD 2.207
