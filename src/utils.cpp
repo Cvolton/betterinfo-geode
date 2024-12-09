@@ -802,18 +802,19 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
         )
     );
     //if(versionResult.isOk() && versionResult->getMinor() == Mod::get()->getVersion().getMinor()) return nullptr;
-    if(versionResult.isOk() && ComparableVersionInfo::parse(">=4.2.0").unwrap().compare(versionResult.unwrap())) return nullptr;
+    if(versionResult.isOk() && ComparableVersionInfo::parse(">=4.3.0").unwrap().compare(versionResult.unwrap())) return nullptr;
 
     return createQuickPopup(
         "BetterInfo",
         "<cg>BetterInfo has updated!</c>\n"
         "\n"
-        "<cy>Changelog:</c> <cg>v4.2.0</c> (2024-07-07)\n"
-        "- <cg>Added</c> <cl>list folders</c>\n"
-        "- <cg>Added</c> <cl>notification</c> when you can claim a <co>rated list reward</c>\n"
-        "- <cg>Added</c> <cl>followed user list</c> to <co>friends menu</c>\n"
-        "- <cg>Added</c> <cl>Coin Count</c> and <cl>Folder</c> filters to <cj>Filtered Search</c>\n"
-        "- <cg>Added</c> more <cl>Level Progress</c> information to <co>Editor levels</c>\n"
+        "<cy>Changelog:</c> <cg>v4.3.0</c> (2024-12-09)\n"
+        "- <cg>Added</c> <cl>Featured Lite</c> (Weekly Levels) to <co>BI menu</c>\n"
+        "- <cg>Added</c> <cl>integration</c> with <co>Eclipse Menu</c> and <co>QOLmod</c>\n"
+        "- <cg>Added</c> <cl>estimated game version</c> to <co>Extended Level Info</c>\n"
+        "- <cg>Added</c> <cl>more info</c> for <co>sent friend requests</c> and <co>messages</c>\n"
+        "- <cg>Disabled</c> <cj>auto submit</c> for <co>classic levels</c> on <cp>mobile devices</c>\n"
+        "- <cg>Made</c> <cl>Extended Level Info</c> details copyable\n"
         "- <cr>More!</c> Click \"<cy>More Info</c>\" for the <co>whole list</c>!\n"
         "\n",
         "More Info",
