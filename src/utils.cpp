@@ -804,7 +804,7 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
     //if(versionResult.isOk() && versionResult->getMinor() == Mod::get()->getVersion().getMinor()) return nullptr;
     if(versionResult.isOk() && ComparableVersionInfo::parse(">=4.3.0").unwrap().compare(versionResult.unwrap())) return nullptr;
 
-    return createQuickPopup(
+    auto popup = createQuickPopup(
         "BetterInfo",
         "<cg>BetterInfo has updated!</c>\n"
         "\n"
@@ -819,7 +819,7 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
         "\n",
         "More Info",
         "Ok",
-        420,
+        450,
         [](FLAlertLayer* me, bool btn2) {
             Mod::get()->setSavedValue<std::string>("last_dialog_version", Mod::get()->getVersion().toVString());
 
@@ -829,6 +829,8 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
         },
         false
     );
+    fixOversizedPopup(popup);
+    return popup;
 }
 
 //from coloride on geode sdk discord
@@ -1032,4 +1034,40 @@ void BetterInfo::cancelUnimportantNotifications() {
         notification->cancel();
     }
     s_notifications.clear();
+}
+
+/**
+ * This function fixes compatibility with AlertLayerTweaks by Erymantheus
+ *
+ * @param node the popup that is likely broken by AlertLayerTweaks by Erymantheus
+ */
+void BetterInfo::fixOversizedPopup(FLAlertLayer* node) {
+    auto winSize = CCDirector::sharedDirector()->getWinSize();
+    auto backgroundSprite = node->m_mainLayer->getChildByType<CCScale9Sprite>(0);
+
+    if(!backgroundSprite) return;
+    auto size = backgroundSprite->getContentSize();
+
+    bool fixApplied = false;
+
+    if(size.width > winSize.width) {
+        node->setScale(winSize.width / size.width);
+        fixApplied = true;
+    }
+    if(size.height > winSize.height) {
+        node->setScale(winSize.height / size.height);
+        fixApplied = true;
+    }
+
+    if(fixApplied) {
+        node->setOpacity(0.f);
+
+        auto newLayerColor = CCLayerColor::create({0, 0, 0, 150});
+        newLayerColor->setContentSize(winSize / node->getScale());
+        newLayerColor->ignoreAnchorPointForPosition(false);
+        newLayerColor->setPosition(winSize / 2);
+        newLayerColor->setID("background-fix"_spr);
+
+        node->addChild(newLayerColor, -1);
+    }
 }

@@ -98,4 +98,6 @@ namespace BetterInfo {
 
     BI_DLL void showUnimportantNotification(const std::string& content, NotificationIcon icon, float time = 5.f);
     BI_DLL void cancelUnimportantNotifications();
+
+    BI_DLL void fixOversizedPopup(FLAlertLayer* node);
 }

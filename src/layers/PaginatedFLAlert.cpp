@@ -24,6 +24,7 @@ bool PaginatedFLAlert::init(const std::string& title, const std::vector<std::str
     if(m_content.size() == 0) m_content.push_back("PaginatedFLAlert content is empty, this is very likely a coding mistake and should be reported as a bug to the mod author(s).");
 
     FLAlertLayer::init(nullptr, title.c_str(), content[page % m_content.size()], "OK", nullptr, 400, false, 300, 1);
+    BetterInfo::fixOversizedPopup(this);
 
     /*
         next/prev page btn

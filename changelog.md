@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.3.1</c> (2024-12-11)
+* <cg>Fixed</c> <cl>compatibility</c> with <co>AlertLayerTweaks</c>
+
 ## <cg>v4.3.0</c> (2024-12-09)
 * <cg>Added</c> <cl>Featured Lite</c> (Weekly Levels) to <co>BI menu</c>
 * <cg>Added</c> <cl>integration</c> with <co>Eclipse Menu</c> and <co>QOLmod</c>

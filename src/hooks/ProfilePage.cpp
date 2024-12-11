@@ -56,7 +56,8 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
         CCMenuItemSpriteExtra* bootupsButton = nullptr;
 
         std::ostringstream contentStream;
-        if(score->m_userID == GM->m_playerUserID) {
+        //AlertLayerTweaks users don't deserve rights
+        if(score->m_userID == GM->m_playerUserID && !Loader::get()->isModLoaded("raydeeux.alertlayertweaks")) {
             contentStream << "\n\n\n";
 
             userButton = CopyableLabel::create("cy", "User ID", std::to_string(score->m_userID));
@@ -72,7 +73,7 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
             << "\n<cl>Private Messages:</c> " << StaticStringHelper::getMessageType(score->m_messageState)
             << "\n<cp>Comment History:</c> " << StaticStringHelper::getMessageType(score->m_commentHistoryStatus)
             << "\n";
-        if(score->m_userID == GM->m_playerUserID) {
+        if(score->m_userID == GM->m_playerUserID && !Loader::get()->isModLoaded("raydeeux.alertlayertweaks")) {
             contentStream << "\n\n";
 
             bootupsButton = CopyableLabel::create("co", "Bootups", std::to_string(GM->m_bootups));
