@@ -14,6 +14,8 @@ BIBaseLayer* BIBaseLayer::create(bool BL, bool BR, bool TL, bool TR) {
 }
 
 bool BIBaseLayer::init(bool BL, bool BR, bool TL, bool TR) {
+    if(!CCLayer::init()) return false;
+
     this->setID(BetterInfo::getNodeName(this, true));
 
     auto backgroundSprite = CCSprite::create("game_bg_14_001.png");
