@@ -1037,9 +1037,9 @@ void BetterInfo::cancelUnimportantNotifications() {
 }
 
 /**
- * This function fixes compatibility with AlertLayerTweaks by Erymantheus
+ * This function fixes compatibility with AlertLayerTweaks by Erymanthus
  *
- * @param node the popup that is likely broken by AlertLayerTweaks by Erymantheus
+ * @param node the popup that is likely broken by AlertLayerTweaks by Erymanthus
  */
 void BetterInfo::fixOversizedPopup(FLAlertLayer* node) {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
