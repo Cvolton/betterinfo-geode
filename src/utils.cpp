@@ -1071,3 +1071,21 @@ void BetterInfo::fixOversizedPopup(FLAlertLayer* node) {
         node->addChild(newLayerColor, -1);
     }
 }
+
+int BetterInfo::countCompletedEventLevels(bool demon) {
+    auto glm = GameLevelManager::sharedState();
+    if (!glm || !glm->m_dailyLevels) return -1;
+    int eventLevels = 0;
+    for (auto [id, level] : CCDictionaryExt<std::string, GJGameLevel*>(glm->m_dailyLevels)) {
+        if (level->m_normalPercent.value() < 100 || !GameStatsManager::sharedState()->hasCompletedLevel(level)) continue;
+        if (!demon && level->m_stars.value() > 9) continue;
+        if (demon && level->m_stars.value() < 10) continue;
+        if (level->m_dailyID >= 200000) eventLevels++;
+    }
+    return eventLevels;
+}
+
+CCLabelBMFont* BetterInfo::createEventLevelsLabel(int count) {
+    if (count < 0) return nullptr;
+    return CCLabelBMFont::create(fmt::format("Event: {}", count).c_str(), "goldFont.fnt");
+}

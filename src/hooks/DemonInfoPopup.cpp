@@ -25,13 +25,24 @@ class BI_DLL $modify(BIDemonInfoPopup, DemonInfoPopup) {
             if(userInfo->m_demons <= sum) return true;
 
             if(auto menu = m_mainLayer->getChildByID("bottom-left-menu")) {
-                auto text = CCLabelBMFont::create(
+                auto deratedLabel = CCLabelBMFont::create(
                     fmt::format("Derated: {}", userInfo->m_demons - sum).c_str(),
                     "goldFont.fnt"
                 );
 
-                menu->addChild(text);
-                menu->updateLayout();
+                deratedLabel->setID("derated-label"_spr);
+                menu->addChild(deratedLabel);
+            	menu->updateLayout();
+
+            	int eventLevels = BetterInfo::countCompletedEventLevels(true);
+            	if (eventLevels < 0) return true;
+
+            	auto eventLevelsLabel = BetterInfo::createEventLevelsLabel(eventLevels);
+            	if (!eventLevelsLabel) return true;
+
+            	eventLevelsLabel->setID("demons-event-text"_spr);
+            	menu->addChild(eventLevelsLabel);
+            	menu->updateLayout();
             }
         }
 
