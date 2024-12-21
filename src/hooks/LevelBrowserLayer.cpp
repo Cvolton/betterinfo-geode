@@ -12,6 +12,19 @@
 
 using namespace geode::prelude;
 
+static const std::unordered_map<SearchType, const char*> s_labels = {
+    { SearchType::HallOfFame, "hallOfFameLabel_001.png"_spr },
+    // 2.208: remove
+    { SearchType::FeaturedLite, "weeklyLevelsLabel_001.png"_spr },
+    { SearchType::Bonus, "bonusLevelsLabel_001.png"_spr }
+};
+
+static const std::unordered_map<SearchType, std::pair<const char*, const char*>> s_infoTexts = {
+    // 2.208: remove
+    { SearchType::FeaturedLite, {"Weekly Levels", "New <cg>levels</c> are released every <cy>week</c>.\n<cl>Check back later for more updates!</c>" }},
+    { SearchType::Bonus, {"Bonus Levels", "New <cg>levels</c> are released from time to time.\n<cl>Check back later for more updates!</c>" }}
+};
+
 class BI_DLL 
 $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     struct Fields {
@@ -250,18 +263,9 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             }
         }
 
-        if(m_searchObject->m_searchMode == 0 && m_searchObject->m_searchType == SearchType::HallOfFame) {
+        if(m_searchObject->m_searchMode == 0 && s_labels.contains(m_searchObject->m_searchType)) {
             auto winSize = CCDirector::sharedDirector()->getWinSize();
-            auto label = CCSprite::create("hallOfFameLabel_001.png"_spr);
-            label->setPosition({(winSize.width / 2), (winSize.height / 2) + 24 + 110});
-            label->setID("header-sprite"); //substitutes a vanilla feature, therefore vanilla style ID
-            this->addChild(label, 2);
-        }
-
-        // 2.208: remove
-        if(m_searchObject->m_searchMode == 0 && m_searchObject->m_searchType == SearchType::FeaturedLite) {
-            auto winSize = CCDirector::sharedDirector()->getWinSize();
-            auto label = CCSprite::create("weeklyLevelsLabel_001.png"_spr);
+            auto label = CCSprite::create(s_labels.at(m_searchObject->m_searchType));
             label->setPosition({(winSize.width / 2), (winSize.height / 2) + 24 + 110});
             label->setID("header-sprite"); //substitutes a vanilla feature, therefore vanilla style ID
             this->addChild(label, 2);
@@ -288,19 +292,24 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             return fmt::format("{} ({}: {})", mainTitle, m_searchObject->m_folder, folderName);
         }
 
-        // 2.208: remove
-        if(m_searchObject->m_searchType == SearchType::FeaturedLite) return "";
+        if(s_labels.contains(m_searchObject->m_searchType)) return "";
 
         return LevelBrowserLayer::getSearchTitle();
     }
 
-    /*void onInfo(CCObject* sender) {
-        FLAlertLayer::create(nullptr, "Info", 
-            "<cg>Green</c> users are unregistered.\n"
-            "<cy>Gold</c> users are unique registered.\n"
-            "<cl>Blue</c> songs are official.\n"
-            "<cp>Purple</c> songs are custom.\n"
-            "<co>Orange</c> songs are custom, not from Newgrounds.\n",
-        "OK", nullptr, 360)->show();
-    }*/
+    void onInfo(CCObject* sender) {
+        if(s_infoTexts.contains(m_searchObject->m_searchType)) {
+            auto info = s_infoTexts.at(m_searchObject->m_searchType);
+            return FLAlertLayer::create(
+                nullptr,
+                info.first,
+                info.second,
+                "OK",
+                nullptr,
+                380.f
+            )->show();
+        }
+
+        return LevelBrowserLayer::onInfo(sender);
+    }
 };

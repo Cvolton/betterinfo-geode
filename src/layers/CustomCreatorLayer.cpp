@@ -54,32 +54,25 @@ bool CustomCreatorLayer::init() {
 
     addChild(label);
 
-    auto featuredBtn = CCMenuItemSpriteExtra::create(
-        BetterInfo::createWithBISpriteFrameName("BI_featuredBtn_001.png"),
-        this,
-        menu_selector(CustomCreatorLayer::onFeatured)
-    );
-    buttonsMenu->addChild(featuredBtn);
-    featuredBtn->setSizeMult(1.2f);
-    featuredBtn->setID("featured-button"_spr);
+    const std::vector<std::tuple<const char*, SearchType, const char*>> browserButtons = {
+        { "BI_featuredBtn_001.png", SearchType::FeaturedGDW, "featured-button"_spr },
+        { "BI_featuredLiteBtn_001.png", SearchType::FeaturedLite, "featured-lite-button"_spr },
+        { "GJ_fameBtn_001.png", SearchType::HallOfFame, "hall-of-fame-button"_spr },
+        { "GJ_bonusBtn_001.png", SearchType::Bonus, "bonus-button"_spr }
+    };
 
-    auto featuredLiteBtn = CCMenuItemSpriteExtra::create(
-        BetterInfo::createWithBISpriteFrameName("BI_featuredLiteBtn_001.png"),
-        this,
-        menu_selector(CustomCreatorLayer::onFeaturedLite)
-    );
-    buttonsMenu->addChild(featuredLiteBtn);
-    featuredLiteBtn->setSizeMult(1.2f);
-    featuredLiteBtn->setID("featured-lite-button"_spr);
-
-    auto fameBtn = CCMenuItemSpriteExtra::create(
-        BetterInfo::createBISprite("GJ_fameBtn_001.png"),
-        this,
-        menu_selector(CustomCreatorLayer::onFame)
-    );
-    buttonsMenu->addChild(fameBtn);
-    fameBtn->setSizeMult(1.2f);
-    fameBtn->setID("weekly-button"_spr);
+    for(auto button : browserButtons) {
+        auto sprite = BetterInfo::createWithBISpriteFrameName(std::get<0>(button));
+        auto menuItem = CCMenuItemSpriteExtra::create(
+            sprite,
+            this,
+            menu_selector(CustomCreatorLayer::onBrowserButton)
+        );
+        buttonsMenu->addChild(menuItem);
+        menuItem->setSizeMult(1.2f);
+        menuItem->setTag((int) std::get<1>(button));
+        menuItem->setID(std::get<2>(button));
+    }
 
     auto searchIDBtn = CCMenuItemSpriteExtra::create(
         BetterInfo::createBISprite("BI_searchID_001.png"),
@@ -184,53 +177,8 @@ void CustomCreatorLayer::onSearchID(CCObject* object) {
     LevelIDLayer::create()->show();
 }
 
-void CustomCreatorLayer::onFeatured(CCObject* object) {
-    auto searchObject = GJSearchObject::create(SearchType::FeaturedGDW);
-    auto browserLayer = LevelBrowserLayer::scene(searchObject);
-
-    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
-
-    CCDirector::sharedDirector()->pushScene(transitionFade);
-}
-
-void CustomCreatorLayer::onFeaturedLite(CCObject* object) {
-    auto searchObject = GJSearchObject::create(SearchType::FeaturedLite);
-    auto browserLayer = LevelBrowserLayer::scene(searchObject);
-
-    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
-
-    CCDirector::sharedDirector()->pushScene(transitionFade);
-}
-
-void CustomCreatorLayer::onMostLiked(CCObject* object) {
-    auto searchObject = GJSearchObject::create(SearchType::LikedGDW);
-    auto browserLayer = LevelBrowserLayer::scene(searchObject);
-
-    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
-
-    CCDirector::sharedDirector()->pushScene(transitionFade);
-}
-
-void CustomCreatorLayer::onDaily(CCObject* object) {
-    auto searchObject = GJSearchObject::create(SearchType::DailySafe);
-    auto browserLayer = LevelBrowserLayer::scene(searchObject);
-
-    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
-
-    CCDirector::sharedDirector()->pushScene(transitionFade);
-}
-
-void CustomCreatorLayer::onWeekly(CCObject* object) {
-    auto searchObject = GJSearchObject::create(SearchType::WeeklySafe);
-    auto browserLayer = LevelBrowserLayer::scene(searchObject);
-
-    auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
-
-    CCDirector::sharedDirector()->pushScene(transitionFade);
-}
-
-void CustomCreatorLayer::onFame(CCObject* object) {
-    auto searchObject = GJSearchObject::create(SearchType::HallOfFame);
+void CustomCreatorLayer::onBrowserButton(CCObject* object) {
+    auto searchObject = GJSearchObject::create((SearchType) object->getTag());
     auto browserLayer = LevelBrowserLayer::scene(searchObject);
 
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
