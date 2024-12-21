@@ -168,6 +168,9 @@ bool BetterInfo::isStarUseless(GJSearchObject* searchObject){
     || searchObject->m_searchType == SearchType::Similar
     || searchObject->m_searchType == SearchType::DailySafe
     || searchObject->m_searchType == SearchType::WeeklySafe
+    || searchObject->m_searchType == SearchType::EventSafe
+    || searchObject->m_searchType == SearchType::FeaturedLite
+    || searchObject->m_searchType == SearchType::Bonus
     || isLocal(searchObject);
 }
 
