@@ -8,7 +8,7 @@ using namespace geode::prelude;
 
 static int lastStatInfoID = 0;
 
-class BI_DLL $modify(ProfilePage) {
+/*class BI_DLL $modify(ProfilePage) {
     void onStatInfo(CCObject* obj) {
         lastStatInfoID = m_accountID;
         ProfilePage::onStatInfo(obj);
@@ -37,4 +37,4 @@ class BI_DLL $modify(BIDemonInfoPopup, DemonInfoPopup) {
 
 		return true;
 	}
-};
+};*/
