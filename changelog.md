@@ -1,4 +1,10 @@
 # Changelog
+## <cg>v4.3.2</c> (2024-12-21)
+* <cg>Added</c> <cl>Bonus Levels</c> to <co>BI menu</c>
+* <cg>Removed</c> <cl>derated counter</c> from <co>Demons Info</c> on profiles (temporarily)
+  * This is until I can figure out why event levels sometimes _but not always_ count towards derated
+* Other bugfixes & improvements
+
 ## <cg>v4.3.1</c> (2024-12-11)
 * <cg>Fixed</c> <cl>compatibility</c> with <co>AlertLayerTweaks</c>
 
