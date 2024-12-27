@@ -112,7 +112,7 @@ class BI_DLL $modify(GameLevelManager) {
             m_fields->filteredLevels = nullptr;
         }
 
-        if(m_fields->filteredLevels != nullptr) return m_fields->filteredLevels;
+        if(m_fields->filteredLevels != nullptr && folderID == 0) return m_fields->filteredLevels;
 
         CCArray* pRet = CCArray::create();
 
@@ -209,9 +209,11 @@ class BI_DLL $modify(GameLevelManager) {
             pRet->addObject(level);
         }
 
-        Mod::get()->setSavedValue<bool>("user_search_dirty", false);
+        if(folderID == 0) {
+            Mod::get()->setSavedValue<bool>("user_search_dirty", false);
+            m_fields->filteredLevels = pRet;
+        }
 
-        m_fields->filteredLevels = pRet;
         return pRet;
     }
 
