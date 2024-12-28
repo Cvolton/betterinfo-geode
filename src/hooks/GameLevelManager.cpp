@@ -225,6 +225,12 @@ class BI_DLL $modify(GameLevelManager) {
         m_fields->skipSavedFilter = false;
     }
 
+    void deleteLevel(GJGameLevel* level) {
+        Mod::get()->setSavedValue<bool>("user_search_dirty", true);
+
+        GameLevelManager::deleteLevel(level);
+    }
+
     /**
      * BetterErrors:tm:
      */
