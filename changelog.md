@@ -1,5 +1,5 @@
 # Changelog
-## <cg>v4.3.2</c> (2024-12-28)
+## <cg>v4.3.3</c> (2024-12-28)
 * <cg>Fixed</c> a few <cr>bugs</c> related to <co>Saved Level Filtering</c>
 
 ## <cg>v4.3.2</c> (2024-12-21)
