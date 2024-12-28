@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.3.2</c> (2024-12-28)
+* <cg>Fixed</c> a few <cr>bugs</c> related to <co>Saved Level Filtering</c>
+
 ## <cg>v4.3.2</c> (2024-12-21)
 * <cg>Added</c> <cl>Bonus Levels</c> to <co>BI menu</c>
 * <cg>Removed</c> <cl>derated counter</c> from <co>Demons Info</c> on profiles (temporarily)
@@ -347,7 +350,7 @@ Thank you all for using BI, see you in 2.2 :) --Cvolton
 - Using a faster search method for some filtered searches
     
 ## <cg>v2.4.6</c> (2023-06-11)
-- Added "no coins" filter (thanks _tz and RandomB)
+- Added "no coins" filter (thanks acaruso and RandomB)
 - Bugfixes & improvements
     
 ## <cg>v2.4.5</c> (2023-02-03)
