@@ -13,12 +13,64 @@ bool BetterInfoStats::init(){
     this->migrateSaveData();
     this->setup();
 
+    if(std::filesystem::exists(Mod::get()->getSaveDir() / "stats_diffs.json")) {
+        m_diffJson = utils::file::readJson(Mod::get()->getSaveDir() / "stats_diffs.json").unwrapOrDefault();
+    }
+    this->importJsonData();
+    this->save();
+
     return true;
+}
+
+void BetterInfoStats::importJsonToDict(CCDictionary* dict, matjson::Value& json) {
+    // mutex not created - expected to be locked already
+    for(auto [key, value] : json) {
+        if(auto num = value.asString()) {
+            dict->setObject(CCString::create(num.unwrap().c_str()), key);
+        } else if(auto num = value.asInt()) {
+            dict->setObject(CCString::create(std::to_string(num.unwrap()).c_str()), key);
+        } else if(auto num = value.asDouble()) {
+            dict->setObject(CCString::create(std::to_string(num.unwrap()).c_str()), key);
+        } else {
+            log::error("Failed to import json value to dict: {}", key);
+        }
+    }
+}
+
+void BetterInfoStats::importJsonData() {
+    std::unique_lock lock(m_diffJsonMutex);
+
+    importJsonToDict(m_lastPlayedDict, m_diffJson["lastPlayed"]);
+    importJsonToDict(m_firstPlayedDict, m_diffJson["firstPlayed"]);
+    importJsonToDict(m_normalAttemptDict, m_diffJson["normalAttempt"]);
+    importJsonToDict(m_practiceAttemptDict, m_diffJson["practiceAttempt"]);
+    importJsonToDict(m_normalDict, m_diffJson["normalCompletions"]);
+    importJsonToDict(m_practiceDict, m_diffJson["practiceCompletions"]);
 }
 
 void BetterInfoStats::save() {
     m_saved = false;
     GManager::save();
+
+    std::unique_lock lock(m_diffJsonMutex);
+    m_diffJson.clear();
+    lock.unlock();
+    
+    this->saveTemp();
+}
+
+void BetterInfoStats::saveTemp() {
+    // doing this in a separate thread is useful in the event
+    // of a disk write block
+    std::thread([this] {
+        thread::setName("BI Stats Temp Save");
+        std::shared_lock lock(m_diffJsonMutex);
+        if(m_diffJson.isObject()) {
+            if(!utils::file::writeToJson(Mod::get()->getSaveDir() / "stats_diffs.json", m_diffJson)) {
+                log::error("Failed to save stats_diffs.json");
+            }
+        }
+    }).detach();
 }
 
 void BetterInfoStats::migrateSaveData() {
@@ -72,7 +124,6 @@ void BetterInfoStats::dataLoaded(DS_Dictionary* data) {
     if(listFolderAssignmentsDict) m_listFolderAssignmentsDict = listFolderAssignmentsDict;
 
     this->establishListFolders();
-    this->save();
 }
 
 void BetterInfoStats::firstLoad() {
@@ -98,8 +149,12 @@ void BetterInfoStats::logCompletion(GJGameLevel* level, bool practice) {
 void BetterInfoStats::logCompletion(GJGameLevel* level, bool practice, time_t timestamp) {
     auto dict = practice ? m_practiceDict : m_normalDict;
     dict->setObject(CCString::create(std::to_string(timestamp).c_str()), keyForLevel(level));
+
+    std::unique_lock lock(m_diffJsonMutex);
+    m_diffJson[practice ? "practiceCompletions" : "normalCompletions"][keyForLevel(level)] = timestamp;
+    lock.unlock();
     
-    this->save();
+    this->saveTemp();
 }
 
 time_t BetterInfoStats::getCompletion(GJGameLevel* level, bool practice) {
@@ -112,14 +167,25 @@ time_t BetterInfoStats::getCompletion(GJGameLevel* level, bool practice) {
 }
 
 void BetterInfoStats::logPlay(GJGameLevel* level) {
+    std::unique_lock lock(m_diffJsonMutex);
+
     auto idString = keyForLevel(level);
     auto timeString = CCString::create(std::to_string(std::time(nullptr)).c_str());
+
     m_lastPlayedDict->setObject(timeString, idString);
-    if(getPlay(level, false) == 0 && level->m_normalPercent <= 0) m_firstPlayedDict->setObject(timeString, idString);
+    m_diffJson["lastPlayed"][idString] = timeString->getCString();
+
+    if(getPlay(level, false) == 0 && level->m_normalPercent <= 0) {
+        m_firstPlayedDict->setObject(timeString, idString);
+        m_diffJson["firstPlayed"][idString] = timeString->getCString();
+    }
+
+    lock.unlock();
+
     if(level->m_normalPercent == 100 && getCompletion(level, false) == 0) logCompletion(level, false, -1);
     if(level->m_practicePercent == 100 && getCompletion(level, true) == 0) logCompletion(level, true, -1);
     
-    this->save();
+    this->saveTemp();
 }
 
 time_t BetterInfoStats::getPlay(GJGameLevel* level, bool last) {
@@ -140,7 +206,14 @@ std::string BetterInfoStats::keyForLevel(GJGameLevel* level) {
 
 void BetterInfoStats::logAttempt(GJGameLevel* level, bool practice) {
     auto dict = practice ? m_practiceAttemptDict : m_normalAttemptDict;
-    dict->setObject(CCString::create(std::to_string(getAttempts(level, practice) + 1).c_str()), keyForLevel(level));
+    auto attempts = getAttempts(level, practice) + 1;
+    dict->setObject(CCString::create(std::to_string(attempts).c_str()), keyForLevel(level));
+
+    std::unique_lock lock(m_diffJsonMutex);
+    m_diffJson[practice ? "practiceAttempt" : "normalAttempt"][keyForLevel(level)] = attempts;
+    lock.unlock();
+
+    this->saveTemp();
 }
 
 int BetterInfoStats::getAttempts(GJGameLevel* level, bool practice) {
@@ -167,4 +240,8 @@ int BetterInfoStats::getListFolder(GJLevelList* list) {
     if(std::string_view(ret->getCString()).empty()) return 0;
 
     return BetterInfo::stoi(ret->getCString());
+}
+
+$on_mod(DataSaved) {
+    BetterInfoStats::sharedState()->save();
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <Geode/Geode.hpp>
+#include <shared_mutex>
 #include "../utils.hpp"
 
 using namespace geode::prelude;
@@ -18,8 +19,14 @@ public:
 	Ref<cocos2d::CCDictionary> m_practiceAttemptDict = CCDictionary::create();
 	Ref<cocos2d::CCDictionary> m_listFolderAssignmentsDict = CCDictionary::create();
 
+	matjson::Value m_diffJson = matjson::Value();
+	std::shared_mutex m_diffJsonMutex;
+
 	bool init();
+	void importJsonToDict(cocos2d::CCDictionary* dict, matjson::Value& json);
+	void importJsonData();
 	void save();
+	void saveTemp();
 	void migrateSaveData();
 	void migrationPopup(float dt);
 	void encodeDataTo(DS_Dictionary* data);
