@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.3.4</c> (2025-01-24)
+* <cg>Enabled</c> a missing part of <cj>"Found in"</c> in <co>Icon Info</c> on <cp>Android</c>
+* <cg>Optimized</c> <cj>stats saving</c>
+  * This should fix the freezes on level enter/exit for anyone who experiences those
+
 ## <cg>v4.3.3</c> (2024-12-28)
 * <cg>Fixed</c> a few <cr>bugs</c> related to <co>Saved Level Filtering</c>
 
