@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.3.5</c> (2025-01-25)
+* Further optimizations
+
 ## <cg>v4.3.4</c> (2025-01-24)
 * <cg>Enabled</c> a missing part of <cj>"Found in"</c> in <co>Icon Info</c> on <cp>Android</c>
 * <cg>Optimized</c> <cj>stats saving</c>
