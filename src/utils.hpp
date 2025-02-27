@@ -100,4 +100,7 @@ namespace BetterInfo {
     BI_DLL void cancelUnimportantNotifications();
 
     BI_DLL void fixOversizedPopup(FLAlertLayer* node);
+
+    BI_DLL int countCompletedEventLevels(bool demon);
+    BI_DLL CCLabelBMFont* createEventLevelsLabel(int count);
 }
