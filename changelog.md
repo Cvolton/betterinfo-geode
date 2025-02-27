@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.3.6</c> (2025-01-25)
+* Fixed compatibility with Server Api v2.0.0
+
 ## <cg>v4.3.5</c> (2025-01-25)
 * Further optimizations
 

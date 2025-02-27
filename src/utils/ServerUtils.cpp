@@ -23,7 +23,7 @@ web::WebRequest ServerUtils::getBaseRequest(bool setUserAgent) {
 std::string ServerUtils::getBaseURL() {
     if(Loader::get()->isModLoaded("km7dev.server_api")) {
         auto url = ServerAPIEvents::getCurrentServer().url;
-        if(!url.empty()) {
+        if(!url.empty() && url != "NONE_REGISTERED") {
             while(url.ends_with("/")) url.pop_back();
             return url;
         }
