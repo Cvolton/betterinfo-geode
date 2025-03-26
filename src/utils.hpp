@@ -100,4 +100,13 @@ namespace BetterInfo {
     BI_DLL void cancelUnimportantNotifications();
 
     BI_DLL void fixOversizedPopup(FLAlertLayer* node);
+
+    template<typename T> T* getParentOfType(CCNode* node) {
+        auto parent = node->getParent();
+        while(parent) {
+            if(auto casted = typeinfo_cast<T*>(parent)) return casted;
+            parent = parent->getParent();
+        }
+        return nullptr;
+    }
 }

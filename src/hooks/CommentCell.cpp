@@ -11,7 +11,7 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
      */
     void onProfilePage(CCObject* sender){
         this->m_comment->m_userScore->m_userID = this->m_comment->m_userID;
-        UnregisteredProfileLayer::create(this->m_comment->m_userScore, this->getParent()->getParent()->getParent()->getParent()->getParent()->getParent())->show();
+        UnregisteredProfileLayer::create(this->m_comment->m_userScore, BetterInfo::getParentOfType<InfoLayer>(this))->show();
     }
 
     void onLevelInfoNoLoad(CCObject* sender){
@@ -19,7 +19,7 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
         level->m_levelID = this->m_comment->m_levelID;
 
         InfoLayer* infoLayer = InfoLayer::create(level, nullptr, nullptr);
-        infoLayer->m_scene = this->getParent()->getParent()->getParent()->getParent()->getParent()->getParent();
+        infoLayer->m_scene = BetterInfo::getParentOfType<InfoLayer>(this);
         infoLayer->show();
     }
 
