@@ -40,6 +40,36 @@ void LevelIDLayer::onAccountProfile(cocos2d::CCObject* sender){
     });
 }
 
+void LevelIDLayer::onClassicLeaderboard(cocos2d::CCObject* sender){
+    auto level = GJGameLevel::create();
+    level->m_levelID = getNumber();
+    level->m_levelLength = 0;
+
+    onClose(sender);
+
+    Loader::get()->queueInMainThread([level]() {
+        auto popup = LevelLeaderboard::create(level, LevelLeaderboardType::Global, LevelLeaderboardMode::Time);
+        popup->onUpdate(nullptr);
+        popup->show();
+    });
+}
+
+
+void LevelIDLayer::onPlatformerLeaderboard(cocos2d::CCObject* sender){
+    auto level = GJGameLevel::create();
+    level->m_levelID = getNumber();
+    level->m_levelLength = 5;
+
+    onClose(sender);
+
+    Loader::get()->queueInMainThread([level]() {
+        auto popup = LevelLeaderboard::create(level, LevelLeaderboardType::Global, LevelLeaderboardMode::Time);
+        popup->onUpdate(nullptr);
+        popup->show();
+    });
+}
+
+
 bool LevelIDLayer::init(){
     if(!CvoltonAlertLayerStub::init({220.0f, 150.0f}, 0.8f)) return false;
 
@@ -63,23 +93,47 @@ bool LevelIDLayer::init(){
     infoBg->setScale(0.6f);
     infoBg->setID("id-background"_spr);
 
-    auto buttonSprite = ButtonSprite::create("Lv. Comments", 80, true, "goldFont.fnt", "GJ_button_01.png", 30, 0.8f);
+    auto buttonSprite = ButtonSprite::create("Lv. Comments", 100, true, "goldFont.fnt", "GJ_button_01.png", 30, 0.8f);
+    buttonSprite->setScale(.75f);
     auto buttonButton = CCMenuItemSpriteExtra::create(
         buttonSprite,
         this,
         menu_selector(LevelIDLayer::onLevelComments)
     );
-    buttonButton->setPosition({-52,-45});
+    buttonButton->setPosition({-47,-28});
     buttonButton->setID("comments-button"_spr);
     m_buttonMenu->addChild(buttonButton);
 
-    auto profileSprite = ButtonSprite::create("Acc. Profile", 80, true, "goldFont.fnt", "GJ_button_01.png", 30, 0.8f);
+    auto profileSprite = ButtonSprite::create("Acc. Profile", 100, true, "goldFont.fnt", "GJ_button_01.png", 30, 0.8f);
+    profileSprite->setScale(.75f);
     auto profileButton = CCMenuItemSpriteExtra::create(
         profileSprite,
         this,
         menu_selector(LevelIDLayer::onAccountProfile)
     );
-    profileButton->setPosition({52,-45});
+    profileButton->setPosition({47,-28});
+    profileButton->setID("profile-button"_spr);
+    m_buttonMenu->addChild(profileButton);
+
+    buttonSprite = ButtonSprite::create("Classic Lbs.", 100, true, "goldFont.fnt", "GJ_button_01.png", 30, 0.8f);
+    buttonSprite->setScale(.75f);
+    buttonButton = CCMenuItemSpriteExtra::create(
+        buttonSprite,
+        this,
+        menu_selector(LevelIDLayer::onClassicLeaderboard)
+    );
+    buttonButton->setPosition({-47,-54});
+    buttonButton->setID("comments-button"_spr);
+    m_buttonMenu->addChild(buttonButton);
+
+    profileSprite = ButtonSprite::create("Platformer Lbs.", 100, true, "goldFont.fnt", "GJ_button_01.png", 30, 0.8f);
+    profileSprite->setScale(.75f);
+    profileButton = CCMenuItemSpriteExtra::create(
+        profileSprite,
+        this,
+        menu_selector(LevelIDLayer::onPlatformerLeaderboard)
+    );
+    profileButton->setPosition({47,-54});
     profileButton->setID("profile-button"_spr);
     m_buttonMenu->addChild(profileButton);
 
