@@ -757,9 +757,7 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
     hasBeenCalled = true;
 
     auto url = fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true), getWineVersion(), getOSVersion());
-    static std::optional<web::WebTask> s_requestTask = std::nullopt;
-
-    s_requestTask = web::WebRequest().get(url).map(
+    web::WebRequest().get(url).listen(
         [layer](web::WebResponse* response) {
             auto biCache = BetterInfoCache::sharedState();
 
