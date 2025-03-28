@@ -188,6 +188,7 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
                     folderBtn->setDisplayFolder(m_searchObject->m_folder);
                     folderBtn->setIsCreated(m_searchObject->m_searchType == SearchType::MyLists);
                     folderBtn->setPopupLabel("Go to Folder");
+                    folderBtn->setID("folder-button"_spr);
 
                     pageMenu->insertBefore(folderBtn, pageMenu->getChildByID("last-page-button"));
                 }
