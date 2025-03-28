@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.3.7</c> (2025-03-28)
+* <cg>Added</c> <cj>Level Leaderboards</c> to <co>ID Search</c> in BetterInfo Menu
+* Bugfixes & improvements
+
 ## <cg>v4.3.6</c> (2025-02-27)
 * Fixed compatibility with Server Api v2.0.0
 
