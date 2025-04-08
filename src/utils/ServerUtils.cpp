@@ -8,7 +8,6 @@
 #include <array>
 #include <algorithm>
 
-// For iOS detection; make sure this is available if building on Apple targets.
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
 #endif
