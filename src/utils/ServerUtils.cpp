@@ -62,8 +62,6 @@ std::string ServerUtils::getBaseURL() {
         originalUrl = (char*)(base::get() + 0x952E9E);
     #elif defined(GEODE_IS_IOS) || (defined(__APPLE__) && defined(TARGET_OS_IOS))
         static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
-        // Calculated offset:
-        // Absolute address: 0x1006AF51A, Base: 0x100000000, so offset = 0x6AF51A
         originalUrl = (char*)(base::get() + 0x6AF51A);
     #else
         static_assert(false, "Unsupported platform");
