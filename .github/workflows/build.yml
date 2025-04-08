@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - '**'
+      - "**"
 
 jobs:
   build:
@@ -14,7 +14,7 @@ jobs:
         config:
         - name: Windows
           os: windows-latest
-          
+
         - name: macOS
           os: macos-latest
 
@@ -26,6 +26,10 @@ jobs:
           os: ubuntu-latest
           target: Android64
 
+        - name: iOS
+          os: macos-latest
+          target: iOS
+
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
 
@@ -35,10 +39,13 @@ jobs:
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
         with:
+          bindings: geode-sdk/bindings
+          bindings-ref: main
           combine: true
+          sdk: 'nightly'
+          cli: 'nightly'
           target: ${{ matrix.config.target }}
-          build-args: '--parallel 16'
-      
+
   package:
     name: Package builds
     runs-on: ubuntu-latest
