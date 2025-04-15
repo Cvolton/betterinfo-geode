@@ -23,9 +23,7 @@ std::string TimeUtils::timeToString(time_t input) {
         localtime_r(&input, &timeInfo);
     #endif
 
-    std::ostringstream ss;
-    ss << std::put_time(&timeInfo, "%F %H:%M");
-    return ss.str();
+    return fmt::format("{:%F %H:%M}", timeInfo);
 }
 
 std::string TimeUtils::isoTimeToString(const std::string& input) {
@@ -48,7 +46,7 @@ std::string TimeUtils::workingTime(int value){
 
     std::ostringstream stream;
     if(hours > 0) stream << hours << "h ";
-    if(minutes > 0) stream << minutes << "m ";
+    if(hours > 0 || minutes > 0) stream << minutes << "m ";
     stream << seconds << "s";
 
     return stream.str();
