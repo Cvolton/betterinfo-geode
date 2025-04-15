@@ -28,11 +28,10 @@ void BetterInfoOnline::loadScores(int accountID, bool force, BILeaderboardDelega
 
     m_delegates.insert(delegate);
 
-    static std::unordered_map<int, web::WebTask> tasks;
-    tasks.emplace(accountID, ServerUtils::getBaseRequest(false)
+    ServerUtils::getBaseRequest(false)
         .bodyString(fmt::format("{}&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", ServerUtils::getBasePostString(false), accountID, std::string(GameManager::sharedState()->m_playerUDID)))
         .post(fmt::format("{}/getGJScores20.php", ServerUtils::getBaseURL()))
-        .map([this, accountID, delegate, profilePage](web::WebResponse* response) {
+        .listen([this, accountID, delegate, profilePage](web::WebResponse* response) {
             if(response->ok()) {
                 generateScores(response->string().unwrapOr(""), accountID);
                 if(m_delegates.contains(delegate)) {
@@ -43,17 +42,12 @@ void BetterInfoOnline::loadScores(int accountID, bool force, BILeaderboardDelega
             }
 
             return *response;
-        })
-    );
+        });
 }
 
 void BetterInfoOnline::generateScores(const std::string& response, int accountID){
     auto GM = GameManager::sharedState();
     auto BICache = BetterInfoCache::sharedState();
-
-    if(m_scoreDict.contains(accountID)) { 
-        m_scoreDict[accountID] = nullptr;
-    }
 
     CCArray* scores = CCArray::create();
     m_scoreDict[accountID] = scores;
