@@ -40,7 +40,7 @@ bool LevelUtils::levelHasCollectedCoins(GJGameLevel* level) {
     auto coinDict2 = GameStatsManager::sharedState()->m_pendingUserCoins;
     bool hasAllCoins = true;
     auto coins = level->m_coins ? level->m_coins : BetterInfoCache::sharedState()->getCoinCount(level->m_levelID);
-    for(int i = 0; i < level->m_coins; i++){
+    for(int i = 0; i < coins; i++){
         bool hasntCoin = coinDict->objectForKey(level->getCoinKey(i + 1)) == nullptr && coinDict2->objectForKey(level->getCoinKey(i + 1)) == nullptr;
         if(hasntCoin) hasAllCoins = false;
     }
