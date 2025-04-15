@@ -591,8 +591,6 @@ std::string BetterInfoCache::getLevelName(int levelID) {
     if(!objectExists("level-name-dict", idString)) return "Unknown";
 
     std::shared_lock guard(m_jsonMutex);
-    if(!m_json["level-name-dict"].contains(idString)) return "Unknown";
-    
     return m_json["level-name-dict"][idString].asString().unwrapOr("Unknown (malformed JSON)");
 }
 
