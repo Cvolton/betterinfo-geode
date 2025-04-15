@@ -21,13 +21,7 @@ class BI_DLL $modify(BILevelSearchLayer, LevelSearchLayer) {
             }
         }
 
-        //if(Mod::get()->getSavedValue<bool>("search_no_id") && isID && type == SearchType::Search) str = str + "%25";
-        //if(Mod::get()->getSavedValue<bool>("search_no_id") && isID && type == SearchType::Users) str = str + "%20";
-
         if(Mod::get()->getSavedValue<bool>("search_surround_percent") && (!isID || Mod::get()->getSavedValue<bool>("search_no_id")) && type == SearchType::Search) str = str + "%25%25";
-        
-        //if(Mod::get()->getSavedValue<bool>("search_contains") && type == SearchType::Search && (!isID || Mod::get()->getSavedValue<bool>("search_no_id"))) str = "%25" + str;
-
         gdstr = str;
 
         return LevelSearchLayer::getSearchObject(type, gdstr);
