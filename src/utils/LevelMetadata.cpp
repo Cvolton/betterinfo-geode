@@ -4,7 +4,7 @@
 #include <iomanip>
 
 bool isRobTopStyleDate(const std::string& date){
-    std::array<const char*, 7> times = {"second", "minute", "hour", "day", "week", "month", "year"};
+    constexpr std::array<const char*, 7> times = {"second", "minute", "hour", "day", "week", "month", "year"};
     for(auto time : times) if(date.contains(time)) {
         return true;
     }
@@ -79,8 +79,8 @@ const char* LevelMetadata::getDemonDifficultyIcon(int demonDifficulty){
 std::string LevelMetadata::passwordString(int password){
     if(password == 0) return "NA";
     if(password == 1) return "Free Copy";
-    if(password >= 10000 && password <= 19999) return std::to_string(password - 10000);
-    if(password >= 1000000 && password <= 1999999) return std::to_string(password - 1000000);
+    if(password >= 10000 && password <= 19999) return fmt::format("{:04}", password - 10000);
+    if(password >= 1000000 && password <= 1999999) return fmt::format("{:04}", password - 1000000);
     return "Invalid (" + std::to_string(password) + ")";
 }
 
