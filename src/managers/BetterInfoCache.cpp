@@ -9,7 +9,6 @@
 bool BetterInfoCache::init(){
     if(!BaseJsonManager::init("cache.json")) return false;
     doSave();
-    establishCachedDicts();
     return true;
 }
 
@@ -20,6 +19,7 @@ void BetterInfoCache::finishLoading(){
     //cacheRatedLists();
 
     cacheFollowedCreators();
+    establishCachedDicts();
 
     log::debug("Finished 2nd stage loading BetterInfoCache in {} ms", BetterInfo::timeInMs() - now);
 }
@@ -49,7 +49,6 @@ void BetterInfoCache::validateLoadedData() {
 
 void BetterInfoCache::establishCachedDicts(){
     std::shared_lock guard(m_jsonMutex);
-    std::unique_lock lock(m_coinCountsMutex);
 
     for(auto [key, value] : m_json["coin-count-dict"]) {
         if(value.isNumber()) m_coinCounts[BetterInfo::stoi(key)] = value.asInt().unwrapOr(0);
@@ -703,8 +702,8 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
 }
 
 int BetterInfoCache::getCoinCount(int levelID) {
-    std::unique_lock lock(m_coinCountsMutex);
-    if(m_coinCounts.find(levelID) != m_coinCounts.end()) return m_coinCounts.at(levelID);
+    auto it = m_coinCounts.find(levelID);
+    if (it != m_coinCounts.end()) return it->second;
     
     std::shared_lock guard(m_jsonMutex);
     auto idString = std::to_string(levelID);
