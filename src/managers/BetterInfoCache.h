@@ -11,7 +11,6 @@ class BI_DLL BetterInfoCache : public BaseJsonManager {
 	std::unordered_map<int, Ref<GJLevelList>> m_claimableLists;
 	std::unordered_map<int, int> m_coinCounts;
 	std::unordered_map<std::string, std::string> m_vaultCodes;
-	std::mutex m_coinCountsMutex;
 	inline static BetterInfoCache* s_instance = nullptr;
 	BetterInfoCache();
 

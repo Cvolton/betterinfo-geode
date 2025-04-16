@@ -446,8 +446,6 @@ void BetterInfoCache::checkLevelsFromDict(CCDictionary* dict) {
 
         auto GLM = GameLevelManager::sharedState();
 
-        size_t i = 0;
-        cocos2d::CCDictElement* element = nullptr;
         for(auto currentLvl : *levels) {
             auto idString = std::to_string(currentLvl->m_levelID);
             if(objectExists("level-name-dict", idString) && objectExists("coin-count-dict", idString) && objectExists("demon-difficulty-dict", idString) && getLevelName(currentLvl->m_levelID) != "") continue;
