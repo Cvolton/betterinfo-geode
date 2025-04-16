@@ -17,14 +17,20 @@ class BI_DLL $modify(GameLevelManager) {
      * Helpers
      */
 
-    bool validateRangeOption(const std::string& option, int value, int defaultMin = 0, int defaultMax = 0) {
-        if(Mod::get()->getSavedValue<bool>(option)) {
-            int min = Mod::get()->getSavedValue<int>(fmt::format("{}_min", option), defaultMin);
-            int max = Mod::get()->getSavedValue<int>(fmt::format("{}_max", option), defaultMax);
-            if(min != 0 && value < min) return false;
-            if(max != 0 && value > max) return false;
+    inline bool validateRangeOption(const BISearchObject::RangeItem& option, int value, int defaultMin = 0, int defaultMax = 0) {
+        if(option.enabled) {
+            if(option.min != 0 && option.min > value) return false;
+            if(option.max != 0 && option.max < value) return false;
         }
         return true;
+    }
+
+    BISearchObject::RangeItem createRangeOption(const std::string& option) {
+        BISearchObject::RangeItem rangeItem;
+        rangeItem.enabled = Mod::get()->getSavedValue<bool>(option);
+        rangeItem.min = Mod::get()->getSavedValue<int>(fmt::format("{}_min", option), 0);
+        rangeItem.max = Mod::get()->getSavedValue<int>(fmt::format("{}_max", option), 0);
+        return rangeItem;
     }
 
     /*
@@ -146,6 +152,45 @@ class BI_DLL $modify(GameLevelManager) {
                 )
             ) demonDiff.push_back(i);
         }
+
+        BISearchObject searchObj {
+            .star = Mod::get()->getSavedValue<bool>("user_search_star"),
+            .noStar = Mod::get()->getSavedValue<bool>("user_search_nostar"),
+            .uncompleted = Mod::get()->getSavedValue<bool>("user_search_uncompleted"),
+            .uncompletedOrbs = Mod::get()->getSavedValue<bool>("user_search_uncompletedorbs"),
+            .uncompletedLeaderboard = Mod::get()->getSavedValue<bool>("user_search_uncompletedleaderboard"),
+            .uncompletedCoins = Mod::get()->getSavedValue<bool>("user_search_uncompletedcoins"),
+            .completed = Mod::get()->getSavedValue<bool>("user_search_completed"),
+            .completedOrbs = Mod::get()->getSavedValue<bool>("user_search_completedorbs"),
+            .completedLeaderboard = Mod::get()->getSavedValue<bool>("user_search_completedleaderboard"),
+            .completedCoins = Mod::get()->getSavedValue<bool>("user_search_completedcoins"),
+            .percentage = createRangeOption("user_search_percentage"),
+            .percentageOrbs = createRangeOption("user_search_percentageorbs"),
+            .percentageLeaderboard = createRangeOption("user_search_percentageleaderboard"),
+            .featured = Mod::get()->getSavedValue<bool>("user_search_featured"),
+            .original = Mod::get()->getSavedValue<bool>("user_search_original"),
+            .twoPlayer = Mod::get()->getSavedValue<bool>("user_search_twoplayer"),
+            .coins = createRangeOption("user_search_coins"),
+            .noCoins = Mod::get()->getSavedValue<bool>("user_search_nocoins"),
+            .verifiedCoins = Mod::get()->getSavedValue<bool>("user_search_verifiedcoins"),
+            .unverifiedCoins = Mod::get()->getSavedValue<bool>("user_search_unverifiedcoins"),
+            .epic = Mod::get()->getSavedValue<bool>("user_search_epic"),
+            .legendary = Mod::get()->getSavedValue<bool>("user_search_legendary"),
+            .mythic = Mod::get()->getSavedValue<bool>("user_search_mythic"),
+            .song = Mod::get()->getSavedValue<bool>("user_search_song"),
+            .songCustom = Mod::get()->getSavedValue<bool>("user_search_song_custom"),
+            .songID = Mod::get()->getSavedValue<int>("user_search_song_id"),
+            .copied = Mod::get()->getSavedValue<bool>("user_search_copied"),
+            .downloaded = Mod::get()->getSavedValue<bool>("user_search_downloaded"),
+            .ldm = Mod::get()->getSavedValue<bool>("user_search_ldm"),
+            .idRange = createRangeOption("user_search_idrange"),
+            .copyable = Mod::get()->getSavedValue<bool>("user_search_copy"),
+            .freeCopy = Mod::get()->getSavedValue<bool>("user_search_copy_free"),
+            .unfeatured = Mod::get()->getSavedValue<bool>("user_search_nofeatured"),
+            .unepic = Mod::get()->getSavedValue<bool>("user_search_noepic"),
+            .starRange = createRangeOption("user_search_starrange"),
+            .gameVersion = createRangeOption("user_search_gameversion"),
+        };
         
         //calculating levels
         auto levels = this->m_onlineLevels;
@@ -165,46 +210,46 @@ class BI_DLL $modify(GameLevelManager) {
                 if(!(demonDiff.empty()) && std::find(demonDiff.begin(), demonDiff.end(), demonDifficulty) == demonDiff.end()) continue;
             }
 
-            if(Mod::get()->getSavedValue<bool>("user_search_star") && level->m_stars == 0) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_uncompleted") && level->m_normalPercent == 100) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_completed") && level->m_normalPercent != 100) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_uncompletedorbs") && level->m_orbCompletion == 100) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_completedorbs") && level->m_orbCompletion != 100) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_uncompletedleaderboard") && level->m_newNormalPercent2 == 100) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_completedleaderboard") && level->m_newNormalPercent2 != 100) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_featured") && level->m_featured < 1) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_nofeatured") && level->m_featured >= 1) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_original") && level->m_originalLevel != 0) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_epic") && level->m_isEpic != 1) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_legendary") && level->m_isEpic != 2) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_mythic") && level->m_isEpic != 3) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_noepic") && level->m_isEpic) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_song")) {
-                if(Mod::get()->getSavedValue<bool>("user_search_song_custom") && level->m_songID != Mod::get()->getSavedValue<int>("user_search_song_id")) continue;
-                if(!Mod::get()->getSavedValue<bool>("user_search_song_custom") && (level->m_audioTrack != Mod::get()->getSavedValue<int>("user_search_song_id") || level->m_songID != 0)) continue;
+            if(searchObj.star && level->m_stars == 0) continue;
+            if(searchObj.uncompleted && level->m_normalPercent == 100) continue;
+            if(searchObj.completed && level->m_normalPercent != 100) continue;
+            if(searchObj.uncompletedOrbs && level->m_orbCompletion == 100) continue;
+            if(searchObj.completedOrbs && level->m_orbCompletion != 100) continue;
+            if(searchObj.uncompletedLeaderboard && level->m_newNormalPercent2 == 100) continue;
+            if(searchObj.completedLeaderboard && level->m_newNormalPercent2 != 100) continue;
+            if(searchObj.featured && level->m_featured < 1) continue;
+            if(searchObj.unfeatured && level->m_featured >= 1) continue;
+            if(searchObj.original && level->m_originalLevel != 0) continue;
+            if(searchObj.epic && level->m_isEpic != 1) continue;
+            if(searchObj.legendary && level->m_isEpic != 2) continue;
+            if(searchObj.mythic && level->m_isEpic != 3) continue;
+            if(searchObj.unepic && level->m_isEpic) continue;
+            if(searchObj.song) {
+                if(searchObj.songCustom && level->m_songID != searchObj.songID) continue;
+                if(!searchObj.songCustom && (level->m_songID != 0 || level->m_audioTrack != searchObj.songID)) continue;
             }
-            if(Mod::get()->getSavedValue<bool>("user_search_nostar") && level->m_stars != 0) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_verifiedcoins") && (level->m_coinsVerified == 0)) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_unverifiedcoins") && (level->m_coinsVerified)) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_nocoins") && level->m_coins != 0) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_twoplayer") && !(level->m_twoPlayerMode)) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_copied") && level->m_originalLevel == 0) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_downloaded") && std::string(level->m_levelString).empty()) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_ldm") && !(level->m_lowDetailMode)) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_copy") && password == 0) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_copy_free") && password != 1) continue;
+            if(searchObj.noStar && level->m_stars != 0) continue;
+            if(searchObj.verifiedCoins && (level->m_coinsVerified == 0)) continue;
+            if(searchObj.unverifiedCoins && (level->m_coinsVerified)) continue;
+            if(searchObj.noCoins && level->m_coins != 0) continue;
+            if(searchObj.twoPlayer && !(level->m_twoPlayerMode)) continue;
+            if(searchObj.copied && level->m_originalLevel == 0) continue;
+            if(searchObj.downloaded && std::string(level->m_levelString).empty()) continue;
+            if(searchObj.ldm && !(level->m_lowDetailMode)) continue;
+            if(searchObj.copyable && password == 0) continue;
+            if(searchObj.freeCopy && password != 1) continue;
 
-            if(!validateRangeOption("user_search_idrange", level->m_levelID)) continue;
-            if(!validateRangeOption("user_search_starrange", level->m_stars)) continue;
-            if(!validateRangeOption("user_search_percentage", level->m_normalPercent)) continue;
-            if(!validateRangeOption("user_search_percentageorbs", level->m_orbCompletion)) continue;
-            if(!validateRangeOption("user_search_percentageleaderboard", level->m_newNormalPercent2)) continue;
-            if(!validateRangeOption("user_search_gameversion", level->m_gameVersion)) continue;
-            if(!validateRangeOption("user_search_coins", level->m_coins, 1, 3)) continue;
+            if(!validateRangeOption(searchObj.idRange, level->m_levelID)) continue;
+            if(!validateRangeOption(searchObj.starRange, level->m_stars)) continue;
+            if(!validateRangeOption(searchObj.percentage, level->m_normalPercent)) continue;
+            if(!validateRangeOption(searchObj.percentageOrbs, level->m_orbCompletion)) continue;
+            if(!validateRangeOption(searchObj.percentageLeaderboard, level->m_newNormalPercent2)) continue;
+            if(!validateRangeOption(searchObj.gameVersion, level->m_gameVersion)) continue;
+            if(!validateRangeOption(searchObj.coins, level->m_coins, 1, 3)) continue;
 
             bool hasAllCoins = LevelUtils::levelHasCollectedCoins(level);
-            if(Mod::get()->getSavedValue<bool>("user_search_completedcoins") && (!hasAllCoins || level->m_coins == 0)) continue;
-            if(Mod::get()->getSavedValue<bool>("user_search_uncompletedcoins") && (hasAllCoins || level->m_coins == 0)) continue;
+            if(searchObj.completedCoins && (!hasAllCoins || level->m_coins == 0)) continue;
+            if(searchObj.uncompletedCoins && (hasAllCoins || level->m_coins == 0)) continue;
 
             pRet->addObject(level);
         }
