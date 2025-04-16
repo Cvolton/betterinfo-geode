@@ -18,10 +18,9 @@ class BI_DLL $modify(GameLevelManager) {
      */
 
     inline bool validateRangeOption(const BISearchObject::RangeItem& option, int value, int defaultMin = 0, int defaultMax = 0) {
-        if(option.enabled) {
-            if(option.min != 0 && option.min > value) return false;
-            if(option.max != 0 && option.max < value) return false;
-        }
+        if(!option.enabled) return true;
+        if(option.min != 0 && option.min > value) return false;
+        if(option.max != 0 && option.max < value) return false;
         return true;
     }
 
@@ -204,7 +203,7 @@ class BI_DLL $modify(GameLevelManager) {
 
             if(!(len.empty()) && std::find(len.begin(), len.end(), level->m_levelLength) == len.end()) continue;
 
-            if(Mod::get()->getSavedValue<bool>("user_search_diff_06") && level->m_demon != 0) {
+            if(std::find(diff.begin(), diff.end(), 6) != diff.end() && level->m_demon != 0) {
                 int demonDifficulty = LevelUtils::levelDemonDifficultyAsInt(level);
 
                 if(!(demonDiff.empty()) && std::find(demonDiff.begin(), demonDiff.end(), demonDifficulty) == demonDiff.end()) continue;
@@ -234,7 +233,7 @@ class BI_DLL $modify(GameLevelManager) {
             if(searchObj.noCoins && level->m_coins != 0) continue;
             if(searchObj.twoPlayer && !(level->m_twoPlayerMode)) continue;
             if(searchObj.copied && level->m_originalLevel == 0) continue;
-            if(searchObj.downloaded && std::string(level->m_levelString).empty()) continue;
+            if(searchObj.downloaded && level->m_levelString.empty()) continue;
             if(searchObj.ldm && !(level->m_lowDetailMode)) continue;
             if(searchObj.copyable && password == 0) continue;
             if(searchObj.freeCopy && password != 1) continue;
@@ -247,9 +246,11 @@ class BI_DLL $modify(GameLevelManager) {
             if(!validateRangeOption(searchObj.gameVersion, level->m_gameVersion)) continue;
             if(!validateRangeOption(searchObj.coins, level->m_coins, 1, 3)) continue;
 
-            bool hasAllCoins = LevelUtils::levelHasCollectedCoins(level);
-            if(searchObj.completedCoins && (!hasAllCoins || level->m_coins == 0)) continue;
-            if(searchObj.uncompletedCoins && (hasAllCoins || level->m_coins == 0)) continue;
+            if(searchObj.completedCoins || searchObj.uncompletedCoins) {
+                bool hasAllCoins = LevelUtils::levelHasCollectedCoins(level);
+                if(searchObj.completedCoins && (!hasAllCoins || level->m_coins == 0)) continue;
+                if(searchObj.uncompletedCoins && (hasAllCoins || level->m_coins == 0)) continue;
+            }
 
             pRet->addObject(level);
         }
