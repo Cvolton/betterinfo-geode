@@ -125,10 +125,12 @@ void CustomCreatorLayer::onInfo(CCObject* object) {
         Mod::get()->getName().c_str(), 
             "This is the main menu for all features related to the mod.\n"
             "\n"
-            "<cy>Featured:</c> Levels featured in Geometry Dash World\n"
+            "<co>Featured (GDW):</c> Levels formerly in Geometry Dash World\n"
+            "<cy>Featured (Lite):</c> Levels featured in Geometry Dash Lite\n"
             "<cr>Hall of Fame:</c> Epic levels (as seen in GD 2.1)\n"
-            "<cg>Search (ID):</c> View comments of any level ID.\n"
-            "<cj>Level Search:</c> Show a list of levels based on your progress\n"
+            "<cl>Bonus:</c> Platformer levels featured in Geometry Dash Lite.\n"
+            "<cj>Search (ID):</c> View comments of any level ID.\n"
+            "<cg>Level Search:</c> Show a list of levels based on your progress\n"
             "\n"
             "<cp>Settings:</c> Opens the mod settings",
         "OK", 
