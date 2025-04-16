@@ -14,5 +14,5 @@ namespace LevelUtils {
 
     BI_DLL int levelDifficultyAsInt(GJGameLevel* level);
     BI_DLL int levelDemonDifficultyAsInt(GJGameLevel* level);
-    BI_DLL bool levelHasCollectedCoins(GJGameLevel* level);
+    BI_DLL bool levelHasCollectedCoins(GJGameLevel* level, bool skipCacheCall = false);
 }

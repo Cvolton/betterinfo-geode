@@ -703,12 +703,10 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
 }
 
 int BetterInfoCache::getCoinCount(int levelID) {
-    //std::cout <<  ("Locking shared_lock getCoinCount") << std::endl;
-    std::shared_lock guard(m_jsonMutex);
     std::unique_lock lock(m_coinCountsMutex);
-    //std::cout <<  ("Unlocking shared_lock getCoinCount") << std::endl;
     if(m_coinCounts.find(levelID) != m_coinCounts.end()) return m_coinCounts.at(levelID);
-
+    
+    std::shared_lock guard(m_jsonMutex);
     auto idString = std::to_string(levelID);
     if(!objectExists("coin-count-dict", idString)) return 3;
 

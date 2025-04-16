@@ -247,7 +247,7 @@ class BI_DLL $modify(GameLevelManager) {
             if(!validateRangeOption(searchObj.coins, level->m_coins, 1, 3)) continue;
 
             if(searchObj.completedCoins || searchObj.uncompletedCoins) {
-                bool hasAllCoins = LevelUtils::levelHasCollectedCoins(level);
+                bool hasAllCoins = LevelUtils::levelHasCollectedCoins(level, true);
                 if(searchObj.completedCoins && (!hasAllCoins || level->m_coins == 0)) continue;
                 if(searchObj.uncompletedCoins && (hasAllCoins || level->m_coins == 0)) continue;
             }
