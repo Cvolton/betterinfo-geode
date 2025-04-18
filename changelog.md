@@ -1,6 +1,6 @@
 # Changelog
 ## <cg>v4.3.9</c> (2025-04-18)
-* <cg>Fixed</c> an <cp>iOS only</c> crash
+* <cg>Fixed</c> an <cp>iOS only</c> <cr>crash</c> when opening <co>Level Lists</c>
 
 ## <cg>v4.3.8</c> (2025-04-16)
 * <cg>Added</c> experimental <cp>iOS support</c>
