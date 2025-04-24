@@ -29,6 +29,21 @@ NTSYSAPI NTSTATUS NTAPI RtlGetVersion(PRTL_OSVERSIONINFOEXW lpVersionInformation
 }
 #endif
 
+// https://github.com/geode-sdk/geode/blob/a649cd7cbda18bda3542b3e2350358d0f64d71fc/loader/src/ui/mods/popups/ModPopup.cpp#L851
+class comma_numpunct : public std::numpunct<char> {
+protected:
+    virtual char do_thousands_sep() const
+    {
+        return ',';
+    }
+
+    virtual std::string do_grouping() const
+    {
+        return "\03";
+    }
+};
+static std::locale commaLocale(std::locale(), new comma_numpunct());
+
 CCSprite* BetterInfo::createWithBISpriteFrameName(const char* name){
     return createBISprite(name);
 }
@@ -1009,7 +1024,7 @@ long long BetterInfo::strtol(std::string_view str) {
 }
 
 std::string BetterInfo::numberComma(int number) {
-    return fmt::format(std::locale("en_US.UTF-8"), "{:L}", number);
+    return fmt::format(commaLocale, "{:L}", number);
 }
 
 static std::vector<Ref<Notification>> s_notifications;
