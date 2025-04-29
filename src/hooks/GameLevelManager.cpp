@@ -299,7 +299,7 @@ class BI_DLL $modify(GameLevelManager) {
                 return;
             }
 
-            auto data = std::string(dataVector->begin(), dataVector->end());
+            auto data = std::string(dataVector->data(), dataVector->size());
             ServerUtils::showCFError(data);
         }
         
