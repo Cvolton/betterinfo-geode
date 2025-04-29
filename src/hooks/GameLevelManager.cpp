@@ -284,7 +284,7 @@ class BI_DLL $modify(GameLevelManager) {
         GameLevelManager::onProcessHttpRequestCompleted(client, response);
 
         auto headerVector = response->getResponseHeader();
-        auto header = std::string(headerVector->begin(), headerVector->end());
+        auto header = std::string(headerVector->data(), headerVector->size());
 
         auto dataVector = response->getResponseData();
         if(dataVector->size() > 11 && dataVector->at(0) == 'e') {
