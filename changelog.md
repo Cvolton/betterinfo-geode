@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.3.10</c> (2025-04-30)
+* <cg>Fixed</c> a <cj>Chest History</c> <cr>crash</c> happening on <cp>obscure system configurations</c>
+
 ## <cg>v4.3.9</c> (2025-04-18)
 * <cg>Fixed</c> an <cp>iOS only</c> <cr>crash</c> when opening <co>Level Lists</c>
 
