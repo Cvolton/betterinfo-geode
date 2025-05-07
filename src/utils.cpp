@@ -1087,3 +1087,19 @@ void BetterInfo::fixOversizedPopup(FLAlertLayer* node) {
         node->addChild(newLayerColor, -1);
     }
 }
+
+void BetterInfo::refreshAlertPrio(CCNode* node) {
+    //workaround for no esc catching bug
+    std::vector<Ref<FLAlertLayer>> alerts;
+
+    size_t i = 0;
+    while(auto alert = node->getChildByType<FLAlertLayer>(i++)) {
+        alerts.push_back(alert);
+    }
+
+    for(auto alert : alerts) {
+        alert->removeFromParentAndCleanup(false);
+        alert->m_noElasticity = true;
+        alert->show();
+    }
+}

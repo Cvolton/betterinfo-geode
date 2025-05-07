@@ -16,6 +16,17 @@ bool CvoltonAlertLayerStub::init(CCPoint contentSize, float closeBtnScale, uint8
     m_mainLayer->addChild(bg, -1);
     m_mainLayer->setID("main-layer"_spr);
 
+    auto workaroundMenu = CCMenu::create();
+    auto invisSprite = CCNode::create();
+    invisSprite->setContentSize(winSize);
+    auto invisBtn = CCMenuItemSpriteExtra::create(
+        invisSprite,
+        this,
+        nullptr
+    );
+    workaroundMenu->addChild(invisBtn);
+    m_mainLayer->addChild(workaroundMenu, 9);
+
     m_buttonMenu = CCMenu::create();
     m_buttonMenu->setID("button-menu"_spr);
     m_mainLayer->addChild(m_buttonMenu, 10);

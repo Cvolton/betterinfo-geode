@@ -109,17 +109,5 @@ CCScene* BIBaseLayer::scene(bool BL, bool BR, bool TL, bool TR) {
 void BIBaseLayer::onEnterTransitionDidFinish() {
     CCLayer::onEnterTransitionDidFinish();
 
-    //workaround for no esc catching bug
-    std::vector<Ref<FLAlertLayer>> alerts;
-
-    size_t i = 0;
-    while(auto alert = this->getChildByType<FLAlertLayer>(i++)) {
-        alerts.push_back(alert);
-    }
-
-    for(auto alert : alerts) {
-        alert->removeFromParentAndCleanup(false);
-        alert->m_noElasticity = true;
-        alert->show();
-    }
+    BetterInfo::refreshAlertPrio(this);
 }

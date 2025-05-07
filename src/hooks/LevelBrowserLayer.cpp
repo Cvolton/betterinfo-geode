@@ -105,6 +105,9 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         if(auto lastBtn = m_fields->m_biLastPageBtnArrow) {
             lastBtn->usePopupTexture(shouldSearchForLastPage());
         }
+
+        BetterInfo::refreshAlertPrio(this);
+        handleTouchPriority(this, true);
     }
 
     bool canBeLocalFiltered() {
@@ -312,5 +315,11 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         }
 
         return LevelBrowserLayer::onInfo(sender);
+    }
+
+    void onEnterTransitionDidFinish() {
+        LevelBrowserLayer::onEnterTransitionDidFinish();
+
+        refreshButtonVisibility();
     }
 };

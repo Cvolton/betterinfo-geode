@@ -109,4 +109,6 @@ namespace BetterInfo {
         }
         return nullptr;
     }
+
+    BI_DLL void refreshAlertPrio(CCNode* node);
 }
