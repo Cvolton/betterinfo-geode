@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.3.11</c> (2025-05-17)
+* <cg>Fixed</c> a <cr>startup crash</c> that was made possible by <cp>Geode 4.4.0</c>
+* <cg>Fixed</c> the bug where <cj>Created Lists</c> would show <cr>nonsensical upload dates</c>
+* <cg>Fixed</c> the bug where you could <cr>click through</c> the <cj>Claimable Lists popup</c>
+
 ## <cg>v4.3.10</c> (2025-04-30)
 * <cg>Fixed</c> a <cj>Chest History</c> <cr>crash</c> happening on <cp>obscure system configurations</c>
 
