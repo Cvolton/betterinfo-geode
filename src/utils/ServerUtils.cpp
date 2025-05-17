@@ -7,9 +7,7 @@
 using namespace geode::prelude;
 
 static inline std::unordered_map<std::string, Ref<cocos2d::CCArray>> s_cache;
-static inline std::unordered_map<std::string, web::WebTask> s_requests;
 
-static inline std::shared_mutex s_requestsMutex;
 static bool s_isGDPS = false;
 
 bool ServerUtils::isGDPS() {
@@ -123,90 +121,78 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
     postString += "&secret=Wmfd2893gb7";
 
     std::string key = getSearchObjectKey(searchObject);
-    auto requestKey = fmt::format("getLevelLists_{}", key);
+    getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevelLists.php", getBaseURL()))
+        .listen([callback, key, cacheLevels](web::WebResponse* response) {
+            auto GLM = GameLevelManager::sharedState();
 
-    std::unique_lock lock(s_requestsMutex);
-    if(s_requests.find(requestKey) == s_requests.end()) {
-        s_requests.emplace(requestKey, getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevelLists.php", getBaseURL())));
-    }
+            if(!response->ok()) {
+                if(response->header("retry-after").has_value()) {
+                    showRateLimitError(BetterInfo::stoi(response->header("retry-after").value()));
+                } else {
+                    showCFError(response->string().unwrapOr(""));
+                }
 
-    auto task = s_requests[requestKey].map([callback, key, requestKey, cacheLevels](web::WebResponse* response) {
-        auto GLM = GameLevelManager::sharedState();
+                auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
 
-        std::unique_lock lock(s_requestsMutex);
-        s_requests.erase(requestKey);
-        lock.unlock();
+                callback(levels, false);
 
-        if(!response->ok()) {
-            if(response->header("retry-after").has_value()) {
-                showRateLimitError(BetterInfo::stoi(response->header("retry-after").value()));
-            } else {
-                showCFError(response->string().unwrapOr(""));
+                return *response;
             }
 
             auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
 
-            callback(levels, false);
+            auto responseString = response->string().unwrapOr("");
+
+            size_t hashes = std::count(responseString.begin(), responseString.end(), '#');
+            if(hashes < 3) {
+                callback(levels, false);
+                return *response;
+            }
+
+            std::stringstream responseStream(responseString);
+            std::string levelData;
+            std::string userData;
+            std::string pageData;
+
+            getline(responseStream, levelData, '#');
+            getline(responseStream, userData, '#');
+            getline(responseStream, pageData, '#');
+
+            std::stringstream userStream(userData);
+            std::string currentUser;
+            while(getline(userStream, currentUser, '|')) {
+                auto info = utils::string::split(currentUser, ":");
+                if(info.size() < 3) continue;
+
+                int userID = BetterInfo::stoi(info[0]);
+                int accountID = BetterInfo::stoi(info[2]);
+
+                if(userID > 0) GLM->storeUserName(userID, accountID, info[1]);
+            }
+
+            std::stringstream levelStream(levelData);
+            std::string currentLevel;
+            while(getline(levelStream, currentLevel, '|')) {
+                auto level = GJLevelList::create(BetterInfo::responseToDict(currentLevel));
+                levels->push_back(level);
+            }
+
+            CCArray* levelArray = CCArray::create();
+            for(auto level : *levels) {
+                levelArray->addObject(level);
+                GLM->updateSavedLevelList(level);
+            }
+
+            if(cacheLevels) {
+                if(key.length() < 255) GLM->storeSearchResult(levelArray, pageData, key.c_str());
+                else s_cache[key] = levelArray;
+            }
+
+            callback(levels, true);
 
             return *response;
-        }
-
-        auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
-
-        auto responseString = response->string().unwrapOr("");
-
-        size_t hashes = std::count(responseString.begin(), responseString.end(), '#');
-        if(hashes < 3) {
-            callback(levels, false);
-            return *response;
-        }
-
-        std::stringstream responseStream(responseString);
-        std::string levelData;
-        std::string userData;
-        std::string pageData;
-
-        getline(responseStream, levelData, '#');
-        getline(responseStream, userData, '#');
-        getline(responseStream, pageData, '#');
-
-        std::stringstream userStream(userData);
-        std::string currentUser;
-        while(getline(userStream, currentUser, '|')) {
-            auto info = utils::string::split(currentUser, ":");
-            if(info.size() < 3) continue;
-
-            int userID = BetterInfo::stoi(info[0]);
-            int accountID = BetterInfo::stoi(info[2]);
-
-            if(userID > 0) GLM->storeUserName(userID, accountID, info[1]);
-        }
-
-        std::stringstream levelStream(levelData);
-        std::string currentLevel;
-        while(getline(levelStream, currentLevel, '|')) {
-            auto level = GJLevelList::create(BetterInfo::responseToDict(currentLevel));
-            levels->push_back(level);
-        }
-
-        CCArray* levelArray = CCArray::create();
-        for(auto level : *levels) {
-            levelArray->addObject(level);
-            GLM->updateSavedLevelList(level);
-        }
-
-        if(cacheLevels) {
-            if(key.length() < 255) GLM->storeSearchResult(levelArray, pageData, key.c_str());
-            else s_cache[key] = levelArray;
-        }
-
-        callback(levels, true);
-
-        return *response;
-    });
-
-    s_requests.erase(requestKey);
-    s_requests.emplace(requestKey, task);
+        });
+    
 }
 
 void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJGameLevel>>>, bool success, bool explicitError)> callback, bool cacheLevels) {
@@ -248,95 +234,83 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
     postString += "&secret=Wmfd2893gb7";
 
     std::string key = getSearchObjectKey(searchObject);
-    auto requestKey = fmt::format("getOnlineLevels_{}", key);
+    getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevels21.php", getBaseURL()))
+        .listen([callback, key, cacheLevels](web::WebResponse* response) {
+            if(!response->ok()) {
+                if(response->header("retry-after").has_value()) {
+                    showRateLimitError(BetterInfo::stoi(response->header("retry-after").value()));
+                } else {
+                    showCFError(response->string().unwrapOr(""));
+                }
 
-    std::unique_lock lock(s_requestsMutex);
-    if(s_requests.find(requestKey) == s_requests.end()) {
-        s_requests.emplace(requestKey, getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevels21.php", getBaseURL())));
-    }
+                auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
-    auto task = s_requests[requestKey].map([callback, key, requestKey, cacheLevels](web::WebResponse* response) {
-        std::unique_lock lock(s_requestsMutex);
-        s_requests.erase(requestKey);
-        lock.unlock();
+                callback(levels, false, false);
 
-        if(!response->ok()) {
-            if(response->header("retry-after").has_value()) {
-                showRateLimitError(BetterInfo::stoi(response->header("retry-after").value()));
-            } else {
-                showCFError(response->string().unwrapOr(""));
+                return *response;
             }
 
             auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
-            callback(levels, false, false);
+            auto responseString = response->string().unwrapOr("");
+
+            if(responseString == "-1") {
+                callback(levels, false, true);
+                return *response;
+            }
+
+            size_t hashes = std::count(responseString.begin(), responseString.end(), '#');
+            if(hashes < 4) {
+                callback(levels, false, false);
+                return *response;
+            }
+
+            std::stringstream responseStream(responseString);
+            std::string levelData;
+            std::string userData;
+            std::string songData;
+            std::string pageData;
+
+            getline(responseStream, levelData, '#');
+            getline(responseStream, userData, '#');
+            getline(responseStream, songData, '#');
+            getline(responseStream, pageData, '#');
+
+            MusicDownloadManager::sharedState()->createSongsInfo(songData, "");
+
+            std::stringstream userStream(userData);
+            std::string currentUser;
+            while(getline(userStream, currentUser, '|')) {
+                auto info = utils::string::split(currentUser, ":");
+                if(info.size() < 3) continue;
+
+                int userID = BetterInfo::stoi(info[0]);
+                int accountID = BetterInfo::stoi(info[2]);
+
+                if(userID > 0) GameLevelManager::sharedState()->storeUserName(userID, accountID, info[1]);
+            }
+
+            std::stringstream levelStream(levelData);
+            std::string currentLevel;
+            while(getline(levelStream, currentLevel, '|')) {
+                auto level = GJGameLevel::create(BetterInfo::responseToDict(currentLevel), false);
+                levels->push_back(level);
+            }
+
+            CCArray* levelArray = CCArray::create();
+            for(auto level : *levels) levelArray->addObject(level);
+
+            GameLevelManager::sharedState()->saveFetchedLevels(levelArray);
+            if(cacheLevels) {
+                if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, pageData, key.c_str());
+                else s_cache[key] = levelArray;
+            }
+
+            callback(levels, true, false);
 
             return *response;
-        }
+        });
 
-        auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
-
-        auto responseString = response->string().unwrapOr("");
-
-        if(responseString == "-1") {
-            callback(levels, false, true);
-            return *response;
-        }
-
-        size_t hashes = std::count(responseString.begin(), responseString.end(), '#');
-        if(hashes < 4) {
-            callback(levels, false, false);
-            return *response;
-        }
-
-        std::stringstream responseStream(responseString);
-        std::string levelData;
-        std::string userData;
-        std::string songData;
-        std::string pageData;
-
-        getline(responseStream, levelData, '#');
-        getline(responseStream, userData, '#');
-        getline(responseStream, songData, '#');
-        getline(responseStream, pageData, '#');
-
-        MusicDownloadManager::sharedState()->createSongsInfo(songData, "");
-
-        std::stringstream userStream(userData);
-        std::string currentUser;
-        while(getline(userStream, currentUser, '|')) {
-            auto info = utils::string::split(currentUser, ":");
-            if(info.size() < 3) continue;
-
-            int userID = BetterInfo::stoi(info[0]);
-            int accountID = BetterInfo::stoi(info[2]);
-
-            if(userID > 0) GameLevelManager::sharedState()->storeUserName(userID, accountID, info[1]);
-        }
-
-        std::stringstream levelStream(levelData);
-        std::string currentLevel;
-        while(getline(levelStream, currentLevel, '|')) {
-            auto level = GJGameLevel::create(BetterInfo::responseToDict(currentLevel), false);
-            levels->push_back(level);
-        }
-
-        CCArray* levelArray = CCArray::create();
-        for(auto level : *levels) levelArray->addObject(level);
-
-        GameLevelManager::sharedState()->saveFetchedLevels(levelArray);
-        if(cacheLevels) {
-            if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, pageData, key.c_str());
-            else s_cache[key] = levelArray;
-        }
-
-        callback(levels, true, false);
-
-        return *response;
-    });
-
-    s_requests.erase(requestKey);
-    s_requests.emplace(requestKey, task);
 }
 
 CCArray* ServerUtils::getStoredOnlineLevels(const std::string& key) {

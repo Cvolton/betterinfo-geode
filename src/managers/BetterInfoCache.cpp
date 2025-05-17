@@ -654,9 +654,6 @@ void BetterInfoCache::storeDatesForLevel(GJGameLevel* level) {
 }
 
 std::string BetterInfoCache::getUserName(int userID, bool download) {
-    static std::mutex downloadingMutex;
-    static std::condition_variable downloadingCV;
-    static std::optional<web::WebTask> downloadingTask;
     if(userID == 0) return ""; //this prevents the request from being sent on every account comments load
 
     auto idString = std::to_string(userID);
@@ -665,16 +662,11 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
             std::thread([userID, this] {
                 thread::setName("BI Username Downloader");
 
-                std::unique_lock lock(downloadingMutex);
-                downloadingCV.wait(lock, []{ return !downloadingTask.has_value(); });
-
-                downloadingTask = ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).map(
+                ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).listen(
                     [userID, this](web::WebResponse* response) {
                         auto json = response->json();
                         if(!response->ok() || json.isErr()) {
                             log::error("Error while getting username for {}: {} - {}", userID, response->code(), response->string().unwrapOr("No response"));
-                            downloadingTask = std::nullopt;
-                            downloadingCV.notify_one();
                             return *response;                            
                         }
 
@@ -685,7 +677,6 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
 
                         storeUserName(userID, username);
                         log::debug("Restored green username for {}: {}", userID, username);
-                        downloadingTask = std::nullopt;
                         return *response;
                     }
                 );
@@ -738,17 +729,7 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
     auto idString = std::to_string(levelID);
     if(!objectExists("upload-date-dict", idString)) {
         if(m_attemptedLevelDates.find(levelID) == m_attemptedLevelDates.end()) {
-
-            static std::mutex downloadingMutex;
-            static std::unordered_map<int, web::WebTask> tasks;
-
-            std::unique_lock lock(downloadingMutex);
-
-            if(tasks.find(levelID) != tasks.end()) {
-                return "";
-            }
-
-            tasks.emplace(levelID, ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).map(
+            ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).listen(
                 [levelID, this](web::WebResponse* response) {
                     auto json = response->json();
                     if(!response->ok() || json.isErr()) {
@@ -766,7 +747,7 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
                     storeUploadDate(levelID, res.unwrap());
                     return *response;
                 }
-            ));
+            );
 
             m_attemptedLevelDates.insert(levelID);
         }
