@@ -106,8 +106,10 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             lastBtn->usePopupTexture(shouldSearchForLastPage());
         }
 
-        BetterInfo::refreshAlertPrio(this);
-        handleTouchPriority(this, true);
+        if(!LevelEditorLayer::get()) {
+            BetterInfo::refreshAlertPrio(this);
+            handleTouchPriority(this, true);
+        }
     }
 
     bool canBeLocalFiltered() {
