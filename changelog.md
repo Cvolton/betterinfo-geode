@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.3.12</c> (2025-05-27)
+* <cg>Improved</c> support for <cp>Amazon</c> versions of the game
+
 ## <cg>v4.3.11</c> (2025-05-17)
 * <cg>Fixed</c> a <cr>startup crash</c> that was made possible by <cp>Geode 4.4.0</c>
 * <cg>Fixed</c> the bug where <cj>Created Lists</c> would show <cr>nonsensical upload dates</c>
