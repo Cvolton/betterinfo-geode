@@ -41,10 +41,10 @@ std::string ServerUtils::getBaseURL() {
         originalUrl = (char*)(base::get() + 0x8516bf);
     #elif defined(GEODE_IS_ANDROID64)
         static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0xEA2988);
+        originalUrl = MiscBugfixes::isAmazon() ? (char*)(base::get() + 0xEA27F8) : (char*)(base::get() + 0xEA2988);
     #elif defined(GEODE_IS_ANDROID32)
         static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0x952E9E);
+        originalUrl = MiscBugfixes::isAmazon() ? (char*)(base::get() + 0x952CCE) : (char*)(base::get() + 0x952E9E);
     #elif defined(GEODE_IS_IOS)
         static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
         originalUrl = (char*)(base::get() + 0x6af51a);

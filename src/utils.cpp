@@ -14,6 +14,8 @@
 #include <Geode/utils/web.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 
+#include <cvolton.misc_bugfixes/src/_Utils.hpp>
+
 #include "managers/BetterInfoCache.h"
 
 // https://stackoverflow.com/questions/25986331/how-to-determine-windows-version-in-future-proof-way
@@ -771,7 +773,7 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
     if(hasBeenCalled) return;
     hasBeenCalled = true;
 
-    auto url = fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true), getWineVersion(), getOSVersion());
+    auto url = fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&amazon={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true), getWineVersion(), getOSVersion(), MiscBugfixes::isAmazon() ? "1" : "0");
     web::WebRequest().get(url).listen(
         [layer](web::WebResponse* response) {
             auto biCache = BetterInfoCache::sharedState();
