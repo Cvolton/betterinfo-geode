@@ -106,7 +106,7 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
             lastBtn->usePopupTexture(shouldSearchForLastPage());
         }
 
-        if(!LevelEditorLayer::get()) {
+        if(!m_searchObject->m_searchIsOverlay && !LevelEditorLayer::get()) {
             BetterInfo::refreshAlertPrio(this);
             handleTouchPriority(this, true);
         }
