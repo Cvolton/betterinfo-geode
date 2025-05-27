@@ -18,17 +18,8 @@
 
 #include "managers/BetterInfoCache.h"
 
-// https://stackoverflow.com/questions/25986331/how-to-determine-windows-version-in-future-proof-way
 #ifdef GEODE_IS_WINDOWS
-#pragma comment(lib, "ntdll.lib")
-
-extern "C" {
-typedef LONG NTSTATUS, *PNTSTATUS;
-#define STATUS_SUCCESS (0x00000000)
-
-// Windows 2000 and newer
-NTSYSAPI NTSTATUS NTAPI RtlGetVersion(PRTL_OSVERSIONINFOEXW lpVersionInformation);
-}
+typedef void (WINAPI* RtlGetNtVersionNumbersFunc)(DWORD* major, DWORD* minor, DWORD* build);
 #endif
 
 // https://github.com/geode-sdk/geode/blob/a649cd7cbda18bda3542b3e2350358d0f64d71fc/loader/src/ui/mods/popups/ModPopup.cpp#L851
@@ -756,13 +747,14 @@ std::string BetterInfo::getWineVersion() {
 
 std::string BetterInfo::getOSVersion() {
     #ifdef GEODE_IS_WINDOWS
-        // https://stackoverflow.com/questions/25986331/how-to-determine-windows-version-in-future-proof-way
-        RTL_OSVERSIONINFOEXW osVers;
-        osVers.dwOSVersionInfoSize = sizeof(osVers);
+        DWORD major = 0, minor = 0, build = 0;
+        RtlGetNtVersionNumbersFunc rtlGetNtVersionNumbers = (RtlGetNtVersionNumbersFunc)GetProcAddress(GetModuleHandle("ntdll.dll"), "RtlGetNtVersionNumbers");
+        if (rtlGetNtVersionNumbers) {
+            rtlGetNtVersionNumbers(&major, &minor, &build);
+            build &= 0xFFFF;
+        }
 
-        NTSTATUS status = RtlGetVersion(&osVers);
-
-        return fmt::format("Windows%20{}.{}.{}", osVers.dwMajorVersion, osVers.dwMinorVersion, osVers.dwBuildNumber);
+        return fmt::format("Windows%20{}.{}.{}", major, minor, build);
     #else
         return GEODE_PLATFORM_NAME;
     #endif
