@@ -1,6 +1,7 @@
 #include "ServerUtils.h"
 #include "../utils.hpp"
 #include "../integrations/ServerAPIEvents.hpp"
+#include <cvolton.misc_bugfixes/src/_Utils.hpp>
 
 #include <shared_mutex>
 
