@@ -12,6 +12,9 @@ class BI_DLL LevelBrowserEndLayer : public CvoltonAlertLayerStub, public LevelMa
     LoadingCircle* m_circle = nullptr;
     cocos2d::CCLabelBMFont* m_timer = nullptr;
 
+    std::vector<int> m_500ids;
+    bool m_verified500 = false;
+
     int m_min = 0;
     int m_max = 0;
     int m_requests = 0;
