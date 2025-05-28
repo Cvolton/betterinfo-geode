@@ -611,16 +611,16 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
         });
 
         for(const auto& portal : speedPortals) {
-            log::info("Object ID: {}, X Position: {}, Portal ID: {}", portal.id, portal.xPos, prevPortalId);
+            //log::info("Object ID: {}, X Position: {}, Portal ID: {}", portal.id, portal.xPos, prevPortalId);
             timeFull += (portal.xPos - prevPortalX) / travelForPortalId(prevPortalId);
             prevPortalId = portal.id;
             prevPortalX = portal.xPos;
         }
 
-        log::info("Last portal ID: {}, Last X Position: {}", prevPortalId, prevPortalX);
+        //log::info("Last portal ID: {}, Last X Position: {}", prevPortalId, prevPortalX);
         timeFull += (maxPos - prevPortalX) / travelForPortalId(prevPortalId);
         auto b = timeInMs() - a;
-        log::info("Time for levelString: {}ms, decompress: {}ms, parse: {}ms, maxPos {}", b, c - a, timeInMs() - c, maxPos);
+        //log::info("Time for levelString: {}ms, decompress: {}ms, parse: {}ms, maxPos {}", b, c - a, timeInMs() - c, maxPos);
         return timeFull;
     } catch(std::exception e) {
         log::error("An exception has occured while calculating time for levelString: {}", e.what());
