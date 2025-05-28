@@ -551,6 +551,12 @@ uint64_t BetterInfo::timeInMs() {
 }
 
 float BetterInfo::timeForLevelString(const std::string& levelString) {
+    struct SpeedPortalObject {
+        int id;
+        float xPos;
+        bool checked;
+    };
+
     try {
         auto a = timeInMs();
 
@@ -560,6 +566,7 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
         std::string currentObject;
         std::string currentKey;
         std::string keyID;
+        std::vector<SpeedPortalObject> speedPortals;
 
         //std::stringstream objectStream;
         float prevPortalX = 0;
@@ -596,14 +603,24 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
             if(maxPos < xPos) maxPos = xPos;
             if(!checked || !objectIDIsSpeedPortal(objID)) continue;
 
-            timeFull += (xPos - prevPortalX) / travelForPortalId(prevPortalId);
-            prevPortalId = objID;
-            prevPortalX = xPos;
+            speedPortals.push_back({objID, xPos, checked});
         }
 
+        std::sort(speedPortals.begin(), speedPortals.end(), [](const SpeedPortalObject& a, const SpeedPortalObject& b) {
+            return a.xPos < b.xPos;
+        });
+
+        for(const auto& portal : speedPortals) {
+            log::info("Object ID: {}, X Position: {}, Portal ID: {}", portal.id, portal.xPos, prevPortalId);
+            timeFull += (portal.xPos - prevPortalX) / travelForPortalId(prevPortalId);
+            prevPortalId = portal.id;
+            prevPortalX = portal.xPos;
+        }
+
+        log::info("Last portal ID: {}, Last X Position: {}", prevPortalId, prevPortalX);
         timeFull += (maxPos - prevPortalX) / travelForPortalId(prevPortalId);
         auto b = timeInMs() - a;
-        //log::info("Time for levelString: {}ms, decompress: {}ms, parse: {}ms", b, c - a, timeInMs() - c);
+        log::info("Time for levelString: {}ms, decompress: {}ms, parse: {}ms, maxPos {}", b, c - a, timeInMs() - c, maxPos);
         return timeFull;
     } catch(std::exception e) {
         log::error("An exception has occured while calculating time for levelString: {}", e.what());
