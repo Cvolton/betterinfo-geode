@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.3.13</c> (2025-05-29)
+* <cg>Added</c> <cl>support</c> for the recently introduced <cr>500 page limit</c> to <co>Find Last Page</c>
+* <cg>Fixed</c> <cl>Smart Templates</c> being <cr>unclickable</c> on <cp>Android</c>
+* <cg>Fixed</c> <cl>Slaughterhouse</c> by icedcave showing <cr>incorrrect level length</c>
+
 ## <cg>v4.3.12</c> (2025-05-27)
 * <cg>Improved</c> support for <cp>Amazon</c> versions of the game
 
