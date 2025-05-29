@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.3.14</c> (2025-05-29)
+* Other bugfixes & improvements
+
 ## <cg>v4.3.13</c> (2025-05-29)
 * <cg>Added</c> <cl>support</c> for the recently introduced <cr>500 page limit</c> to <co>Find Last Page</c>
 * <cg>Fixed</c> <cl>Smart Templates</c> being <cr>unclickable</c> on <cp>Android</c>

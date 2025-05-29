@@ -322,6 +322,6 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     void onEnterTransitionDidFinish() {
         LevelBrowserLayer::onEnterTransitionDidFinish();
 
-        refreshButtonVisibility();
+        if(typeinfo_cast<LevelBrowserLayer*>(this)) refreshButtonVisibility();
     }
 };
