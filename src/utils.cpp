@@ -248,14 +248,9 @@ std::string BetterInfo::decodeBase64Gzip(const std::string& input) {
 }
 
 std::string BetterInfo::fileSize(size_t bytes) {
-    std::stringstream size;
-    size << std::setprecision(4);
-
-    if(bytes > (1024*1024)) size << ( bytes / (float)(1024*1024) ) << "MB";
-    else if(bytes > (1024)) size << ( bytes / (float)(1024) ) << "KB";
-    else size << bytes << "B";
-
-    return size.str();
+    if(bytes > 1024 * 1024) return fmt::format("{:.4g}MB", bytes / (1024.0 * 1024.0));
+    else if(bytes > 1024) return fmt::format("{:.4g}KB", bytes / 1024.0);
+    return fmt::format("{}B", bytes);
 }
 
 std::string BetterInfo::fixColorCrashes(std::string input) {
