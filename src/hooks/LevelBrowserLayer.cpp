@@ -1,5 +1,6 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LevelBrowserLayer.hpp>
+#include <Geode/modify/CCLayer.hpp>
 
 #include "../utils.hpp"
 #include "../ui/DoubleArrow.h"
@@ -318,10 +319,12 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
 
         return LevelBrowserLayer::onInfo(sender);
     }
+};
 
+class $modify(CCLayer) {
     void onEnterTransitionDidFinish() {
-        LevelBrowserLayer::onEnterTransitionDidFinish();
+        CCLayer::onEnterTransitionDidFinish();
 
-        if(typeinfo_cast<LevelBrowserLayer*>(this)) refreshButtonVisibility();
+        if(typeinfo_cast<LevelBrowserLayer*>(this)) reinterpret_cast<BILevelBrowserLayer*>(this)->refreshButtonVisibility();
     }
 };
