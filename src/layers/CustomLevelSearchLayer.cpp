@@ -48,15 +48,15 @@ void CustomLevelSearchLayer::onSong(CCObject* sender) {
 }
 
 void CustomLevelSearchLayer::onNeighbors(CCObject* sender) {
-    std::ostringstream query;
+    std::string query;
     bool addSeparator = false;
     for(int i = (m_level->m_levelID) - 50; i < ((m_level->m_levelID) + 50); i++){
-        if(addSeparator) query << ",";
-        query << i;
+        if(addSeparator) query += ",";
+        query += std::to_string(i);
         addSeparator = true;
     }
 
-    auto searchObject = GJSearchObject::create(SearchType::Type19, query.str());
+    auto searchObject = GJSearchObject::create(SearchType::Type19, query);
     auto browserLayer = LevelBrowserLayer::scene(searchObject);
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
     CCDirector::sharedDirector()->pushScene(transitionFade);
