@@ -28,12 +28,8 @@ std::string TimeUtils::timeToString(time_t input) {
 
 std::string TimeUtils::isoTimeToString(const std::string& input) {
     if(input.empty()) return "NA";
-    std::string output;
-    getline(std::istringstream(input), output, 'T');
-    return output;
-    /*int y,M,d;
-    sscanf(input.c_str(), "%d-%d-%dT", &y, &M, &d);
-    return fmt::format("{}-{:02}-{:02}", y, M, d);*/
+    auto pos = input.find('T');
+    return pos != std::string::npos ? input.substr(0, pos) : input;
 }
 
 std::string TimeUtils::workingTime(int value){
@@ -44,12 +40,12 @@ std::string TimeUtils::workingTime(int value){
     int minutes = (value % 3600) / 60;
     int seconds = value % 60;
 
-    std::ostringstream stream;
-    if(hours > 0) stream << hours << "h ";
-    if(hours > 0 || minutes > 0) stream << minutes << "m ";
-    stream << seconds << "s";
+    std::string res;
+    if(hours > 0) res += fmt::format("{}h ", hours);
+    if(hours > 0 || minutes > 0) res += fmt::format("{}m ", minutes);
+    res += fmt::format("{}s", seconds);
 
-    return stream.str();
+    return res;
 }
 
 std::string TimeUtils::platformerTime(int value, bool showMilliseconds){
