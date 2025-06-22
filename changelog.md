@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.3.16</c> (2025-06-22)
+* <cg>Added</c> <cp>iOS Jitless</c> support
+* <cg>Improved</c> compatibility with <cl>Controllable</c> mod
+
 ## <cg>v4.3.14 & v4.3.15</c> (2025-05-29)
 * Other bugfixes & improvements
 
