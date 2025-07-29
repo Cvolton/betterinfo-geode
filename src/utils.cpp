@@ -777,7 +777,7 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
     if(hasBeenCalled) return;
     hasBeenCalled = true;
 
-    auto url = fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&amazon={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true), getWineVersion(), getOSVersion(), (MiscBugfixes::isAmazon() || Loader::get()->isPatchless()) ? "1" : "0");
+    auto url = fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&amazon={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true), getWineVersion(), getOSVersion(), (BetterInfo::isAmazon() || Loader::get()->isPatchless()) ? "1" : "0");
     web::WebRequest().get(url).listen(
         [layer](web::WebResponse* response) {
             auto biCache = BetterInfoCache::sharedState();
@@ -1108,4 +1108,8 @@ void BetterInfo::refreshAlertPrio(CCNode* node) {
         alert->m_noElasticity = true;
         alert->show();
     }
+}
+
+bool BetterInfo::isAmazon() {
+    return !((GJMoreGamesLayer* volatile)nullptr)->getMoreGamesList()->count();
 }
