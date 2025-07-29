@@ -1,4 +1,11 @@
 # Changelog
+## <cg>v4.3.17</c> (2025-07-30)
+* <cg>Removed</c> mandatory dependency on <co>Misc Bugfixes</c> mod
+* <cg>Removed</c> the limit where <cj>auto submit to leaderboards</c> for <co>classic levels</c> was <cr>Disabled</c> on <cp>mobile devices</c>
+  * RobTop removed the limit that caused the feature
+* <cg>Removed</c> integration with <ci>QOLmod</d>
+  * Per developer request - it broke disabling noclip or something
+
 ## <cg>v4.3.16</c> (2025-06-22)
 * <cg>Added</c> <cp>iOS Jitless</c> support
 * <cg>Improved</c> compatibility with <cl>Controllable</c> mod
