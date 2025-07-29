@@ -777,7 +777,7 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
     if(hasBeenCalled) return;
     hasBeenCalled = true;
 
-    auto url = fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&amazon={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true), getWineVersion(), getOSVersion(), MiscBugfixes::isAmazon() ? "1" : "0");
+    auto url = fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&amazon={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true), getWineVersion(), getOSVersion(), (MiscBugfixes::isAmazon() || Loader::get()->isPatchless()) ? "1" : "0");
     web::WebRequest().get(url).listen(
         [layer](web::WebResponse* response) {
             auto biCache = BetterInfoCache::sharedState();

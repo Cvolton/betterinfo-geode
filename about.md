@@ -22,3 +22,6 @@ The best epic modification ever made for Geometry Dash is here! BetterInfo, now 
 - acaruso, RandomB, TheSillyDoggo for minor code contributions
 - All [GDHistory](https://history.geometrydash.eu/) contributors (especially the Restoration Union)
 - Geode people and GDP people
+
+## Special note
+Misc Bugfixes mod is highly recommended to be enabled while using this mod, keep in mind that while that mod is not absolutely required for BetterInfo to work, additional crashes may occur.

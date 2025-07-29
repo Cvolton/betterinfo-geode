@@ -23,7 +23,10 @@
     "early-load": true,
     "dependencies": {
         "geode.node-ids": "v1.18.0",
-        "cvolton.misc_bugfixes": "v1.6.4",
+        "cvolton.misc_bugfixes": {
+            "version": "v1.6.4",
+            "importance": "recommended"
+        },
         "cvolton.level-id-api": "v1.0.0"
     },
     "settings": {
