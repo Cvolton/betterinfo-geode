@@ -85,6 +85,9 @@ bool UnregisteredProfileLayer::init(GJUserScore* score, CCNode* invoker){
     icon->updatePlayerFrame(m_score->m_iconID, m_score->m_iconType);
     icon->setColor(GM->colorForIdx(m_score->m_color1));
     icon->setSecondColor(GM->colorForIdx(m_score->m_color2));
+    if(m_score->m_special == 2){
+        icon->setGlowOutline(GM->colorForIdx(m_score->m_color2));
+    }
     icon->updateColors();
 
     //icon->setPosition({440,224});
