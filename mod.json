@@ -32,7 +32,7 @@
     "settings": {
         "auto-submit": {
             "name": "Auto submit to leaderboards",
-            "description": "Automatically submits your level score to the level leaderboards upon exiting a level\n\n(force disabled for classic levels on mobile until RobTop fixes his anticheat)",
+            "description": "Automatically submits your level score to the level leaderboards upon exiting a level",
             "type": "bool",
             "default": false
         },
