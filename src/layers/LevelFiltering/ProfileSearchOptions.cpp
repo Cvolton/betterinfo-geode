@@ -108,6 +108,7 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
     m_top = 96;
     m_gap = 39;
 
+    this->m_scene = levelBrowserLayer;
     this->m_levelBrowserLayer = levelBrowserLayer;
     this->m_prefix = prefix;
     this->m_searchObjDelegate = searchObjDelegate;
