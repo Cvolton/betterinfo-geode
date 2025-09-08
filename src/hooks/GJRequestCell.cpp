@@ -87,6 +87,18 @@ class BI_DLL $modify(BIFriendRequestPopup, FriendRequestPopup) {
 
 		if(!FriendRequestPopup::init(request)) return false;
 
+		// friend request id
+		auto idText = CCLabelBMFont::create(fmt::format("#{}", request->m_requestID).c_str(), "chatFont.fnt");
+		idText->setPosition({446, 235});
+		idText->setAnchorPoint({1, .5f});
+		idText->setScale(.35f);
+		idText->setOpacity(200);
+		idText->setColor({0,0,0});
+		idText->setID("request-id"_spr);
+		m_mainLayer->addChild(idText);
+
+		// cancel button in sent requests
+
 		if(m_fields->m_sent) {
 			if(auto menu = m_mainLayer->getChildByID("bottom-menu")) {
 				if(auto acceptBtn = menu->getChildByID("accept-button")) acceptBtn->removeFromParent();
