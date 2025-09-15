@@ -31,6 +31,7 @@ class BI_DLL $modify(BIGJScoreCell, GJScoreCell) {
             auto container = CCNode::create();
             container->setContentSize({50,50});
             container->addChild(player);
+            container->setID("player-icon-container"_spr);
 
             player->setPosition(container->getContentSize() / 2);
 
@@ -39,8 +40,10 @@ class BI_DLL $modify(BIGJScoreCell, GJScoreCell) {
                 this,
                 menu_selector(BIGJScoreCell::onSimplePlayer)
             );
+            playerBtn->setID("player-icon-button"_spr);
 
             playerMenu->addChild(playerBtn);
+            playerMenu->setID("player-icon-menu"_spr);
         }
 
     }
