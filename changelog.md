@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.3.20</c> (2025-09-21)
+* <cg>Fixed</c> a potential save corruption bug
+
 ## <cg>v4.3.19</c> (2025-09-21)
 * <cg>Fixed</c> a rare potential <cp>Android</c>-specific <cr>crash</c>
 * Other bugfixes & improvements
