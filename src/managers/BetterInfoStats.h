@@ -50,4 +50,5 @@ public:
 	std::string keyForList(GJLevelList* list);
 	void setListFolder(GJLevelList* list, int folder);
 	int getListFolder(GJLevelList* list);
+	void finishLoading();
 };

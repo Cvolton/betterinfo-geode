@@ -24,6 +24,7 @@ void BI_DLL loadManagers() {
 
 void BI_DLL finishLoadingManagers() {
     BetterInfoCache::sharedState()->finishLoading();
+    BetterInfoStats::sharedState()->finishLoading();
 }
 
 void BI_DLL fixLevelLists() {

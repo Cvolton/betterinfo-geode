@@ -113,8 +113,6 @@ void BetterInfoStats::dataLoaded(DS_Dictionary* data) {
 
     auto listFolderAssignmentsDict = static_cast<CCDictionary*>(data->getObjectForKey("listFolderAssignments"));
     if(listFolderAssignmentsDict) m_listFolderAssignmentsDict = listFolderAssignmentsDict;
-
-    this->establishListFolders();
 }
 
 void BetterInfoStats::firstLoad() {
@@ -227,4 +225,8 @@ int BetterInfoStats::getListFolder(GJLevelList* list) {
 
 $on_mod(DataSaved) {
     BetterInfoStats::sharedState()->save();
+}
+
+void BetterInfoStats::finishLoading() {
+    this->establishListFolders();
 }
