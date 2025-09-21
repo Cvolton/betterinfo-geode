@@ -1110,6 +1110,11 @@ void BetterInfo::refreshAlertPrio(CCNode* node) {
     }
 }
 
+static bool s_isAmazon = false;
 bool BetterInfo::isAmazon() {
-    return GEODE_ANDROID(!((GJMoreGamesLayer* volatile)nullptr)->getMoreGamesList()->count() ||) false;
+    return s_isAmazon;
+}
+
+void BetterInfo::setAmazon(bool value) {
+    s_isAmazon = value;
 }

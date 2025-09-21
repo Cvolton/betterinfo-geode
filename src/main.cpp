@@ -74,21 +74,13 @@ class BI_DLL $modify(MenuLayer) {
             fixLevelLists();
         }
 
-        /*Notification::create("important notification")->show();
-        BetterInfo::showUnimportantNotification("unimportant 1", NotificationIcon::Success);
-        BetterInfo::showUnimportantNotification("unimportant 2", NotificationIcon::Success);
-        BetterInfo::showUnimportantNotification("unimportant 3", NotificationIcon::Success);
-        BetterInfo::showUnimportantNotification("unimportant 4", NotificationIcon::Success);
-        BetterInfo::showUnimportantNotification("unimportant 5", NotificationIcon::Success);
-        BetterInfo::showUnimportantNotification("unimportant 6", NotificationIcon::Success);
-        Notification::create("important notification 2")->show();*/
-
         return true;
     }
 };
 
-$execute {
-    Loader::get()->queueInMainThread([] {
-        loadManagers();
-    });
+$on_mod(Loaded) {
+    #ifdef GEODE_IS_ANDROID
+        BetterInfo::setAmazon((GJMoreGamesLayer* volatile)nullptr)->getMoreGamesList()->count() == 0);
+    #endif
+    loadManagers();
 }

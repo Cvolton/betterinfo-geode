@@ -112,4 +112,5 @@ namespace BetterInfo {
 
     BI_DLL void refreshAlertPrio(CCNode* node);
     BI_DLL bool isAmazon();
+    BI_DLL void setAmazon(bool value);
 }
