@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.3.19</c> (2025-09-21)
+* <cg>Fixed</c> a rare potential <cp>Android</c>-specific <cr>crash</c>
+* Other bugfixes & improvements
+
 ## <cg>v4.3.18</c> (2025-08-14)
 * <cg>Fixed</c> <cl>glow</c> not showing on <co>Green User Profiles</c>
 * <cg>Fixed</c> <co>Saved Level Filters</c> not being properly clickable on <cp>Android</c>
