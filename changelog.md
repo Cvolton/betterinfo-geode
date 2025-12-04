@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.3.21</c> (2025-12-04)
+* <cg>Fixed</c> some menus being <cr>unlickable</c> with Better Touch Prio mod installed
+
 ## <cg>v4.3.20</c> (2025-09-21)
 * <cg>Fixed</c> a potential save corruption bug
 

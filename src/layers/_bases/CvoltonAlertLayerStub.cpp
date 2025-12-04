@@ -28,7 +28,7 @@ bool CvoltonAlertLayerStub::init(CCPoint contentSize, float closeBtnScale, uint8
     invisBtn->setID("invisible-button"_spr);
     invisBtn->setUserObject("undefined0.controllable/should-not-focus", CCBool::create(true));
     workaroundMenu->addChild(invisBtn);
-    m_mainLayer->addChild(workaroundMenu, 9);
+    m_mainLayer->addChild(workaroundMenu, -1000);
 
     m_buttonMenu = CCMenu::create();
     m_buttonMenu->setID("button-menu"_spr);
