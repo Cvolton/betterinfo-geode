@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.3.22</c> (2026-01-09)
+* <cg>Fixed</c> <cl>Claimable Lists popup</c> not working on <cp>Android</c>
+* <cg>Fixed</c> <cr>a bug</c> where you couldn't press <cl>Esc</c> after closing the <co>Filtered Search popup</c>
+
 ## <cg>v4.3.21</c> (2025-12-04)
 * <cg>Fixed</c> some menus being <cr>unclickable</c> with Better Touch Prio mod installed
 
