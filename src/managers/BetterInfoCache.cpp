@@ -312,6 +312,10 @@ void BetterInfoCache::cacheList(GJLevelList* list) {
         if(*it < 0x20) *it = ' ';
     }
 
+    for(auto level : list->m_levels) {
+        log::info("List {} contains level {}", list->m_listID, level);
+    }
+
     m_json["list-info-dict"][idString]["name"] = name;
     m_json["list-info-dict"][idString]["levels"] = std::vector<int>(list->m_levels);
     m_json["list-info-dict"][idString]["levels-to-claim"] = list->m_levelsToClaim;
