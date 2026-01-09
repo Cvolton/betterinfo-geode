@@ -312,8 +312,14 @@ void BetterInfoCache::cacheList(GJLevelList* list) {
         if(*it < 0x20) *it = ' ';
     }
 
+    //this is needed for android, std::vector<int>(list->m_levels); keeps the vector empty
+    std::vector<int> levelsVec;
+    for(auto level : list->m_levels) {
+        levelsVec.push_back(level);
+    }
+
     m_json["list-info-dict"][idString]["name"] = name;
-    m_json["list-info-dict"][idString]["levels"] = std::vector<int>(list->m_levels);
+    m_json["list-info-dict"][idString]["levels"] = levelsVec;
     m_json["list-info-dict"][idString]["levels-to-claim"] = list->m_levelsToClaim;
     m_json["list-info-dict"][idString]["diamonds"] = list->m_diamonds;
     guard.unlock();
