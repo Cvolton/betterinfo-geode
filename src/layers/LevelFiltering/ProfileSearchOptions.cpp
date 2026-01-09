@@ -21,10 +21,12 @@ ProfileSearchOptions* ProfileSearchOptions::create(LevelBrowserLayer* levelBrows
 
 void ProfileSearchOptions::onClose(cocos2d::CCObject* sender)
 {
+    this->retain();
+    CvoltonOptionsLayer::onClose(sender);
+
     if(m_searchObjDelegate != nullptr) m_searchObjDelegate->onSearchObjectFinished(getSearchObject());
     reloadBrowser();
-    
-    CvoltonOptionsLayer::onClose(sender);
+    this->release();
 }
 
 void ProfileSearchOptions::onPrev(cocos2d::CCObject* sender)
