@@ -530,7 +530,7 @@ void ProfileSearchOptions::setToRangeItem(BISearchObject::RangeItem& item, const
     item = {getOption(option), getOptionInt(fmt::format("{}_min", option)), getOptionInt(fmt::format("{}_max", option))};
 }
 
-void ProfileSearchOptions::keyDown(enumKeyCodes key) {
+void ProfileSearchOptions::keyDown(enumKeyCodes key, double timestamp) {
     switch(key) {
         case KEY_Left:
         case CONTROLLER_Left:
@@ -541,7 +541,7 @@ void ProfileSearchOptions::keyDown(enumKeyCodes key) {
             if(m_nextBtn->isVisible()) onNext(nullptr);
             break;
         default:
-            CvoltonOptionsLayer::keyDown(key);
+            CvoltonOptionsLayer::keyDown(key, timestamp);
             break;
     }
 }

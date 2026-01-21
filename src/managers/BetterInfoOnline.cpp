@@ -83,9 +83,7 @@ void BetterInfoOnline::sendScores(cocos2d::CCArray* scores, int accountID, BILea
 void BetterInfoOnline::sendScoreToProfilePage(cocos2d::CCArray* scores, int accountID, Ref<ProfilePage> profilePage){
     if(!profilePage) return;
 
-    CCObject* obj;
-    CCARRAY_FOREACH(scores, obj){
-        auto score = static_cast<GJUserScore*>(obj);
+    for(auto score : CCArrayExt<GJUserScore>(scores)) {
         score->m_messageState = 2;
         score->m_friendStatus = 1;
         score->m_glowEnabled = score->m_special == 2;

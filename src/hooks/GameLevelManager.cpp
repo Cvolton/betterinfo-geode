@@ -65,10 +65,7 @@ class BI_DLL $modify(GameLevelManager) {
 
         //uint64_t now = BetterInfo::timeInMs();
 
-        auto levels = this->m_onlineLevels;
-        CCDictElement* obj;
-        CCDICT_FOREACH(levels, obj){
-            auto currentLvl = static_cast<GJGameLevel*>(obj->getObject());
+        for(auto [key, currentLvl] : CCDictionaryExt<gd::string, GJGameLevel>(this->m_onlineLevels)) {
             switch(mode){
                 case CompleteMode::completed:
                     if(currentLvl->m_normalPercent == 100) pRet->addObject(currentLvl);
@@ -192,10 +189,7 @@ class BI_DLL $modify(GameLevelManager) {
         };
         
         //calculating levels
-        auto levels = this->m_onlineLevels;
-        CCObject* obj;
-        CCARRAY_FOREACH(original, obj){
-            auto level = static_cast<GJGameLevel*>(obj);
+        for(auto [key, level] : CCDictionaryExt<gd::string, GJGameLevel>(this->m_onlineLevels)){
 
             int password = level->m_password;
             int difficulty = LevelUtils::levelDifficultyAsInt(level);

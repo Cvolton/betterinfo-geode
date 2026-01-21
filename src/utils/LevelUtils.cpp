@@ -9,9 +9,7 @@ GJGameLevel* LevelUtils::getLevelFromSaved(int levelID) {
 std::deque<GJGameLevel*> LevelUtils::completedDeque() {
     std::deque<GJGameLevel*> levelsDeque;
     auto levels = GameLevelManager::sharedState()->m_onlineLevels;
-    CCDictElement* obj;
-    CCDICT_FOREACH(levels, obj){
-        auto currentLvl = static_cast<GJGameLevel*>(obj->getObject());
+    for(auto [key, currentLvl] : CCDictionaryExt<gd::string, GJGameLevel*>(levels)) {
         levelsDeque.push_back(currentLvl);
     }
     return levelsDeque;

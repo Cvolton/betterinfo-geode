@@ -248,7 +248,7 @@ int BIViewLayer::resultsPerPage() const{
     return !m_paginated ? m_data->count() : ((GameManager::sharedState()->getGameVariable("0093")) ? 20 : 10);
 }
 
-void BIViewLayer::keyDown(enumKeyCodes key){
+void BIViewLayer::keyDown(enumKeyCodes key, double timestamp){
     switch(key){
         case KEY_Left:
         case CONTROLLER_Left:
@@ -259,7 +259,7 @@ void BIViewLayer::keyDown(enumKeyCodes key){
             if(m_nextBtn->isVisible() == true) onNext(nullptr);
             break;
         default:
-            CCLayer::keyDown(key);
+            CCLayer::keyDown(key, timestamp);
     }
 }
 

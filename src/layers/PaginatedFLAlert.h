@@ -16,5 +16,5 @@ public:
     void onPrev(cocos2d::CCObject* sender);
     void loadPage(size_t page);
 
-    void keyDown(cocos2d::enumKeyCodes key);
+    void keyDown(cocos2d::enumKeyCodes key, double timestamp);
 };

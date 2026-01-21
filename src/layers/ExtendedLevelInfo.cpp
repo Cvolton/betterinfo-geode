@@ -366,7 +366,7 @@ CCLabelBMFont* ExtendedLevelInfo::createTextLabel(const std::string text, const 
     return bmFont;
 }
 
-void ExtendedLevelInfo::keyDown(enumKeyCodes key) {
+void ExtendedLevelInfo::keyDown(enumKeyCodes key, double timestamp) {
     switch(key) {
         case KEY_Left:
         case CONTROLLER_Left:
@@ -377,6 +377,6 @@ void ExtendedLevelInfo::keyDown(enumKeyCodes key) {
             if(m_nextBtn->isVisible()) onNext(nullptr);
             break;
         default:
-            FLAlertLayer::keyDown(key);
+            FLAlertLayer::keyDown(key, timestamp);
     }
 }

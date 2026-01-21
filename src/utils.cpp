@@ -42,8 +42,7 @@ CCSprite* BetterInfo::createWithBISpriteFrameName(const char* name){
 }
 
 CCSprite* BetterInfo::createBISprite(const char* name){
-    name = Mod::get()->expandSpriteName(name).data();
-    auto sprite = CCSprite::create(name);
+    auto sprite = CCSprite::create(Mod::get()->expandSpriteName(name).data());
     if(sprite) return sprite;
 
     return createPlaceholder();
@@ -1037,7 +1036,7 @@ static std::vector<Ref<Notification>> s_notifications;
 void BetterInfo::showUnimportantNotification(const std::string& content, NotificationIcon icon, float time) {
     if(GJBaseGameLayer::get()) return;
 
-    auto notif = Notification::create(content, icon, time);
+    auto notif = Notification::create(content.c_str(), icon, time);
     s_notifications.push_back(notif);
     notif->show();
 

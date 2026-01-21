@@ -82,7 +82,7 @@ void PaginatedFLAlert::loadPage(size_t page) {
     parent->addChild(newAlert);
 }
 
-void PaginatedFLAlert::keyDown(cocos2d::enumKeyCodes key) {
+void PaginatedFLAlert::keyDown(cocos2d::enumKeyCodes key, double timestamp) {
     switch(key) {
         case KEY_Left:
         case CONTROLLER_Left:
@@ -93,6 +93,6 @@ void PaginatedFLAlert::keyDown(cocos2d::enumKeyCodes key) {
             onNext(nullptr);
             break;
         default:
-            FLAlertLayer::keyDown(key);
+            FLAlertLayer::keyDown(key, timestamp);
     }
 }

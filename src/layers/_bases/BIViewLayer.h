@@ -44,7 +44,7 @@ public:
     static BIViewLayer* create(bool paginated = true);
     static cocos2d::CCScene* scene(bool paginated = true);
     virtual int getPage() const;
-    virtual void keyDown(cocos2d::enumKeyCodes key);
+    virtual void keyDown(cocos2d::enumKeyCodes key, double timestamp);
     void setData(cocos2d::CCArray* data);
 
     void showCircle();

@@ -133,12 +133,9 @@ void RewardCell::loadFromData(CCObject* object) {
     menu->setPosition(rowX, rowY);
     m_mainLayer->addChild(menu);
 
-    CCObject* obj;
     CCNode* lastSprite = nullptr;
     CCLabelBMFont* lastText = nullptr;
-    CCARRAY_FOREACH(m_rewardItem->m_rewardObjects, obj){
-        auto rewardObj = static_cast<GJRewardObject*>(obj);
-
+    for(auto rewardObj : CCArrayExt<GJRewardObject>(m_rewardItem->m_rewardObjects)) {
         lastSprite = itemToSprite(rewardObj->m_specialRewardItem);
         if(rewardObj->m_specialRewardItem == SpecialRewardItem::CustomItem) {
             auto icon = GJItemIcon::createBrowserItem(rewardObj->m_unlockType, rewardObj->m_itemID);

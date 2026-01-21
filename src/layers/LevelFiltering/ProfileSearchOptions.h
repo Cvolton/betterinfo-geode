@@ -56,7 +56,7 @@ public:
     void setSearchObject(const BISearchObject& searchObj);
     void setFromRangeItem(const std::string& option, const BISearchObject::RangeItem& item);
     void setToRangeItem(BISearchObject::RangeItem& item, const std::string& option) const;
-    void keyDown(enumKeyCodes key);
+    void keyDown(enumKeyCodes key, double timestamp);
 
     ~ProfileSearchOptions() {
         log::info("Destroying ProfileSearchOptions");

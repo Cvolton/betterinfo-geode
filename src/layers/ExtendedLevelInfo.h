@@ -37,5 +37,5 @@ public:
     void setupAdditionalInfo();
     bool init(GJGameLevel* level);
     static cocos2d::CCLabelBMFont* createTextLabel(const std::string text, const cocos2d::CCPoint& position, const float scale, cocos2d::CCNode* menu, const char* font = "bigFont.fnt");
-    void keyDown(cocos2d::enumKeyCodes key);
+    void keyDown(cocos2d::enumKeyCodes key, double timestamp);
 };
