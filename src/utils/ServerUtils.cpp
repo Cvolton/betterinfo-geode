@@ -34,7 +34,7 @@ std::string ServerUtils::getBaseURL() {
     #ifdef GEODE_IS_WINDOWS
         static_assert(GEODE_COMP_GD_VERSION == 22081, "Unsupported GD version");
         // origia
-        originalUrl = (char*)(base::get() + 0x558970);
+        originalUrl = (char*)(base::get() + 0x558b70);
     #elif defined(GEODE_IS_ARM_MAC)
         static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
         originalUrl = (char*)(base::get() + 0x7749fb);
