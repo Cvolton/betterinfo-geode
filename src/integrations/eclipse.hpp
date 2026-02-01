@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include <string>
@@ -200,3 +201,4 @@ namespace eclipse {
         }
     }
 }
+    */

@@ -1,7 +1,6 @@
 #include "ServerUtils.h"
 #include "../utils.hpp"
 #include "../integrations/ServerAPIEvents.hpp"
-#include <cvolton.misc_bugfixes/src/_Utils.hpp>
 
 #include <shared_mutex>
 
@@ -20,13 +19,13 @@ web::WebRequest ServerUtils::getBaseRequest(bool setUserAgent) {
 }
 
 std::string ServerUtils::getBaseURL() {
-    if(Loader::get()->isModLoaded("km7dev.server_api")) {
+    /*if(Loader::get()->isModLoaded("km7dev.server_api")) {
         auto url = ServerAPIEvents::getCurrentServer().url;
         if(!url.empty() && url != "NONE_REGISTERED") {
             while(url.ends_with("/")) url.pop_back();
             return url;
         }
-    }
+    }*/
 
     // The addresses are pointing to "https://www.boomlings.com/database/getGJLevels21.php"
     // in the main game executable
@@ -123,32 +122,33 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
     postString += "&secret=Wmfd2893gb7";
 
     std::string key = getSearchObjectKey(searchObject);
-    getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevelLists.php", getBaseURL()))
-        .listen([callback, key, cacheLevels](web::WebResponse* response) {
+    async::spawn(
+        getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevelLists.php", getBaseURL())),
+        [callback, key, cacheLevels](web::WebResponse response) {
             auto GLM = GameLevelManager::sharedState();
 
-            if(!response->ok()) {
-                if(response->header("retry-after").has_value()) {
-                    showRateLimitError(BetterInfo::stoi(response->header("retry-after").value()));
+            if(!response.ok()) {
+                if(response.header("retry-after").has_value()) {
+                    showRateLimitError(BetterInfo::stoi(response.header("retry-after").value()));
                 } else {
-                    showCFError(response->string().unwrapOr(""));
+                    showCFError(response.string().unwrapOr(""));
                 }
 
                 auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
 
                 callback(levels, false);
 
-                return *response;
+                return;
             }
 
             auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
 
-            auto responseString = response->string().unwrapOr("");
+            auto responseString = response.string().unwrapOr("");
 
             size_t hashes = std::count(responseString.begin(), responseString.end(), '#');
             if(hashes < 3) {
                 callback(levels, false);
-                return *response;
+                return;
             }
 
             std::stringstream responseStream(responseString);
@@ -192,8 +192,9 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
 
             callback(levels, true);
 
-            return *response;
-        });
+            return;
+        }
+    );
     
 }
 
@@ -236,35 +237,36 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
     postString += "&secret=Wmfd2893gb7";
 
     std::string key = getSearchObjectKey(searchObject);
-    getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevels21.php", getBaseURL()))
-        .listen([callback, key, cacheLevels](web::WebResponse* response) {
-            if(!response->ok()) {
-                if(response->header("retry-after").has_value()) {
-                    showRateLimitError(BetterInfo::stoi(response->header("retry-after").value()));
+    async::spawn(
+        getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevels21.php", getBaseURL())),
+        [callback, key, cacheLevels](web::WebResponse response) {
+            if(!response.ok()) {
+                if(response.header("retry-after").has_value()) {
+                    showRateLimitError(BetterInfo::stoi(response.header("retry-after").value()));
                 } else {
-                    showCFError(response->string().unwrapOr(""));
+                    showCFError(response.string().unwrapOr(""));
                 }
 
                 auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
                 callback(levels, false, false);
 
-                return *response;
+                return;
             }
 
             auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
-            auto responseString = response->string().unwrapOr("");
+            auto responseString = response.string().unwrapOr("");
 
             if(responseString == "-1") {
                 callback(levels, false, true);
-                return *response;
+                return;
             }
 
             size_t hashes = std::count(responseString.begin(), responseString.end(), '#');
             if(hashes < 4) {
                 callback(levels, false, false);
-                return *response;
+                return;
             }
 
             std::stringstream responseStream(responseString);
@@ -310,9 +312,9 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
 
             callback(levels, true, false);
 
-            return *response;
-        });
-
+            return;
+        }
+    );
 }
 
 CCArray* ServerUtils::getStoredOnlineLevels(const std::string& key) {

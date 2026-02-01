@@ -668,12 +668,13 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
             std::thread([userID, this] {
                 thread::setName("BI Username Downloader");
 
-                ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)).listen(
-                    [userID, this](web::WebResponse* response) {
-                        auto json = response->json();
-                        if(!response->ok() || json.isErr()) {
-                            log::error("Error while getting username for {}: {} - {}", userID, response->code(), response->string().unwrapOr("No response"));
-                            return *response;                            
+                async::spawn(
+                    ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)),
+                    [userID, this](web::WebResponse response) {
+                        auto json = response.json();
+                        if(!response.ok() || json.isErr()) {
+                            log::error("Error while getting username for {}: {} - {}", userID, response.code(), response.string().unwrapOr("No response"));
+                            return;                            
                         }
 
                         auto data = json.unwrap();
@@ -683,7 +684,7 @@ std::string BetterInfoCache::getUserName(int userID, bool download) {
 
                         storeUserName(userID, username);
                         log::debug("Restored green username for {}: {}", userID, username);
-                        return *response;
+                        return;
                     }
                 );
             }).detach();
@@ -735,23 +736,23 @@ std::string BetterInfoCache::getUploadDate(int levelID, UploadDateDelegate* dele
     auto idString = std::to_string(levelID);
     if(!objectExists("upload-date-dict", idString)) {
         if(m_attemptedLevelDates.find(levelID) == m_attemptedLevelDates.end()) {
-            ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)).listen(
-                [levelID, this](web::WebResponse* response) {
-                    auto json = response->json();
-                    if(!response->ok() || json.isErr()) {
-                        log::error("Error while getting exact upload date for level {}: {} - {}", levelID, response->code(), response->string().unwrapOr("No response"));
-                        return *response;
+            async::spawn(
+                ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)),
+                [levelID, this](web::WebResponse response) {
+                    auto json = response.json();
+                    if(!response.ok() || json.isErr()) {
+                        log::error("Error while getting exact upload date for level {}: {} - {}", levelID, response.code(), response.string().unwrapOr("No response"));
+                        return;
                     }
 
                     auto data = json.unwrap();
-                    if(!data["approx"].isObject()) return *response;
-                    if(!data["approx"]["estimation"].isString()) return *response;
+                    if(!data["approx"].isObject()) return;
+                    if(!data["approx"]["estimation"].isString()) return;
 
                     auto res = data["approx"]["estimation"].asString();
-                    if(!res) return *response;
+                    if(!res) return;
 
                     storeUploadDate(levelID, res.unwrap());
-                    return *response;
                 }
             );
 

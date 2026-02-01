@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 using namespace geode::prelude;
 
@@ -128,3 +128,4 @@ namespace ServerAPIEvents {
         return event.m_servers;
     }
 }
+*/

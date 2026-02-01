@@ -14,8 +14,6 @@
 #include <Geode/utils/web.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 
-#include <cvolton.misc_bugfixes/src/_Utils.hpp>
-
 #include "managers/BetterInfoCache.h"
 
 #ifdef GEODE_IS_WINDOWS
@@ -777,17 +775,18 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
     hasBeenCalled = true;
 
     auto url = fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&amazon={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true), getWineVersion(), getOSVersion(), (BetterInfo::isAmazon() || Loader::get()->isPatchless()) ? "1" : "0");
-    web::WebRequest().get(url).listen(
-        [layer](web::WebResponse* response) {
+    async::spawn(
+        web::WebRequest().get(url),
+        [layer](web::WebResponse response) {
             auto biCache = BetterInfoCache::sharedState();
 
-            if(!response->ok() || response->json().isErr()) {
-                log::warn("Fetching important notices failed: {} - {}", response->code(), response->string().unwrapOr("No response"));
+            if(!response.ok() || response.json().isErr()) {
+                log::warn("Fetching important notices failed: {} - {}", response.code(), response.string().unwrapOr("No response"));
                 biCache->cacheRatedLists();
-                return *response;
+                return;
             }
 
-            auto info = response->json().unwrap();
+            auto info = response.json().unwrap();
             if(auto res = info["notice"].asString()) {
                 auto alert = FLAlertLayer::create("BetterInfo", res.unwrap(), "OK");
                 alert->m_scene = layer;
@@ -807,9 +806,8 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
                 log::debug("Attempting to cache rated lists from server");
                 biCache->cacheRatedLists();
             }
-
-            return *response;
-        });
+        }
+    );
 }
 
 FLAlertLayer* BetterInfo::createUpdateDialog() {

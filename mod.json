@@ -27,7 +27,7 @@
             "version": "v1.6.4",
             "importance": "recommended"
         },
-        "cvolton.level-id-api": "v1.0.0"
+        "cvolton.level-id-api": "v2.0.0-beta.1"
     },
     "settings": {
         "auto-submit": {

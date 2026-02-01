@@ -1,4 +1,4 @@
-#include "eclipse.hpp"
+/*#include "eclipse.hpp"
 
 using namespace eclipse;
 using namespace geode::prelude;
@@ -29,4 +29,4 @@ $on_mod(Loaded) {
         createSettingTab("white-id", tab);
     });
     
-}
+}*/

@@ -19,7 +19,7 @@ class BI_DLL $modify(BILeaderboardsLayer, LeaderboardsLayer) {
         GLM->m_storedLevels->removeObjectForKey("leaderboard_global");
         GLM->m_storedLevels->removeObjectForKey("leaderboard_top");
 
-        auto layer = LeaderboardsLayer::create(GLM->m_leaderboardState);
+        auto layer = LeaderboardsLayer::create(GLM->m_leaderboardType, GLM->m_leaderboardStat);
         auto scene = CCScene::create();
         scene->addChild(layer);
         CCDirector::sharedDirector()->replaceScene(scene);
@@ -29,8 +29,8 @@ class BI_DLL $modify(BILeaderboardsLayer, LeaderboardsLayer) {
      * Hooks
      */
 
-    bool init(LeaderboardState state){
-        if(!LeaderboardsLayer::init(state)) return false;
+    bool init(LeaderboardType type, LeaderboardStat stat){
+        if(!LeaderboardsLayer::init(type, stat)) return false;
 
         if(auto menu = getChildByID("bottom-right-menu")) { 
             auto refreshBtn = CCMenuItemSpriteExtra::create(
