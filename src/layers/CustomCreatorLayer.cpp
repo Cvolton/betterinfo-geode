@@ -148,6 +148,34 @@ void CustomCreatorLayer::onSearchID(CCObject* object) {
 }
 
 void CustomCreatorLayer::onBrowserButton(CCObject* object) {
+
+    // need to load bonusLevelsLabel_001.png because robtop forgot to add it to gmd steam
+    auto* frameCache = CCSpriteFrameCache::sharedSpriteFrameCache();
+    auto* textureCache = CCTextureCache::sharedTextureCache();
+
+    const char* targetName = "bonusLevelsLabel_001.png";       // The name you want it to have
+    const char* filePath = "bonusLevelsLabel_001.png"_spr;  // The actual file on disk
+
+    // 2. Only run if the target name isn't already in the cache
+    if (!frameCache->spriteFrameByName(targetName)) {
+
+        // 3. Load the image file into a Texture
+        CCTexture2D* texture = textureCache->addImage(filePath, false);
+        
+        if (texture) {
+            // 4. Create a rectangle spanning the full size of the texture
+            CCSize size = texture->getContentSize();
+            CCRect rect = CCRectMake(0, 0, size.width, size.height);
+
+            // 5. Create a new Sprite Frame using that texture
+            CCSpriteFrame* newFrame = CCSpriteFrame::createWithTexture(texture, rect);
+
+            // 6. Inject it into the Sprite Frame Cache
+            frameCache->addSpriteFrame(newFrame, targetName);
+        }
+    }
+
+    // continue normal operation
     auto searchObject = GJSearchObject::create((SearchType) object->getTag());
     auto browserLayer = LevelBrowserLayer::scene(searchObject);
 

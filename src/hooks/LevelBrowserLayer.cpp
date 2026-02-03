@@ -15,9 +15,6 @@ using namespace geode::prelude;
 
 static const std::unordered_map<SearchType, const char*> s_labels = {
     { SearchType::HallOfFame, "hallOfFameLabel_001.png"_spr },
-    // 2.208: remove
-    { SearchType::FeaturedLite, "weeklyLevelsLabel_001.png"_spr },
-    { SearchType::Bonus, "bonusLevelsLabel_001.png"_spr }
 };
 
 static const std::unordered_map<SearchType, std::pair<const char*, const char*>> s_infoTexts = {
