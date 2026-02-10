@@ -1,11 +1,11 @@
 {
-    "geode": "5.0.0-alpha.1",
+    "geode": "5.0.0-alpha.2",
     "version": "v4.3.22",
     "gd": {
         "win": "2.2081",
-        "android": "2.2074",
-        "mac": "2.2074",
-        "ios": "2.2074"
+        "android": "2.2081",
+        "mac": "2.2081",
+        "ios": "2.2081"
     },
     "id": "cvolton.betterinfo",
     "name": "BetterInfo",
@@ -25,7 +25,7 @@
         "geode.node-ids": "v1.18.0",
         "cvolton.misc_bugfixes": {
             "version": "v1.6.4",
-            "importance": "recommended"
+            "required": false
         },
         "cvolton.level-id-api": "v2.0.0-beta.1"
     },
