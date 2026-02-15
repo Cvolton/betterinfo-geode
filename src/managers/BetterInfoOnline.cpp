@@ -29,7 +29,7 @@ void BetterInfoOnline::loadScores(int accountID, bool force, BILeaderboardDelega
     m_delegates.insert(delegate);
 
     async::spawn(ServerUtils::getBaseRequest(false)
-        .bodyString(fmt::format("{}&accountID={}&udid={}&type=relative&secret=Wmfd2893gb7", ServerUtils::getBasePostString(false), accountID, std::string(GameManager::sharedState()->m_playerUDID)))
+        .bodyString(fmt::format("{}&udid={}&type=relative&secret=Wmfd2893gb7", ServerUtils::getBasePostString(false), accountID))
         .post(fmt::format("{}/getGJScores20.php", ServerUtils::getBaseURL())),
         [this, accountID, delegate, profilePage](web::WebResponse response) {
             if(response.ok()) {
