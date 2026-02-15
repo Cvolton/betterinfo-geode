@@ -93,11 +93,11 @@ bool CustomLevelSearchLayer::init(GJGameLevel* level){
     /*auto neighborButton = createButton(m_buttonMenu, "Neighbors", menu_selector(CustomLevelSearchLayer::onNeighbors), 0, 4, (int)(120*0.6), 44*0.6f, 0.6f);
     auto similarButton = createButton(m_buttonMenu, "Similar", menu_selector(CustomLevelSearchLayer::onSimilar), 0, -48, (int)(120*0.6), 44*0.6f, 0.6f);*/
 
-    auto similarButton = createButton(m_buttonMenu, "Similar", menu_selector(CustomLevelSearchLayer::onSimilar), -75, 8, (int)(120*0.6), 44*0.6f, 0.6f);
-    similarButton->setID("similar-button"_spr);
-    auto neighborButton = createButton(m_buttonMenu, "Neighbors", menu_selector(CustomLevelSearchLayer::onNeighbors), 75, 8, (int)(120*0.6), 44*0.6f, 0.6f);
+    /*auto similarButton = createButton(m_buttonMenu, "Similar", menu_selector(CustomLevelSearchLayer::onSimilar), -75, 8, (int)(120*0.6), 44*0.6f, 0.6f);
+    similarButton->setID("similar-button"_spr);*/
+    auto neighborButton = createButton(m_buttonMenu, "Neighbors", menu_selector(CustomLevelSearchLayer::onNeighbors), 75, -20, (int)(120*0.6), 44*0.6f, 0.6f);
     neighborButton->setID("neighbor-button"_spr);
-    auto songButton = createButton(m_buttonMenu, "Same song", menu_selector(CustomLevelSearchLayer::onSong), 0, -48, (int)(120*0.6), 44*0.6f, 0.6f);
+    auto songButton = createButton(m_buttonMenu, "Same song", menu_selector(CustomLevelSearchLayer::onSong), -75, -20, (int)(120*0.6), 44*0.6f, 0.6f);
     songButton->setID("song-button"_spr);
 
     return true;
