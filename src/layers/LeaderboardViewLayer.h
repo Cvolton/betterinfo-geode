@@ -6,9 +6,12 @@
 class BI_DLL LeaderboardViewLayer : public BIViewLayer, public BILeaderboardDelegate {
     int m_accountID = 0;
     int m_stat = 0;
+    Ref<CCMenu> m_rightMenu = nullptr;
+    std::vector<Ref<CCMenuItemSpriteExtra>> m_statBtns;
 protected:
     virtual bool init(int accountID);
     virtual void keyBackClicked();
+    void setupStatBtns();
     void onRefresh(cocos2d::CCObject*);
     void loadStat(int stat);
 public:

@@ -43,17 +43,11 @@ bool LeaderboardViewLayer::init(int accountID) {
 
     loadPage();
 
-    std::array<std::pair<const char*, const char*>, 4> stats = {
-        std::make_pair("GJ_starsIcon_001.png", "stars"),
-        std::make_pair("GJ_moonsIcon_001.png", "moons"),
-        std::make_pair("GJ_demonIcon_001.png", "demons"),
-        std::make_pair("GJ_coinsIcon2_001.png", "user-coins")
-    };
-    auto rightMenu = CCMenu::create();
-    rightMenu->setID("right-side-menu"_spr);
-    rightMenu->setContentSize({ 24.f, 150.f });
-    rightMenu->setPosition({ winSize.width / 2 + 220.f, winSize.height / 2 });
-    rightMenu->setLayout(
+    m_rightMenu = CCMenu::create();
+    m_rightMenu->setID("right-side-menu"_spr);
+    m_rightMenu->setContentSize({ 24.f, 150.f });
+    m_rightMenu->setPosition({ winSize.width / 2 + 220.f, winSize.height / 2 });
+    m_rightMenu->setLayout(
         ColumnLayout::create()
             ->setGap(11.f)
             ->setAxisAlignment(AxisAlignment::Center)
@@ -61,10 +55,31 @@ bool LeaderboardViewLayer::init(int accountID) {
             ->setAutoScale(false)
     );
 
+    this->setupStatBtns();
+    this->addChild(m_rightMenu);
+
+    this->onRefresh(nullptr);
+
+    return true;
+}
+
+void LeaderboardViewLayer::setupStatBtns() {
+    for(const auto& btn : m_statBtns) {
+        btn->removeFromParent();
+    }
+    m_statBtns.clear();
+
+    std::array<std::pair<const char*, const char*>, 4> stats = {
+        std::make_pair("GJ_starsIcon_001.png", "stars"),
+        std::make_pair("GJ_moonsIcon_001.png", "moons"),
+        std::make_pair("GJ_demonIcon_001.png", "demons"),
+        std::make_pair("GJ_coinsIcon2_001.png", "user-coins")
+    };
+
     int i = 0;
     for (const auto& stat : stats) {
         auto icon = CCSprite::createWithSpriteFrameName(stat.first);
-        auto sprite = ButtonSprite::create(icon, 32, 0, 320.0, 1.0, true, "GJ_button_01.png", false);
+        auto sprite = ButtonSprite::create(icon, 32, 0, 320.0, 1.0, true, m_stat == i ? "GJ_button_02.png" : "GJ_button_01.png", false);
         sprite->updateSpriteOffset({0, -1.5f});
         sprite->setScale(0.6f);
         icon->setScale(1.2f);
@@ -75,16 +90,12 @@ bool LeaderboardViewLayer::init(int accountID) {
             }
         );
         btn->setID(fmt::format("{}-button"_spr, stat.second));
-        rightMenu->addChild(btn);
+        m_rightMenu->addChild(btn);
+        m_statBtns.push_back(btn);
         i++;
     }
 
-    rightMenu->updateLayout();
-    this->addChild(rightMenu);
-
-    this->onRefresh(nullptr);
-
-    return true;
+    m_rightMenu->updateLayout();
 }
 
 void LeaderboardViewLayer::loadPage(){
@@ -103,10 +114,15 @@ void LeaderboardViewLayer::onRefresh(CCObject* object) {
 }
 
 void LeaderboardViewLayer::loadStat(int stat) {
+    setData(CCArray::create());
+    loadPage();
+
     BetterInfoOnline::sharedState()->loadScores(m_accountID, true, this, nullptr, stat);
 
     showCircle();
     m_stat = stat;
+
+    setupStatBtns();
 }
 
 CCScene* LeaderboardViewLayer::scene(int accountID) {
