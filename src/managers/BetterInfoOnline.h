@@ -24,7 +24,7 @@ public:
 	    return s_instance;
 	}
 
-    void loadScores(int accountID, bool force, BILeaderboardDelegate* delegate, Ref<ProfilePage> profilePage);
+    void loadScores(int accountID, bool force, BILeaderboardDelegate* delegate, Ref<ProfilePage> profilePage, int stat = 0);
     void loadScores(int accountID, bool force, BILeaderboardDelegate* delegate);
     void loadScores(int accountID, bool force, Ref<ProfilePage> profilePage);
     void generateScores(const std::string& response, int accountID);

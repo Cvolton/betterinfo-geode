@@ -5,10 +5,12 @@
 
 class BI_DLL LeaderboardViewLayer : public BIViewLayer, public BILeaderboardDelegate {
     int m_accountID = 0;
+    int m_stat = 0;
 protected:
     virtual bool init(int accountID);
     virtual void keyBackClicked();
     void onRefresh(cocos2d::CCObject*);
+    void loadStat(int stat);
 public:
     virtual void loadPage();
     static LeaderboardViewLayer* create(int accountID);
