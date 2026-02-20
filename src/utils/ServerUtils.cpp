@@ -107,6 +107,14 @@ std::string ServerUtils::getSearchObjectKey(GJSearchObject* searchObject) {
     return ret;
 }
 
+void ServerUtils::showResponseError(const web::WebResponse& response) {
+    if(response.header("retry-after").has_value()) {
+        showRateLimitError(BetterInfo::stoi(response.header("retry-after").value()));
+    } else {
+        showCFError(response.string().unwrapOr(""));
+    }
+}
+
 void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJLevelList>>>, bool)> callback, bool cacheLevels) {
     std::string completedLevels = "";
 
@@ -128,14 +136,9 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
             auto GLM = GameLevelManager::sharedState();
 
             if(!response.ok()) {
-                if(response.header("retry-after").has_value()) {
-                    showRateLimitError(BetterInfo::stoi(response.header("retry-after").value()));
-                } else {
-                    showCFError(response.string().unwrapOr(""));
-                }
+                showResponseError(response);
 
                 auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
-
                 callback(levels, false);
 
                 return;

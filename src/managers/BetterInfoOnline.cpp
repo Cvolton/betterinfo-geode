@@ -39,6 +39,9 @@ void BetterInfoOnline::loadScores(int accountID, bool force, BILeaderboardDelega
                     m_delegates.erase(delegate);
                 }
                 BetterInfoCache::sharedState()->cacheScoresResult(m_scoreDict[accountID]);
+            } else {
+                sendScores(CCArray::create(), accountID, delegate, profilePage);
+                ServerUtils::showResponseError(response);
             }
         });
 }
