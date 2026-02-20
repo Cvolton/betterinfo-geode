@@ -63,8 +63,13 @@ bool LeaderboardViewLayer::init(int accountID) {
 
     int i = 0;
     for (const auto& stat : stats) {
+        auto icon = CCSprite::createWithSpriteFrameName(stat.first);
+        auto sprite = ButtonSprite::create(icon, 32, 0, 320.0, 1.0, true, "GJ_button_01.png", false);
+        sprite->updateSpriteOffset({0, -1.5f});
+        sprite->setScale(0.6f);
+        icon->setScale(1.2f);
         auto btn = CCMenuItemExt::createSpriteExtra(
-            ButtonSprite::create(CCSprite::createWithSpriteFrameName(stat.first)),
+            sprite,
             [this, i] (auto sprite) {
                 this->loadStat(i);
             }

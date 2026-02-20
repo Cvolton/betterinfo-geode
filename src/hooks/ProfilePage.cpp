@@ -124,7 +124,7 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
 
         if(auto leftMenu = m_mainLayer->getChildByID("left-menu")) {
             auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoBtn_001.png");
-            infoSprite->setScale(0.7f);
+            infoSprite->setScale(0.63f);
             auto infoButton = CCMenuItemSpriteExtra::create(
                 infoSprite,
                 this,
