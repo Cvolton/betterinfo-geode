@@ -4,5 +4,5 @@
 
 class BILeaderboardDelegate {
 public:
-	virtual void onLeaderboardFinished(cocos2d::CCArray* scores) = 0;
+	virtual void onLeaderboardFinished(cocos2d::CCArray* scores, int stat) = 0;
 };

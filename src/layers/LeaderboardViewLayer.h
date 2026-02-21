@@ -13,13 +13,13 @@ protected:
     virtual void keyBackClicked();
     void setupStatBtns();
     void onRefresh(cocos2d::CCObject*);
-    void loadStat(int stat);
+    void loadStat(int stat, bool reload);
 public:
     virtual void loadPage();
     static LeaderboardViewLayer* create(int accountID);
     static cocos2d::CCScene* scene(int accountID);
 
-    void onLeaderboardFinished(cocos2d::CCArray* scores);
+    void onLeaderboardFinished(cocos2d::CCArray* scores, int stat);
 
     ~LeaderboardViewLayer();
 };

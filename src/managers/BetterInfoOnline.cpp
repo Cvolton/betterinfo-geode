@@ -20,9 +20,11 @@ void BetterInfoOnline::loadScores(int accountID, bool force, Ref<ProfilePage> pr
 }
 
 void BetterInfoOnline::loadScores(int accountID, bool force, BILeaderboardDelegate* delegate, Ref<ProfilePage> profilePage, int stat){
+    auto loadKey = std::make_pair(accountID, stat);
+
     //cache optimization
-    if(!force && m_scoreDict.contains(accountID)) {
-        sendScores(m_scoreDict[accountID], accountID, delegate, profilePage);
+    if(!force && m_scoreDict.contains(loadKey)) {
+        sendScores(m_scoreDict[loadKey], accountID, stat, delegate, profilePage);
         return;
     }
 
@@ -31,27 +33,27 @@ void BetterInfoOnline::loadScores(int accountID, bool force, BILeaderboardDelega
     async::spawn(ServerUtils::getBaseRequest(false)
         .bodyString(fmt::format("{}&udid={}&stat={}&type=relative&secret=Wmfd2893gb7", ServerUtils::getBasePostString(false), accountID, stat))
         .post(fmt::format("{}/getGJScores20.php", ServerUtils::getBaseURL())),
-        [this, accountID, delegate, profilePage](web::WebResponse response) {
+        [this, accountID, stat, delegate, profilePage, loadKey](web::WebResponse response) {
             if(response.ok()) {
-                generateScores(response.string().unwrapOr(""), accountID);
+                generateScores(response.string().unwrapOr(""), loadKey);
                 if(m_delegates.contains(delegate)) {
-                    sendScores(m_scoreDict[accountID], accountID, delegate, profilePage);
+                    sendScores(m_scoreDict[loadKey], accountID, stat, delegate, profilePage);
                     m_delegates.erase(delegate);
                 }
-                BetterInfoCache::sharedState()->cacheScoresResult(m_scoreDict[accountID]);
+                BetterInfoCache::sharedState()->cacheScoresResult(m_scoreDict[loadKey]);
             } else {
-                sendScores(CCArray::create(), accountID, delegate, profilePage);
+                sendScores(CCArray::create(), accountID, stat, delegate, profilePage);
                 ServerUtils::showResponseError(response);
             }
         });
 }
 
-void BetterInfoOnline::generateScores(const std::string& response, int accountID){
+void BetterInfoOnline::generateScores(const std::string& response, std::pair<int, int> loadKey){
     auto GM = GameManager::sharedState();
     auto BICache = BetterInfoCache::sharedState();
 
     CCArray* scores = CCArray::create();
-    m_scoreDict[accountID] = scores;
+    m_scoreDict[loadKey] = scores;
 
     if(response == "-1") return;
 
@@ -72,9 +74,9 @@ void BetterInfoOnline::generateScores(const std::string& response, int accountID
     }
 }
 
-void BetterInfoOnline::sendScores(cocos2d::CCArray* scores, int accountID, BILeaderboardDelegate* delegate, Ref<ProfilePage> profilePage){
+void BetterInfoOnline::sendScores(cocos2d::CCArray* scores, int accountID, int stat, BILeaderboardDelegate* delegate, Ref<ProfilePage> profilePage){
     if(delegate) {
-        delegate->onLeaderboardFinished(scores);
+        delegate->onLeaderboardFinished(scores, stat);
         delegate = nullptr;
     }else if(profilePage) {
         sendScoreToProfilePage(scores, accountID, profilePage);

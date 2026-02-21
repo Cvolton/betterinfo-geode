@@ -58,7 +58,7 @@ bool LeaderboardViewLayer::init(int accountID) {
     this->setupStatBtns();
     this->addChild(m_rightMenu);
 
-    this->onRefresh(nullptr);
+    this->loadStat(0, false);
 
     return true;
 }
@@ -86,7 +86,7 @@ void LeaderboardViewLayer::setupStatBtns() {
         auto btn = CCMenuItemExt::createSpriteExtra(
             sprite,
             [this, i] (auto sprite) {
-                this->loadStat(i);
+                this->loadStat(i, false);
             }
         );
         btn->setID(fmt::format("{}-button"_spr, stat.second));
@@ -110,19 +110,19 @@ void LeaderboardViewLayer::keyBackClicked() {
 }
 
 void LeaderboardViewLayer::onRefresh(CCObject* object) {
-    this->loadStat(m_stat); 
+    this->loadStat(m_stat, true); 
 }
 
-void LeaderboardViewLayer::loadStat(int stat) {
+void LeaderboardViewLayer::loadStat(int stat, bool reload) {
     setData(CCArray::create());
     loadPage();
-
-    BetterInfoOnline::sharedState()->loadScores(m_accountID, true, this, nullptr, stat);
 
     showCircle();
     m_stat = stat;
 
     setupStatBtns();
+
+    BetterInfoOnline::sharedState()->loadScores(m_accountID, reload, this, nullptr, stat);
 }
 
 CCScene* LeaderboardViewLayer::scene(int accountID) {
@@ -132,7 +132,9 @@ CCScene* LeaderboardViewLayer::scene(int accountID) {
     return scene;
 }
 
-void LeaderboardViewLayer::onLeaderboardFinished(cocos2d::CCArray* scores) {
+void LeaderboardViewLayer::onLeaderboardFinished(cocos2d::CCArray* scores, int stat) {
+    if(stat != m_stat) return;
+
     setData(scores);
     loadPage();
     hideCircle();
