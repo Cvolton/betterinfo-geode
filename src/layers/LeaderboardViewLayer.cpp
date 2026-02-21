@@ -90,6 +90,7 @@ void LeaderboardViewLayer::setupStatBtns() {
             }
         );
         btn->setID(fmt::format("{}-button"_spr, stat.second));
+        btn->setSizeMult(1.5f);
         m_rightMenu->addChild(btn);
         m_statBtns.push_back(btn);
         i++;
