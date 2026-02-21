@@ -35,20 +35,20 @@ std::string ServerUtils::getBaseURL() {
         // origia
         originalUrl = (char*)(base::get() + 0x558b70);
     #elif defined(GEODE_IS_ARM_MAC)
-        static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0x7749fb);
+        static_assert(GEODE_COMP_GD_VERSION == 22081, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x77d709);
     #elif defined(GEODE_IS_INTEL_MAC)
-        static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0x8516bf);
+        static_assert(GEODE_COMP_GD_VERSION == 22081, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x868df0);
     #elif defined(GEODE_IS_ANDROID64)
-        static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
-        originalUrl = BetterInfo::isAmazon() ? (char*)(base::get() + 0xEA27F8) : (char*)(base::get() + 0xEA2988);
+        static_assert(GEODE_COMP_GD_VERSION == 22081, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0xECCF90);
     #elif defined(GEODE_IS_ANDROID32)
-        static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
-        originalUrl = BetterInfo::isAmazon() ? (char*)(base::get() + 0x952CCE) : (char*)(base::get() + 0x952E9E);
+        static_assert(GEODE_COMP_GD_VERSION == 22081, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x96C0DB);
     #elif defined(GEODE_IS_IOS)
-        static_assert(GEODE_COMP_GD_VERSION == 22074, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0x6af51a);
+        static_assert(GEODE_COMP_GD_VERSION == 22081, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x6b8cc2);
     #else
         static_assert(false, "Unsupported platform");
     #endif
