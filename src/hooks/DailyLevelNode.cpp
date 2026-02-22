@@ -13,6 +13,10 @@ class BI_DLL $modify(BIDailyLevelNode, DailyLevelNode) {
             if(newNode->getPositionX() == 182) newNode->setPositionX(130);
         }
 
+        if(auto robtopTimelyNode = getChildByID("timely-id-label")) {
+            robtopTimelyNode->setVisible(false);
+        }
+
         return true;
     }
 };
