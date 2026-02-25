@@ -6,6 +6,10 @@
 using namespace geode::prelude;
 
 class BI_DLL $modify(BICommentCell, CommentCell) {
+    struct Fields {
+        async::TaskHolder<web::WebResponse> m_dateListener;
+    };
+
     /*
      * Callbacks
      */
@@ -115,6 +119,47 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
                     usernameMenu->addChild(buttonButton);
                     usernameMenu->updateLayout();
                 }
+            }
+
+            /**
+             * Show exact comment date
+             */
+             if(auto dateLabel = typeinfo_cast<CCLabelBMFont*>(m_mainLayer->getChildByIDRecursive("date-label"))) {
+                static std::map<std::pair<int, int>, std::string> dateCache; // levelID, commentID -> date
+                auto idPair = std::make_pair(b->m_levelID, b->m_commentID);
+                auto cacheIt = dateCache.find(idPair);
+                if(cacheIt != dateCache.end()) {
+                    auto date = fmt::format(
+                        "{} | {} ago",
+                        cacheIt->second,
+                        m_comment->m_uploadDate
+                    );
+                    dateLabel->setString(date.c_str());
+                    return;
+                }
+
+                 m_fields->m_dateListener.spawn(
+                    ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/date/comment/{}/{}/level/", b->m_levelID, b->m_commentID)),
+                    [this, dateLabel = Ref(dateLabel), idPair] (web::WebResponse response) {
+                        auto json = response.json();
+                        if(!response.ok() || json.isErr()) {
+                            log::error("Error while getting exact date for comment {}: {} - {}", dateLabel->getString(), response.code(), response.string().unwrapOr("No response"));
+                            return;
+                        }
+
+                        auto timeString = TimeUtils::isoTimeToString(json.unwrap()["high"]["estimation"].asString().unwrapOr(""));
+                        dateCache[idPair] = timeString;
+
+                        auto date = fmt::format(
+                            "{} | {} ago",
+                            timeString,
+                            m_comment->m_uploadDate
+                        );
+                        if(date.empty()) return;
+
+                        dateLabel->setString(date.c_str());
+                    }
+                );
             }
         }
     }
