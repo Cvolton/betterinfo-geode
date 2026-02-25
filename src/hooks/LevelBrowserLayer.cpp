@@ -81,6 +81,32 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         if(this->m_searchObject->m_starFilter) button->setColor({255, 255, 255});
         else button->setColor({125,125,125});
     }
+
+    void onLevelBrowserHide(CCObject* sender){
+        if(m_searchObject == nullptr || (m_searchObject->m_searchType != SearchType::UsersLevels && !m_searchObject->m_searchQuery.starts_with("&type=6"))) return;
+
+        bool isCurrentlyFiltered = m_searchObject->m_searchQuery.starts_with("&type=");
+
+        if(!isCurrentlyFiltered) {
+            m_searchObject->m_searchQuery = fmt::format("&type={}&str={}", (int) m_searchObject->m_searchType, m_searchObject->m_searchQuery);
+        } else {
+            m_searchObject->m_searchType = SearchType::UsersLevels;
+            auto pos = m_searchObject->m_searchQuery.find('=');
+            if(pos != std::string::npos) {
+                pos = m_searchObject->m_searchQuery.find('=', pos + 1);
+                if(pos != std::string::npos) {
+                    m_searchObject->m_searchQuery = m_searchObject->m_searchQuery.substr(pos + 1);
+                }
+            }
+        }
+        this->loadPage(m_searchObject);
+
+        auto button = static_cast<CCMenuItemSpriteExtra*>(sender);
+        if(isCurrentlyFiltered) button->setColor({255, 255, 255});
+        else button->setColor({125,125,125});
+
+        Notification::create(fmt::format("Unlisted levels {}", isCurrentlyFiltered ? "shown" : "hidden"), CCSprite::createWithSpriteFrameName("hideBtn_001.png"))->show();
+    }
     /**
      * Helpers
     */
@@ -264,6 +290,25 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
                 starButton->setID("star-button"_spr);
                 infoMenu->addChild(starButton);
                 infoMenu->updateLayout();
+            }
+
+            if(m_searchObject->m_searchType == SearchType::UsersLevels) {
+                auto myId = GameManager::sharedState()->m_playerUserID.value();
+
+                bool isMyLevelUnfiltered = m_searchObject->m_searchQuery == fmt::format("{}", myId);
+                bool isMyLevelFiltered = m_searchObject->m_searchQuery == fmt::format("{}&", myId);
+                if(isMyLevelUnfiltered || isMyLevelFiltered) {
+                    auto hideBtn = CCMenuItemSpriteExtra::create(
+                        CCSprite::createWithSpriteFrameName("hideBtn_001.png"),
+                        this,
+                        menu_selector(BILevelBrowserLayer::onLevelBrowserHide)
+                    );
+                    hideBtn->setID("unlisted-button"_spr);
+                    hideBtn->setZOrder(-3);
+                    if(isMyLevelFiltered) hideBtn->setColor({125,125,125});
+                    infoMenu->addChild(hideBtn);
+                    infoMenu->updateLayout();
+                }
             }
         }
 
