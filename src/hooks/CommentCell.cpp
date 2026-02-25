@@ -124,9 +124,10 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
             /**
              * Show exact comment date
              */
-             if(auto dateLabel = typeinfo_cast<CCLabelBMFont*>(m_mainLayer->getChildByIDRecursive("date-label"))) {
-                static std::map<std::pair<int, int>, std::string> dateCache; // levelID, commentID -> date
-                auto idPair = std::make_pair(b->m_levelID, b->m_commentID);
+             if(auto dateLabel = typeinfo_cast<CCLabelBMFont*>(m_mainLayer->getChildByIDRecursive("date-label"))) { 
+                static std::map<std::tuple<int, int, bool>, std::string> dateCache; // levelID, commentID, accountComment -> date
+                int levelId = m_accountComment ? b->m_accountID : b->m_levelID;
+                auto idPair = std::make_tuple(levelId, b->m_commentID, m_accountComment);
                 auto cacheIt = dateCache.find(idPair);
                 if(cacheIt != dateCache.end()) {
                     auto date = fmt::format(
@@ -138,8 +139,8 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
                     return;
                 }
 
-                 m_fields->m_dateListener.spawn(
-                    ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/date/comment/{}/{}/level/", b->m_levelID, b->m_commentID)),
+                m_fields->m_dateListener.spawn(
+                    ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/date/comment/{}/{}/{}/", levelId, b->m_commentID, m_accountComment ? "account" : "level")),
                     [this, dateLabel = Ref(dateLabel), idPair] (web::WebResponse response) {
                         auto json = response.json();
                         if(!response.ok() || json.isErr()) {
@@ -147,7 +148,10 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
                             return;
                         }
 
-                        auto timeString = TimeUtils::isoTimeToString(json.unwrap()["high"]["estimation"].asString().unwrapOr(""));
+                        auto jsonRes = json.unwrap();
+                        auto timeString = TimeUtils::isoTimeToString(jsonRes["high"]["estimation"].asString().unwrapOr(""));
+                        if(timeString == "NA") timeString = TimeUtils::isoTimeToString(jsonRes["low"]["estimation"].asString().unwrapOr(""));
+                        
                         dateCache[idPair] = timeString;
 
                         auto date = fmt::format(
