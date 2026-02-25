@@ -124,6 +124,7 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
             /**
              * Show exact comment date
              */
+             if(Mod::get()->getSettingValue<bool>("exact-comment-date"))
              if(auto dateLabel = typeinfo_cast<CCLabelBMFont*>(m_mainLayer->getChildByIDRecursive("date-label"))) { 
                 static std::map<std::tuple<int, int, bool>, std::string> dateCache; // levelID, commentID, accountComment -> date
                 int levelId = m_accountComment ? b->m_accountID : b->m_levelID;
