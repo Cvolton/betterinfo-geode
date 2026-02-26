@@ -828,12 +828,9 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
         "<cg>BetterInfo has updated!</c>\n"
         "\n"
         "<cy>Changelog:</c> <cg>v4.4.0</c> (2024-12-09)\n"
-        "- <cg>Added</c> <cl>Featured Lite</c> (Weekly Levels) to <co>BI menu</c>\n"
-        "- <cg>Added</c> <cl>integration</c> with <co>Eclipse Menu</c> and <co>QOLmod</c>\n"
-        "- <cg>Added</c> <cl>estimated game version</c> to <co>Extended Level Info</c>\n"
-        "- <cg>Added</c> <cl>more info</c> for <co>sent friend requests</c> and <co>messages</c>\n"
-        "- <cg>Disabled</c> <cj>auto submit</c> for <co>classic levels</c> on <cp>mobile devices</c>\n"
-        "- <cg>Made</c> <cl>Extended Level Info</c> details copyable\n"
+        "- <cg>Updated</c> for Geode 5.0.0 and GD 2.208\n"
+        "- <cg>Added</c> a toggle to <cl>Hide Unlisted Levels</c> in <co>My Levels</c> search\n"
+        "- <cg>Added</c> <cl>Exact Dates</c> to <co>Comments</c> (disabled by default, see settings)\n"
         "- <cr>More!</c> Click \"<cy>More Info</c>\" for the <co>whole list</c>!\n"
         "\n",
         "More Info",
