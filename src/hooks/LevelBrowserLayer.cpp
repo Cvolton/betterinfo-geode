@@ -92,10 +92,10 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         } else {
             m_searchObject->m_searchType = SearchType::UsersLevels;
             auto pos = std::string_view(m_searchObject->m_searchQuery).find('=');
-            if(pos != std::string::npos) {
+            if(pos != std::string_view::npos) {
                 pos = std::string_view(m_searchObject->m_searchQuery).find('=', pos + 1);
-                if(pos != std::string::npos) {
-                    m_searchObject->m_searchQuery = std::string_view(m_searchObject->m_searchQuery).substr(pos + 1);
+                if(pos != std::string_view::npos) {
+                    m_searchObject->m_searchQuery = std::string(std::string_view(m_searchObject->m_searchQuery).substr(pos + 1));
                 }
             }
         }
