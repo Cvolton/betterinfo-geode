@@ -1,5 +1,5 @@
 {
-    "geode": "5.0.1",
+    "geode": "5.1.0",
     "version": "v4.3.22",
     "gd": {
         "win": "2.2081",
@@ -22,12 +22,13 @@
     ],
     "early-load": true,
     "dependencies": {
-        "geode.node-ids": "v1.18.0",
-        "cvolton.misc_bugfixes": {
-            "version": "v1.6.4",
+        "geode.node-ids": "v1.23.0",
+        "cvolton.misc_bugfixes": "v1.10.0",
+        "cvolton.level-id-api": "v2.0.0",
+        "eclipse.eclipse-menu": {
+            "version": "v1.8.1",
             "required": false
-        },
-        "cvolton.level-id-api": "v2.0.0-beta.1"
+        }
     },
     "settings": {
         "auto-submit": {

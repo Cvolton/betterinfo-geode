@@ -1,4 +1,5 @@
-/*#include "eclipse.hpp"
+#define ECLIPSE_MODULES_HPP
+#include <eclipse.eclipse-menu/include/eclipse.hpp>
 
 using namespace eclipse;
 using namespace geode::prelude;
@@ -13,7 +14,7 @@ void createSettingTab(const char* settingID, MenuTab& tab) {
 
     eclipse::config::set<bool>(Mod::get()->expandSpriteName(settingID).data(), Mod::get()->getSettingValue<bool>(settingID));
 
-    listenForSettingChanges(settingID, [settingID](bool value)
+    listenForSettingChanges<bool>(settingID, [settingID](bool value)
     {
         eclipse::config::set<bool>(Mod::get()->expandSpriteName(settingID).data(), Mod::get()->getSettingValue<bool>(settingID));
     });
@@ -29,4 +30,4 @@ $on_mod(Loaded) {
         createSettingTab("white-id", tab);
     });
     
-}*/
+}
