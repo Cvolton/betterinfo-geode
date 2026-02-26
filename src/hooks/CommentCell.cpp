@@ -150,7 +150,7 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
                         }
 
                         auto jsonRes = json.unwrap();
-                        auto timeString = TimeUtils::isoTimeToString(jsonRes["high"]["estimation"].asString().unwrapOr(""));
+                        auto timeString = TimeUtils::isoTimeToString(jsonRes["approx"]["estimation"].asString().unwrapOr(""));
                         if(timeString == "NA") timeString = TimeUtils::isoTimeToString(jsonRes["low"]["estimation"].asString().unwrapOr(""));
                         
                         dateCache[idPair] = timeString;
