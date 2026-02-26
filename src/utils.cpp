@@ -821,13 +821,13 @@ FLAlertLayer* BetterInfo::createUpdateDialog() {
         )
     );
     //if(versionResult.isOk() && versionResult->getMinor() == Mod::get()->getVersion().getMinor()) return nullptr;
-    if(versionResult.isOk() && ComparableVersionInfo::parse(">=4.3.0").unwrap().compare(versionResult.unwrap())) return nullptr;
+    if(versionResult.isOk() && ComparableVersionInfo::parse(">=4.4.0").unwrap().compare(versionResult.unwrap())) return nullptr;
 
     auto popup = createQuickPopup(
         "BetterInfo",
         "<cg>BetterInfo has updated!</c>\n"
         "\n"
-        "<cy>Changelog:</c> <cg>v4.3.0</c> (2024-12-09)\n"
+        "<cy>Changelog:</c> <cg>v4.4.0</c> (2024-12-09)\n"
         "- <cg>Added</c> <cl>Featured Lite</c> (Weekly Levels) to <co>BI menu</c>\n"
         "- <cg>Added</c> <cl>integration</c> with <co>Eclipse Menu</c> and <co>QOLmod</c>\n"
         "- <cg>Added</c> <cl>estimated game version</c> to <co>Extended Level Info</c>\n"

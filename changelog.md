@@ -1,4 +1,13 @@
 # Changelog
+## <cg>v4.4.0</c> (2026-02-26)
+* <cg>Updated</c> for Geode 5.0.0 and GD 2.208
+  * <cg>Added</c> <cl>more stats</c> to <cl>View Leaderboard As</c>
+  * The built in daily # display is hidden in favor of BetterInfo's own implementation
+* <cg>Added</c> a toggle to <cl>Hide Unlisted Levels</c> in <co>My Levels</c> search
+* <cg>Added</c> <cl>Exact Dates</c> to <cl>Comments</c> (disabled by default, see settings)
+* <cg>Removed</c> <cl>Similar</c> search filter (disabled by RobTop)
+* Other bugfixes & improvements
+
 ## <cg>v4.3.22</c> (2026-01-09)
 * <cg>Fixed</c> <cl>Claimable Lists popup</c> not working on <cp>Android</c>
 * <cg>Fixed</c> <cr>a bug</c> where you couldn't press <cl>Esc</c> after closing the <co>Filtered Search popup</c>
