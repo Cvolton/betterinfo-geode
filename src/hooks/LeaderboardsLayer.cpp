@@ -14,10 +14,7 @@ class BI_DLL $modify(BILeaderboardsLayer, LeaderboardsLayer) {
     void onLeaderboardRefresh(CCObject* sender){
         auto GLM = GameLevelManager::sharedState();
         GLM->updateUserScore();
-        GLM->m_storedLevels->removeObjectForKey("leaderboard_creator");
-        GLM->m_storedLevels->removeObjectForKey("leaderboard_friends");
-        GLM->m_storedLevels->removeObjectForKey("leaderboard_global");
-        GLM->m_storedLevels->removeObjectForKey("leaderboard_top");
+        GLM->m_storedLevels->removeObjectForKey(fmt::format("lb_{}_{}", (int) GLM->m_leaderboardType, (int) GLM->m_leaderboardStat).c_str());
 
         auto layer = LeaderboardsLayer::create(GLM->m_leaderboardType, GLM->m_leaderboardStat);
         auto scene = CCScene::create();
