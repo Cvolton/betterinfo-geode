@@ -83,19 +83,19 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     }
 
     void onLevelBrowserHide(CCObject* sender){
-        if(m_searchObject == nullptr || (m_searchObject->m_searchType != SearchType::UsersLevels && !m_searchObject->m_searchQuery.starts_with("&type=6"))) return;
+        if(m_searchObject == nullptr || (m_searchObject->m_searchType != SearchType::UsersLevels && !std::string_view(m_searchObject->m_searchQuery).starts_with("&type=6"))) return;
 
-        bool isCurrentlyFiltered = m_searchObject->m_searchQuery.starts_with("&type=");
+        bool isCurrentlyFiltered = std::string_view(m_searchObject->m_searchQuery).starts_with("&type=");
 
         if(!isCurrentlyFiltered) {
             m_searchObject->m_searchQuery = fmt::format("&type={}&str={}", (int) m_searchObject->m_searchType, m_searchObject->m_searchQuery);
         } else {
             m_searchObject->m_searchType = SearchType::UsersLevels;
-            auto pos = m_searchObject->m_searchQuery.find('=');
+            auto pos = std::string_view(m_searchObject->m_searchQuery).find('=');
             if(pos != std::string::npos) {
-                pos = m_searchObject->m_searchQuery.find('=', pos + 1);
+                pos = std::string_view(m_searchObject->m_searchQuery).find('=', pos + 1);
                 if(pos != std::string::npos) {
-                    m_searchObject->m_searchQuery = m_searchObject->m_searchQuery.substr(pos + 1);
+                    m_searchObject->m_searchQuery = std::string_view(m_searchObject->m_searchQuery).substr(pos + 1);
                 }
             }
         }
