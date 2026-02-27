@@ -159,12 +159,17 @@ GJUserScore* BetterInfoCache::getCachedScore(int accountID) {
 }
 
 void BetterInfoCache::cacheRatedListsFromMegaResponse(const std::string& megaResponse) {
+    log::debug("cacheRatedListsFromMegaResponse BEGIN");
+
     if(megaResponse.empty() || ServerUtils::isGDPS()) return cacheRatedLists();
 
     auto GLM = GameLevelManager::sharedState();
+    log::debug("cacheRatedListsFromMegaResponse after GLM sharedState");
 
     size_t hashes = std::count(megaResponse.begin(), megaResponse.end(), '#');
     if(hashes < 3) return cacheRatedLists();
+
+    log::debug("cacheRatedListsFromMegaResponse after cacheRatedLists return");
 
     std::stringstream responseStream(megaResponse);
     std::string levelData;
@@ -175,6 +180,8 @@ void BetterInfoCache::cacheRatedListsFromMegaResponse(const std::string& megaRes
 
     std::stringstream userStream(userData);
     std::string currentUser;
+
+    log::debug("cacheRatedListsFromMegaResponse before while getline");
     while(getline(userStream, currentUser, '|')) {
         auto info = utils::string::split(currentUser, ":");
         if(info.size() < 3) continue;
@@ -185,8 +192,12 @@ void BetterInfoCache::cacheRatedListsFromMegaResponse(const std::string& megaRes
         if(userID > 0) GLM->storeUserName(userID, accountID, info[1]);
     }
 
+    log::debug("cacheRatedListsFromMegaResponse after while getline");
+
     std::stringstream levelStream(levelData);
     std::string currentLevel;
+
+    log::debug("cacheRatedListsFromMegaResponse before second while getline");
     while(getline(levelStream, currentLevel, '|')) {
         auto level = GJLevelList::create(BetterInfo::responseToDict(currentLevel));
         GLM->updateSavedLevelList(level);
