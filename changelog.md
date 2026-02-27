@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.4.1</c> (2026-02-27)
+* Temporarily disabled the Claimable Lists check because it was causing unresolved crashes on android32 and it's unknown whether it could cause issues on other platforms at this point
+* Fixed web request crashes caused by an internal Geode bug
+  * This Geode bug is also fixed in Geode now so this bug is double fixed now
+
 ## <cg>v4.4.0</c> (2026-02-26)
 * <cg>Updated</c> for Geode 5.0.0 and GD 2.208
   * <cg>Added</c> <cl>more stats</c> to <co>View Leaderboard As</c>

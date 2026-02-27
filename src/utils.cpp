@@ -799,13 +799,13 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
                 biCache->cacheVaultCode(value.getKey().value_or(""), value.asString().unwrap());
             }
 
-            if(auto res = info["additional"]["rated_lists"]["content"].asString()) {
+            /*if(auto res = info["additional"]["rated_lists"]["content"].asString()) {
                 log::debug("Attempting to cache rated lists from megaresponse");
                 biCache->cacheRatedListsFromMegaResponse(res.unwrap());
             } else {
                 log::debug("Attempting to cache rated lists from server");
                 biCache->cacheRatedLists();
-            }
+            }*/
         }
     );
 }
