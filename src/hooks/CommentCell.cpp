@@ -142,7 +142,7 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
 
                 m_fields->m_dateListener.spawn(
                     ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/date/comment/{}/{}/{}/", levelId, b->m_commentID, m_accountComment ? "account" : "level")),
-                    [this, dateLabel = Ref(dateLabel), idPair] (web::WebResponse response) {
+                    [this, dateLabel, idPair] (web::WebResponse response) {
                         auto json = response.json();
                         if(!response.ok() || json.isErr()) {
                             log::error("Error while getting exact date for comment {}: {} - {}", dateLabel->getString(), response.code(), response.string().unwrapOr("No response"));
