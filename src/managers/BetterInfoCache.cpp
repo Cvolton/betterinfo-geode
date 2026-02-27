@@ -288,17 +288,22 @@ void BetterInfoCache::checkClaimableLists() {
             log::debug("CheckClaimableLists THREAD queueInMainThread begin");
 
             for(auto listID : completedLists) {
+                log::debug("Checking if can claim reward for list {}", listID);
                 auto list = GJLevelList::create();
                 list->m_listID = listID;
+                log::debug("before has claimed check {}", listID);
                 if(GameStatsManager::sharedState()->hasClaimedListReward(list)) continue;
+                log::debug("before claimable lists check {}", listID);
                 if(m_claimableLists.contains(listID)) continue;
 
+                log::debug("before updatedcachedlists contains check {}", listID);
                 if(m_updatedCachedLists.contains(listID)) {
                     m_claimableLists.emplace(listID, m_updatedCachedLists[listID]);
                     m_updatedCachedLists.erase(listID);
                 } else {
                     m_claimableLists.emplace(listID, nullptr);
                 }
+                log::debug("und das ist alles {}", listID);
                 log::info("Can claim reward for list {}", listID);
             }
 
