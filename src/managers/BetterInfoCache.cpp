@@ -199,10 +199,15 @@ void BetterInfoCache::cacheRatedListsFromMegaResponse(const std::string& megaRes
 
     log::debug("cacheRatedListsFromMegaResponse before second while getline");
     while(getline(levelStream, currentLevel, '|')) {
+        log::debug("cacheRatedListsFromMegaResponse in while getline, currentLevel: {}", currentLevel);
         auto level = GJLevelList::create(BetterInfo::responseToDict(currentLevel));
+        log::debug("cacheRatedListsFromMegaResponse after level create, listID: {}", level->m_listID);
         GLM->updateSavedLevelList(level);
+        log::debug("cacheRatedListsFromMegaResponse after GLM updateSavedLevelList, listID: {}", level->m_listID);
         cacheListAsync(level);
+        log::debug("cacheRatedListsFromMegaResponse after cacheListAsync, listID: {}", level->m_listID);
         m_updatedCachedLists.emplace(level->m_listID, level);
+        log::debug("cacheRatedListsFromMegaResponse after emplace, listID: {}", level->m_listID);
     }
 
     log::debug("Cached rated lists from mega response");
