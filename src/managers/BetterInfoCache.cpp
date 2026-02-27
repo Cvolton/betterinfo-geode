@@ -243,6 +243,8 @@ void BetterInfoCache::cacheRatedLists(int page) {
 }
 
 void BetterInfoCache::checkClaimableLists() {
+    log::debug("CheckClaimableLists begin");
+
     std::unordered_set<int> completedLevels;
 
     auto GLM = GameLevelManager::sharedState();
@@ -253,6 +255,8 @@ void BetterInfoCache::checkClaimableLists() {
 
     std::thread([this, completedLevels = std::move(completedLevels)] {
         thread::setName("BI Claimable List Checker");
+
+        log::debug("CheckClaimableLists THREAD begin");
 
         std::unordered_set<int> completedLists;
 
@@ -281,6 +285,8 @@ void BetterInfoCache::checkClaimableLists() {
         }
 
         Loader::get()->queueInMainThread([this, completedLists = std::move(completedLists)] {
+            log::debug("CheckClaimableLists THREAD queueInMainThread begin");
+
             for(auto listID : completedLists) {
                 auto list = GJLevelList::create();
                 list->m_listID = listID;
@@ -298,8 +304,14 @@ void BetterInfoCache::checkClaimableLists() {
 
             m_updatedCachedLists.clear();
             downloadClaimableLists();
+
+            log::debug("CheckClaimableLists THREAD queueInMainThread end");
         });
+
+        log::debug("CheckClaimableLists THREAD end");
     }).detach();
+
+    log::debug("CheckClaimableLists end");
 }
 
 void BetterInfoCache::cacheList(GJLevelList* list) {
