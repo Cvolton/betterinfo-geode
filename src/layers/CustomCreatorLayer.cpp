@@ -156,7 +156,8 @@ void CustomCreatorLayer::onBrowserButton(CCObject* object) {
     const char* targetName = "bonusLevelsLabel_001.png";
     const char* filePath = "bonusLevelsLabel_001.png"_spr;
 
-    if (!frameCache->spriteFrameByName(targetName)) {
+    auto frameCacheRes = frameCache->spriteFrameByName(targetName);
+    if (!frameCacheRes || frameCacheRes->getTag() == 105871529 /*textureldr fallback tag*/) {
         CCTexture2D* texture = textureCache->addImage(filePath, false);
         
         if (texture) {
