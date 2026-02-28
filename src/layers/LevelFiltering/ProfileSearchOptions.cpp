@@ -25,7 +25,9 @@ void ProfileSearchOptions::onClose(cocos2d::CCObject* sender)
     CvoltonOptionsLayer::onClose(sender);
 
     if(m_searchObjDelegate != nullptr) m_searchObjDelegate->onSearchObjectFinished(getSearchObject());
-    reloadBrowser();
+    if(m_levelBrowserLayer != nullptr) {
+        m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
+    }
     this->release();
 }
 
@@ -178,7 +180,17 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
 
 void ProfileSearchOptions::reloadBrowser(){
     Mod::get()->setSavedValue<bool>("user_search_dirty", true);
-    if(m_levelBrowserLayer != nullptr) m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
+    if(m_levelBrowserLayer != nullptr) {
+        auto searchObj = m_levelBrowserLayer->m_searchObject;
+        int pageBegin = (searchObj->m_page * BetterInfo::levelsPerPage(searchObj)) + 1;
+        int total = GameLevelManager::get()->getSavedLevels(searchObj->m_searchType == SearchType::FavouriteLevels, searchObj->m_folder)->count();
+        int pageEnd = std::min( (searchObj->m_page + 1) * BetterInfo::levelsPerPage(searchObj) , total);
+
+        //m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
+        if(m_levelBrowserLayer->m_countText) m_levelBrowserLayer->m_countText->setString(
+            fmt::format("{}{} to {} of {}", BetterInfo::isSavedFiltered() ? "(Filtered) " : "", pageBegin, pageEnd, total).c_str()
+        );
+    }
 }
 
 void ProfileSearchOptions::drawToggles(){

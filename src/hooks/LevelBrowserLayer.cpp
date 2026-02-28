@@ -129,11 +129,6 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         if(auto lastBtn = m_fields->m_biLastPageBtnArrow) {
             lastBtn->usePopupTexture(shouldSearchForLastPage());
         }
-
-        if(!m_searchObject->m_searchIsOverlay && !LevelEditorLayer::get()) {
-            BetterInfo::refreshAlertPrio(this);
-            handleTouchPriority(this, true);
-        }
     }
 
     bool canBeLocalFiltered() {
@@ -166,6 +161,12 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
 
         refreshButtonVisibility();
         showFilteredText();
+    }
+    
+    void loadLevelsFinished(cocos2d::CCArray* levels, char const* key, int type) {
+        LevelBrowserLayer::loadLevelsFinished(levels, key, type);
+
+        if(m_searchObject->m_searchMode == 1 && m_searchObject->m_searchType == SearchType::Featured && m_searchObject->m_page == 0) BetterInfoCache::sharedState()->tryShowClaimableListsPopup(this);
     }
 
     void loadPage(GJSearchObject* searchObj) {
@@ -324,8 +325,6 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
          * Ending steps
         */
         refreshButtonVisibility();
-
-        if(m_searchObject->m_searchMode == 1 && m_searchObject->m_searchType == SearchType::Featured) BetterInfoCache::sharedState()->tryShowClaimableListsPopup(this);
 
         return true;
     }
