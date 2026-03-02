@@ -190,6 +190,7 @@ class BI_DLL $modify(GameLevelManager) {
         
         //calculating levels
         for(auto [key, level] : CCDictionaryExt<gd::string, GJGameLevel>(this->m_onlineLevels)){
+            if(level->m_levelNotDownloaded) continue;
 
             int password = level->m_password;
             int difficulty = LevelUtils::levelDifficultyAsInt(level);
