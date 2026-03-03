@@ -84,7 +84,7 @@ void ExtendedLevelInfo::refreshInfoTexts() {
     auto updateDateStd = std::string(m_level->m_updateDate);
     int levelPassword = m_level->m_password;
 
-    //TODO BetterInfoCache
+    //TODO: BetterInfoCache
     m_primaryValues.push_back(LevelMetadata::stringDate(uploadDateStd));
     m_primaryValues.push_back(LevelMetadata::stringDate(updateDateStd));
     m_primaryValues.push_back(LevelMetadata::zeroIfNA(m_level->m_originalLevel));

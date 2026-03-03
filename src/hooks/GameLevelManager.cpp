@@ -40,13 +40,12 @@ class BI_DLL $modify(GameLevelManager) {
         auto userName = GameLevelManager::userNameForUserID(userID);
         auto userNameStd = std::string(userName);
 
-        //TODO: BetterInfoCache
-        /*if(Mod::get()->getSettingValue<bool>("fix-green-users") && (userNameStd == "" || userNameStd == "-" || userNameStd == "Player")){
+        if(Mod::get()->getSettingValue<bool>("fix-green-users") && (userNameStd == "" || userNameStd == "-" || userNameStd == "Player")){
 
-            auto newUserName = BetterInfoCache::sharedState()->getUserName(userID);
+            auto newUserName = BetterInfoCache::sharedState()->tryGetUsername(userID);
             if(userID == 32471) userName = "PixelCube"; //previous dataset had an error
             if(!newUserName.empty()) userName = newUserName;
-        }*/
+        }
 
         return userName;
     }

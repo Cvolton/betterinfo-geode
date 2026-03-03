@@ -113,10 +113,9 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
     }
 
     void loadCustomLevelCell() {
-        //TODO: BetterInfoCache
-        /*if(std::string(m_level->m_creatorName).empty()) {
-            m_level->m_creatorName = BetterInfoCache::sharedState()->getUserName(m_level->m_userID, false);
-        }*/
+        if(std::string(m_level->m_creatorName).empty() || m_level->m_creatorName == "-") {
+            m_level->m_creatorName = GameLevelManager::get()->userNameForUserID(m_level->m_accountID);
+        }
 
         LevelCell::loadCustomLevelCell();
 

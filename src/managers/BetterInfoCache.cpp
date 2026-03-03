@@ -166,17 +166,57 @@ BetterInfoCache::CachedLevel& BetterInfoCache::getLevel(int levelID) {
  */
 void BetterInfoCache::fetchLevelDate(int levelID, geode::Function<void(time_t)> callback) {
     if(ServerUtils::isGDPS()) return;
+    if(m_levelDateCache.contains(levelID)) {
+        callback(m_levelDateCache[levelID]);
+        return;
+    }
 
     async::spawn(
         ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)),
-        [callback = std::move(callback)](web::WebResponse response) mutable {
+        [callback = std::move(callback), this](web::WebResponse response) mutable {
             if(!response.ok()) return;
 
             auto json = response.json().unwrapOrDefault();
             if(!json["approx"].contains("estimation") || !json["approx"].contains("online_id")) return;
 
             time_t time = TimeUtils::isoStringToTime(json["approx"]["estimation"].asString().unwrapOrDefault());
+            m_levelDateCache[json["approx"]["online_id"].asInt().unwrapOrDefault()] = time;
             callback(time);
         }
     );
+}
+
+/**
+ * Username Caching
+ */
+void BetterInfoCache::fetchUsername(int userID, geode::Function<void(std::string)> callback) {
+    if(ServerUtils::isGDPS() || userID == 0) return;
+    if(m_usernameCache.contains(userID)) {
+        callback(m_usernameCache[userID]);
+        return;
+    }
+
+    async::spawn(
+        ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/user/{}/brief/", userID)),
+        [callback = std::move(callback), this](web::WebResponse response) mutable {
+            if(!response.ok()) return;
+
+            auto json = response.json().unwrapOrDefault();
+            if(!json.contains("username") || !json.contains("user_id")) return;
+
+            std::string username = json["username"].asString().unwrapOrDefault();
+            m_usernameCache[json["user_id"].asInt().unwrapOrDefault()] = username;
+            callback(username);
+        }
+    );
+}
+
+std::string BetterInfoCache::tryGetUsername(int userID) {
+    if(m_usernameCache.contains(userID)) return m_usernameCache[userID];
+
+    fetchUsername(userID, [userID](std::string username) {
+        log::debug("Fetched username for user ID {}: {}", userID, username);
+    });
+
+    return "";
 }

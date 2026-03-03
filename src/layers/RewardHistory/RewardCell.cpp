@@ -27,7 +27,7 @@ std::string RewardCell::getDisplayName() {
     /**
      * Vault chests
     */
-    //TODO BetterInfoCache
+    //TODO: BetterInfoCache
     /*if(key[0] == 'o' && std::string_view(key).starts_with("o_secret")) {
         auto name = BetterInfoCache::sharedState()->getVaultCode(key);
         key = key.substr(9);
@@ -73,7 +73,7 @@ std::string RewardCell::getDisplayName() {
     /**
      * Weekly Chests
     */
-    //TODO BetterInfoCache
+    //TODO: BetterInfoCache
     /*if(key[0] == 'd') {
         key = key.substr(1);
 

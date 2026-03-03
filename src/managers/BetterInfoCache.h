@@ -16,6 +16,7 @@ class BI_DLL BetterInfoCache {
 	std::unordered_map<int, CachedLevel> m_levelCache;
 	std::unordered_map<int, int> m_levelFailures;
 	std::unordered_map<int, time_t> m_levelDateCache;
+	std::unordered_map<int, std::string> m_usernameCache;
 
 	BetterInfoCache();
 public:
@@ -35,4 +36,7 @@ public:
 	CachedLevel& getLevel(int levelID);
 
 	void fetchLevelDate(int levelID, geode::Function<void(time_t)> callback);
+
+	void fetchUsername(int userID, geode::Function<void(std::string)> callback);
+	std::string tryGetUsername(int userID);
 };
