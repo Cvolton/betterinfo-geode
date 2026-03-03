@@ -165,17 +165,7 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
             dailyTextNode->setID("daily-id-label"_spr);
             if(Mod::get()->getSettingValue<bool>("show-level-ids")) m_mainLayer->addChild(dailyTextNode);
 
-            //TODO: BetterInfoCache
-            /*m_level->retain();
-            std::thread([level = m_level](){
-                thread::setName("Cache Level");
-
-                BetterInfoCache::sharedState()->cacheLevel(level);
-
-                Loader::get()->queueInMainThread([level]() {
-                    level->release();
-                });
-            }).detach();*/
+            BetterInfoCache::sharedState()->cacheLevel(m_level);
         }
 
         /*if(auto songLabel = m_mainLayer->getChildByID("song-name")) {

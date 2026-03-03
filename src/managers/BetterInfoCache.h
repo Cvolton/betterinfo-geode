@@ -31,4 +31,5 @@ public:
 	arc::Future<> cacheLevels(CCDictionary* dict);
 	arc::Future<> cacheLevelBatch(std::vector<int> levelIDs, bool rated);
 	void cacheLevel(GJGameLevel* level);
+	CachedLevel& getLevel(int levelID);
 };

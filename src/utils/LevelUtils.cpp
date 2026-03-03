@@ -34,15 +34,17 @@ int LevelUtils::levelDemonDifficultyAsInt(GJGameLevel* level) {
 }
 
 bool LevelUtils::levelHasCollectedCoins(GJGameLevel* level, bool skipCacheCall) {
-    //TODO BetterInfoCache
-    /*auto GSM = GameStatsManager::sharedState();
+    auto GSM = GameStatsManager::sharedState();
     auto coinDict = GSM->m_verifiedUserCoins;
     auto coinDict2 = GSM->m_pendingUserCoins;
-    auto coins = level->m_coins ? level->m_coins : 
-        skipCacheCall ? 0 : BetterInfoCache::sharedState()->getCoinCount(level->m_levelID);
+    
+    auto coins = level->m_coins ? 
+        level->m_coins : 
+        skipCacheCall ? 0 : BetterInfoCache::sharedState()->getLevel(level->m_levelID).m_coins;
+
     for(int i = 1; i <= coins; i++){
         auto key = level->getCoinKey(i);
         if(coinDict->objectForKey(key) == nullptr && coinDict2->objectForKey(key) == nullptr) return false;
-    }*/
+    }
     return true;
 }

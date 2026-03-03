@@ -112,6 +112,8 @@ arc::Future<> BetterInfoCache::cacheLevelBatch(std::vector<int> levelIDs, bool r
             levelIDs.pop_back();
         }
 
+        log::debug("Caching batch of levels, size: {}, rated: {}", batch.size(), rated);
+
         GJSearchObject* searchObject = nullptr;
         co_await waitForMainThread([&searchObject, batch = std::move(batch)] {
             searchObject = GJSearchObject::create(
@@ -142,4 +144,13 @@ void BetterInfoCache::cacheLevel(GJGameLevel* level) {
         level->m_coins,
         level->m_demonDifficulty
     };
+}
+
+BetterInfoCache::CachedLevel& BetterInfoCache::getLevel(int levelID) {
+    if(m_levelCache.contains(levelID)) {
+        return m_levelCache[levelID];
+    }
+
+    static CachedLevel emptyLevel = {"", 0, 0};
+    return emptyLevel;
 }

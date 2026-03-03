@@ -10,14 +10,17 @@ void DailyCell::loadFromData(CCObject* object) {
     auto GLM = GameLevelManager::sharedState();
     auto GSM = GameStatsManager::sharedState();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
+    auto cacheLevel = biCache->getLevel(level->m_levelID);
 
-    //TODO BetterInfoCache
-    /*auto diffSprite = CCSprite::createWithSpriteFrameName(level->m_stars == 10 ? LevelMetadata::getDemonDifficultyIcon(biCache->getDemonDifficulty(level->m_levelID)) : LevelMetadata::getDifficultyIcon(level->m_stars));
+    auto diffSprite = CCSprite::createWithSpriteFrameName(level->m_stars == 10 ? 
+        LevelMetadata::getDemonDifficultyIcon(cacheLevel.m_demonDifficulty) : 
+        LevelMetadata::getDifficultyIcon(level->m_stars)
+    );
     diffSprite->setPosition({22.f, 32.f});
     diffSprite->setScale(0.8f);
     diffSprite->setZOrder(1);
     diffSprite->setID("difficulty-sprite"_spr);
-    this->m_mainLayer->addChild(diffSprite);*/
+    this->m_mainLayer->addChild(diffSprite);
 
     auto featureSprite = CCSprite::createWithSpriteFrameName("GJ_featuredCoin_001.png");
     featureSprite->setPosition({22.f, 32.f});
@@ -40,13 +43,12 @@ void DailyCell::loadFromData(CCObject* object) {
     starsSprite->setID("stars-sprite"_spr);
     this->m_mainLayer->addChild(starsSprite);
 
-    //TODO BetterInfoCache
-    /*auto title = CCLabelBMFont::create(biCache->getLevelName(level->m_levelID).c_str(), "bigFont.fnt");
+    auto title = CCLabelBMFont::create(cacheLevel.m_name.c_str(), "bigFont.fnt");
     title->setAnchorPoint({ 0.0f, .5f });
     title->setPosition(43.0f, 42.f);
     title->limitLabelWidth(170, .7f, .4f);
     title->setID("title-label"_spr);
-    this->m_mainLayer->addChild(title);*/
+    this->m_mainLayer->addChild(title);
 
     //row 2
     auto numberSprite = CCSprite::createWithSpriteFrameName("GJ_sRecentIcon_001.png");
@@ -56,8 +58,7 @@ void DailyCell::loadFromData(CCObject* object) {
     numberSprite->setID("number-sprite"_spr);
     this->m_mainLayer->addChild(numberSprite);
 
-    //TODO BetterInfoCache
-    /*auto number = CCLabelBMFont::create(CCString::createWithFormat("%i", level->m_dailyID % 100000)->getCString(), "bigFont.fnt");
+    auto number = CCLabelBMFont::create(CCString::createWithFormat("%i", level->m_dailyID % 100000)->getCString(), "bigFont.fnt");
     number->setAnchorPoint({ 0.0f, 0.5f });
     number->setPosition(57.5f, 10.0f);
     number->setScale(.325f);
@@ -97,7 +98,7 @@ void DailyCell::loadFromData(CCObject* object) {
     orb->setPosition(orbSprite->getPositionX() + 11.5f, 10.0f);
     orb->setScale(.325f);
     orb->setID("orb-label"_spr);
-    this->m_mainLayer->addChild(orb);*/
+    this->m_mainLayer->addChild(orb);
 
     //row 1
     auto percentSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png");
@@ -133,9 +134,8 @@ void DailyCell::loadFromData(CCObject* object) {
 
     auto coinDict = GameStatsManager::sharedState()->m_verifiedUserCoins;
 
-    //TODO BetterInfoCache
-    /*float coinX = practice->getPositionX() + ((practice->getContentSize().width) * practice->getScaleX());
-    for(int i = 1; i <= biCache->getCoinCount(level->m_levelID); i++){
+    float coinX = practice->getPositionX() + ((practice->getContentSize().width) * practice->getScaleX());
+    for(int i = 1; i <= cacheLevel.m_coins; i++){
         bool isCollected = coinDict->objectForKey(level->getCoinKey(i)) == nullptr;
         auto coinSprite = CCSprite::createWithSpriteFrameName("usercoin_small01_001.png");
         if(isCollected) coinSprite->setColor({165, 165, 165});
@@ -145,15 +145,14 @@ void DailyCell::loadFromData(CCObject* object) {
         coinSprite->setID(fmt::format("coin-sprite-{}"_spr, i).c_str());
         //coinSprite->setScale(0.35f);
         this->m_mainLayer->addChild(coinSprite);
-    }*/
+    }
 
-    //TODO BetterInfoCache
     //fix level data (deleted from saved)
-    /*if(std::string(level->m_levelName) == "" && level->m_coins == 0 && level->m_coinsVerified == false) {
-        level->m_levelName = biCache->getLevelName(level->m_levelID);
-        level->m_coins = biCache->getCoinCount(level->m_levelID);
+    if(std::string(level->m_levelName) == "" && level->m_coins == 0 && level->m_coinsVerified == false) {
+        level->m_levelName = cacheLevel.m_name;
+        level->m_coins = cacheLevel.m_coins;
         level->m_coinsVerified = true;
-    }*/
+    }
 
     //buttons
     auto menu = CCMenu::create();

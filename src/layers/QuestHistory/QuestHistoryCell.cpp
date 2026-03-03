@@ -1,7 +1,6 @@
 #include "QuestHistoryCell.h"
 #include "QuestHistoryObject.h"
 #include "../../utils.hpp"
-#include "../../managers/BetterInfoCache.h"
 
 void QuestHistoryCell::loadFromData(CCObject* object) {
     auto data = dynamic_cast<QuestHistoryObject*>(object);

@@ -83,14 +83,13 @@ class BI_DLL $modify(GameLevelManager) {
                     
                     if(currentLvl->m_normalPercent < 100) continue;
 
-                    //TODO: BetterInfoCache
-                    /*auto coins = currentLvl->m_coins ? currentLvl->m_coins : BICache->getCoinCount(currentLvl->m_levelID);
+                    auto coins = currentLvl->m_coins ? currentLvl->m_coins : BICache->getLevel(currentLvl->m_levelID).m_coins;
                     for(int i = 0; i < coins; i++){
                         auto key = currentLvl->getCoinKey(i + 1);
                         bool hasCoin = coinDict->objectForKey(key) != nullptr || coinDict2->objectForKey(key) != nullptr;
                         completed = hasCoin ? (completed && true) : false;
                     }
-                    if(((mode == CompleteMode::noCoins) != completed) && (coins > 0)) pRet->addObject(currentLvl);*/
+                    if(((mode == CompleteMode::noCoins) != completed) && (coins > 0)) pRet->addObject(currentLvl);
                     
                     break;
                 }

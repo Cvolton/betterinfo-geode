@@ -54,19 +54,7 @@ class BI_DLL $modify(LevelInfoLayer) {
         /**
          * Cache level
         */
-        //TODO: BetterInfoCache
-        /*m_level->retain();
-        std::thread([level = this->m_level](){
-            thread::setName("Cache Level");
-
-            auto cache = BetterInfoCache::sharedState();
-            cache->cacheLevel(level);
-            cache->storeDatesForLevel(level);
-
-            Loader::get()->queueInMainThread([level]() {
-                level->release();
-            });
-        }).detach();*/
+        BetterInfoCache::sharedState()->cacheLevel(m_level);
 
         /**
          * Update exact time label
