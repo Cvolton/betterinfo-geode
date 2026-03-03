@@ -23,9 +23,8 @@ void FoundListsPopup::onClose(cocos2d::CCObject* sender)
 }
 
 void FoundListsPopup::onOK(cocos2d::CCObject* sender){
-    //TODO: BetterInfoCache
-    //BetterInfoCache::sharedState()->showClaimableLists();
     this->onClose(sender);
+    BetterInfoCache::sharedState()->showClaimableLists();
 }
 
 bool FoundListsPopup::init(){
@@ -33,12 +32,11 @@ bool FoundListsPopup::init(){
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    //TODO: BetterInfoCache
-    /*auto textLabel = TextArea::create(fmt::format("You can claim rewards\nfrom <cg>{}</c> new lists!", BetterInfoCache::sharedState()->claimableListsCount()), "chatFont.fnt", 1, 295, {0.5,0.5}, 20, false);
+    auto textLabel = TextArea::create(fmt::format("You can claim rewards\nfrom <cg>{}</c> new lists!", BetterInfoCache::sharedState()->claimableListsCount()), "chatFont.fnt", 1, 295, {0.5,0.5}, 20, false);
     textLabel->setAnchorPoint({0.5,0.5});
     textLabel->setPosition({0,1});
     textLabel->setID("text-label"_spr);
-    m_buttonMenu->addChild(textLabel);*/
+    m_buttonMenu->addChild(textLabel);
 
     cocos2d::extension::CCScale9Sprite* infoBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
     infoBg->setContentSize({320,114});

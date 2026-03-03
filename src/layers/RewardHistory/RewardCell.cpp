@@ -73,15 +73,14 @@ std::string RewardCell::getDisplayName() {
     /**
      * Weekly Chests
     */
-    //TODO: BetterInfoCache
-    /*if(key[0] == 'd') {
+    if(key[0] == 'd') {
         key = key.substr(1);
 
         auto level = typeinfo_cast<GJGameLevel*>(GameLevelManager::sharedState()->m_dailyLevels->objectForKey(key));
-        if(level) return fmt::format("{}: {}", BetterInfo::stoi(key) % 100000, BetterInfoCache::sharedState()->getLevelName(level->m_levelID));
+        if(level) return fmt::format("{}: {}", BetterInfo::stoi(key) % 100000, BetterInfoCache::sharedState()->getLevel(level->m_levelID).m_name);
 
         return key;
-    }*/
+    }
 
     /**
      * Treasure Room Chests

@@ -18,6 +18,9 @@ class BI_DLL BetterInfoCache {
 	std::unordered_map<int, time_t> m_levelDateCache;
 	std::unordered_map<int, std::string> m_usernameCache;
 
+	std::vector<Ref<GJLevelList>> m_levelLists;
+	std::vector<Ref<GJLevelList>> m_claimableLists;
+
 	BetterInfoCache();
 public:
 	static BetterInfoCache* sharedState();
@@ -39,4 +42,9 @@ public:
 
 	void fetchUsername(int userID, geode::Function<void(std::string)> callback);
 	std::string tryGetUsername(int userID);
+
+	void cacheRatedListsFromMegaResponse(std::string_view response);
+	void checkClaimableLists();
+	size_t claimableListsCount() const;
+	void showClaimableLists();
 };

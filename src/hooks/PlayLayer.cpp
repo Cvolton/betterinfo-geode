@@ -34,6 +34,8 @@ class BI_DLL $modify(BIPlayLayer, PlayLayer) {
         stats->logPlay(this->m_level);
 
         if(Mod::get()->getSettingValue<bool>("auto-submit") && this->m_level->m_levelType == GJLevelType::Saved) BetterInfoScheduler::sharedState()->submitLevel(this->m_level);
+        BetterInfoCache::sharedState()->checkClaimableLists();
+
         PlayLayer::onQuit();
     }
 

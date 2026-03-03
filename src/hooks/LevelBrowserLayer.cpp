@@ -8,6 +8,7 @@
 #include "../layers/LevelBrowserEndLayer.h"
 #include "../layers/LevelFiltering/LevelSearchViewLayer.h"
 #include "../layers/LevelFiltering/ProfileSearchOptions.h"
+#include "../layers/FoundListsPopup.h"
 
 #include "../managers/BetterInfoCache.h"
 
@@ -166,8 +167,13 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     void loadLevelsFinished(cocos2d::CCArray* levels, char const* key, int type) {
         LevelBrowserLayer::loadLevelsFinished(levels, key, type);
 
-        //TODO: BetterInfoCache
-        //if(m_searchObject->m_searchMode == 1 && m_searchObject->m_searchType == SearchType::Featured && m_searchObject->m_page == 0) BetterInfoCache::sharedState()->tryShowClaimableListsPopup(this);
+        if(m_searchObject->m_searchMode == 1 && m_searchObject->m_searchType == SearchType::Featured && m_searchObject->m_page == 0) {
+            if(BetterInfoCache::sharedState()->claimableListsCount() > 0) {
+                auto popup = FoundListsPopup::create();
+                popup->m_scene = this;
+                popup->show();
+            }
+        }
     }
 
     void loadPage(GJSearchObject* searchObj) {

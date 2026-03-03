@@ -29,8 +29,7 @@ class BI_DLL $modify(BICreatorLayer, CreatorLayer) {
         auto menu = static_cast<CCMenu*>(this->getChildByID("creator-buttons-menu"));
         auto GSM = GameStatsManager::sharedState();
 
-        //TODO: BetterInfoCache
-        bool showExclamation = false;//BetterInfoCache::sharedState()->claimableListsCount() > 0;
+        bool showExclamation = BetterInfoCache::sharedState()->claimableListsCount() > 0;
 
         if(menu == nullptr || !showExclamation) return;
 

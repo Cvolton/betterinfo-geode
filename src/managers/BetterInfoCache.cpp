@@ -220,3 +220,61 @@ std::string BetterInfoCache::tryGetUsername(int userID) {
 
     return "";
 }
+
+/**
+ * Rated List Caching
+ */
+void BetterInfoCache::cacheRatedListsFromMegaResponse(std::string_view response) {
+    if(ServerUtils::isGDPS()) return;
+
+    auto parts = geode::utils::string::split(response, "#");
+    if (parts.empty()) return;
+    
+    auto lists = geode::utils::string::split(parts[0], "|");
+    for (const auto& listStr : lists) {
+        if (listStr.empty()) continue;
+        m_levelLists.push_back(GJLevelList::create(BetterInfo::responseToDict(listStr)));
+    }
+
+    checkClaimableLists();
+}
+
+void BetterInfoCache::checkClaimableLists() {
+    m_claimableLists.clear();
+
+    for (const auto& list : m_levelLists) {
+        if (GameStatsManager::get()->hasClaimedListReward(list)) continue;
+        if (list->completedLevels() < list->m_levelsToClaim) continue;
+
+        m_claimableLists.push_back(list);
+    }
+}
+
+size_t BetterInfoCache::claimableListsCount() const {
+    return m_claimableLists.size();
+}
+
+void BetterInfoCache::showClaimableLists() {
+    if(m_claimableLists.empty()) return;
+
+    auto searchObj = GJSearchObject::create((SearchType) 212156);
+    searchObj->m_searchMode = 1;
+    auto lists = CCArray::create();
+    for(auto list : m_claimableLists) {
+        if(list) lists->addObject(list);
+    }
+    GameLevelManager::sharedState()->storeSearchResult(lists, fmt::format("{}:{}:{}", lists->count(), 0, lists->count()), searchObj->getKey());
+
+    auto scene = LevelBrowserLayer::scene(searchObj);
+    auto transitionFade = CCTransitionFade::create(0.5, scene);
+    CCDirector::sharedDirector()->pushScene(transitionFade);
+
+    if(auto LBL = scene->getChildByType<LevelBrowserLayer>(0)) {
+        LBL->m_refreshBtn->setVisible(false);
+        if(auto starButton = LBL->getChildByIDRecursive("star-button"_spr)) {
+            auto parent = starButton->getParent();
+            starButton->removeFromParent();
+            parent->updateLayout();
+        }
+    }
+}
