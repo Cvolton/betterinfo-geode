@@ -4,7 +4,6 @@
 
 #include <thread>
 
-//#include "managers/BetterInfoStatsV2.h"
 #include "managers/BetterInfoStats.h"
 #include "managers/BetterInfoCache.h"
 #include "utils.hpp"
@@ -16,7 +15,6 @@ void BI_DLL loadManagers() {
 
     std::thread([] {
         thread::setName("BI Manager Loader");
-        //BetterInfoStatsV2::sharedState();
         BetterInfoCache::sharedState();
     }).detach();
     

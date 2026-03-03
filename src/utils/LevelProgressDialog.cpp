@@ -56,7 +56,6 @@ void LevelProgressDialog::show(GJGameLevel* level){
     }
 
     if(level->m_levelType != GJLevelType::Editor){
-        //auto statsV2 = BetterInfoStatsV2::sharedState();
         contentStream << "\n" << toMergeStream.str() << "\n";
     }else{
         contentStream << "\n<cp>Objects</c>: " << level->m_objectCount
@@ -68,7 +67,6 @@ void LevelProgressDialog::show(GJGameLevel* level){
 
     auto normalAttempts = stats->getAttempts(level, false);
     auto practiceAttempts = stats->getAttempts(level, true);
-    //auto commonFail = statsV2->getCommonFail(level);
     secondStream << "<cp>Attempts (normal)</c>: " << normalAttempts << "\n";
     secondStream << "<co>Attempts (practice)</c>: " << practiceAttempts << "\n";
     if((normalAttempts + practiceAttempts) != level->m_attempts) secondStream << "<cy>Attempts (unknown)</c>: " << (level->m_attempts - practiceAttempts - normalAttempts) << "\n";

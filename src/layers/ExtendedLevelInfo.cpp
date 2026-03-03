@@ -1,6 +1,5 @@
 #include "ExtendedLevelInfo.h"
 #include "../utils.hpp"
-//#include "../managers/BetterInfoStatsV2.h"
 #include "../managers/BetterInfoCache.h"
 #include "../ui/CopyableLabel.h"
 
