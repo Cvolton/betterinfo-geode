@@ -14,4 +14,7 @@ namespace TimeUtils {
 
     BI_DLL double getRobTopTime();
     BI_DLL double getFullDoubleTime();
+
+    BI_DLL std::time_t isoStringToTime(std::string_view time_str);
+    BI_DLL std::string timeToIsoDate(std::time_t time);
 }

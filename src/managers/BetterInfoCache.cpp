@@ -23,6 +23,9 @@ void BetterInfoCache::startLoading() {
     });
 }
 
+/**
+ * User Score Caching
+ */
 arc::Future<> BetterInfoCache::cacheFollowedCreators() {
     log::debug("Started caching followed creators");
     std::vector<int> followedCreatorIDs;
@@ -67,6 +70,9 @@ GJUserScore* BetterInfoCache::getUserScore(int accountID) {
     return score;
 }
 
+/**
+ * Level Caching
+ */
 arc::Future<> BetterInfoCache::cacheSavedLevels() {
     co_await this->cacheLevels(GameLevelManager::sharedState()->m_dailyLevels);
     co_await this->cacheLevels(GameLevelManager::sharedState()->m_onlineLevels);
@@ -153,4 +159,24 @@ BetterInfoCache::CachedLevel& BetterInfoCache::getLevel(int levelID) {
 
     static CachedLevel emptyLevel = {"", 0, 0};
     return emptyLevel;
+}
+
+/**
+ * Level Date Caching
+ */
+void BetterInfoCache::fetchLevelDate(int levelID, geode::Function<void(time_t)> callback) {
+    if(ServerUtils::isGDPS()) return;
+
+    async::spawn(
+        ServerUtils::getBaseRequest().get(fmt::format("https://history.geometrydash.eu/api/v1/date/level/{}/", levelID)),
+        [callback = std::move(callback)](web::WebResponse response) mutable {
+            if(!response.ok()) return;
+
+            auto json = response.json().unwrapOrDefault();
+            if(!json["approx"].contains("estimation") || !json["approx"].contains("online_id")) return;
+
+            time_t time = TimeUtils::isoStringToTime(json["approx"]["estimation"].asString().unwrapOrDefault());
+            callback(time);
+        }
+    );
 }

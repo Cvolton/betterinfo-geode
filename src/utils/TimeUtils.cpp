@@ -120,3 +120,21 @@ double TimeUtils::getFullDoubleTime() {
         return timebuffer.time + timebuffer.millitm / 1000.0;
     #endif
 }
+
+std::time_t TimeUtils::isoStringToTime(std::string_view time_str) {
+    std::chrono::sys_time<std::chrono::milliseconds> tp;
+    std::istringstream ss{std::string(time_str)};
+    ss >> std::chrono::parse("%FT%T%Z", tp);
+    
+    if (ss.fail()) return 0;
+    
+    auto tp_sec = std::chrono::time_point_cast<std::chrono::seconds>(tp);
+    return std::chrono::system_clock::to_time_t(tp_sec);
+}
+
+std::string TimeUtils::timeToIsoDate(std::time_t time) {
+    if(time == 0) return "NA";
+
+    std::chrono::system_clock::time_point tp = std::chrono::system_clock::from_time_t(time);
+    return fmt::format("{:%F}", tp);
+}

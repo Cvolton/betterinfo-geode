@@ -15,6 +15,7 @@ class BI_DLL BetterInfoCache {
 	std::unordered_map<int, Ref<GJUserScore>> m_userScoreCache;
 	std::unordered_map<int, CachedLevel> m_levelCache;
 	std::unordered_map<int, int> m_levelFailures;
+	std::unordered_map<int, time_t> m_levelDateCache;
 
 	BetterInfoCache();
 public:
@@ -32,4 +33,6 @@ public:
 	arc::Future<> cacheLevelBatch(std::vector<int> levelIDs, bool rated);
 	void cacheLevel(GJGameLevel* level);
 	CachedLevel& getLevel(int levelID);
+
+	void fetchLevelDate(int levelID, geode::Function<void(time_t)> callback);
 };

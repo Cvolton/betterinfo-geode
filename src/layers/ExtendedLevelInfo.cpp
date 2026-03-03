@@ -22,9 +22,6 @@ ExtendedLevelInfo* ExtendedLevelInfo::create(GJGameLevel* level){
 
 void ExtendedLevelInfo::onClose(cocos2d::CCObject* sender)
 {
-    //TODO: BetterInfoCache
-    //BetterInfoCache::sharedState()->m_uploadDateDelegate = nullptr;
-    
     CvoltonAlertLayerStub::onClose(sender);
 }
 
@@ -61,12 +58,6 @@ void ExtendedLevelInfo::onPrev(cocos2d::CCObject* sender)
     loadPage(m_page-1);
 }
 
-void ExtendedLevelInfo::onUploadDateLoaded(int levelID, const std::string& date) {
-    m_uploadDateEstimated = date;
-    refreshInfoTexts();
-    loadPage(m_page);
-}
-
 void ExtendedLevelInfo::loadPage(int page) {
     this->m_page = page;
     if(page % 2 == 0) { 
@@ -94,8 +85,8 @@ void ExtendedLevelInfo::refreshInfoTexts() {
     int levelPassword = m_level->m_password;
 
     //TODO BetterInfoCache
-    /*m_primaryValues.push_back(LevelMetadata::stringDate(!uploadDateStd.empty() ? uploadDateStd : LevelMetadata::addPlus(cache->getLevelInfo(m_level->m_levelID, "upload-date"))));
-    m_primaryValues.push_back(LevelMetadata::stringDate(!updateDateStd.empty() ? updateDateStd : LevelMetadata::addPlus(cache->getLevelInfo(m_level->m_levelID, "update-date"))));
+    m_primaryValues.push_back(LevelMetadata::stringDate(uploadDateStd));
+    m_primaryValues.push_back(LevelMetadata::stringDate(updateDateStd));
     m_primaryValues.push_back(LevelMetadata::zeroIfNA(m_level->m_originalLevel));
     m_primaryValues.push_back(LevelMetadata::getGameVersionName(m_level->m_gameVersion));
     m_primaryValues.push_back(LevelMetadata::passwordString(levelPassword));
@@ -111,7 +102,7 @@ void ExtendedLevelInfo::refreshInfoTexts() {
         //<< "\nFeature Score</c>: " << m_level->m_featured
         << "\n<co>Password</c>: " << m_primaryValues[4]
         << "\n<cr>In Editor</c>: " << m_primaryValues[5]
-        << "\n<cr>Editor (C)</c>: " << m_primaryValues[6];*/
+        << "\n<cr>Editor (C)</c>: " << m_primaryValues[6];
 
     m_primary = infoText.str();
 
@@ -120,7 +111,7 @@ void ExtendedLevelInfo::refreshInfoTexts() {
 
     infoText.str("");
     if(!ServerUtils::isGDPS()) {
-        m_secondaryValues.push_back(TimeUtils::isoTimeToString(m_uploadDateEstimated));
+        m_secondaryValues.push_back(TimeUtils::timeToIsoDate(m_uploadDateEstimated));
         infoText << "\n<cj>Uploaded</c>: " << m_secondaryValues[offset++];
     }
 
@@ -140,24 +131,18 @@ void ExtendedLevelInfo::refreshInfoTexts() {
     ;
 
     m_secondary = infoText.str();
-
-    /*infoText << "<cg>Total Attempts</c>: " << m_level->attempts
-        << "\n<cl>Total Jumps</c>: " << m_level->jumps
-        << "\n<co>Clicks (best att.)</c>: " << m_level->clicks // the contents of this variable make no sense to me
-        << "\n<co>Time (best att.)</c>: " << TimeUtils::workingTime(m_level->attemptTime) // the contents of this variable make no sense to me
-        //<< "\n<co>Is legit</c>: " << m_level->isCompletionLegitimate // the contents of this variable make no sense to me
-        << "\n<cp>Normal</c>: " << m_level->normalPercent
-        << "%\n<co>Practice</c>: " << m_level->practicePercent << "%";
-
-    if(m_level->orbCompletion != m_level->newNormalPercent2) infoText << "\n<cj>2.1 Normal</c>: " << m_level->orbCompletion << "%";
-    if(m_level->newNormalPercent2 != m_level->normalPercent) infoText << "\n<cr>2.11 Normal</c>: " << m_level->newNormalPercent2 << "%";*/
 }
 
 void ExtendedLevelInfo::setupAdditionalInfo() {
-    //TODO BetterInfoCache
-    /*m_uploadDateEstimated = BetterInfoCache::sharedState()->getUploadDate(m_level->m_levelID, this);
-    this->retain();
+    BetterInfoCache::sharedState()->fetchLevelDate(m_level->m_levelID, [this](time_t date) {
+        if(m_level->m_uploadDate.empty()) m_level->m_uploadDate = TimeUtils::timestampToHumanReadable(date);
 
+        m_uploadDateEstimated = date;
+        refreshInfoTexts();
+        loadPage(m_page);
+    });
+    
+    this->retain();
     std::thread([this]() {
         thread::setName("Additional Level Info");
         std::string levelString(BetterInfo::decodeBase64Gzip(m_level->m_levelString));
@@ -170,7 +155,7 @@ void ExtendedLevelInfo::setupAdditionalInfo() {
             this->loadPage(this->m_page);
             this->release();
         });
-    }).detach();*/
+    }).detach();
 }
 
 bool ExtendedLevelInfo::init(GJGameLevel* level){
