@@ -45,9 +45,10 @@ class BI_DLL $modify(BIFriendsProfilePage, FriendsProfilePage) {
         
         std::map<std::string, Ref<GJUserScore>> followedCreators;
         
-        for(auto [key,trueString] : CCDictionaryExt<gd::string, CCString*>(GLM->m_followedCreators)) {
+        //TODO: BetterInfoCache
+        /*for(auto [key,trueString] : CCDictionaryExt<gd::string, CCString*>(GLM->m_followedCreators)) {
             auto id = BetterInfo::stoi(key);
-            auto score = BICache->getCachedOrPlaceholderScore(id);
+            //auto score = BICache->getCachedOrPlaceholderScore(id);
 
             std::string username = score->m_userName;
             BetterInfo::strToLower(username);
@@ -55,7 +56,7 @@ class BI_DLL $modify(BIFriendsProfilePage, FriendsProfilePage) {
                 username += " ";
             }
             followedCreators.emplace(username, score);
-        }
+        }*/
 
         CCArrayExt<GJUserScore*> followedCreatorsArray;
 

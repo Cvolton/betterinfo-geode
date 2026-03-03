@@ -26,8 +26,9 @@ class BI_DLL $modify(BIPlayLayer, PlayLayer) {
         auto stats = BetterInfoStats::sharedState();
         stats->logPlay(this->m_level);
 
-        auto cache = BetterInfoCache::sharedState();
-        cache->storeDatesForLevel(this->m_level);
+        //TODO: BetterInfoCache
+        /*auto cache = BetterInfoCache::sharedState();
+        cache->storeDatesForLevel(this->m_level);*/
 
         return true;
     }

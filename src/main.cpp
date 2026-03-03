@@ -21,7 +21,8 @@ void BI_DLL loadManagers() {
 }
 
 void BI_DLL finishLoadingManagers() {
-    BetterInfoCache::sharedState()->finishLoading();
+    //TODO BetterInfoCache
+    //BetterInfoCache::sharedState()->finishLoading();
     BetterInfoStats::sharedState()->finishLoading();
 }
 

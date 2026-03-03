@@ -786,7 +786,8 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
 
             if(!response.ok() || response.json().isErr()) {
                 log::warn("Fetching important notices failed: {} - {}", response.code(), response.string().unwrapOr("No response"));
-                biCache->cacheRatedLists();
+                //TODO BetterInfoCache
+                //biCache->cacheRatedLists();
                 return;
             }
 
@@ -800,7 +801,8 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
             for(auto& value : info["additional"]["vault5"]) {
                 if(!value.isString()) continue;
 
-                biCache->cacheVaultCode(value.getKey().value_or(""), value.asString().unwrap());
+                //TODO BetterInfoCache
+                //biCache->cacheVaultCode(value.getKey().value_or(""), value.asString().unwrap());
             }
 
             /*if(auto res = info["additional"]["rated_lists"]["content"].asString()) {

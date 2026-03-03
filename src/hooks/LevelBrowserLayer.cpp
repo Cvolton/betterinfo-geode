@@ -166,7 +166,8 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
     void loadLevelsFinished(cocos2d::CCArray* levels, char const* key, int type) {
         LevelBrowserLayer::loadLevelsFinished(levels, key, type);
 
-        if(m_searchObject->m_searchMode == 1 && m_searchObject->m_searchType == SearchType::Featured && m_searchObject->m_page == 0) BetterInfoCache::sharedState()->tryShowClaimableListsPopup(this);
+        //TODO: BetterInfoCache
+        //if(m_searchObject->m_searchMode == 1 && m_searchObject->m_searchType == SearchType::Featured && m_searchObject->m_page == 0) BetterInfoCache::sharedState()->tryShowClaimableListsPopup(this);
     }
 
     void loadPage(GJSearchObject* searchObj) {

@@ -18,7 +18,8 @@ $modify(BILevelListLayer, LevelListLayer) {
     void onClaimReward(CCObject* sender){
         LevelListLayer::onClaimReward(sender);
 
-        BetterInfoCache::sharedState()->removeClaimedLists();
+        //TODO: BetterInfoCache
+        //BetterInfoCache::sharedState()->removeClaimedLists();
     }
 
     bool init(GJLevelList* list) {

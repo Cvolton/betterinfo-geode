@@ -22,7 +22,8 @@ ExtendedLevelInfo* ExtendedLevelInfo::create(GJGameLevel* level){
 
 void ExtendedLevelInfo::onClose(cocos2d::CCObject* sender)
 {
-    BetterInfoCache::sharedState()->m_uploadDateDelegate = nullptr;
+    //TODO: BetterInfoCache
+    //BetterInfoCache::sharedState()->m_uploadDateDelegate = nullptr;
     
     CvoltonAlertLayerStub::onClose(sender);
 }
@@ -92,7 +93,8 @@ void ExtendedLevelInfo::refreshInfoTexts() {
     auto updateDateStd = std::string(m_level->m_updateDate);
     int levelPassword = m_level->m_password;
 
-    m_primaryValues.push_back(LevelMetadata::stringDate(!uploadDateStd.empty() ? uploadDateStd : LevelMetadata::addPlus(cache->getLevelInfo(m_level->m_levelID, "upload-date"))));
+    //TODO BetterInfoCache
+    /*m_primaryValues.push_back(LevelMetadata::stringDate(!uploadDateStd.empty() ? uploadDateStd : LevelMetadata::addPlus(cache->getLevelInfo(m_level->m_levelID, "upload-date"))));
     m_primaryValues.push_back(LevelMetadata::stringDate(!updateDateStd.empty() ? updateDateStd : LevelMetadata::addPlus(cache->getLevelInfo(m_level->m_levelID, "update-date"))));
     m_primaryValues.push_back(LevelMetadata::zeroIfNA(m_level->m_originalLevel));
     m_primaryValues.push_back(LevelMetadata::getGameVersionName(m_level->m_gameVersion));
@@ -109,7 +111,7 @@ void ExtendedLevelInfo::refreshInfoTexts() {
         //<< "\nFeature Score</c>: " << m_level->m_featured
         << "\n<co>Password</c>: " << m_primaryValues[4]
         << "\n<cr>In Editor</c>: " << m_primaryValues[5]
-        << "\n<cr>Editor (C)</c>: " << m_primaryValues[6];
+        << "\n<cr>Editor (C)</c>: " << m_primaryValues[6];*/
 
     m_primary = infoText.str();
 
@@ -152,7 +154,8 @@ void ExtendedLevelInfo::refreshInfoTexts() {
 }
 
 void ExtendedLevelInfo::setupAdditionalInfo() {
-    m_uploadDateEstimated = BetterInfoCache::sharedState()->getUploadDate(m_level->m_levelID, this);
+    //TODO BetterInfoCache
+    /*m_uploadDateEstimated = BetterInfoCache::sharedState()->getUploadDate(m_level->m_levelID, this);
     this->retain();
 
     std::thread([this]() {
@@ -167,7 +170,7 @@ void ExtendedLevelInfo::setupAdditionalInfo() {
             this->loadPage(this->m_page);
             this->release();
         });
-    }).detach();
+    }).detach();*/
 }
 
 bool ExtendedLevelInfo::init(GJGameLevel* level){

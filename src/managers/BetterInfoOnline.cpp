@@ -40,7 +40,8 @@ void BetterInfoOnline::loadScores(int accountID, bool force, BILeaderboardDelega
                     sendScores(m_scoreDict[loadKey], accountID, stat, delegate, profilePage);
                     m_delegates.erase(delegate);
                 }
-                BetterInfoCache::sharedState()->cacheScoresResult(m_scoreDict[loadKey]);
+                //TODO BetterInfoCache
+                //BetterInfoCache::sharedState()->cacheScoresResult(m_scoreDict[loadKey]);
             } else {
                 sendScores(CCArray::create(), accountID, stat, delegate, profilePage);
                 ServerUtils::showResponseError(response);

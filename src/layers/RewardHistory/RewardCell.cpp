@@ -27,13 +27,14 @@ std::string RewardCell::getDisplayName() {
     /**
      * Vault chests
     */
-    if(key[0] == 'o' && std::string_view(key).starts_with("o_secret")) {
+    //TODO BetterInfoCache
+    /*if(key[0] == 'o' && std::string_view(key).starts_with("o_secret")) {
         auto name = BetterInfoCache::sharedState()->getVaultCode(key);
         key = key.substr(9);
 
         if(!name.empty()) return fmt::format("{}: {}", key, name);
         return fmt::format("Vault Code {}", key);
-    }
+    }*/
 
     /**
      * Other chests
@@ -72,14 +73,15 @@ std::string RewardCell::getDisplayName() {
     /**
      * Weekly Chests
     */
-    if(key[0] == 'd') {
+    //TODO BetterInfoCache
+    /*if(key[0] == 'd') {
         key = key.substr(1);
 
         auto level = typeinfo_cast<GJGameLevel*>(GameLevelManager::sharedState()->m_dailyLevels->objectForKey(key));
         if(level) return fmt::format("{}: {}", BetterInfo::stoi(key) % 100000, BetterInfoCache::sharedState()->getLevelName(level->m_levelID));
 
         return key;
-    }
+    }*/
 
     /**
      * Treasure Room Chests

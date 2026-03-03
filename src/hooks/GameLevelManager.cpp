@@ -40,12 +40,13 @@ class BI_DLL $modify(GameLevelManager) {
         auto userName = GameLevelManager::userNameForUserID(userID);
         auto userNameStd = std::string(userName);
 
-        if(Mod::get()->getSettingValue<bool>("fix-green-users") && (userNameStd == "" || userNameStd == "-" || userNameStd == "Player")){
+        //TODO: BetterInfoCache
+        /*if(Mod::get()->getSettingValue<bool>("fix-green-users") && (userNameStd == "" || userNameStd == "-" || userNameStd == "Player")){
 
             auto newUserName = BetterInfoCache::sharedState()->getUserName(userID);
             if(userID == 32471) userName = "PixelCube"; //previous dataset had an error
             if(!newUserName.empty()) userName = newUserName;
-        }
+        }*/
 
         return userName;
     }
@@ -82,13 +83,14 @@ class BI_DLL $modify(GameLevelManager) {
                     
                     if(currentLvl->m_normalPercent < 100) continue;
 
-                    auto coins = currentLvl->m_coins ? currentLvl->m_coins : BICache->getCoinCount(currentLvl->m_levelID);
+                    //TODO: BetterInfoCache
+                    /*auto coins = currentLvl->m_coins ? currentLvl->m_coins : BICache->getCoinCount(currentLvl->m_levelID);
                     for(int i = 0; i < coins; i++){
                         auto key = currentLvl->getCoinKey(i + 1);
                         bool hasCoin = coinDict->objectForKey(key) != nullptr || coinDict2->objectForKey(key) != nullptr;
                         completed = hasCoin ? (completed && true) : false;
                     }
-                    if(((mode == CompleteMode::noCoins) != completed) && (coins > 0)) pRet->addObject(currentLvl);
+                    if(((mode == CompleteMode::noCoins) != completed) && (coins > 0)) pRet->addObject(currentLvl);*/
                     
                     break;
                 }

@@ -113,9 +113,10 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
     }
 
     void loadCustomLevelCell() {
-        if(std::string(m_level->m_creatorName).empty()) {
+        //TODO: BetterInfoCache
+        /*if(std::string(m_level->m_creatorName).empty()) {
             m_level->m_creatorName = BetterInfoCache::sharedState()->getUserName(m_level->m_userID, false);
-        }
+        }*/
 
         LevelCell::loadCustomLevelCell();
 
@@ -164,7 +165,8 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
             dailyTextNode->setID("daily-id-label"_spr);
             if(Mod::get()->getSettingValue<bool>("show-level-ids")) m_mainLayer->addChild(dailyTextNode);
 
-            m_level->retain();
+            //TODO: BetterInfoCache
+            /*m_level->retain();
             std::thread([level = m_level](){
                 thread::setName("Cache Level");
 
@@ -173,7 +175,7 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
                 Loader::get()->queueInMainThread([level]() {
                     level->release();
                 });
-            }).detach();
+            }).detach();*/
         }
 
         /*if(auto songLabel = m_mainLayer->getChildByID("song-name")) {

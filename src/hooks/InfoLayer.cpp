@@ -72,10 +72,11 @@ class BI_DLL $modify(BIInfoLayer, InfoLayer) {
     bool init(GJGameLevel* level, GJUserScore* score, GJLevelList* list) {
         if (!InfoLayer::init(level, score, list)) return false;
 
-        if(level) {
+        //TODO: BetterInfoCache
+        /*if(level) {
             auto cache = BetterInfoCache::sharedState();
             cache->storeDatesForLevel(this->m_level);
-        }
+        }*/
 
         if(auto playerName = static_cast<CCMenuItemSpriteExtra*>(m_buttonMenu->getChildByID("creator-button"))) {
             playerName->setEnabled(true);
