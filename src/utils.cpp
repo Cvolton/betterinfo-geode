@@ -799,8 +799,7 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
             for(auto& value : info["additional"]["vault5"]) {
                 if(!value.isString()) continue;
 
-                //TODO: BetterInfoCache
-                //biCache->cacheVaultCode(value.getKey().value_or(""), value.asString().unwrap());
+                biCache->cacheVaultCode(value.getKey().value_or(""), value.asString().unwrap());
             }
 
             if(auto res = info["additional"]["rated_lists"]["content"].asString()) {

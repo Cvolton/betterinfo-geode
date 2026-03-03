@@ -278,3 +278,15 @@ void BetterInfoCache::showClaimableLists() {
         }
     }
 }
+
+/**
+ * Vault Code Caching
+ */
+void BetterInfoCache::cacheVaultCode(const std::string& id, std::string_view code) {
+    m_vaultCodeCache[id] = code;
+}
+
+std::string BetterInfoCache::getVaultCode(const std::string& id) {
+    if(m_vaultCodeCache.contains(id)) return m_vaultCodeCache[id];
+    return "";
+}

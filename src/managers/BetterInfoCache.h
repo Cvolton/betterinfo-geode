@@ -17,6 +17,7 @@ class BI_DLL BetterInfoCache {
 	std::unordered_map<int, int> m_levelFailures;
 	std::unordered_map<int, time_t> m_levelDateCache;
 	std::unordered_map<int, std::string> m_usernameCache;
+	std::unordered_map<std::string, std::string> m_vaultCodeCache;
 
 	std::vector<Ref<GJLevelList>> m_levelLists;
 	std::vector<Ref<GJLevelList>> m_claimableLists;
@@ -47,4 +48,7 @@ public:
 	void checkClaimableLists();
 	size_t claimableListsCount() const;
 	void showClaimableLists();
+
+	void cacheVaultCode(const std::string& id, std::string_view code);
+	std::string getVaultCode(const std::string& id);
 };
