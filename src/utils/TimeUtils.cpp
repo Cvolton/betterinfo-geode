@@ -122,14 +122,15 @@ double TimeUtils::getFullDoubleTime() {
 }
 
 std::time_t TimeUtils::isoStringToTime(std::string_view time_str) {
-    std::chrono::sys_time<std::chrono::milliseconds> tp;
+    std::tm tmStruct = {};
     std::istringstream ss{std::string(time_str)};
-    ss >> std::chrono::parse("%FT%T%Z", tp);
+    ss >> std::get_time(&tmStruct, "%Y-%m-%dT%H:%M:%S");
     
-    if (ss.fail()) return 0;
+    if (ss.fail()) {
+        return 0;
+    }
     
-    auto tp_sec = std::chrono::time_point_cast<std::chrono::seconds>(tp);
-    return std::chrono::system_clock::to_time_t(tp_sec);
+    return std::mktime(&tmStruct);
 }
 
 std::string TimeUtils::timeToIsoDate(std::time_t time) {
