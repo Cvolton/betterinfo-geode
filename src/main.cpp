@@ -12,11 +12,7 @@ using namespace geode::prelude;
 
 void BI_DLL loadManagers() {
     BetterInfoStats::sharedState();
-
-    std::thread([] {
-        thread::setName("BI Manager Loader");
-        BetterInfoCache::sharedState();
-    }).detach();
+    BetterInfoCache::sharedState();
     
 }
 
