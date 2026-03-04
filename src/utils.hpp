@@ -65,8 +65,6 @@ namespace BetterInfo {
     BI_DLL bool levelProgressMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);
     BI_DLL std::vector<GJGameLevel*> completedLevelsInStarRange(int min, int max, bool platformer, CCDictionary* dict = GameLevelManager::sharedState()->m_onlineLevels);
 
-    BI_DLL void reloadUsernames(LevelBrowserLayer* levelBrowserLayer);
-
     BI_DLL uint64_t timeInMs();
     BI_DLL float timeForLevelString(const std::string& levelString);
     BI_DLL int maxObjectIDForDecompressedLevelString(const std::string& levelString);

@@ -422,59 +422,6 @@ std::vector<GJGameLevel*> BetterInfo::completedLevelsInStarRange(int min, int ma
     return levels;
 }
 
-void BetterInfo::reloadUsernames(LevelBrowserLayer* levelBrowserLayer) {
-    auto winSize = CCDirector::sharedDirector()->getWinSize();
-
-    auto listLayer = levelBrowserLayer->getChildByType<GJListLayer>(0);
-    if(!listLayer) return;
-    auto listView = listLayer->getChildByType<CustomListView>(0);
-    if(!listView) return;
-    auto tableView = listView->getChildByType<TableView>(0);
-    if(!tableView) return;
-    auto contentLayer = tableView->getChildByType<CCContentLayer>(0);
-    if(!contentLayer) return;
-    auto children = CCArrayExt<CCNode*>(contentLayer->getChildren());
-
-    for(auto& child : children) {
-        //TODO: rewrite the positioning code here
-
-        auto levelCell = typeinfo_cast<LevelCell*>(child);
-        if(!levelCell) continue;
-        auto menu = levelCell->m_mainLayer->getChildByID("main-menu");
-        if(!menu) continue;
-        auto playerName = menu->getChildByID("creator-name");
-        if(!playerName) continue;
-        auto textNode = static_cast<CCLabelBMFont*>(playerName->getChildren()->objectAtIndex(0));
-        if(!textNode) continue;
-
-        float oldXSize = textNode->getScaledContentSize().width;
-
-        auto userName = GameLevelManager::sharedState()->userNameForUserID(levelCell->m_level->m_userID);
-        if(userName.empty() || std::string(userName) == "-" || std::string(userName) == "Unknown") continue;
-
-        auto oldString = std::string(textNode->getString());
-        auto newString = fmt::format("{}{}", levelCell->m_compactView ? "" : "By ", std::string(userName));
-
-        textNode->setString(newString.c_str());
-
-        float difference = textNode->getScaledContentSize().width - oldXSize;
-
-        playerName->setContentSize(textNode->getContentSize() * textNode->getScale());
-        playerName->setPositionX(playerName->getPositionX() + (difference / 2));
-
-        textNode->setPositionX(playerName->getContentSize().width / 2);
-
-        if(auto copyIcon = menu->getChildByID("copy-indicator")) {
-            copyIcon->setPositionX(copyIcon->getPositionX() + difference);
-        }
-        if(auto highObjectIcon = menu->getChildByID("high-object-indicator")) {
-            highObjectIcon->setPositionX(highObjectIcon->getPositionX() + difference);
-        }
-
-        levelCell->m_level->m_creatorName = userName;
-    }
-}
-
 inline bool objectIDIsSpeedPortal(int id) {
     return (id == 200 || id == 201 || id == 202 || id == 203 || id == 1334);
 }

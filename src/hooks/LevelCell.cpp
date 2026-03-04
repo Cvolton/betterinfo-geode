@@ -113,11 +113,50 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
     }
 
     void loadCustomLevelCell() {
-        if(std::string(m_level->m_creatorName).empty() || m_level->m_creatorName == "-") {
-            m_level->m_creatorName = GameLevelManager::get()->userNameForUserID(m_level->m_accountID);
-        }
-
         LevelCell::loadCustomLevelCell();
+
+        if(std::string(m_level->m_creatorName).empty() || m_level->m_creatorName == "-" || m_level->m_creatorName == "Unknown" || m_level->m_creatorName == "Player") {
+            // if cells werent so stupid I'd just remove all objects and recreate them
+            // however because I can't retain them I have to resort to this
+            // the alternative is to refactor ServerUtils to use arc which I'd like to
+            // do in the future but it is "outside the budget" for now
+
+            if(auto menu = m_mainLayer->getChildByID("main-menu")) {
+                if(auto playerName = menu->getChildByID("creator-name")) {
+                    if(auto textNode = static_cast<CCLabelBMFont*>(playerName->getChildren()->objectAtIndex(0))) {
+                        float oldXSize = textNode->getScaledContentSize().width;
+
+                        BetterInfoCache::sharedState()->fetchUsername(
+                            m_level->m_userID, 
+                            [textNode = Ref(textNode), menu = Ref(menu), playerName = Ref(playerName), oldXSize, level = Ref(m_level), compactView = m_compactView](std::string userName) {
+                                if(!userName.empty() && std::string(userName) != "-" && std::string(userName) != "Unknown") {
+                                    auto oldString = std::string(textNode->getString());
+                                    auto newString = fmt::format("{}{}", compactView ? "" : "By ", std::string(userName));
+
+                                    textNode->setString(newString.c_str());
+
+                                    float difference = textNode->getScaledContentSize().width - oldXSize;
+
+                                    playerName->setContentSize(textNode->getContentSize() * textNode->getScale());
+                                    playerName->setPositionX(playerName->getPositionX() + (difference / 2));
+
+                                    textNode->setPositionX(playerName->getContentSize().width / 2);
+
+                                    if(auto copyIcon = menu->getChildByID("copy-indicator")) {
+                                        copyIcon->setPositionX(copyIcon->getPositionX() + difference);
+                                    }
+                                    if(auto highObjectIcon = menu->getChildByID("high-object-indicator")) {
+                                        highObjectIcon->setPositionX(highObjectIcon->getPositionX() + difference);
+                                    }
+
+                                    level->m_creatorName = userName;
+                                }
+                            }
+                        );
+                    }
+                }
+            }
+        }
 
         //this->getScheduler()->scheduleSelector(schedule_selector(BILevelCell::checkHover), this, 0.1f, false);
 
