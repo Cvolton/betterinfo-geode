@@ -984,13 +984,14 @@ void BetterInfo::showUnimportantNotification(const std::string& content, Notific
     s_notifications.push_back(notif);
     notif->show();
 
-    async::spawn([] -> arc::Future<> {
-        //assume up to 4 notifications are scheduled outside of this - if this fails nothing much really happens, they just wont be removed immediately
-        //assume notifications are not longer than 5s
-        co_await arc::sleep(asp::Duration::fromSecs(5 * (s_notifications.size() + 4)));
-    }, [notif] {
-        s_notifications.erase(std::remove(s_notifications.begin(), s_notifications.end(), notif), s_notifications.end());
-    });
+    //assume up to 4 notifications are scheduled outside of this - if this fails nothing much really happens, they just wont be removed immediately
+    //assume notifications are not longer than 5s
+    async::spawn(
+        arc::sleep(asp::Duration::fromSecs(5 * (s_notifications.size() + 4))), 
+        [notif] {
+            s_notifications.erase(std::remove(s_notifications.begin(), s_notifications.end(), notif), s_notifications.end());
+        }
+    );
 }
 
 void BetterInfo::cancelUnimportantNotifications() {
