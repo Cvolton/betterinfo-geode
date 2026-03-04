@@ -325,7 +325,7 @@ void BetterInfoCache::cacheLevel(GJGameLevel* level) {
     };
 }
 
-BetterInfoCache::CachedLevel& BetterInfoCache::getLevel(int levelID) {
+const BetterInfoCache::CachedLevel& BetterInfoCache::getLevel(int levelID) {
     if(m_levelCache.contains(levelID)) {
         return m_levelCache[levelID];
     }

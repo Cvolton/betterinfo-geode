@@ -42,7 +42,7 @@ public:
 	arc::Future<> cacheLevels(CCDictionary* dict);
 	arc::Future<> cacheLevelBatch(std::vector<int> levelIDs, bool rated);
 	void cacheLevel(GJGameLevel* level);
-	CachedLevel& getLevel(int levelID);
+	const CachedLevel& getLevel(int levelID);
 
 	void fetchLevelDate(int levelID, geode::Function<void(time_t)> callback);
 
