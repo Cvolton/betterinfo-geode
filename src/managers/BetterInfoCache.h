@@ -11,7 +11,9 @@ class BI_DLL BetterInfoCache {
 	};
 	friend struct matjson::Serialize<CachedLevel>;
 
+	std::atomic_bool m_jsonLoaded = false;
 	std::atomic_bool m_loadingStarted = false;
+	std::atomic_bool m_loadingStartAttempted = false;
 
 	std::unordered_map<int, Ref<GJUserScore>> m_userScoreCache;
 	std::unordered_map<int, CachedLevel> m_levelCache;
@@ -28,6 +30,7 @@ public:
 	static BetterInfoCache* sharedState();
 
 	void startLoading();
+	void loadJson();
 	void saveJson();
 
 	arc::Future<> cacheFollowedCreators();

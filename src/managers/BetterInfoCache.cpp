@@ -87,13 +87,13 @@ BetterInfoCache* BetterInfoCache::sharedState() {
 }
 
 BetterInfoCache::BetterInfoCache() {
-    //TODO load json
+    loadJson();
 }
 
 void BetterInfoCache::startLoading() {
-    //TODO block if json is not loaded
+    m_loadingStartAttempted = true;
 
-    if(m_loadingStarted) return;
+    if(m_loadingStarted || !m_jsonLoaded) return;
     m_loadingStarted = true;
 
     saveJson();
@@ -104,6 +104,43 @@ void BetterInfoCache::startLoading() {
     }, [this] {
         log::debug("Finished initial caching");
         saveJson();
+    });
+}
+
+void BetterInfoCache::loadJson() {
+    arc::spawn([this] -> arc::Future<> {
+        auto jsonOpt = utils::file::readJson(Mod::get()->getSaveDir() / "cache_v2.json");
+        if(!jsonOpt) {
+            log::error("Failed to read BetterInfoCache from json: {}", jsonOpt.unwrapErr());
+            m_jsonLoaded = true;
+            co_return;
+        }
+
+        auto json = jsonOpt.unwrap();
+
+        auto levelCache = json["levelCache"].as<std::unordered_map<int, CachedLevel>>().unwrapOrDefault();
+        auto levelFailures = json["levelFailures"].as<std::unordered_map<int, int>>().unwrapOrDefault();
+        auto levelDateCache = json["levelDateCache"].as<std::unordered_map<int, time_t>>().unwrapOrDefault();
+        auto usernameCache = json["usernameCache"].as<std::unordered_map<int, std::string>>().unwrapOrDefault();
+
+        co_await waitForMainThread([this, 
+                                    levelCache = std::move(levelCache), 
+                                    levelFailures = std::move(levelFailures), 
+                                    levelDateCache = std::move(levelDateCache), 
+                                    usernameCache = std::move(usernameCache)]() {
+            
+            m_levelCache = std::move(levelCache);
+            m_levelFailures = std::move(levelFailures);
+            m_levelDateCache = std::move(levelDateCache);
+            m_usernameCache = std::move(usernameCache);
+            m_jsonLoaded = true;
+
+            if(m_loadingStartAttempted && !m_loadingStarted) {
+                startLoading();
+            }
+        });
+
+        log::debug("BetterInfoCache loaded from json");
     });
 }
 
@@ -159,6 +196,10 @@ void BetterInfoCache::saveJson() {
         }*/
         co_return;
     });
+}
+
+$on_mod(DataSaved) {
+    BetterInfoCache::sharedState()->saveJson();
 }
 
 /**
