@@ -78,6 +78,12 @@
             "description": "## Highly experimental feature\nShows full comment dates in YYYY-MM-DD using the GDHistory Date Estimator (online). Not fully accurate yet.\nThe comment date database is not complete yet, so estimates from the equivalent of today's date x years ago to September 1st of the same year will be highly inaccurate. This means that as of the time of addition of this feature all dates between xxxx-02-25 and xxxx-09-01 cannot be trusted yet.",
             "type": "bool",
             "default": false
+        },
+        "reset-saved-filters": {
+            "name": "Reset saved level filters on Restart",
+            "description": "Whether saved level filters should be reset when the game is restarted",
+            "type": "bool",
+            "default": true
         }
     },
     "resources": {
