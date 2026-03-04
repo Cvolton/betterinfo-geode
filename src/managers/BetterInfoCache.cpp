@@ -169,13 +169,13 @@ void BetterInfoCache::loadJson() {
 
 void BetterInfoCache::saveJson() {
     // this copies on purpose
-    arc::spawn([
+    async::runtime().spawnBlocking<void>([
         userScoreCache = this->m_userScoreCache,
         m_levelCache = this->m_levelCache,
         m_levelFailures = this->m_levelFailures,
         m_levelDateCache = this->m_levelDateCache,
         m_usernameCache = this->m_usernameCache
-    ] -> arc::Future<> {
+    ] {
         auto json = matjson::makeObject({
             {"userScoreCache", userScoreCache},
             {"levelCache", m_levelCache},
@@ -189,8 +189,6 @@ void BetterInfoCache::saveJson() {
         } else {
             log::debug("BetterInfoCache saved to json");
         }
-
-        co_return;
     });
 }
 
