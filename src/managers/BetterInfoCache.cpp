@@ -257,7 +257,7 @@ arc::Future<> BetterInfoCache::cacheLevels(CCDictionary* levels) {
 
     co_await waitForMainThread([this, levels, &needsDownloadingRated, &needsDownloadingUnrated] {
         for(auto [id, level] : levels->asExt<gd::string, GJGameLevel*>()) {
-            auto idNum = BetterInfo::stoi(id);
+            auto idNum = level->m_levelID.value();
             if(m_levelCache.contains(idNum) || (m_levelFailures.contains(idNum) && m_levelFailures[idNum] > 5)) continue;
 
             if(!level->m_levelName.empty()) {
