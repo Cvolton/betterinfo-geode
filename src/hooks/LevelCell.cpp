@@ -98,6 +98,53 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
         m_lastMousePos = getMousePos();
     }*/
 
+    void refreshUsername() {
+        if(!(std::string(m_level->m_creatorName).empty() || m_level->m_creatorName == "-" || m_level->m_creatorName == "Unknown" || m_level->m_creatorName == "Player")) return;
+        // if cells werent so stupid I'd just remove all objects and recreate them
+        // however because I can't retain them I have to resort to this
+        // the alternative is to refactor ServerUtils to use arc which I'd like to
+        // do in the future but it is "outside the budget" for now
+
+        auto menu = m_mainLayer->getChildByID("main-menu");
+        if(!menu) return;
+
+        auto playerName = menu->getChildByID("creator-name");
+        if(!playerName) return;
+
+        auto textNode = playerName->getChildByType<CCLabelBMFont>(0);
+        if(!textNode) return;
+        
+        float oldXSize = textNode->getScaledContentSize().width;
+
+        BetterInfoCache::sharedState()->fetchUsername(
+            m_level->m_userID, 
+            [textNode = Ref(textNode), menu = Ref(menu), playerName = Ref(playerName), oldXSize, level = Ref(m_level), compactView = m_compactView](std::string userName) {
+                if(userName.empty() || std::string(userName) == "-" || std::string(userName) == "Unknown") return;
+
+                auto oldString = std::string(textNode->getString());
+                auto newString = fmt::format("{}{}", compactView ? "" : "By ", std::string(userName));
+
+                textNode->setString(newString.c_str());
+
+                float difference = textNode->getScaledContentSize().width - oldXSize;
+
+                playerName->setContentSize(textNode->getContentSize() * textNode->getScale());
+                playerName->setPositionX(playerName->getPositionX() + (difference / 2));
+
+                textNode->setPositionX(playerName->getContentSize().width / 2);
+
+                if(auto copyIcon = menu->getChildByID("copy-indicator")) {
+                    copyIcon->setPositionX(copyIcon->getPositionX() + difference);
+                }
+                if(auto highObjectIcon = menu->getChildByID("high-object-indicator")) {
+                    highObjectIcon->setPositionX(highObjectIcon->getPositionX() + difference);
+                }
+
+                level->m_creatorName = userName;
+            }
+        );
+    }
+
     /*
      * Hooks
      */
@@ -115,49 +162,7 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
     void loadCustomLevelCell() {
         LevelCell::loadCustomLevelCell();
 
-        if(std::string(m_level->m_creatorName).empty() || m_level->m_creatorName == "-" || m_level->m_creatorName == "Unknown" || m_level->m_creatorName == "Player") {
-            // if cells werent so stupid I'd just remove all objects and recreate them
-            // however because I can't retain them I have to resort to this
-            // the alternative is to refactor ServerUtils to use arc which I'd like to
-            // do in the future but it is "outside the budget" for now
-
-            if(auto menu = m_mainLayer->getChildByID("main-menu")) {
-                if(auto playerName = menu->getChildByID("creator-name")) {
-                    if(auto textNode = static_cast<CCLabelBMFont*>(playerName->getChildren()->objectAtIndex(0))) {
-                        float oldXSize = textNode->getScaledContentSize().width;
-
-                        BetterInfoCache::sharedState()->fetchUsername(
-                            m_level->m_userID, 
-                            [textNode = Ref(textNode), menu = Ref(menu), playerName = Ref(playerName), oldXSize, level = Ref(m_level), compactView = m_compactView](std::string userName) {
-                                if(!userName.empty() && std::string(userName) != "-" && std::string(userName) != "Unknown") {
-                                    auto oldString = std::string(textNode->getString());
-                                    auto newString = fmt::format("{}{}", compactView ? "" : "By ", std::string(userName));
-
-                                    textNode->setString(newString.c_str());
-
-                                    float difference = textNode->getScaledContentSize().width - oldXSize;
-
-                                    playerName->setContentSize(textNode->getContentSize() * textNode->getScale());
-                                    playerName->setPositionX(playerName->getPositionX() + (difference / 2));
-
-                                    textNode->setPositionX(playerName->getContentSize().width / 2);
-
-                                    if(auto copyIcon = menu->getChildByID("copy-indicator")) {
-                                        copyIcon->setPositionX(copyIcon->getPositionX() + difference);
-                                    }
-                                    if(auto highObjectIcon = menu->getChildByID("high-object-indicator")) {
-                                        highObjectIcon->setPositionX(highObjectIcon->getPositionX() + difference);
-                                    }
-
-                                    level->m_creatorName = userName;
-                                }
-                            }
-                        );
-                    }
-                }
-            }
-        }
-
+        refreshUsername();
         //this->getScheduler()->scheduleSelector(schedule_selector(BILevelCell::checkHover), this, 0.1f, false);
 
         //TODO: layout for ID node in Node ID mod
