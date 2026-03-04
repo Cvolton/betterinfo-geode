@@ -111,4 +111,6 @@ namespace BetterInfo {
     BI_DLL void refreshAlertPrio(CCNode* node);
     BI_DLL bool isAmazon();
     BI_DLL void setAmazon(bool value);
+
+    BI_DLL void clearSavedValueGroup(std::string_view group);
 }

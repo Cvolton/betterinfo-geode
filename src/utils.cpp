@@ -1053,3 +1053,16 @@ bool BetterInfo::isAmazon() {
 void BetterInfo::setAmazon(bool value) {
     s_isAmazon = value;
 }
+
+void BetterInfo::clearSavedValueGroup(std::string_view group) {
+    auto& container = Mod::get()->getSaveContainer();
+    std::vector<std::string> keysToRemove;
+    for(auto& [key, value] : container) {
+        if(key.find(group) == 0) {
+            keysToRemove.push_back(key);
+        }
+    }
+    for(auto& key : keysToRemove) {
+        container.erase(key);
+    }
+}

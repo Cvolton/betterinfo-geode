@@ -81,16 +81,7 @@ $on_mod(Loaded) {
         loadManagers();
 
         if(Mod::get()->getSettingValue<bool>("reset-saved-filters")) {
-            auto& container = Mod::get()->getSaveContainer();
-            std::vector<std::string> keysToRemove;
-            for(auto& [key, value] : container) {
-                if(key.find("user_search_") == 0) {
-                    keysToRemove.push_back(key);
-                }
-            }
-            for(auto& key : keysToRemove) {
-                container.erase(key);
-            }
+            BetterInfo::clearSavedValueGroup("user_search_");
         }
     });
 }

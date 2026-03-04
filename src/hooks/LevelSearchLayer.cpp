@@ -27,4 +27,10 @@ class BI_DLL $modify(BILevelSearchLayer, LevelSearchLayer) {
         return LevelSearchLayer::getSearchObject(type, gdstr);
     }
 
+    void clearFilters() {
+        LevelSearchLayer::clearFilters();
+
+        BetterInfo::clearSavedValueGroup("search_completed");
+    }
+
 };
