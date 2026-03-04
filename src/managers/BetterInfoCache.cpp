@@ -49,7 +49,7 @@ struct matjson::Serialize<Ref<GJUserScore>> {
     }
     static matjson::Value toJson(const Ref<GJUserScore>& score) {
         return matjson::makeObject({
-            {"name", score->m_userName},
+            {"name", std::string(score->m_userName)},
             {"userID", score->m_userID},
             {"accountID", score->m_accountID},
             {"stars", score->m_stars},
