@@ -59,23 +59,14 @@ class BI_DLL $modify(LevelInfoLayer) {
         /**
          * Update exact time label
         */
-        this->retain();
-        //auto bmFont = typeinfo_cast<CCLabelBMFont*>(getChildByID("exact-time"_spr));
-        //if(bmFont && m_lengthLabel) bmFont->setPosition({m_lengthLabel->getPositionX() + 1, m_lengthLabel->getPositionY() - 8.f});
-
-        std::thread([this](){
-            thread::setName("Exact Level Length");
-
-            auto wt = m_level->m_timestamp
+        async::spawn([this]() -> arc::Future<std::string> {
+            co_return m_level->m_timestamp
                 ? TimeUtils::workingTime(m_level->m_timestamp / 240)
                 : TimeUtils::workingTime(m_level->isPlatformer() ? 0 : std::ceil(BetterInfo::timeForLevelString(m_level->m_levelString)));
-            //since whatever is done by queueInMainThread is guaranteed to execute after init is finished, this shouldn't result in a race condition
-            Loader::get()->queueInMainThread([this, wt]() {
-                m_exactLengthLabel->setString(fmt::format("{}", wt).c_str());
-                m_exactLengthLabel->setVisible(true);
-                this->release();
-            });
-        }).detach();
+        }, [self = Ref(this)](std::string wt) {
+            self->m_exactLengthLabel->setString(fmt::format("{}", wt).c_str());
+            self->m_exactLengthLabel->setVisible(true);
+        });
     }
 
     void onViewProfile(CCObject* sender) {
