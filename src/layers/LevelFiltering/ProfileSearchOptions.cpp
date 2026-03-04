@@ -112,6 +112,20 @@ void ProfileSearchOptions::onSecondaryInfo(cocos2d::CCObject* sender){
     )->show();
 }
 
+void ProfileSearchOptions::onReset(cocos2d::CCObject* sender) {
+    createQuickPopup(
+        "Clear Filters",
+        "Do you want to <cr>reset</c> all search <cy>filters</c>?",
+        "No",
+        "Yes",
+        [this](FLAlertLayer* self, bool btn2) {
+            if(btn2) {
+                this->setSearchObject(BISearchObject());
+            }
+        }
+    );
+}
+
 bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std::string& prefix, BISearchObjectDelegate* searchObjDelegate){
     if(!CvoltonAlertLayerStub::init({440.0f, 290.0f}, 1.f, 0x96)) return false;
 
@@ -179,6 +193,17 @@ bool ProfileSearchOptions::init(LevelBrowserLayer* levelBrowserLayer, const std:
     );
     m_lenMenu->setID("length-menu"_spr);
     m_mainLayer->addChild(m_lenMenu);
+
+    auto resetBtn = CCMenuItemSpriteExtra::create(
+        CCSprite::createWithSpriteFrameName("GJ_trashBtn_001.png"),
+        this,
+        menu_selector(ProfileSearchOptions::onReset)
+    );
+    resetBtn->setPosition({198, 124});
+    resetBtn->setID("reset-button"_spr);
+    resetBtn->setScale(resetBtn->m_baseScale = .75f);
+    m_buttonMenu->addChild(resetBtn);
+
 
     drawToggles();
 

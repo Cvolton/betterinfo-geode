@@ -40,6 +40,7 @@ public:
     void onPercentageLeaderboard(cocos2d::CCObject* sender);
     void onNext(cocos2d::CCObject* sender);
     void onSecondaryInfo(cocos2d::CCObject* sender);
+    void onReset(cocos2d::CCObject* sender);
     bool init(LevelBrowserLayer* levelBrowserLayer = nullptr, const std::string& prefix = "", BISearchObjectDelegate* searchObjDelegate = nullptr);
     void reloadBrowser();
     void drawToggles();
