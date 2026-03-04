@@ -2,6 +2,85 @@
 #include "BetterInfoOnline.h"
 #include <arc/time/Sleep.hpp>
 
+/**
+ * MATjson shenanigans
+ */
+template <>
+struct matjson::Serialize<BetterInfoCache::CachedLevel> {
+    static geode::Result<BetterInfoCache::CachedLevel> fromJson(const matjson::Value& value) {
+        GEODE_UNWRAP_INTO(std::string name, value["name"].asString());
+        GEODE_UNWRAP_INTO(int coins, value["coins"].asInt());
+        GEODE_UNWRAP_INTO(int demonDifficulty, value["demonDifficulty"].asInt());
+        return Ok(BetterInfoCache::CachedLevel{name, coins, demonDifficulty});
+    }
+    static matjson::Value toJson(const BetterInfoCache::CachedLevel& level) {
+        return matjson::makeObject({
+            {"name", level.m_name},
+            {"coins", level.m_coins},
+            {"demonDifficulty", level.m_demonDifficulty}
+        });
+    }
+};
+
+template <>
+struct matjson::Serialize<Ref<GJUserScore>> {
+    /*static geode::Result<Ref<GJUserScore>> fromJson(const matjson::Value& value) {
+        return Ok();
+    }*/
+    static matjson::Value toJson(const Ref<GJUserScore>& score) {
+        return matjson::makeObject({
+            {"name", score->m_userName},
+            {"userID", score->m_userID},
+            {"accountID", score->m_accountID},
+            {"stars", score->m_stars},
+            {"moons", score->m_moons},
+            {"diamonds", score->m_diamonds},
+            {"demons", score->m_demons},
+            {"playerRank", score->m_playerRank},
+            {"creatorPoints", score->m_creatorPoints},
+            {"secretCoins", score->m_secretCoins},
+            {"userCoins", score->m_userCoins},
+            {"iconID", score->m_iconID},
+            {"color1", score->m_color1},
+            {"color2", score->m_color2},
+            {"color3", score->m_color3},
+            {"special", score->m_special},
+            {"iconType", (int)score->m_iconType}
+        });
+    }
+};
+
+// https://github.com/geode-sdk/json/blob/d54b2aba2361f08b08d96d1f302b19cf2153c305/include/matjson/std.hpp#L169
+template <class T, class Hash, class KeyEqual, class Alloc>
+struct matjson::Serialize<std::unordered_map<int, T, Hash, KeyEqual, Alloc>> {
+    using Map = std::unordered_map<int, T, Hash, KeyEqual, Alloc>;
+
+    static geode::Result<Map> fromJson(Value const& value)
+        requires requires(Value const& value) { value.template as<std::decay_t<T>>(); }
+    {
+        if (!value.isObject()) return geode::Err("not an object");
+        Map res;
+        for (auto const& [k, v] : value) {
+            GEODE_UNWRAP_INTO(auto vv, v.template as<std::decay_t<T>>());
+            res.insert({BetterInfo::stoi(k), vv});
+        }
+        return geode::Ok(res);
+    }
+
+    static Value toJson(Map const& value)
+        requires requires(T const& value) { Value(value); }
+    {
+        Value res;
+        for (auto const& [k, v] : value) {
+            res.set(fmt::format("{}", k), Value(v));
+        }
+        return res;
+    }
+};
+
+/**
+ * BetterInfoCache
+ */
 BetterInfoCache* BetterInfoCache::sharedState() {
     static BetterInfoCache instance;
     return &instance;
@@ -17,9 +96,68 @@ void BetterInfoCache::startLoading() {
     if(m_loadingStarted) return;
     m_loadingStarted = true;
 
-    arc::spawn([this] -> arc::Future<> {
+    saveJson();
+
+    async::spawn([this] -> arc::Future<> {
         co_await cacheSavedLevels();
         co_await cacheFollowedCreators();
+    }, [this] {
+        log::debug("Finished initial caching");
+        saveJson();
+    });
+}
+
+void BetterInfoCache::saveJson() {
+    // this copies on purpose
+    arc::spawn([
+        userScoreCache = this->m_userScoreCache,
+        m_levelCache = this->m_levelCache,
+        m_levelFailures = this->m_levelFailures,
+        m_levelDateCache = this->m_levelDateCache,
+        m_usernameCache = this->m_usernameCache
+    ] -> arc::Future<> {
+        auto json = matjson::makeObject({
+            {"userScoreCache", userScoreCache},
+            {"levelCache", m_levelCache},
+            {"levelFailures", m_levelFailures},
+            {"levelDateCache", m_levelDateCache},
+            {"usernameCache", m_usernameCache}
+        });
+
+        if(!utils::file::writeToJson(Mod::get()->getSaveDir() / "cache_v2.json", json)) {
+            log::error("Failed to write BetterInfoCache to json");
+        } else {
+            log::debug("BetterInfoCache saved to json");
+        }
+
+        /*std::unordered_map<int, std::string> test = {
+            {1, "asdf"},
+            {2, "asdf2"}
+        };
+        json["test"] = test;
+        auto dump = json.dump();
+        log::debug("Dumped json: {}", dump);
+
+        auto loadJsonTest = matjson::parse(dump);
+        if(loadJsonTest.isErr()) {
+            log::error("Failed to parse json: {}", loadJsonTest.unwrapErr());
+        } else {
+            auto loadedTest = loadJsonTest.unwrap();
+            if(!loadedTest["test"].isObject()) {
+                log::error("Loaded json is not an object");
+            } else {
+                auto loadedMap = loadedTest["test"].as<std::unordered_map<int, std::string>>();
+                if(loadedMap.isErr()) {
+                    log::error("Failed to parse map from json: {}", loadedMap.unwrapErr());
+                } else {
+                    log::debug("Loaded map from json:");
+                    for(auto& [k, v] : loadedMap.unwrap()) {
+                        log::debug("Key: {}, Value: {}", k, v);
+                    }
+                }
+            }
+        }*/
+        co_return;
     });
 }
 
@@ -121,9 +259,9 @@ arc::Future<> BetterInfoCache::cacheLevelBatch(std::vector<int> levelIDs, bool r
         log::debug("Caching batch of levels, size: {}, rated: {}", batch.size(), rated);
 
         GJSearchObject* searchObject = nullptr;
-        co_await waitForMainThread([&searchObject, batch = std::move(batch)] {
+        co_await waitForMainThread([&searchObject, batch = std::move(batch), rated] {
             searchObject = GJSearchObject::create(
-                SearchType::MapPackOnClick, 
+                rated ? SearchType::MapPackOnClick : SearchType::Type26, 
                 fmt::format("{}", fmt::join(batch, ","))
             );
         });

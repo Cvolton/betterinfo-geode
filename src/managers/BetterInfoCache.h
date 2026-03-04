@@ -9,6 +9,7 @@ class BI_DLL BetterInfoCache {
 		int m_coins;
 		int m_demonDifficulty;
 	};
+	friend struct matjson::Serialize<CachedLevel>;
 
 	std::atomic_bool m_loadingStarted = false;
 
@@ -27,6 +28,7 @@ public:
 	static BetterInfoCache* sharedState();
 
 	void startLoading();
+	void saveJson();
 
 	arc::Future<> cacheFollowedCreators();
 	void cacheUserScore(int userID, GJUserScore* score);
