@@ -55,6 +55,7 @@ class BI_DLL $modify(LevelInfoLayer) {
          * Cache level
         */
         BetterInfoCache::sharedState()->cacheLevel(m_level);
+        if(!m_level->m_uploadDate.empty()) BetterInfoCache::sharedState()->cacheLevelDates(m_level);
 
         /**
          * Update exact time label

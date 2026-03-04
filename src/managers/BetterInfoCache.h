@@ -11,12 +11,19 @@ class BI_DLL BetterInfoCache {
 	};
 	friend struct matjson::Serialize<CachedLevel>;
 
+	struct CachedLevelDate {
+		std::string m_uploadDate;
+		std::string m_updateDate;
+	};
+	friend struct matjson::Serialize<CachedLevelDate>;
+
 	std::atomic_bool m_jsonLoaded = false;
 	std::atomic_bool m_loadingStarted = false;
 	std::atomic_bool m_loadingStartAttempted = false;
 
 	std::unordered_map<int, Ref<GJUserScore>> m_userScoreCache;
 	std::unordered_map<int, CachedLevel> m_levelCache;
+	std::unordered_map<int, CachedLevelDate> m_levelDateStringCache;
 	std::unordered_map<int, int> m_levelFailures;
 	std::unordered_map<int, time_t> m_levelDateCache;
 	std::unordered_map<int, std::string> m_usernameCache;
@@ -56,4 +63,7 @@ public:
 
 	void cacheVaultCode(const std::string& id, std::string_view code);
 	std::string getVaultCode(const std::string& id);
+
+	void cacheLevelDates(GJGameLevel* level);
+	const CachedLevelDate& getLevelDates(int levelID);
 };

@@ -23,6 +23,21 @@ struct matjson::Serialize<BetterInfoCache::CachedLevel> {
 };
 
 template <>
+struct matjson::Serialize<BetterInfoCache::CachedLevelDate> {
+    static geode::Result<BetterInfoCache::CachedLevelDate> fromJson(const matjson::Value& value) {
+        GEODE_UNWRAP_INTO(std::string uploadDate, value["uploadDate"].asString());
+        GEODE_UNWRAP_INTO(std::string updateDate, value["updateDate"].asString());
+        return Ok(BetterInfoCache::CachedLevelDate{uploadDate, updateDate});
+    }
+    static matjson::Value toJson(const BetterInfoCache::CachedLevelDate& levelDate) {
+        return matjson::makeObject({
+            {"uploadDate", levelDate.m_uploadDate},
+            {"updateDate", levelDate.m_updateDate}
+        });
+    }
+};
+
+template <>
 struct matjson::Serialize<Ref<GJUserScore>> {
     static geode::Result<Ref<GJUserScore>> fromJson(const matjson::Value& value) {
         auto score = GJUserScore::create();
@@ -143,18 +158,22 @@ void BetterInfoCache::loadJson() {
         auto levelFailures = json["levelFailures"].as<std::unordered_map<int, int>>().unwrapOrDefault();
         auto levelDateCache = json["levelDateCache"].as<std::unordered_map<int, time_t>>().unwrapOrDefault();
         auto usernameCache = json["usernameCache"].as<std::unordered_map<int, std::string>>().unwrapOrDefault();
+        auto levelDateStringCache = json["levelDateStringCache"].as<std::unordered_map<int, CachedLevelDate>>().unwrapOrDefault();
 
-        co_await waitForMainThread([this, 
-                                    levelCache = std::move(levelCache), 
-                                    levelFailures = std::move(levelFailures), 
-                                    levelDateCache = std::move(levelDateCache), 
-                                    usernameCache = std::move(usernameCache),
-                                    userScoreJson = std::move(userScoreJson)]() {
-            
+        co_await waitForMainThread([
+            this, 
+            levelCache = std::move(levelCache), 
+            levelFailures = std::move(levelFailures), 
+            levelDateCache = std::move(levelDateCache), 
+            usernameCache = std::move(usernameCache),
+            levelDateStringCache = std::move(levelDateStringCache),
+            userScoreJson = std::move(userScoreJson)
+        ]() {    
             m_userScoreCache = userScoreJson.as<std::unordered_map<int, Ref<GJUserScore>>>().unwrapOrDefault();
             m_levelCache = std::move(levelCache);
             m_levelFailures = std::move(levelFailures);
             m_levelDateCache = std::move(levelDateCache);
+            m_levelDateStringCache = std::move(levelDateStringCache);
             m_usernameCache = std::move(usernameCache);
             m_jsonLoaded = true;
 
@@ -174,14 +193,25 @@ void BetterInfoCache::saveJson() {
         m_levelCache = this->m_levelCache,
         m_levelFailures = this->m_levelFailures,
         m_levelDateCache = this->m_levelDateCache,
-        m_usernameCache = this->m_usernameCache
-    ] {
+        m_usernameCache = this->m_usernameCache,
+        m_levelDateStringCache = this->m_levelDateStringCache
+    ] mutable {
+        auto dict = GameLevelManager::sharedState()->m_onlineLevels->asExt<gd::string, GJGameLevel*>();
+        std::erase_if(m_levelDateStringCache, [&dict](const auto& item) {
+            auto idNum = fmt::to_string(item.first);
+            if (!dict.contains(idNum)) {
+                return true; 
+            }
+            return dict[idNum]->m_levelString.empty();
+        });
+
         auto json = matjson::makeObject({
             {"userScoreCache", userScoreCache},
             {"levelCache", m_levelCache},
             {"levelFailures", m_levelFailures},
             {"levelDateCache", m_levelDateCache},
-            {"usernameCache", m_usernameCache}
+            {"usernameCache", m_usernameCache},
+            {"levelDateStringCache", m_levelDateStringCache}
         });
 
         if(!utils::file::writeToJson(Mod::get()->getSaveDir() / "cache_v2.json", json)) {
@@ -466,4 +496,23 @@ void BetterInfoCache::cacheVaultCode(const std::string& id, std::string_view cod
 std::string BetterInfoCache::getVaultCode(const std::string& id) {
     if(m_vaultCodeCache.contains(id)) return m_vaultCodeCache[id];
     return "";
+}
+
+/**
+ * Level String Date Caching
+ */
+void BetterInfoCache::cacheLevelDates(GJGameLevel* level) {
+    m_levelDateStringCache[level->m_levelID] = {
+        level->m_uploadDate,
+        level->m_updateDate
+    };
+}
+
+const BetterInfoCache::CachedLevelDate& BetterInfoCache::getLevelDates(int levelID) {
+    if(m_levelDateStringCache.contains(levelID)) {
+        return m_levelDateStringCache[levelID];
+    }
+
+    static CachedLevelDate emptyDate = {"", ""};
+    return emptyDate;
 }
