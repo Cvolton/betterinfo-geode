@@ -2,8 +2,8 @@
 #include "../utils.hpp"
 #include "../managers/BetterInfoCache.h"
 
+#include <arc/future/UtilPollables.hpp>
 #include <algorithm>
-#include <thread>
 #include <string>
 
 ExtendedLevelInfo* ExtendedLevelInfo::create(GJGameLevel* level){
@@ -58,6 +58,8 @@ void ExtendedLevelInfo::onPrev(cocos2d::CCObject* sender)
 }
 
 void ExtendedLevelInfo::loadPage(int page) {
+    if(!m_info) return;
+
     this->m_page = page;
     if(page % 2 == 0) { 
         m_info->setString(m_primary);
@@ -130,28 +132,48 @@ void ExtendedLevelInfo::refreshInfoTexts() {
 }
 
 void ExtendedLevelInfo::setupAdditionalInfo() {
+    this->retain();
     BetterInfoCache::sharedState()->fetchLevelDate(m_level->m_levelID, [this](time_t date) {
         if(m_level->m_uploadDate.empty()) m_level->m_uploadDate = TimeUtils::timestampToHumanReadable(date);
 
         m_uploadDateEstimated = date;
         refreshInfoTexts();
         loadPage(m_page);
+        this->release();
     });
     
     this->retain();
-    std::thread([this]() {
-        thread::setName("Additional Level Info");
+    m_extraInfoHolder.spawn(
+        "BetterInfo ExtendedLevelInfo",
+        [this]() -> arc::Future<> {
         std::string levelString(BetterInfo::decodeBase64Gzip(m_level->m_levelString));
-        m_objectsEstimated = std::count(levelString.begin(), levelString.end(), ';');
-        m_fileSizeCompressed = BetterInfo::fileSize(m_level->m_levelString.size());
-        m_fileSizeUncompressed = BetterInfo::fileSize(levelString.size());
-        m_maxGameVersion = BetterInfo::gameVerForDecompressedLevelString(levelString);
-        refreshInfoTexts();
-        Loader::get()->queueInMainThread([this]() {
-            this->loadPage(this->m_page);
+        co_await waitForMainThread([this] {
             this->release();
         });
-    }).detach();
+        
+        auto objectsEstimated = std::count(levelString.begin(), levelString.end(), ';');
+        co_await arc::yield();
+
+        auto fileSizeCompressed = BetterInfo::fileSize(m_level->m_levelString.size());
+        co_await arc::yield();
+
+        auto fileSizeUncompressed = BetterInfo::fileSize(levelString.size());
+        co_await arc::yield();
+
+        auto maxGameVersion = BetterInfo::gameVerForDecompressedLevelString(levelString);
+        co_await arc::yield();
+
+        co_await waitForMainThread([this, objectsEstimated = std::move(objectsEstimated), fileSizeCompressed = std::move(fileSizeCompressed), fileSizeUncompressed = std::move(fileSizeUncompressed), maxGameVersion = std::move(maxGameVersion)]() {
+            m_objectsEstimated = std::move(objectsEstimated);
+            m_fileSizeCompressed = std::move(fileSizeCompressed);
+            m_fileSizeUncompressed = std::move(fileSizeUncompressed);
+            m_maxGameVersion = std::move(maxGameVersion);
+        });
+    },
+    [this] {
+        refreshInfoTexts();
+        this->loadPage(this->m_page);
+    });
 }
 
 bool ExtendedLevelInfo::init(GJGameLevel* level){

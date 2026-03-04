@@ -7,6 +7,7 @@ using namespace geode::prelude;
 #include "../utils.hpp"
 
 class BI_DLL ExtendedLevelInfo : public CvoltonAlertLayerStub {
+    async::TaskHolder<> m_extraInfoHolder;
     std::string m_primary;
     std::string m_secondary;
     std::string m_fileSizeCompressed = "NA";
@@ -15,10 +16,10 @@ class BI_DLL ExtendedLevelInfo : public CvoltonAlertLayerStub {
     std::time_t m_uploadDateEstimated = 0;
     std::vector<std::string> m_primaryValues;
     std::vector<std::string> m_secondaryValues;
-    Ref<GJGameLevel> m_level;
-    TextArea* m_info;
-    CCMenuItemSpriteExtra* m_prevBtn;
-    CCMenuItemSpriteExtra* m_nextBtn;
+    Ref<GJGameLevel> m_level = nullptr;
+    TextArea* m_info = nullptr;
+    CCMenuItemSpriteExtra* m_prevBtn = nullptr;
+    CCMenuItemSpriteExtra* m_nextBtn = nullptr;
     int m_page = 0;
     size_t m_objectsEstimated = 0;
 public:
