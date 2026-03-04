@@ -19,9 +19,7 @@ static const std::unordered_map<SearchType, const char*> s_labels = {
 };
 
 static const std::unordered_map<SearchType, std::pair<const char*, const char*>> s_infoTexts = {
-    // 2.208: remove
-    { SearchType::FeaturedLite, {"Weekly Levels", "New <cg>levels</c> are released every <cy>week</c>.\n<cl>Check back later for more updates!</c>" }},
-    { SearchType::Bonus, {"Bonus Levels", "New <cg>levels</c> are released from time to time.\n<cl>Check back later for more updates!</c>" }}
+    // currently empty, we are caught up to latest release
 };
 
 class BI_DLL 
