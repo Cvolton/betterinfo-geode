@@ -1,7 +1,6 @@
 #include "ExtendedLevelInfo.h"
 #include "../utils.hpp"
 #include "../managers/BetterInfoCache.h"
-#include "../ui/CopyableLabel.h"
 
 #include <algorithm>
 #include <thread>
@@ -95,11 +94,8 @@ void ExtendedLevelInfo::refreshInfoTexts() {
 
     infoText << "\n<cj>Uploaded</c>: " << m_primaryValues[0]
         << "\n<cj>Updated</c>: " << m_primaryValues[1]
-        //<< "\n<cy>Stars Requested</c>: " << m_level->m_starsRequested
         << "\n<cg>Original</c>: " << m_primaryValues[2]
-        //<< "\n<cg>Feature score</c>: " << LevelMetadata::zeroIfNA(m_level->m_featured)
         << "\n<cy>Game Version</c>: " << m_primaryValues[3]
-        //<< "\nFeature Score</c>: " << m_level->m_featured
         << "\n<co>Password</c>: " << m_primaryValues[4]
         << "\n<cr>In Editor</c>: " << m_primaryValues[5]
         << "\n<cr>Editor (C)</c>: " << m_primaryValues[6];
@@ -218,8 +214,6 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
 
     cocos2d::extension::CCScale9Sprite* infoBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
     infoBg->setContentSize({340,148});
-    //infoBg->setColor({130,64,33});
-    //infoBg->setColor({191,114,62});
     infoBg->setColor({123,60,31});
     m_buttonMenu->addChild(infoBg, -1);
     infoBg->setPosition({0,-57});
@@ -230,22 +224,10 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
 
     m_info = TextArea::create(m_primary, "chatFont.fnt", 1, 170, {0,1}, 20, false);
     m_info->setPosition({-160.5,26});
-    //m_info->setPosition({-160.5,10});
     m_info->setAnchorPoint({0,1});
     m_info->setScale(0.925f);
     m_info->setID("info-text"_spr);
     m_buttonMenu->addChild(m_info);
-
-    /*std::ostringstream progressText;
-    if(m_level->personalBests != "") progressText << "\n\n<cy>Progresses</c>:\n" << printableProgress(m_level->personalBests, m_level->newNormalPercent2);
-    auto progress = TextArea::create("chatFont.fnt", false, progressText.str(), 0.8f, 130, 20, {0,1});
-    progress->setPosition({12,50});
-    progress->setAnchorPoint({0,1});
-    m_buttonMenu->addChild(progress);*/
-
-    /*std::ostringstream uploadedText;
-    uploadedText << "Uploaded: " << m_level->uploadDate << " ago";
-    createTextLabel(uploadedText.str(), {0,0}, 0.5f, m_buttonMenu);*/
 
     auto requestedRate = createTextLabel("Requested Rate:", {88,-1}, 0.5f, m_buttonMenu);
     requestedRate->setID("requested-rate-label"_spr);
