@@ -14,6 +14,8 @@
 #include <Geode/utils/web.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 
+#include <arc/time/Sleep.hpp>
+
 #include "managers/BetterInfoCache.h"
 
 #ifdef GEODE_IS_WINDOWS
@@ -982,14 +984,13 @@ void BetterInfo::showUnimportantNotification(const std::string& content, Notific
     s_notifications.push_back(notif);
     notif->show();
 
-    std::thread([notif, time] {
+    async::spawn([] -> arc::Future<> {
         //assume up to 4 notifications are scheduled outside of this - if this fails nothing much really happens, they just wont be removed immediately
         //assume notifications are not longer than 5s
-        std::this_thread::sleep_for(std::chrono::seconds((int) (5 * (s_notifications.size() + 4))));
-        Loader::get()->queueInMainThread([notif] {
-            s_notifications.erase(std::remove(s_notifications.begin(), s_notifications.end(), notif), s_notifications.end());
-        });
-    }).detach();
+        co_await arc::sleep(asp::Duration::fromSecs(5 * (s_notifications.size() + 4)));
+    }, [notif] {
+        s_notifications.erase(std::remove(s_notifications.begin(), s_notifications.end(), notif), s_notifications.end());
+    });
 }
 
 void BetterInfo::cancelUnimportantNotifications() {
