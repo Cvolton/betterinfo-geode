@@ -258,7 +258,7 @@ arc::Future<> BetterInfoCache::cacheLevels(CCDictionary* levels) {
     co_await waitForMainThread([this, levels, &needsDownloadingRated, &needsDownloadingUnrated] {
         for(auto [id, level] : levels->asExt<gd::string, GJGameLevel*>()) {
             auto idNum = BetterInfo::stoi(id);
-            if(m_levelCache.contains(idNum) || m_levelFailures[idNum] > 5) continue;
+            if(m_levelCache.contains(idNum) || (m_levelFailures.contains(idNum) && m_levelFailures[idNum] > 5)) continue;
 
             if(!level->m_levelName.empty()) {
                 cacheLevel(level);
@@ -294,18 +294,22 @@ arc::Future<> BetterInfoCache::cacheLevelBatch(std::vector<int> levelIDs, bool r
         log::debug("Caching batch of levels, size: {}, rated: {}", batch.size(), rated);
 
         GJSearchObject* searchObject = nullptr;
-        co_await waitForMainThread([&searchObject, batch = std::move(batch), rated] {
+        co_await waitForMainThread([&searchObject, batch, rated] {
             searchObject = GJSearchObject::create(
                 rated ? SearchType::MapPackOnClick : SearchType::Type26, 
                 fmt::format("{}", fmt::join(batch, ","))
             );
         });
 
-        ServerUtils::getOnlineLevels(searchObject, [] (std::shared_ptr<std::vector<Ref<GJGameLevel>>> levels, bool success, bool explicitError) {
-            if(!success) return;
-
+        ServerUtils::getOnlineLevels(searchObject, [batch = std::move(batch), this] (std::shared_ptr<std::vector<Ref<GJGameLevel>>> levels, bool success, bool explicitError) mutable {
             for(auto& level : *levels) {
-                BetterInfoCache::sharedState()->cacheLevel(level);
+                cacheLevel(level);
+                batch.erase(std::remove(batch.begin(), batch.end(), level->m_levelID.value()), batch.end());
+            }
+
+            for(auto id : batch) {
+                log::trace("Failed to cache level with ID: {}", id);
+                m_levelFailures[id]++;
             }
 
             log::debug("Cached batch of levels, size: {}", levels->size());
