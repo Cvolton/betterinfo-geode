@@ -121,6 +121,12 @@ double TimeUtils::getFullDoubleTime() {
     #endif
 }
 
+#if defined(_WIN32)
+    #define MAKE_UTC_TIME _mkgmtime
+#else
+    #define MAKE_UTC_TIME timegm
+#endif
+
 std::time_t TimeUtils::isoStringToTime(std::string_view time_str) {
     std::tm tmStruct = {};
     std::istringstream ss{std::string(time_str)};
@@ -130,7 +136,7 @@ std::time_t TimeUtils::isoStringToTime(std::string_view time_str) {
         return 0;
     }
     
-    return std::mktime(&tmStruct);
+    return MAKE_UTC_TIME(&tmStruct);
 }
 
 std::string TimeUtils::timeToIsoDate(std::time_t time) {
