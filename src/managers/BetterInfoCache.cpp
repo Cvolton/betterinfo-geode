@@ -24,9 +24,29 @@ struct matjson::Serialize<BetterInfoCache::CachedLevel> {
 
 template <>
 struct matjson::Serialize<Ref<GJUserScore>> {
-    /*static geode::Result<Ref<GJUserScore>> fromJson(const matjson::Value& value) {
-        return Ok();
-    }*/
+    static geode::Result<Ref<GJUserScore>> fromJson(const matjson::Value& value) {
+        auto score = GJUserScore::create();
+        GEODE_UNWRAP_INTO(score->m_userName, value["name"].asString());
+        GEODE_UNWRAP_INTO(score->m_userID, value["userID"].asInt());
+        GEODE_UNWRAP_INTO(score->m_accountID, value["accountID"].asInt());
+        GEODE_UNWRAP_INTO(score->m_stars, value["stars"].asInt());
+        GEODE_UNWRAP_INTO(score->m_moons, value["moons"].asInt());
+        GEODE_UNWRAP_INTO(score->m_diamonds, value["diamonds"].asInt());
+        GEODE_UNWRAP_INTO(score->m_demons, value["demons"].asInt());
+        GEODE_UNWRAP_INTO(score->m_playerRank, value["playerRank"].asInt());
+        GEODE_UNWRAP_INTO(score->m_creatorPoints, value["creatorPoints"].asInt());
+        GEODE_UNWRAP_INTO(score->m_secretCoins, value["secretCoins"].asInt());
+        GEODE_UNWRAP_INTO(score->m_userCoins, value["userCoins"].asInt());
+        GEODE_UNWRAP_INTO(score->m_iconID, value["iconID"].asInt());
+        GEODE_UNWRAP_INTO(score->m_color1, value["color1"].asInt());
+        GEODE_UNWRAP_INTO(score->m_color2, value["color2"].asInt());
+        GEODE_UNWRAP_INTO(score->m_color3, value["color3"].asInt());
+        GEODE_UNWRAP_INTO(score->m_special, value["special"].asInt());
+        GEODE_UNWRAP_INTO(auto iconType, value["iconType"].asInt());
+        score->m_iconType = (IconType)iconType;
+
+        return Ok(Ref(score));
+    }
     static matjson::Value toJson(const Ref<GJUserScore>& score) {
         return matjson::makeObject({
             {"name", score->m_userName},
@@ -118,6 +138,7 @@ void BetterInfoCache::loadJson() {
 
         auto json = jsonOpt.unwrap();
 
+        auto userScoreJson = json["userScoreCache"];
         auto levelCache = json["levelCache"].as<std::unordered_map<int, CachedLevel>>().unwrapOrDefault();
         auto levelFailures = json["levelFailures"].as<std::unordered_map<int, int>>().unwrapOrDefault();
         auto levelDateCache = json["levelDateCache"].as<std::unordered_map<int, time_t>>().unwrapOrDefault();
@@ -127,8 +148,10 @@ void BetterInfoCache::loadJson() {
                                     levelCache = std::move(levelCache), 
                                     levelFailures = std::move(levelFailures), 
                                     levelDateCache = std::move(levelDateCache), 
-                                    usernameCache = std::move(usernameCache)]() {
+                                    usernameCache = std::move(usernameCache),
+                                    userScoreJson = std::move(userScoreJson)]() {
             
+            m_userScoreCache = userScoreJson.as<std::unordered_map<int, Ref<GJUserScore>>>().unwrapOrDefault();
             m_levelCache = std::move(levelCache);
             m_levelFailures = std::move(levelFailures);
             m_levelDateCache = std::move(levelDateCache);
@@ -167,33 +190,6 @@ void BetterInfoCache::saveJson() {
             log::debug("BetterInfoCache saved to json");
         }
 
-        /*std::unordered_map<int, std::string> test = {
-            {1, "asdf"},
-            {2, "asdf2"}
-        };
-        json["test"] = test;
-        auto dump = json.dump();
-        log::debug("Dumped json: {}", dump);
-
-        auto loadJsonTest = matjson::parse(dump);
-        if(loadJsonTest.isErr()) {
-            log::error("Failed to parse json: {}", loadJsonTest.unwrapErr());
-        } else {
-            auto loadedTest = loadJsonTest.unwrap();
-            if(!loadedTest["test"].isObject()) {
-                log::error("Loaded json is not an object");
-            } else {
-                auto loadedMap = loadedTest["test"].as<std::unordered_map<int, std::string>>();
-                if(loadedMap.isErr()) {
-                    log::error("Failed to parse map from json: {}", loadedMap.unwrapErr());
-                } else {
-                    log::debug("Loaded map from json:");
-                    for(auto& [k, v] : loadedMap.unwrap()) {
-                        log::debug("Key: {}, Value: {}", k, v);
-                    }
-                }
-            }
-        }*/
         co_return;
     });
 }
@@ -233,7 +229,7 @@ void BetterInfoCache::cacheUserScore(int accountID, GJUserScore* score) {
 
 void BetterInfoCache::cacheUserScores(CCArray* scores) {
     for(auto score : CCArrayExt<GJUserScore>(scores)) {
-        if(!GameLevelManager::sharedState()->m_followedCreators->valueForKey(std::to_string(score->m_accountID).c_str())) continue;
+        if(!GameLevelManager::sharedState()->m_followedCreators->objectForKey(fmt::to_string(score->m_accountID))) continue;
 
         cacheUserScore(score->m_accountID, score);
     }
