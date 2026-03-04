@@ -22,6 +22,8 @@ class BI_DLL ProfileSearchOptions : public CvoltonOptionsLayer, public SongDialo
     BISearchObjectDelegate* m_searchObjDelegate = nullptr;
     cocos2d::CCMenu* m_lenMenu = nullptr;
     std::string m_prefix;
+    bool m_optionsChanged = false;
+    bool m_shouldBackOut = false;
     int m_page = 0;
 public:
     static ProfileSearchOptions* create(LevelBrowserLayer* levelBrowserLayer = nullptr, const std::string& prefix = "", BISearchObjectDelegate* searchObjDelegate = nullptr);
@@ -57,4 +59,6 @@ public:
     void setFromRangeItem(const std::string& option, const BISearchObject::RangeItem& item);
     void setToRangeItem(BISearchObject::RangeItem& item, const std::string& option) const;
     void keyDown(enumKeyCodes key, double timestamp);
+    void optionChanged();
+    void pleaseBackOutOnChange();
 };

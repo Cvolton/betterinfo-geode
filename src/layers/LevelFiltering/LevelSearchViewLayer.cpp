@@ -283,6 +283,7 @@ void LevelSearchViewLayer::setTextStatus(bool finished) {
 void LevelSearchViewLayer::onFilters(cocos2d::CCObject*) {
     auto searchOptions = ProfileSearchOptions::create(nullptr, "", this);
     searchOptions->setSearchObject(m_searchObj);
+    searchOptions->pleaseBackOutOnChange();
     searchOptions->m_scene = this;
     searchOptions->show();
 }

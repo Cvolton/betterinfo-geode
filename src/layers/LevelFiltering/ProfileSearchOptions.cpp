@@ -28,6 +28,13 @@ void ProfileSearchOptions::onClose(cocos2d::CCObject* sender)
     if(m_levelBrowserLayer != nullptr) {
         m_levelBrowserLayer->loadPage(m_levelBrowserLayer->m_searchObject);
     }
+
+    Loader::get()->queueInMainThread([shouldBackOut = m_shouldBackOut] {
+        if(shouldBackOut) {
+            CCDirector::sharedDirector()->popScene();
+        }
+    });
+
     this->release();
 }
 
@@ -391,12 +398,14 @@ void ProfileSearchOptions::setOption(const std::string& option, bool value) {
     if(!m_prefix.empty()) Mod::get()->setSavedValue<bool>(fmt::format("{}_{}", m_prefix, option), value);
 
     m_options[option] = value;
+    optionChanged();
 }
 
 void ProfileSearchOptions::setOptionInt(const std::string& option, int value) {
     if(!m_prefix.empty()) Mod::get()->setSavedValue<int>(fmt::format("{}_{}", m_prefix, option), value);
 
     m_optionInts[option] = value;
+    optionChanged();
 }
 
 BISearchObject ProfileSearchOptions::getSearchObject() {
@@ -556,4 +565,25 @@ void ProfileSearchOptions::keyDown(enumKeyCodes key, double timestamp) {
             CvoltonOptionsLayer::keyDown(key, timestamp);
             break;
     }
+}
+
+void ProfileSearchOptions::optionChanged() {
+    if(m_optionsChanged) return;
+    m_optionsChanged = true;
+    m_shouldBackOut = false;
+
+    m_closeBtn->setNormalImage(
+        CCSprite::createWithSpriteFrameName("GJ_closeBtn_001.png")
+    );
+    m_closeBtn->setScale(m_closeBtn->m_baseScale = 1.f);
+}
+
+void ProfileSearchOptions::pleaseBackOutOnChange() {
+    m_optionsChanged = false;
+    m_shouldBackOut = true;
+
+    m_closeBtn->setNormalImage(
+        CCSprite::createWithSpriteFrameName("GJ_backBtn_001.png")
+    );
+    m_closeBtn->setScale(m_closeBtn->m_baseScale = .925f);
 }
