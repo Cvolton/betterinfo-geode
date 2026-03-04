@@ -99,7 +99,7 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
     }*/
 
     void refreshUsername() {
-        if(!(std::string(m_level->m_creatorName).empty() || m_level->m_creatorName == "-" || m_level->m_creatorName == "Unknown" || m_level->m_creatorName == "Player")) return;
+        if(!std::string(m_level->m_creatorName).empty() && m_level->m_creatorName != "-" && m_level->m_creatorName != "Unknown" && m_level->m_creatorName != "Player") return;
         // if cells werent so stupid I'd just remove all objects and recreate them
         // however because I can't retain them I have to resort to this
         // the alternative is to refactor ServerUtils to use arc which I'd like to
@@ -121,7 +121,6 @@ class BI_DLL $modify(BILevelCell, LevelCell) {
             [textNode = Ref(textNode), menu = Ref(menu), playerName = Ref(playerName), oldXSize, level = Ref(m_level), compactView = m_compactView](std::string userName) {
                 if(userName.empty() || std::string(userName) == "-" || std::string(userName) == "Unknown") return;
 
-                auto oldString = std::string(textNode->getString());
                 auto newString = fmt::format("{}{}", compactView ? "" : "By ", std::string(userName));
 
                 textNode->setString(newString.c_str());
