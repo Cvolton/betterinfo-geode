@@ -78,6 +78,9 @@ bool CvoltonSearchOptions::init(){
             CvoltonSearchSettings::create()->show();
         }
     );
+    settingsBtn->setPosition({197.f, 121.f});
+    settingsBtn->setID("settings-button"_spr);
+    settingsBtn->setScale(settingsBtn->m_baseScale = 0.7f);
     m_buttonMenu->addChild(settingsBtn);
 
     drawToggles();
