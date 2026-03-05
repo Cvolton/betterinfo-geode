@@ -169,7 +169,7 @@ void BetterInfoCache::loadJson() {
             usernameCache = std::move(usernameCache),
             levelDateStringCache = std::move(levelDateStringCache),
             userScoreJson = std::move(userScoreJson)
-        ]() {    
+        ]() mutable {    
             m_userScoreCache = userScoreJson.as<std::unordered_map<int, Ref<GJUserScore>>>().unwrapOrDefault();
             m_levelCache = std::move(levelCache);
             m_levelFailures = std::move(levelFailures);
@@ -188,24 +188,26 @@ void BetterInfoCache::loadJson() {
 }
 
 void BetterInfoCache::saveJson() {
+    auto dict = GameLevelManager::sharedState()->m_onlineLevels->asExt<gd::string, GJGameLevel*>();
+    std::erase_if(m_levelDateStringCache, [&dict](const auto& item) {
+        auto idNum = fmt::to_string(item.first);
+        if (!dict.contains(idNum)) {
+            return true; 
+        }
+        return dict[idNum]->m_levelString.empty();
+    });
+
+    auto userScoreJson = matjson::Value(m_userScoreCache);
+
     // this copies on purpose
     async::runtime().spawnBlocking<void>([
-        userScoreCache = this->m_userScoreCache,
+        userScoreCache = std::move(userScoreJson),
         m_levelCache = this->m_levelCache,
         m_levelFailures = this->m_levelFailures,
         m_levelDateCache = this->m_levelDateCache,
         m_usernameCache = this->m_usernameCache,
         m_levelDateStringCache = this->m_levelDateStringCache
     ] mutable {
-        auto dict = GameLevelManager::sharedState()->m_onlineLevels->asExt<gd::string, GJGameLevel*>();
-        std::erase_if(m_levelDateStringCache, [&dict](const auto& item) {
-            auto idNum = fmt::to_string(item.first);
-            if (!dict.contains(idNum)) {
-                return true; 
-            }
-            return dict[idNum]->m_levelString.empty();
-        });
-
         auto json = matjson::makeObject({
             {"userScoreCache", userScoreCache},
             {"levelCache", m_levelCache},
@@ -324,31 +326,25 @@ arc::Future<> BetterInfoCache::cacheLevelBatch(std::vector<int> levelIDs, bool r
 
         log::debug("Caching batch of levels, size: {}, rated: {}", batch.size(), rated);
 
-        GJSearchObject* searchObject = nullptr;
-        co_await waitForMainThread([&searchObject, &batch, rated] {
-            searchObject = GJSearchObject::create(
+        co_await waitForMainThread([batch = std::move(batch), rated, this] mutable {
+            auto searchObject = GJSearchObject::create(
                 rated ? SearchType::MapPackOnClick : SearchType::Type26, 
                 fmt::format("{}", fmt::join(batch, ","))
             );
-            searchObject->retain();
-        });
 
-        ServerUtils::getOnlineLevels(searchObject, [batch = std::move(batch), this] (std::shared_ptr<std::vector<Ref<GJGameLevel>>> levels, bool success, bool explicitError) mutable {
-            for(auto& level : *levels) {
-                cacheLevel(level);
-                batch.erase(std::remove(batch.begin(), batch.end(), level->m_levelID.value()), batch.end());
-            }
+            ServerUtils::getOnlineLevels(searchObject, [batch = std::move(batch), this] (std::shared_ptr<std::vector<Ref<GJGameLevel>>> levels, bool success, bool explicitError) mutable {
+                for(auto& level : *levels) {
+                    cacheLevel(level);
+                    batch.erase(std::remove(batch.begin(), batch.end(), level->m_levelID.value()), batch.end());
+                }
 
-            for(auto id : batch) {
-                log::trace("Failed to cache level with ID: {}", id);
-                m_levelFailures[id]++;
-            }
+                for(auto id : batch) {
+                    log::trace("Failed to cache level with ID: {}", id);
+                    m_levelFailures[id]++;
+                }
 
-            log::debug("Cached batch of levels, size: {}", levels->size());
-        });
-
-        co_await waitForMainThread([&searchObject] {
-            searchObject->release();
+                log::debug("Cached batch of levels, size: {}", levels->size());
+            });
         });
 
         co_await arc::sleep(asp::Duration::fromSecs(30));
@@ -443,6 +439,8 @@ void BetterInfoCache::cacheRatedListsFromMegaResponse(std::string_view response)
     auto allLists = asp::iter::split(response, "#");
     auto allListsIt = allLists.next();
     if(!allListsIt) return;
+
+    m_levelLists.clear();
 
     for(auto listStr : asp::iter::split(allListsIt.value(), "|")) {
         if (listStr.empty()) continue;

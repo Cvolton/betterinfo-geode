@@ -9,8 +9,8 @@ using namespace geode::prelude;
 
 namespace ServerUtils {
     struct ParsedResponse {
-        std::string m_response;
         std::vector<std::string_view> m_parts;
+        std::unique_ptr<std::string> m_response;
         bool m_ok = false;
         bool m_explicitError = false;
 

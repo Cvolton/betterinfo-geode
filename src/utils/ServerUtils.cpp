@@ -8,8 +8,6 @@ using namespace geode::prelude;
 
 static inline std::unordered_map<std::string, Ref<cocos2d::CCArray>> s_cache;
 
-static bool s_isGDPS = false;
-
 bool ServerUtils::isGDPS() {
     return getBaseURL() != "https://www.boomlings.com/database";
 }
@@ -137,21 +135,20 @@ ServerUtils::ParsedResponse ServerUtils::parseResponse(const web::WebResponse& r
         return ret;
     }
 
-    if(response.string().unwrapOr("") == "-1") {
+    ret.m_response = std::make_unique<std::string>(response.string().unwrapOr(""));
+    if(*ret.m_response == "-1") {
         ret.m_ok = false;
         ret.m_explicitError = true;
         return ret;
     }
 
-    auto responseString = response.string().unwrapOr("");
-    auto responseParts = asp::iter::split(responseString, '#').collect();
+    auto responseParts = asp::iter::split(*ret.m_response, '#').collect();
 
     if(responseParts.size() < expectedParts) {
         ret.m_ok = false;
         return ret;
     }
 
-    ret.m_response = std::move(responseString);
     ret.m_parts = std::move(responseParts);
     ret.m_ok = true;
     return ret;
@@ -221,8 +218,6 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
 }
 
 void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJGameLevel>>>, bool success, bool explicitError)> callback, bool cacheLevels) {
-    std::string completedLevels = "";
-
     std::string postString = fmt::format("{}&type={}&str={}&diff={}&len={}&page={}&total={}&uncompleted={}&onlyCompleted={}&featured={}&original={}&twoPlayer={}&coins={}",
         getBasePostString(), (int) searchObject->m_searchType, searchObject->m_searchQuery, searchObject->m_difficulty, searchObject->m_length, searchObject->m_page,
         searchObject->m_total, searchObject->m_uncompletedFilter ? 1 : 0, searchObject->m_completedFilter ? 1 : 0, searchObject->m_featuredFilter ? 1 : 0, searchObject->m_originalFilter ? 1 : 0,
@@ -231,22 +226,22 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
     if(searchObject->m_epicFilter) postString += "&epic=1";
     if(searchObject->m_legendaryFilter) postString += "&legendary=1";
     if(searchObject->m_mythicFilter) postString += "&mythic=1";
-    if(searchObject->m_searchType == SearchType::UsersLevels) postString += fmt::format("&local={}", BetterInfo::stoi(searchObject->m_searchQuery) == GameManager::sharedState()->m_playerUserID);
+    if(searchObject->m_searchType == SearchType::UsersLevels) postString += fmt::format("&local={}", (BetterInfo::stoi(searchObject->m_searchQuery) == GameManager::sharedState()->m_playerUserID) ? 1 : 0);
     if(searchObject->m_songFilter) {
         postString += fmt::format("&song={}", searchObject->m_songID);
         if(searchObject->m_customSongFilter) postString += "&customSong=1";
     }
     if(searchObject->m_uncompletedFilter || searchObject->m_completedFilter) {
         auto completedArray = CCArrayExt<GJGameLevel*>(GameLevelManager::sharedState()->getCompletedLevels(GameManager::sharedState()->getGameVariable("0073")));
-        bool first = true;
 
+        std::vector<int> completedIDs;
+        completedIDs.reserve(completedArray.size());
+        
         for(auto level : completedArray) {
-            if(!first) completedLevels += ",";
-            completedLevels += fmt::format("{}", level->m_levelID.value());
-            first = false;
+            completedIDs.push_back(level->m_levelID.value());
         }
 
-        postString += fmt::format("&completedLevels={}", completedLevels);
+        postString += fmt::format("&completedLevels={}", fmt::join(completedIDs, ","));
     }
     //if(searchObject->m_searchType == SearchType::LevelListsOnClick) postString += "&inc=1";
 
