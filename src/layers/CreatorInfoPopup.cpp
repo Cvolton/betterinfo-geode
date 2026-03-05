@@ -2,6 +2,7 @@
 
 #include "../utils.hpp"
 #include <string>
+#include <asp/iter.hpp>
 
 CreatorInfoPopup* CreatorInfoPopup::create(int userID){
     auto ret = new CreatorInfoPopup();
@@ -293,12 +294,9 @@ void CreatorInfoPopup::loadLevelsFailed(const char*) {
 
 void CreatorInfoPopup::setupPageInfo(gd::string counts, const char* key) {
 
-    std::vector<int> countsVec;
-    std::stringstream responseStream(counts);
-    std::string currentKey;
-    while(std::getline(responseStream, currentKey, ':')) {
-        countsVec.push_back(BetterInfo::stoi(currentKey));
-    }
+    auto countsVec = asp::iter::split(counts, ":").map([](std::string_view currentKey) {
+        return BetterInfo::stoi(currentKey);
+    }).collect<std::vector<int>>();
 
     if(countsVec.size() != 3) return;
     if(countsVec[0] == 0) return;
