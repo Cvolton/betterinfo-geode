@@ -199,31 +199,20 @@ bool BetterInfo::isAdvancedEnabled(GJSearchObject* searchObject) {
 
 bool BetterInfo::isSavedFiltered() {
     for(unsigned int i = 0; i <= 5; i++){
-        if(
-            Mod::get()->getSavedValue<bool>(
-                CCString::createWithFormat("user_search_len_%02u", i)->getCString()
-                )
-            ) return true;
+        if(Mod::get()->getSavedValue<bool>(fmt::format("user_search_len_{:02}", i))) return true;
     }
 
     if(Mod::get()->getSavedValue<bool>("user_search_diff_auto")) return true;
 
     for(int i = 0; i <= 6; i++){
-        if(
-            Mod::get()->getSavedValue<bool>(
-                CCString::createWithFormat("user_search_diff_%02i", i)->getCString()
-                )
-            ) return true;
+        if(Mod::get()->getSavedValue<bool>(fmt::format("user_search_diff_{:02}", i))) return true;
     }
 
-    if(Mod::get()->getSavedValue<bool>("user_search_diff_06"))
+    if(Mod::get()->getSavedValue<bool>("user_search_diff_06")) {
         for(int i = 0; i <= 5; i++){
-            if(
-                Mod::get()->getSavedValue<bool>(
-                    CCString::createWithFormat("user_search_demon_%02i", i)->getCString()
-                    )
-                ) return true;
+            if(Mod::get()->getSavedValue<bool>(fmt::format("user_search_demon_{:02}", i))) return true;
         }
+    }
 
     const char* options[] = {
         "user_search_star", "user_search_uncompleted", "user_search_completed",

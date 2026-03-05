@@ -269,8 +269,8 @@ void ProfileSearchOptions::drawTogglesPrimary(){
 
     for(unsigned int i = 0; i <= 6; i++){
         createButtonToggle(
-            CCString::createWithFormat("diff_%02u", i)->getCString(),
-            CCSprite::createWithSpriteFrameName(CCString::createWithFormat("difficulty_%02u_btn_001.png", i)->getCString()),
+            fmt::format("diff_{}", i).c_str(),
+            CCSprite::createWithSpriteFrameName(fmt::format("difficulty_{:02}_btn_001.png", i).c_str()),
             -187 + (i * 53.5f),
             -70,
             .9f
@@ -307,8 +307,8 @@ void ProfileSearchOptions::drawTogglesSecondary(){
         if(i == 3) diffSprite = 9;
 
         createButtonToggle(
-            CCString::createWithFormat("demon_%02u", i)->getCString(),
-            CCSprite::createWithSpriteFrameName(CCString::createWithFormat("difficulty_%02u_btn2_001.png", diffSprite)->getCString()),
+            fmt::format("demon_{}", i).c_str(),
+            CCSprite::createWithSpriteFrameName(fmt::format("difficulty_{:02}_btn2_001.png", diffSprite).c_str()),
             -133.5f + (i * 66.875f),
             -102,
             .9f
@@ -438,17 +438,17 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
 
     if(getOption("diff_auto")) searchObj.difficulty.insert(-1);
     for(int i = 0; i <= 6; i++) {
-        auto diff = CCString::createWithFormat("diff_%02i", i)->getCString();
+        auto diff = fmt::format("diff_{}", i);
         if(getOption(diff)) searchObj.difficulty.insert(i);
     }
 
     for(int i = 0; i <= 5; i++) {
-        auto len = CCString::createWithFormat("len_%02i", i)->getCString();
+        auto len = fmt::format("len_{}", i);
         if(getOption(len)) searchObj.length.insert(i);
     }
 
     for(int i = 0; i <= 4; i++) {
-        auto len = CCString::createWithFormat("demon_%02i", i)->getCString();
+        auto len = fmt::format("demon_{}", i);
         if(getOption(len)) searchObj.demonDifficulty.insert(i);
     }
 
@@ -502,21 +502,21 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
 
     for(int i = -1; i <= 6; i++) {
         setOption(
-            i == -1 ? "diff_auto" : CCString::createWithFormat("diff_%02i", i)->getCString(),
+            i == -1 ? "diff_auto" : fmt::format("diff_{:02d}", i),
             searchObj.difficulty.find(i) != searchObj.difficulty.end()
         );
     }
 
     for(int i = 0; i <= 5; i++) {
         setOption(
-            CCString::createWithFormat("len_%02i", i)->getCString(),
+            fmt::format("len_{:02d}", i),
             searchObj.length.find(i) != searchObj.length.end()
         );
     }
 
     for(int i = 0; i <= 4; i++) {
         setOption(
-            CCString::createWithFormat("demon_%02i", i)->getCString(),
+            fmt::format("demon_{:02d}", i),
             searchObj.demonDifficulty.find(i) != searchObj.demonDifficulty.end()
         );
     }

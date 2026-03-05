@@ -58,7 +58,7 @@ void DailyCell::loadFromData(CCObject* object) {
     numberSprite->setID("number-sprite"_spr);
     this->m_mainLayer->addChild(numberSprite);
 
-    auto number = CCLabelBMFont::create(CCString::createWithFormat("%i", level->m_dailyID % 100000)->getCString(), "bigFont.fnt");
+    auto number = CCLabelBMFont::create(fmt::format("{}", level->m_dailyID % 100000).c_str(), "bigFont.fnt");
     number->setAnchorPoint({ 0.0f, 0.5f });
     number->setPosition(57.5f, 10.0f);
     number->setScale(.325f);
@@ -72,7 +72,7 @@ void DailyCell::loadFromData(CCObject* object) {
     diamondSprite->setID("diamond-sprite"_spr);
     this->m_mainLayer->addChild(diamondSprite);
 
-    auto diamond = CCLabelBMFont::create(CCString::createWithFormat("%i/%i", getAwardedDiamonds(), getTotalDiamonds())->getCString(), "bigFont.fnt");
+    auto diamond = CCLabelBMFont::create(fmt::format("{}/{}", getAwardedDiamonds(), getTotalDiamonds()).c_str(), "bigFont.fnt");
     diamond->setAnchorPoint({ 0.0f, 0.5f });
     diamond->setPosition(diamondSprite->getPositionX() + 11.f, 10.0f);
     diamond->setScale(.325f);
@@ -89,9 +89,9 @@ void DailyCell::loadFromData(CCObject* object) {
 
     int orbsMax = (GSM->getBaseCurrencyForLevel(level) * 125) / 100;
     int orbsCollectible = GSM->getAwardedCurrencyForLevel(level);
-    auto orb = CCLabelBMFont::create(CCString::createWithFormat("%i/%i", orbsCollectible, orbsMax)->getCString(), "bigFont.fnt");
+    auto orb = CCLabelBMFont::create(fmt::format("{}/{}", orbsCollectible, orbsMax).c_str(), "bigFont.fnt");
     if(orbsCollectible == orbsMax){ 
-        orb = CCLabelBMFont::create(CCString::createWithFormat("%i", orbsCollectible)->getCString(), "bigFont.fnt");
+        orb = CCLabelBMFont::create(fmt::format("{}", orbsCollectible).c_str(), "bigFont.fnt");
         orb->setColor({100, 255, 255});
     }
     orb->setAnchorPoint({ 0.0f, 0.5f });
@@ -109,7 +109,7 @@ void DailyCell::loadFromData(CCObject* object) {
     percentSprite->setID("percent-sprite"_spr);
     this->m_mainLayer->addChild(percentSprite);
 
-    auto percent = CCLabelBMFont::create(CCString::createWithFormat("%i%%", level->m_normalPercent.value())->getCString(), "bigFont.fnt");
+    auto percent = CCLabelBMFont::create(fmt::format("{}%", level->m_normalPercent.value()).c_str(), "bigFont.fnt");
     percent->setAnchorPoint({ 0.0f, 0.5f });
     percent->setPosition(57.5f, 24.0f);
     percent->setScale(.325f);
@@ -124,7 +124,7 @@ void DailyCell::loadFromData(CCObject* object) {
     practiceSprite->setID("practice-sprite"_spr);
     this->m_mainLayer->addChild(practiceSprite);
 
-    auto practice = CCLabelBMFont::create(CCString::createWithFormat("%i%%", level->m_practicePercent)->getCString(), "bigFont.fnt");
+    auto practice = CCLabelBMFont::create(fmt::format("{}%", level->m_practicePercent).c_str(), "bigFont.fnt");
     practice->setAnchorPoint({ 0.0f, 0.5f });
     practice->setPosition(practiceSprite->getPositionX() + 8.f, 24.0f);
     practice->setScale(.325f);

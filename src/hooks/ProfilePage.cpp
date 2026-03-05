@@ -172,7 +172,7 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
             m_buttonMenu->addChild(leaderboardButton);
             this->m_buttons->addObject(leaderboardButton);
 
-            auto userIDNode = CCLabelBMFont::create(CCString::createWithFormat("User ID: %i", a2->m_userID)->getCString(), "chatFont.fnt");
+            auto userIDNode = CCLabelBMFont::create(fmt::format("User ID: {}", a2->m_userID).c_str(), "chatFont.fnt");
             userIDNode->setScale(0.6f);
             userIDNode->setColor({255,255,255});
             userIDNode->setOpacity(220);
@@ -186,7 +186,7 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
             m_buttonMenu->addChild(userIDBtn);
             this->m_buttons->addObject(userIDBtn);
 
-            auto accountIDNode = CCLabelBMFont::create(CCString::createWithFormat("Account ID: %i", a2->m_accountID)->getCString(), "chatFont.fnt");
+            auto accountIDNode = CCLabelBMFont::create(fmt::format("Account ID: {}", a2->m_accountID).c_str(), "chatFont.fnt");
             accountIDNode->setScale(0.6f);
             accountIDNode->setColor({255,255,255});
             accountIDNode->setOpacity(220);

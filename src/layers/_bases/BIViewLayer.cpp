@@ -171,7 +171,7 @@ void BIViewLayer::updateCounter(){
     }
 
     m_counter->setVisible(m_data->count() > 0);
-    m_counter->setCString(CCString::createWithFormat("%i to %i of %i", firstIndex+1, (m_data->count() >= lastIndex) ? lastIndex : m_data->count(), m_data->count())->getCString());
+    m_counter->setCString(fmt::format("{} to {} of {}", firstIndex+1, (m_data->count() >= lastIndex) ? lastIndex : m_data->count(), m_data->count()).c_str());
 }
 
 void BIViewLayer::loadPage(unsigned int page){

@@ -121,32 +121,29 @@ class BI_DLL $modify(GameLevelManager) {
         //getting config
         std::vector<unsigned int> len;
         for(unsigned int i = 0; i <= 5; i++){
-            if(
-                Mod::get()->getSavedValue<bool>(
-                    CCString::createWithFormat("user_search_len_%02u", i)->getCString()
-                )
-            ) len.push_back(i);
+            if(Mod::get()->getSavedValue<bool>(fmt::format("user_search_len_{:02}", i))) {
+                len.push_back(i);
+            }
         }
 
         std::vector<int> diff;
 
-        if(Mod::get()->getSavedValue<bool>("user_search_diff_auto")) diff.push_back(-1);
+        if(Mod::get()->getSavedValue<bool>("user_search_diff_auto")) {
+            diff.push_back(-1);
+        }
+
         for(int i = 0; i <= 6; i++){
-            if(
-                Mod::get()->getSavedValue<bool>(
-                    CCString::createWithFormat("user_search_diff_%02i", i)->getCString()
-                )
-            ) diff.push_back(i);
+            if(Mod::get()->getSavedValue<bool>(fmt::format("user_search_diff_{:02}", i))) {
+                diff.push_back(i);
+            }
         }
 
         std::vector<int> demonDiff;
 
         for(int i = 0; i <= 5; i++){
-            if(
-                Mod::get()->getSavedValue<bool>(
-                    CCString::createWithFormat("user_search_demon_%02i", i)->getCString()
-                )
-            ) demonDiff.push_back(i);
+            if(Mod::get()->getSavedValue<bool>(fmt::format("user_search_demon_{:02}", i))) {
+                demonDiff.push_back(i);
+            }
         }
 
         BISearchObject searchObj {
