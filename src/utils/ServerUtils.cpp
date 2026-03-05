@@ -2,8 +2,6 @@
 #include "../utils.hpp"
 //#include "../integrations/ServerAPIEvents.hpp"
 
-#include <shared_mutex>
-
 using namespace geode::prelude;
 
 static inline std::unordered_map<std::string, Ref<cocos2d::CCArray>> s_cache;
