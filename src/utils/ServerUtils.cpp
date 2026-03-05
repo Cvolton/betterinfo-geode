@@ -2,6 +2,8 @@
 #include "../utils.hpp"
 //#include "../integrations/ServerAPIEvents.hpp"
 
+#include <asp/iter.hpp>
+
 using namespace geode::prelude;
 
 static inline std::unordered_map<std::string, Ref<cocos2d::CCArray>> s_cache;
@@ -145,37 +147,28 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
             auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
 
             auto responseString = response.string().unwrapOr("");
+            auto responseParts = asp::iter::split(responseString, '#').collect();
 
-            size_t hashes = std::count(responseString.begin(), responseString.end(), '#');
-            if(hashes < 3) {
+            if(responseParts.size() < 3) {
                 callback(levels, false);
                 return;
             }
 
-            std::stringstream responseStream(responseString);
-            std::string levelData;
-            std::string userData;
-            std::string pageData;
+            std::string_view levelData(responseParts[0]);
+            std::string_view userData(responseParts[1]);
+            std::string_view pageData(responseParts[2]);
 
-            getline(responseStream, levelData, '#');
-            getline(responseStream, userData, '#');
-            getline(responseStream, pageData, '#');
-
-            std::stringstream userStream(userData);
-            std::string currentUser;
-            while(getline(userStream, currentUser, '|')) {
-                auto info = utils::string::split(currentUser, ":");
+            for(auto currentUser : asp::iter::split(userData, '|')) {
+                auto info = asp::iter::split(currentUser, ":").collect();
                 if(info.size() < 3) continue;
 
                 int userID = BetterInfo::stoi(info[0]);
                 int accountID = BetterInfo::stoi(info[2]);
 
-                if(userID > 0) GLM->storeUserName(userID, accountID, info[1]);
+                if(userID > 0) GLM->storeUserName(userID, accountID, gd::string(info[1].data(), info[1].size()));
             }
 
-            std::stringstream levelStream(levelData);
-            std::string currentLevel;
-            while(getline(levelStream, currentLevel, '|')) {
+            for(auto currentLevel : asp::iter::split(levelData, '|')) {
                 auto level = GJLevelList::create(BetterInfo::responseToDict(currentLevel));
                 levels->push_back(level);
             }
@@ -187,7 +180,7 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
             }
 
             if(cacheLevels) {
-                if(key.length() < 255) GLM->storeSearchResult(levelArray, pageData, key.c_str());
+                if(key.length() < 255) GLM->storeSearchResult(levelArray, gd::string(pageData.data(), pageData.size()), key.c_str());
                 else s_cache[key] = levelArray;
             }
 
@@ -241,12 +234,10 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
     async::spawn(
         getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevels21.php", getBaseURL())),
         [callback, key, cacheLevels](web::WebResponse response) {
+            auto GLM = GameLevelManager::sharedState();
+
             if(!response.ok()) {
-                if(response.header("retry-after").has_value()) {
-                    showRateLimitError(BetterInfo::stoi(response.header("retry-after").value()));
-                } else {
-                    showCFError(response.string().unwrapOr(""));
-                }
+                showResponseError(response);
 
                 auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
@@ -258,46 +249,35 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
             auto responseString = response.string().unwrapOr("");
-
             if(responseString == "-1") {
                 callback(levels, false, true);
                 return;
             }
 
-            size_t hashes = std::count(responseString.begin(), responseString.end(), '#');
-            if(hashes < 4) {
+            auto responseParts = asp::iter::split(responseString, '#').collect();
+            if(responseParts.size() < 4) {
                 callback(levels, false, false);
                 return;
             }
 
-            std::stringstream responseStream(responseString);
-            std::string levelData;
-            std::string userData;
-            std::string songData;
-            std::string pageData;
+            std::string_view levelData = responseParts[0];
+            std::string_view userData = responseParts[1];
+            std::string_view songData = responseParts[2];
+            std::string_view pageData = responseParts[3];
 
-            getline(responseStream, levelData, '#');
-            getline(responseStream, userData, '#');
-            getline(responseStream, songData, '#');
-            getline(responseStream, pageData, '#');
+            MusicDownloadManager::sharedState()->createSongsInfo(gd::string(songData.data(), songData.size()), "");
 
-            MusicDownloadManager::sharedState()->createSongsInfo(songData, "");
-
-            std::stringstream userStream(userData);
-            std::string currentUser;
-            while(getline(userStream, currentUser, '|')) {
-                auto info = utils::string::split(currentUser, ":");
+            for(auto currentUser : asp::iter::split(userData, '|')) {
+                auto info = asp::iter::split(currentUser, ":").collect();
                 if(info.size() < 3) continue;
 
                 int userID = BetterInfo::stoi(info[0]);
                 int accountID = BetterInfo::stoi(info[2]);
 
-                if(userID > 0) GameLevelManager::sharedState()->storeUserName(userID, accountID, info[1]);
+                if(userID > 0) GLM->storeUserName(userID, accountID, gd::string(info[1].data(), info[1].size()));
             }
 
-            std::stringstream levelStream(levelData);
-            std::string currentLevel;
-            while(getline(levelStream, currentLevel, '|')) {
+            for(auto currentLevel : asp::iter::split(levelData, '|')) {
                 auto level = GJGameLevel::create(BetterInfo::responseToDict(currentLevel), false);
                 levels->push_back(level);
             }
@@ -307,7 +287,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
 
             GameLevelManager::sharedState()->saveFetchedLevels(levelArray);
             if(cacheLevels) {
-                if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, pageData, key.c_str());
+                if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, gd::string(pageData.data(), pageData.size()), key.c_str());
                 else s_cache[key] = levelArray;
             }
 
