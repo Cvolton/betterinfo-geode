@@ -325,11 +325,12 @@ arc::Future<> BetterInfoCache::cacheLevelBatch(std::vector<int> levelIDs, bool r
         log::debug("Caching batch of levels, size: {}, rated: {}", batch.size(), rated);
 
         GJSearchObject* searchObject = nullptr;
-        co_await waitForMainThread([&searchObject, batch, rated] {
+        co_await waitForMainThread([&searchObject, &batch, rated] {
             searchObject = GJSearchObject::create(
                 rated ? SearchType::MapPackOnClick : SearchType::Type26, 
                 fmt::format("{}", fmt::join(batch, ","))
             );
+            searchObject->retain();
         });
 
         ServerUtils::getOnlineLevels(searchObject, [batch = std::move(batch), this] (std::shared_ptr<std::vector<Ref<GJGameLevel>>> levels, bool success, bool explicitError) mutable {
@@ -344,6 +345,10 @@ arc::Future<> BetterInfoCache::cacheLevelBatch(std::vector<int> levelIDs, bool r
             }
 
             log::debug("Cached batch of levels, size: {}", levels->size());
+        });
+
+        co_await waitForMainThread([&searchObject] {
+            searchObject->release();
         });
 
         co_await arc::sleep(asp::Duration::fromSecs(30));
