@@ -115,6 +115,20 @@ void ServerUtils::showResponseError(const web::WebResponse& response) {
     }
 }
 
+void ServerUtils::storeUserNames(std::string_view userData) {
+    auto GLM = GameLevelManager::sharedState();
+
+    for(auto currentUser : asp::iter::split(userData, '|')) {
+        auto info = asp::iter::split(currentUser, ":").collect();
+        if(info.size() < 3) continue;
+
+        int userID = BetterInfo::stoi(info[0]);
+        int accountID = BetterInfo::stoi(info[2]);
+
+        if(userID > 0) GLM->storeUserName(userID, accountID, gd::string(info[1].data(), info[1].size()));
+    }
+}
+
 void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJLevelList>>>, bool)> callback, bool cacheLevels) {
     std::string completedLevels = "";
 
@@ -134,17 +148,14 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
         getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevelLists.php", getBaseURL())),
         [callback, key, cacheLevels](web::WebResponse response) {
             auto GLM = GameLevelManager::sharedState();
+            auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
 
             if(!response.ok()) {
                 showResponseError(response);
-
-                auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
                 callback(levels, false);
 
                 return;
             }
-
-            auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
 
             auto responseString = response.string().unwrapOr("");
             auto responseParts = asp::iter::split(responseString, '#').collect();
@@ -158,15 +169,7 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
             std::string_view userData(responseParts[1]);
             std::string_view pageData(responseParts[2]);
 
-            for(auto currentUser : asp::iter::split(userData, '|')) {
-                auto info = asp::iter::split(currentUser, ":").collect();
-                if(info.size() < 3) continue;
-
-                int userID = BetterInfo::stoi(info[0]);
-                int accountID = BetterInfo::stoi(info[2]);
-
-                if(userID > 0) GLM->storeUserName(userID, accountID, gd::string(info[1].data(), info[1].size()));
-            }
+            ServerUtils::storeUserNames(userData);
 
             for(auto currentLevel : asp::iter::split(levelData, '|')) {
                 auto level = GJLevelList::create(BetterInfo::responseToDict(currentLevel));
@@ -189,7 +192,6 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
             return;
         }
     );
-    
 }
 
 void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJGameLevel>>>, bool success, bool explicitError)> callback, bool cacheLevels) {
@@ -235,18 +237,14 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
         getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevels21.php", getBaseURL())),
         [callback, key, cacheLevels](web::WebResponse response) {
             auto GLM = GameLevelManager::sharedState();
+            auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
             if(!response.ok()) {
                 showResponseError(response);
-
-                auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
-
                 callback(levels, false, false);
 
                 return;
             }
-
-            auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
             auto responseString = response.string().unwrapOr("");
             if(responseString == "-1") {
@@ -266,16 +264,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             std::string_view pageData = responseParts[3];
 
             MusicDownloadManager::sharedState()->createSongsInfo(gd::string(songData.data(), songData.size()), "");
-
-            for(auto currentUser : asp::iter::split(userData, '|')) {
-                auto info = asp::iter::split(currentUser, ":").collect();
-                if(info.size() < 3) continue;
-
-                int userID = BetterInfo::stoi(info[0]);
-                int accountID = BetterInfo::stoi(info[2]);
-
-                if(userID > 0) GLM->storeUserName(userID, accountID, gd::string(info[1].data(), info[1].size()));
-            }
+            ServerUtils::storeUserNames(userData);
 
             for(auto currentLevel : asp::iter::split(levelData, '|')) {
                 auto level = GJGameLevel::create(BetterInfo::responseToDict(currentLevel), false);
