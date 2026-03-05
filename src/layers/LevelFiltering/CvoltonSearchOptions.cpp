@@ -1,7 +1,7 @@
 #include "CvoltonSearchOptions.h"
+#include "CvoltonSearchSettings.h"
 #include "IDRangePopup.h"
 #include "../../enums.hpp"
-#include "../../utils.hpp"
 #include "../../ui/EnumSelectNode.h"
 
 const int completedMax = 7;
@@ -72,6 +72,14 @@ bool CvoltonSearchOptions::init(){
     completedModeSelect->setShowKey(true);
     m_mainLayer->addChild(completedModeSelect);
 
+    auto settingsBtn = CCMenuItemExt::createSpriteExtra(
+        CCSprite::createWithSpriteFrameName("GJ_optionsBtn_001.png"),
+        [] (CCObject* sender) {
+            CvoltonSearchSettings::create()->show();
+        }
+    );
+    m_buttonMenu->addChild(settingsBtn);
+
     drawToggles();
 
     return true;
@@ -83,7 +91,7 @@ void CvoltonSearchOptions::drawToggles(){
     //createToggle("search_contains", "Name Contains", -170, 75); //40 -60, 170 -60, 300 -60, 40 -110
     //createToggle("search_no_id", "No ID Search", -40, 75);
     //createToggle("search_surround_percent", "No Forced Star", 90, 75);
-    createToggle("search_trim", "Trim Spaces");
+    //createToggle("search_trim", "Trim Spaces");
 
     auto completedMode = createTextLabel("Completed Mode:", {0, -95}, 0.5f, m_buttonMenu, "goldFont.fnt");
     completedMode->setID("completed-mode"_spr);
