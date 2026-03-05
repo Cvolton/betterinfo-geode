@@ -247,7 +247,7 @@ bool BetterInfo::isSavedFiltered() {
     return false;
 }
 
-std::string BetterInfo::decodeBase64Gzip(const std::string& input) {
+gd::string BetterInfo::decodeBase64Gzip(const gd::string& input) {
     return ZipUtils::decompressString(input, false, 0);
 }
 

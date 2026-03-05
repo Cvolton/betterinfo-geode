@@ -47,7 +47,7 @@ namespace BetterInfo {
 
     BI_DLL bool isSavedFiltered();
 
-    BI_DLL std::string decodeBase64Gzip(const std::string& input);
+    BI_DLL gd::string decodeBase64Gzip(const gd::string& input);
     BI_DLL std::string fileSize(size_t bytes);
     BI_DLL std::string fixColorCrashes(std::string input);
     BI_DLL std::string fixNullByteCrash(std::string input);
