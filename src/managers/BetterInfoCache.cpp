@@ -435,12 +435,13 @@ std::string BetterInfoCache::tryGetUsername(int userID) {
 void BetterInfoCache::cacheRatedListsFromMegaResponse(std::string_view response) {
     if(ServerUtils::isGDPS()) return;
 
-    auto allLists = asp::iter::split(response, "#").next();
-    if (!allLists) return;
+    auto allLists = asp::iter::split(response, "#");
+    auto allListsIt = allLists.next();
+    if(!allListsIt) return;
 
-    for(auto listStr : asp::iter::split(allLists.value(), "|")) {
+    for(auto listStr : asp::iter::split(allListsIt.value(), "|")) {
         if (listStr.empty()) continue;
-        m_levelLists.push_back(GJLevelList::create(BetterInfo::responseToDict(std::string(listStr))));
+        m_levelLists.push_back(GJLevelList::create(BetterInfo::responseToDict(listStr)));
     }
 
     checkClaimableLists();

@@ -5,16 +5,15 @@
 #include "../layers/PaginatedFLAlert.h"
 #include "../utils.hpp"
 
-std::string LevelProgressDialog::printableProgress(std::string personalBests, int percentage){
+#include <asp/iter.hpp>
 
-    std::stringstream bestsStream(personalBests);
-    std::string currentBest;
-    std::deque<int> progresses;
-    while(getline(bestsStream, currentBest, ',')){
-        progresses.push_front(BetterInfo::stoi(currentBest));
-    }
+std::string LevelProgressDialog::printableProgress(std::string_view personalBests, int percentage){
+
+    auto progresses = asp::iter::split(personalBests, ",").map([](std::string_view currentBest) {
+        return BetterInfo::stoi(currentBest);
+    }).collect<std::deque<int>>();
+
     std::string printable;
-    //std::reverse(std::begin(progresses), std::end(progresses));
     for(auto i : progresses){
         printable = std::to_string(percentage) + "% " + printable;
         percentage -= i;

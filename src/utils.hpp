@@ -58,7 +58,7 @@ namespace BetterInfo {
     BI_DLL std::string getSongUrl(int audioID);
     BI_DLL bool isNewGrounds(int audioID);
 
-    BI_DLL cocos2d::CCDictionary* responseToDict(const std::string& response);
+    BI_DLL cocos2d::CCDictionary* responseToDict(std::string_view response);
 
     BI_DLL bool validateRangeItem(const BISearchObject::RangeItem& rangeItem, int value);
     BI_DLL bool levelMatchesObject(GJGameLevel* level, const BISearchObject& searchObj);

@@ -15,6 +15,7 @@
 #include <Geode/ui/GeodeUI.hpp>
 
 #include <arc/time/Sleep.hpp>
+#include <asp/iter.hpp>
 
 #include "managers/BetterInfoCache.h"
 
@@ -309,20 +310,16 @@ bool BetterInfo::isNewGrounds(int audioID) {
     because I couldn't get it to work. It's not 1:1 with the original
     but it achieves the same purpose.
 */
-CCDictionary* BetterInfo::responseToDict(const std::string& response){
+CCDictionary* BetterInfo::responseToDict(std::string_view response){
     auto dict = CCDictionary::create();
 
-    std::stringstream responseStream(response);
-    std::string currentKey;
+    bool isKey = true;
     std::string keyID;
+    for(auto currentKey : asp::iter::split(response, ":")) {
+        if(isKey) keyID = currentKey;
+        else dict->setObject(CCString::create(std::string(currentKey)),keyID);
 
-    unsigned int i = 0;
-    while(getline(responseStream, currentKey, ':')){
-
-        if(i % 2 == 0) keyID = currentKey;
-        else dict->setObject(CCString::create(currentKey.c_str()),keyID);
-
-        i++;
+        isKey = !isKey;
     }
 
     return dict;
@@ -507,32 +504,22 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
 
         auto decompressString = decodeBase64Gzip(levelString);
         auto c = timeInMs();
-        std::stringstream responseStream(decompressString);
-        std::string currentObject;
-        std::string currentKey;
         std::string keyID;
         std::vector<SpeedPortalObject> speedPortals;
 
-        //std::stringstream objectStream;
         float prevPortalX = 0;
         int prevPortalId = 0;
 
         float timeFull = 0;
 
         float maxPos = 0;
-        while(getline(responseStream, currentObject, ';')){
+        for (auto currentObject : asp::iter::split(decompressString, ";")) {
             size_t i = 0;
             int objID = 0;
             float xPos = 0;
             bool checked = false;
 
-            /*objectStream.str("");
-            objectStream.clear();
-            objectStream << currentObject;
-            objectStream.seekp(0);
-            objectStream.seekg(0);*/
-            std::stringstream objectStream(currentObject);
-            while(getline(objectStream, currentKey, ',')) {
+            for(auto currentKey : asp::iter::split(currentObject, ",")) {
                 if(i % 2 == 0) keyID = currentKey;
                 else {
                     if(keyID == "1") objID = BetterInfo::stoi(currentKey);
@@ -565,7 +552,7 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
         //log::info("Last portal ID: {}, Last X Position: {}", prevPortalId, prevPortalX);
         timeFull += (maxPos - prevPortalX) / travelForPortalId(prevPortalId);
         auto b = timeInMs() - a;
-        //log::info("Time for levelString: {}ms, decompress: {}ms, parse: {}ms, maxPos {}", b, c - a, timeInMs() - c, maxPos);
+        log::debug("Time for levelString: {}ms, decompress: {}ms, parse: {}ms, maxPos {}", b, c - a, timeInMs() - c, maxPos);
         return timeFull;
     } catch(std::exception e) {
         log::error("An exception has occured while calculating time for levelString: {}", e.what());
@@ -575,20 +562,16 @@ float BetterInfo::timeForLevelString(const std::string& levelString) {
 
 int BetterInfo::maxObjectIDForDecompressedLevelString(const std::string& levelString) {
     try {
-        std::stringstream responseStream(levelString);
-        std::string currentObject;
-        std::string currentKey;
         std::string keyID;
 
         int maxID = 0;
 
-        while(getline(responseStream, currentObject, ';')){
+        for(auto currentObject : asp::iter::split(levelString, ";")) {
             size_t i = 0;
             int objID = 0;
             float xPos = 0;
 
-            std::stringstream objectStream(currentObject);
-            while(getline(objectStream, currentKey, ',')) {
+            for(auto currentKey : asp::iter::split(currentObject, ",")) {
                 if(i % 2 == 0) keyID = currentKey;
                 else {
                     if(keyID == "1") objID = BetterInfo::stoi(currentKey);
@@ -642,43 +625,33 @@ std::string BetterInfo::gameVerForDecompressedLevelString(const std::string& lev
 int BetterInfo::gameVerObjectForLevelStringHeader(const std::string& levelString) {
     //returning max object id for the first game version
     //where such a header is possible
-    const std::map<int, std::set<std::string>> uniques = {
-        {43, {"kS1","kS2","kS3","kS4","kS5","kS6","kA1"}},
-        {285, {"kS7","kS8","kS9","kS10","kS11","kS12","kS13","kS14","kS15","kS16","kS17","kS18","kS19","kS20","kA2","kA3","kA4","kA5","kA6","kA7"}},
-        {505, {"kA8","kA9","kA10","kA11"}},
-        {744, {"kS29","kS30","kS31","kS32","kS33","kS34","kS35","kS36","kS37","kA13","kA14","kA15","kA16"}},
-        {1329, {"kS38","kS39","kA17","kA18"}},
-        {4539, {"kA19","kA20","kA21","kA22","kA23","kA24","kA25","kA26","kA27","kA28","kA29","kA31","kA32","kA33","kA34","kA35","kA36","kA37","kA38","kA39","kA40","kA41","kA42","kA43","kA44"}}
-    };
+    static const auto keyToVersion = [] {
+        std::unordered_map<std::string_view, int> map;
+        for (auto k : {"kS1","kS2","kS3","kS4","kS5","kS6","kA1"}) map[k] = 43;
+        for (auto k : {"kS7","kS8","kS9","kS10","kS11","kS12","kS13","kS14","kS15","kS16","kS17","kS18","kS19","kS20","kA2","kA3","kA4","kA5","kA6","kA7"}) map[k] = 285;
+        for (auto k : {"kA8","kA9","kA10","kA11"}) map[k] = 505;
+        for (auto k : {"kS29","kS30","kS31","kS32","kS33","kS34","kS35","kS36","kS37","kA13","kA14","kA15","kA16"}) map[k] = 744;
+        for (auto k : {"kS38","kS39","kA17","kA18"}) map[k] = 1329;
+        for (auto k : {"kA19","kA20","kA21","kA22","kA23","kA24","kA25","kA26","kA27","kA28","kA29","kA31","kA32","kA33","kA34","kA35","kA36","kA37","kA38","kA39","kA40","kA41","kA42","kA43","kA44"}) map[k] = 4539;
+        return map;
+    }();
 
-    try {
-        std::stringstream responseStream(levelString);
-        std::string levelHeader;
-        std::string currentKey;
-        std::set<std::string> keys;
+    auto levelHeader = asp::iter::split(levelString, ";");
+    auto firstPart = levelHeader.next();
+    if (!firstPart) return 0;
 
-        getline(responseStream, levelHeader, ';');
-        std::stringstream objectStream(levelHeader);
-
-        int i = 0;
-        while(getline(objectStream, currentKey, ',')) {
-            if(i % 2 == 0) keys.insert(currentKey);
-            i++;
-        }
-
-        for(auto it = uniques.rbegin(); it != uniques.rend(); it++) {
-            for(auto& key : keys) {
-                if(it->second.contains(key)) return it->first;
+    int maxObject = 0;
+    bool isKey = true;
+    for (auto currentKey : asp::iter::split(firstPart.value(), ",")) {
+        if (isKey) {
+            if (auto it = keyToVersion.find(currentKey); it != keyToVersion.end()) {
+                maxObject = std::max(maxObject, it->second);
             }
         }
-
-        return 0;
-    } catch(std::exception e) {
-        log::error("An exception has occured while calculating max object ID for levelString: {}", e.what());
-        return 0;
+        isKey = !isKey;
     }
 
-    return 0;
+    return maxObject;
 }
 
 bool BetterInfo::controllerConnected() {

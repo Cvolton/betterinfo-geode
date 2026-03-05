@@ -59,7 +59,7 @@ void BetterInfoOnline::generateScores(const std::string& response, std::pair<int
     if(response == "-1") return;
 
     for(auto score : asp::iter::split(response, "|")) {
-        auto scoreObj = GJUserScore::create(BetterInfo::responseToDict(std::string(score)));
+        auto scoreObj = GJUserScore::create(BetterInfo::responseToDict(score));
         GameLevelManager::sharedState()->storeUserName(scoreObj->m_userID, scoreObj->m_accountID, scoreObj->m_userName);
 
         if(std::string(scoreObj->m_userUDID) != "") scoreObj->m_userUDID = GM->m_playerUDID;
