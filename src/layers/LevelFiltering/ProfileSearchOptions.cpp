@@ -315,7 +315,7 @@ void ProfileSearchOptions::drawTogglesSecondary(){
         );
     }
 
-    auto infoBtn = createButton("GJ_infoIcon_001.png", {203, 128}, menu_selector(ProfileSearchOptions::onSecondaryInfo));
+    auto infoBtn = createButton("GJ_infoIcon_001.png", {205, -79}, menu_selector(ProfileSearchOptions::onSecondaryInfo), .8f);
     infoBtn->setID("info-button"_spr);
     m_toggles.push_back(infoBtn);
 
