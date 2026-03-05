@@ -146,7 +146,7 @@ void ExtendedLevelInfo::setupAdditionalInfo() {
     m_extraInfoHolder.spawn(
         "BetterInfo ExtendedLevelInfo",
         [this]() -> arc::Future<> {
-        std::string levelString(BetterInfo::decodeBase64Gzip(m_level->m_levelString));
+        auto levelString = BetterInfo::decodeBase64Gzip(m_level->m_levelString);
         co_await waitForMainThread([this] {
             this->release();
         });
