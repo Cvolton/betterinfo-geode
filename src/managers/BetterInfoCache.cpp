@@ -1,6 +1,7 @@
 #include "BetterInfoCache.h"
 #include "BetterInfoOnline.h"
 #include <arc/time/Sleep.hpp>
+#include <asp/iter.hpp>
 
 /**
  * MATjson shenanigans
@@ -434,13 +435,12 @@ std::string BetterInfoCache::tryGetUsername(int userID) {
 void BetterInfoCache::cacheRatedListsFromMegaResponse(std::string_view response) {
     if(ServerUtils::isGDPS()) return;
 
-    auto parts = geode::utils::string::split(response, "#");
-    if (parts.empty()) return;
-    
-    auto lists = geode::utils::string::split(parts[0], "|");
-    for (const auto& listStr : lists) {
+    auto allLists = asp::iter::split(response, "#").next();
+    if (!allLists) return;
+
+    for(auto listStr : asp::iter::split(allLists.value(), "|")) {
         if (listStr.empty()) continue;
-        m_levelLists.push_back(GJLevelList::create(BetterInfo::responseToDict(listStr)));
+        m_levelLists.push_back(GJLevelList::create(BetterInfo::responseToDict(std::string(listStr))));
     }
 
     checkClaimableLists();
