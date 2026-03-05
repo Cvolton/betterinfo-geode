@@ -5,9 +5,6 @@
 #include "../managers/BetterInfoCache.h"
 #include "../utils.hpp"
 
-#include <thread>
-#include <locale>
-
 using namespace geode::prelude;
 
 class BI_DLL $modify(LevelInfoLayer) {
@@ -33,17 +30,6 @@ class BI_DLL $modify(LevelInfoLayer) {
             m_exactLengthLabel->setPositionY(m_exactLengthLabel->getPositionY() + 6.f);
             m_lengthLabel->setPositionY(m_lengthLabel->getPositionY() + 6.f);
         }
-
-        /*auto label = m_lengthLabel;
-        if(label) {
-            auto bmFont = CCLabelBMFont::create("Loading", "bigFont.fnt");
-            bmFont->setID("exact-time"_spr);
-            bmFont->setPosition({label->getPositionX() + 1, label->getPositionY() - 2.f}); //193 - 185
-            bmFont->setAnchorPoint({0,1});
-            bmFont->setScale(0.325f);
-            addChild(bmFont);
-            label->setPositionY(label->getPositionY() + 6.f);
-        }*/
 
         return true;
     }
