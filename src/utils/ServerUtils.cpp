@@ -129,9 +129,50 @@ void ServerUtils::storeUserNames(std::string_view userData) {
     }
 }
 
-void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJLevelList>>>, bool)> callback, bool cacheLevels) {
-    std::string completedLevels = "";
+ServerUtils::ParsedResponse ServerUtils::parseResponse(const web::WebResponse& response, size_t expectedParts) {
+    ParsedResponse ret;
+    if(!response.ok()) {
+        showResponseError(response);
+        ret.m_ok = false;
+        return ret;
+    }
 
+    if(response.string().unwrapOr("") == "-1") {
+        ret.m_ok = false;
+        ret.m_explicitError = true;
+        return ret;
+    }
+
+    auto responseString = response.string().unwrapOr("");
+    auto responseParts = asp::iter::split(responseString, '#').collect();
+
+    if(responseParts.size() < expectedParts) {
+        ret.m_ok = false;
+        return ret;
+    }
+
+    ret.m_response = std::move(responseString);
+    ret.m_parts = std::move(responseParts);
+    ret.m_ok = true;
+    return ret;
+}
+
+template <typename T>
+CCArray* cacheSearchResult(const std::string& key, const std::vector<Ref<T>>& levels, std::string_view pageData) {
+    auto GLM = GameLevelManager::sharedState();
+
+    CCArray* levelArray = CCArray::create();
+    for(auto level : levels) {
+        levelArray->addObject(level);
+    }
+
+    if(key.length() < 255) GLM->storeSearchResult(levelArray, gd::string(pageData.data(), pageData.size()), key.c_str());
+    else s_cache[key] = levelArray;
+
+    return levelArray;
+}
+
+void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void(std::shared_ptr<std::vector<Ref<GJLevelList>>>, bool)> callback, bool cacheLevels) {
     std::string postString = fmt::format("{}&str={}&type={}&page={}",
         getBasePostString(), searchObject->m_searchQuery, (int) searchObject->m_searchType, searchObject->m_page);
 
@@ -150,42 +191,27 @@ void ServerUtils::getLevelLists(GJSearchObject* searchObject, std::function<void
             auto GLM = GameLevelManager::sharedState();
             auto levels = std::make_shared<std::vector<Ref<GJLevelList>>>();
 
-            if(!response.ok()) {
-                showResponseError(response);
-                callback(levels, false);
-
-                return;
-            }
-
-            auto responseString = response.string().unwrapOr("");
-            auto responseParts = asp::iter::split(responseString, '#').collect();
-
-            if(responseParts.size() < 3) {
+            auto parsed = parseResponse(response, 3);
+            if(!parsed) {
                 callback(levels, false);
                 return;
             }
 
-            std::string_view levelData(responseParts[0]);
-            std::string_view userData(responseParts[1]);
-            std::string_view pageData(responseParts[2]);
+            std::string_view levelData(parsed.m_parts[0]);
+            std::string_view userData(parsed.m_parts[1]);
+            std::string_view pageData(parsed.m_parts[2]);
 
             ServerUtils::storeUserNames(userData);
 
-            for(auto currentLevel : asp::iter::split(levelData, '|')) {
-                auto level = GJLevelList::create(BetterInfo::responseToDict(currentLevel));
-                levels->push_back(level);
-            }
+            *levels = asp::iter::split(levelData, '|').map([](auto currentLevel) {
+                return GJLevelList::create(BetterInfo::responseToDict(currentLevel));
+            }).collect<std::vector<Ref<GJLevelList>>>();
 
-            CCArray* levelArray = CCArray::create();
             for(auto level : *levels) {
-                levelArray->addObject(level);
                 GLM->updateSavedLevelList(level);
             }
 
-            if(cacheLevels) {
-                if(key.length() < 255) GLM->storeSearchResult(levelArray, gd::string(pageData.data(), pageData.size()), key.c_str());
-                else s_cache[key] = levelArray;
-            }
+            if(cacheLevels) cacheSearchResult(key, *levels, pageData);
 
             callback(levels, true);
 
@@ -236,49 +262,28 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
     async::spawn(
         getBaseRequest(false).bodyString(postString).post(fmt::format("{}/getGJLevels21.php", getBaseURL())),
         [callback, key, cacheLevels](web::WebResponse response) {
-            auto GLM = GameLevelManager::sharedState();
             auto levels = std::make_shared<std::vector<Ref<GJGameLevel>>>();
 
-            if(!response.ok()) {
-                showResponseError(response);
-                callback(levels, false, false);
-
+            auto parsed = parseResponse(response, 4);
+            if(!parsed) {
+                callback(levels, parsed.m_ok, parsed.m_explicitError);
                 return;
             }
 
-            auto responseString = response.string().unwrapOr("");
-            if(responseString == "-1") {
-                callback(levels, false, true);
-                return;
-            }
-
-            auto responseParts = asp::iter::split(responseString, '#').collect();
-            if(responseParts.size() < 4) {
-                callback(levels, false, false);
-                return;
-            }
-
-            std::string_view levelData = responseParts[0];
-            std::string_view userData = responseParts[1];
-            std::string_view songData = responseParts[2];
-            std::string_view pageData = responseParts[3];
+            std::string_view levelData = parsed.m_parts[0];
+            std::string_view userData = parsed.m_parts[1];
+            std::string_view songData = parsed.m_parts[2];
+            std::string_view pageData = parsed.m_parts[3];
 
             MusicDownloadManager::sharedState()->createSongsInfo(gd::string(songData.data(), songData.size()), "");
             ServerUtils::storeUserNames(userData);
 
-            for(auto currentLevel : asp::iter::split(levelData, '|')) {
-                auto level = GJGameLevel::create(BetterInfo::responseToDict(currentLevel), false);
-                levels->push_back(level);
-            }
+            *levels = asp::iter::split(levelData, '|').map([](auto currentLevel) {
+                return GJGameLevel::create(BetterInfo::responseToDict(currentLevel), false);
+            }).collect<std::vector<Ref<GJGameLevel>>>();
 
-            CCArray* levelArray = CCArray::create();
-            for(auto level : *levels) levelArray->addObject(level);
-
+            CCArray* levelArray = cacheSearchResult(key, *levels, pageData);
             GameLevelManager::sharedState()->saveFetchedLevels(levelArray);
-            if(cacheLevels) {
-                if(key.length() < 255) GameLevelManager::sharedState()->storeSearchResult(levelArray, gd::string(pageData.data(), pageData.size()), key.c_str());
-                else s_cache[key] = levelArray;
-            }
 
             callback(levels, true, false);
 
