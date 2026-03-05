@@ -3,6 +3,7 @@
 #include "../utils.hpp"
 #include <Geode/utils/web.hpp>
 #include <Geode/cocos/support/base64.h>
+#include <asp/iter.hpp>
 
 bool BetterInfoOnline::init(){
     return true;
@@ -57,20 +58,13 @@ void BetterInfoOnline::generateScores(const std::string& response, std::pair<int
 
     if(response == "-1") return;
 
-    std::stringstream responseStream(response);
-    std::string current;
+    for(auto score : asp::iter::split(response, "|")) {
+        auto scoreObj = GJUserScore::create(BetterInfo::responseToDict(std::string(score)));
+        GameLevelManager::sharedState()->storeUserName(scoreObj->m_userID, scoreObj->m_accountID, scoreObj->m_userName);
 
-    while(getline(responseStream, current, '|')){
+        if(std::string(scoreObj->m_userUDID) != "") scoreObj->m_userUDID = GM->m_playerUDID;
 
-        auto score = GJUserScore::create(
-            BetterInfo::responseToDict(current)
-        );
-
-        GameLevelManager::sharedState()->storeUserName(score->m_userID, score->m_accountID, score->m_userName);
-
-        if(std::string(score->m_userUDID) != "") score->m_userUDID = GM->m_playerUDID;
-
-        scores->addObject(score);
+        scores->addObject(scoreObj);
     }
 }
 
