@@ -492,106 +492,96 @@ uint64_t BetterInfo::timeInMs() {
     return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
-float BetterInfo::timeForLevelString(const std::string& levelString) {
+float BetterInfo::timeForLevelString(const gd::string& levelString) {
     struct SpeedPortalObject {
         int id;
         float xPos;
         bool checked;
     };
 
-    try {
-        auto a = timeInMs();
+    auto a = timeInMs();
 
-        auto decompressString = decodeBase64Gzip(levelString);
-        auto c = timeInMs();
-        std::string keyID;
-        std::vector<SpeedPortalObject> speedPortals;
+    auto decompressString = decodeBase64Gzip(levelString);
+    auto c = timeInMs();
+    std::string keyID;
+    std::vector<SpeedPortalObject> speedPortals;
 
-        float prevPortalX = 0;
-        int prevPortalId = 0;
+    float prevPortalX = 0;
+    int prevPortalId = 0;
 
-        float timeFull = 0;
+    float timeFull = 0;
 
-        float maxPos = 0;
-        for (auto currentObject : asp::iter::split(decompressString, ";")) {
-            size_t i = 0;
-            int objID = 0;
-            float xPos = 0;
-            bool checked = false;
+    float maxPos = 0;
+    for (auto currentObject : asp::iter::split(decompressString, ";")) {
+        size_t i = 0;
+        int objID = 0;
+        float xPos = 0;
+        bool checked = false;
 
-            for(auto currentKey : asp::iter::split(currentObject, ",")) {
-                if(i % 2 == 0) keyID = currentKey;
-                else {
-                    if(keyID == "1") objID = BetterInfo::stoi(currentKey);
-                    else if(keyID == "2") xPos = BetterInfo::stof(currentKey);
-                    else if(keyID == "13") checked = BetterInfo::stoi(currentKey);
-                    else if(keyID == "kA4") prevPortalId = speedToPortalId(BetterInfo::stoi(currentKey));
-                }
-                i++;
-
-                if(xPos != 0 && objID != 0 && checked == true) break;
+        for(auto currentKey : asp::iter::split(currentObject, ",")) {
+            if(i % 2 == 0) keyID = currentKey;
+            else {
+                if(keyID == "1") objID = BetterInfo::stoi(currentKey);
+                else if(keyID == "2") xPos = BetterInfo::stof(currentKey);
+                else if(keyID == "13") checked = BetterInfo::stoi(currentKey);
+                else if(keyID == "kA4") prevPortalId = speedToPortalId(BetterInfo::stoi(currentKey));
             }
+            i++;
 
-            if(maxPos < xPos) maxPos = xPos;
-            if(!checked || !objectIDIsSpeedPortal(objID)) continue;
-
-            speedPortals.push_back({objID, xPos, checked});
+            if(xPos != 0 && objID != 0 && checked == true) break;
         }
 
-        std::sort(speedPortals.begin(), speedPortals.end(), [](const SpeedPortalObject& a, const SpeedPortalObject& b) {
-            return a.xPos < b.xPos;
-        });
+        if(maxPos < xPos) maxPos = xPos;
+        if(!checked || !objectIDIsSpeedPortal(objID)) continue;
 
-        for(const auto& portal : speedPortals) {
-            //log::info("Object ID: {}, X Position: {}, Portal ID: {}", portal.id, portal.xPos, prevPortalId);
-            timeFull += (portal.xPos - prevPortalX) / travelForPortalId(prevPortalId);
-            prevPortalId = portal.id;
-            prevPortalX = portal.xPos;
-        }
-
-        //log::info("Last portal ID: {}, Last X Position: {}", prevPortalId, prevPortalX);
-        timeFull += (maxPos - prevPortalX) / travelForPortalId(prevPortalId);
-        auto b = timeInMs() - a;
-        log::debug("Time for levelString: {}ms, decompress: {}ms, parse: {}ms, maxPos {}", b, c - a, timeInMs() - c, maxPos);
-        return timeFull;
-    } catch(std::exception e) {
-        log::error("An exception has occured while calculating time for levelString: {}", e.what());
-        return 0;
+        speedPortals.push_back({objID, xPos, checked});
     }
+
+    std::sort(speedPortals.begin(), speedPortals.end(), [](const SpeedPortalObject& a, const SpeedPortalObject& b) {
+        return a.xPos < b.xPos;
+    });
+
+    for(const auto& portal : speedPortals) {
+        //log::info("Object ID: {}, X Position: {}, Portal ID: {}", portal.id, portal.xPos, prevPortalId);
+        timeFull += (portal.xPos - prevPortalX) / travelForPortalId(prevPortalId);
+        prevPortalId = portal.id;
+        prevPortalX = portal.xPos;
+    }
+
+    //log::info("Last portal ID: {}, Last X Position: {}", prevPortalId, prevPortalX);
+    timeFull += (maxPos - prevPortalX) / travelForPortalId(prevPortalId);
+    auto b = timeInMs() - a;
+    log::debug("Time for levelString: {}ms, decompress: {}ms, parse: {}ms, maxPos {}", b, c - a, timeInMs() - c, maxPos);
+    return timeFull;
 }
 
-int BetterInfo::maxObjectIDForDecompressedLevelString(const std::string& levelString) {
-    try {
-        std::string keyID;
+int BetterInfo::maxObjectIDForDecompressedLevelString(std::string_view levelString) {
+    std::string keyID;
 
-        int maxID = 0;
+    int maxID = 0;
 
-        for(auto currentObject : asp::iter::split(levelString, ";")) {
-            size_t i = 0;
-            int objID = 0;
-            float xPos = 0;
+    for(auto currentObject : asp::iter::split(levelString, ";")) {
+        size_t i = 0;
+        int objID = 0;
+        float xPos = 0;
 
-            for(auto currentKey : asp::iter::split(currentObject, ",")) {
-                if(i % 2 == 0) keyID = currentKey;
-                else {
-                    if(keyID == "1") objID = BetterInfo::stoi(currentKey);
-                }
-                i++;
-
-                if(objID != 0) break;
+        for(auto currentKey : asp::iter::split(currentObject, ",")) {
+            if(i % 2 == 0) keyID = currentKey;
+            else {
+                if(keyID == "1") objID = BetterInfo::stoi(currentKey);
             }
+            i++;
 
-            if(objID > maxID) maxID = objID;
+            if(objID != 0) break;
         }
 
-        return maxID;
-    } catch(std::exception e) {
-        log::error("An exception has occured while calculating max object ID for levelString: {}", e.what());
-        return 0;
+        if(objID > maxID) maxID = objID;
     }
+
+    return maxID;
 }
 
-std::string BetterInfo::gameVerForDecompressedLevelString(const std::string& levelString) {
+std::string BetterInfo::gameVerForDecompressedLevelString(std::string_view levelString) {
     const std::map<int, std::string> maximums = {
         {43, "1.0"},
         {46, "1.1"},
@@ -622,7 +612,7 @@ std::string BetterInfo::gameVerForDecompressedLevelString(const std::string& lev
     return "2.3+";
 }
 
-int BetterInfo::gameVerObjectForLevelStringHeader(const std::string& levelString) {
+int BetterInfo::gameVerObjectForLevelStringHeader(std::string_view levelString) {
     //returning max object id for the first game version
     //where such a header is possible
     static const auto keyToVersion = [] {

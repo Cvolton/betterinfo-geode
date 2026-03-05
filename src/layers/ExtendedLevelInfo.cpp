@@ -147,11 +147,12 @@ void ExtendedLevelInfo::setupAdditionalInfo() {
         "BetterInfo ExtendedLevelInfo",
         [this]() -> arc::Future<> {
         auto levelString = BetterInfo::decodeBase64Gzip(m_level->m_levelString);
+        auto levelStringView = std::string_view(levelString);
         co_await waitForMainThread([this] {
             this->release();
         });
         
-        auto objectsEstimated = std::count(levelString.begin(), levelString.end(), ';');
+        auto objectsEstimated = std::count(levelStringView.begin(), levelStringView.end(), ';');
         co_await arc::yield();
 
         auto fileSizeCompressed = BetterInfo::fileSize(m_level->m_levelString.size());

@@ -66,10 +66,10 @@ namespace BetterInfo {
     BI_DLL std::vector<GJGameLevel*> completedLevelsInStarRange(int min, int max, bool platformer, CCDictionary* dict = GameLevelManager::sharedState()->m_onlineLevels);
 
     BI_DLL uint64_t timeInMs();
-    BI_DLL float timeForLevelString(const std::string& levelString);
-    BI_DLL int maxObjectIDForDecompressedLevelString(const std::string& levelString);
-    BI_DLL std::string gameVerForDecompressedLevelString(const std::string& levelString);
-    BI_DLL int gameVerObjectForLevelStringHeader(const std::string& levelString);
+    BI_DLL float timeForLevelString(const gd::string& levelString);
+    BI_DLL int maxObjectIDForDecompressedLevelString(std::string_view levelString);
+    BI_DLL std::string gameVerForDecompressedLevelString(std::string_view levelString);
+    BI_DLL int gameVerObjectForLevelStringHeader(std::string_view levelString);
 
     BI_DLL bool controllerConnected();
 
