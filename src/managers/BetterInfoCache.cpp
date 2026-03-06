@@ -217,7 +217,7 @@ void BetterInfoCache::saveJson() {
             {"levelDateStringCache", m_levelDateStringCache}
         });
 
-        if(!utils::file::writeToJson(Mod::get()->getSaveDir() / "cache_v2.json", json)) {
+        if(!utils::file::writeString(Mod::get()->getSaveDir() / "cache_v2.json", json.dump(matjson::NO_INDENTATION))) {
             log::error("Failed to write BetterInfoCache to json");
         } else {
             log::debug("BetterInfoCache saved to json");
