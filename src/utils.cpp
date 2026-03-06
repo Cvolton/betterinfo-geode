@@ -127,7 +127,7 @@ int BetterInfo::randomNumber(int start, int end){
 }
 
 void BetterInfo::strToLower(std::string& str) {
-    for(auto& c : str) c = tolower(c);
+    for(auto& c : str) c = std::tolower(static_cast<unsigned char>(c));
 }
 
 const char* BetterInfo::rankIcon(int position){
@@ -775,7 +775,7 @@ bool BetterInfo::isSprite(CCSprite* sprite, const char* name) {
     return cache->getTexture() == sprite->getTexture() && cache->getRect() == sprite->getTextureRect();
 }
 
-CCMenuItemSpriteExtra* BetterInfo::replaceWithButton(CCNode* node, CCNode* self, cocos2d::SEL_MenuHandler handler) {
+CCMenuItemSpriteExtra* BetterInfo::replaceWithButton(Ref<CCNode> node, Ref<CCNode> self, cocos2d::SEL_MenuHandler handler) {
 
     auto parent = node->getParent();
 
