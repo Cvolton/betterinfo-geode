@@ -90,7 +90,6 @@ void ExtendedLevelInfo::refreshInfoTexts() {
     
     int levelPassword = m_level->m_password;
 
-    //TODO: Update Date to BetterInfoCache
     m_primaryValues.push_back(LevelMetadata::stringDate(uploadDateStd));
     m_primaryValues.push_back(LevelMetadata::stringDate(updateDateStd));
     m_primaryValues.push_back(LevelMetadata::zeroIfNA(m_level->m_originalLevel));
