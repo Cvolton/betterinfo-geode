@@ -1,6 +1,8 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/GameLevelManager.hpp>
 
+#include <asp/iter.hpp>
+
 #include "../enums.hpp"
 #include "../utils.hpp"
 #include "../managers/BetterInfoCache.h"
@@ -276,10 +278,9 @@ class BI_DLL $modify(GameLevelManager) {
         auto dataVector = response->getResponseData();
         if(dataVector->size() > 11 && dataVector->at(0) == 'e') {
             auto headerVector = response->getResponseHeader();
-            auto header = std::string(headerVector->data(), headerVector->size());
+            auto headerText = std::string_view(headerVector->data(), headerVector->size());
 
-            auto headers = utils::string::split(header, "\n");
-            for(auto& header : headers) {
+            for(auto header : asp::iter::split(headerText, "\n")) {
                 if(header.size() < 14 || !header.starts_with("Retry-After")) continue;
 
                 auto value = header.substr(13);
@@ -292,6 +293,5 @@ class BI_DLL $modify(GameLevelManager) {
             auto data = std::string(dataVector->data(), dataVector->size());
             ServerUtils::showCFError(data);
         }
-        
     }
 };
