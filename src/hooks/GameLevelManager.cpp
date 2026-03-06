@@ -186,9 +186,7 @@ class BI_DLL $modify(GameLevelManager) {
         };
         
         //calculating levels
-        for(auto [key, level] : CCDictionaryExt<gd::string, GJGameLevel>(this->m_onlineLevels)){
-            if(level->m_levelNotDownloaded) continue;
-
+        for(auto level : original->asExt<GJGameLevel>()){
             int password = level->m_password;
             int difficulty = LevelUtils::levelDifficultyAsInt(level);
             if(!(diff.empty()) && std::find(diff.begin(), diff.end(), difficulty) == diff.end()) continue;
@@ -275,11 +273,11 @@ class BI_DLL $modify(GameLevelManager) {
     void onProcessHttpRequestCompleted(CCHttpClient* client, CCHttpResponse* response) {
         GameLevelManager::onProcessHttpRequestCompleted(client, response);
 
-        auto headerVector = response->getResponseHeader();
-        auto header = std::string(headerVector->data(), headerVector->size());
-
         auto dataVector = response->getResponseData();
         if(dataVector->size() > 11 && dataVector->at(0) == 'e') {
+            auto headerVector = response->getResponseHeader();
+            auto header = std::string(headerVector->data(), headerVector->size());
+
             auto headers = utils::string::split(header, "\n");
             for(auto& header : headers) {
                 if(header.size() < 14 || !header.starts_with("Retry-After")) continue;
