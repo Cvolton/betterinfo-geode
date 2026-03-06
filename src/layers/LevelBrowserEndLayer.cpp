@@ -109,7 +109,9 @@ bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer, InfoLayer*
     GameLevelManager::sharedState()->m_levelCommentDelegate = this;
     
     if(Mod::get()->getSavedValue("level-browser-end-ok-clicked", false)) {
-        onOK(nullptr);
+        Loader::get()->queueInMainThread([self = Ref(this)] {
+            self->onOK(nullptr);
+        });
     }
 
     return true;
