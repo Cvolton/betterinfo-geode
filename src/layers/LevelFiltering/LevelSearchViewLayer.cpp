@@ -171,19 +171,17 @@ void LevelSearchViewLayer::startLoading(){
 }
 
 void LevelSearchViewLayer::queueLoad(float dt) {
-    this->retain();
     std::string key = m_gjSearchObjLoaded->getKey();
-    ServerUtils::getOnlineLevels(m_gjSearchObjLoaded, [this, key](auto levels, bool success, bool explicitError) {
+    ServerUtils::getOnlineLevels(m_gjSearchObjLoaded, [self = Ref(this), key](auto levels, bool success, bool explicitError) {
         if(success) {
             auto array = CCArray::create();
             for(auto level : *levels) {
                 array->addObject(level);
             }
-            this->loadLevelsFinished(array, key.c_str());
+            self->loadLevelsFinished(array, key.c_str());
         } else {
-            this->loadLevelsFailed(key.c_str());
+            self->loadLevelsFailed(key.c_str());
         }
-        this->release();
     });
     m_gjSearchObjLoaded->m_page += 1;
     m_allLocal = false;
@@ -343,7 +341,7 @@ void LevelSearchViewLayer::optimizeSearchObject() {
 
     //TODO: if server optimization disabled: return
 
-    if(m_searchObj.star || m_searchObj.starRange.enabled && m_searchObj.starRange.min > 0) m_gjSearchObjOptimized->m_starFilter = true;
+    if(m_searchObj.star || (m_searchObj.starRange.enabled && m_searchObj.starRange.min > 0)) m_gjSearchObjOptimized->m_starFilter = true;
 
     if(!BetterInfo::isAdvancedEnabled(m_gjSearchObjOptimized)) return;
 
