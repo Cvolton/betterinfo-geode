@@ -118,10 +118,9 @@ CCMenuItemSpriteExtra* BetterInfo::createSearchButton(cocos2d::CCLayer* parent, 
 }
 
 int BetterInfo::randomNumber(int start, int end){
-    std::random_device os_seed;
-    const unsigned int seed = os_seed();
+    static thread_local std::random_device os_seed;
+    static thread_local std::mt19937 generator(os_seed());
 
-    std::mt19937 generator(seed);
     std::uniform_int_distribution<int> distribute(start, end);
 
     return distribute(generator);
