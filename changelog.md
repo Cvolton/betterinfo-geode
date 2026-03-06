@@ -1,4 +1,21 @@
 # Changelog
+## <cg>v4.4.2</c>
+* <cl>Clearing level filters</c> now also resets <co>Completed Mode</c>
+  * "Trim Spaces" option has been moved to a separate sub-menu
+* <cl>Saved Level Filters</c> now <cy>reset</c> on game restart (changeable in settings)
+* <cl>Filtered Search</c> now automatically <cy>exits</c> if you don't select filters
+* <cg>Made</c> <cl>upload date calculation</c> for <co>Saved Levels</c> more accurate
+* <cg>Optimized</c> <cf>multiple core features</c> of the mod
+  * Rewritten BICache for way better performance and stability
+  * Improved level data parsing for 5x+ better performance
+    * This makes stuff like Extended Level Info load way faster
+  * Other optimizations for improved stability and performance
+* <cg>Fixed</c> <cr>missing texture</c> in <co>Bonus Levels</c>
+* <cg>Fixed</c> <cl>Exact Comment Dates</c> <cr>not working</c> for <co>level list comments</c>
+* <cg>Fixed</c> <cr>missing</c> <cl>2.208 trophy colors</c> on <co>profiles</c>
+* <cg>Removed</c> <cl>GDPS support</c> from <co>Claimable Lists View</c>
+* Other bugfixes & improvements
+
 ## <cg>v4.4.1</c> (2026-02-27)
 * Temporarily disabled the Claimable Lists check because it was causing unresolved crashes on android32 and it's unknown whether it could cause issues on other platforms at this point
 * Fixed web request crashes caused by an internal Geode bug
