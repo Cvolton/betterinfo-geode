@@ -118,9 +118,9 @@ void ProfileSearchOptions::onReset(cocos2d::CCObject* sender) {
         "Do you want to <cr>reset</c> all search <cy>filters</c>?",
         "No",
         "Yes",
-        [this](FLAlertLayer* self, bool btn2) {
+        [self = Ref(this)](FLAlertLayer* alert, bool btn2) {
             if(btn2) {
-                this->setSearchObject(BISearchObject());
+                self->setSearchObject(BISearchObject());
             }
         }
     );
@@ -438,17 +438,17 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
 
     if(getOption("diff_auto")) searchObj.difficulty.insert(-1);
     for(int i = 0; i <= 6; i++) {
-        auto diff = fmt::format("diff_{}", i);
+        auto diff = fmt::format("diff_{:02}", i);
         if(getOption(diff)) searchObj.difficulty.insert(i);
     }
 
     for(int i = 0; i <= 5; i++) {
-        auto len = fmt::format("len_{}", i);
+        auto len = fmt::format("len_{:02}", i);
         if(getOption(len)) searchObj.length.insert(i);
     }
 
     for(int i = 0; i <= 4; i++) {
-        auto len = fmt::format("demon_{}", i);
+        auto len = fmt::format("demon_{:02}", i);
         if(getOption(len)) searchObj.demonDifficulty.insert(i);
     }
 
@@ -502,21 +502,21 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
 
     for(int i = -1; i <= 6; i++) {
         setOption(
-            i == -1 ? "diff_auto" : fmt::format("diff_{:02d}", i),
+            i == -1 ? "diff_auto" : fmt::format("diff_{:02}", i),
             searchObj.difficulty.find(i) != searchObj.difficulty.end()
         );
     }
 
     for(int i = 0; i <= 5; i++) {
         setOption(
-            fmt::format("len_{:02d}", i),
+            fmt::format("len_{:02}", i),
             searchObj.length.find(i) != searchObj.length.end()
         );
     }
 
     for(int i = 0; i <= 4; i++) {
         setOption(
-            fmt::format("demon_{:02d}", i),
+            fmt::format("demon_{:02}", i),
             searchObj.demonDifficulty.find(i) != searchObj.demonDifficulty.end()
         );
     }
@@ -545,7 +545,7 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
     setOption("legendary", searchObj.legendary);
     setOption("mythic", searchObj.mythic);
     setOptionInt("folder_min", searchObj.folder);
-    if(searchObj.folder > 0) setOption("folder", true);
+    setOption("folder", searchObj.folder > 0);
     //searchObj.folder = 0;
     setOption("song", searchObj.song);
     setOption("song_custom", searchObj.songCustom);
