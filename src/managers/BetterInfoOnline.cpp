@@ -62,7 +62,7 @@ void BetterInfoOnline::generateScores(const std::string& response, std::pair<int
         auto scoreObj = GJUserScore::create(BetterInfo::responseToDict(score));
         GameLevelManager::sharedState()->storeUserName(scoreObj->m_userID, scoreObj->m_accountID, scoreObj->m_userName);
 
-        if(std::string(scoreObj->m_userUDID) != "") scoreObj->m_userUDID = GM->m_playerUDID;
+        if(!scoreObj->m_userUDID.empty()) scoreObj->m_userUDID = GM->m_playerUDID;
 
         scores->addObject(scoreObj);
     }
@@ -71,7 +71,6 @@ void BetterInfoOnline::generateScores(const std::string& response, std::pair<int
 void BetterInfoOnline::sendScores(cocos2d::CCArray* scores, int accountID, int stat, BILeaderboardDelegate* delegate, Ref<ProfilePage> profilePage){
     if(delegate) {
         delegate->onLeaderboardFinished(scores, stat);
-        delegate = nullptr;
     }else if(profilePage) {
         sendScoreToProfilePage(scores, accountID, profilePage);
     }
