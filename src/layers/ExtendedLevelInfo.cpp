@@ -169,7 +169,7 @@ void ExtendedLevelInfo::setupAdditionalInfo() {
         auto maxGameVersion = BetterInfo::gameVerForDecompressedLevelString(levelString);
         co_await arc::yield();
 
-        co_await waitForMainThread([this, objectsEstimated = std::move(objectsEstimated), fileSizeCompressed = std::move(fileSizeCompressed), fileSizeUncompressed = std::move(fileSizeUncompressed), maxGameVersion = std::move(maxGameVersion)]() {
+        co_await waitForMainThread([this, objectsEstimated = std::move(objectsEstimated), fileSizeCompressed = std::move(fileSizeCompressed), fileSizeUncompressed = std::move(fileSizeUncompressed), maxGameVersion = std::move(maxGameVersion)]() mutable {
             m_objectsEstimated = std::move(objectsEstimated);
             m_fileSizeCompressed = std::move(fileSizeCompressed);
             m_fileSizeUncompressed = std::move(fileSizeUncompressed);
