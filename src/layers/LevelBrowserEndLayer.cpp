@@ -277,8 +277,8 @@ void LevelBrowserEndLayer::getOnlineLevels() {
     storedLevels = GLM->getStoredOnlineLevels(key.c_str());
 
     if(page < 0) {
-        Loader::get()->queueInMainThread([this]{
-            onClose(nullptr);
+        Loader::get()->queueInMainThread([self = Ref(this)]{
+            self->onClose(nullptr);
         });
         return;
     }
