@@ -1,5 +1,5 @@
 # Changelog
-## <cg>v4.4.2</c>
+## <cg>v4.4.2</c> (2026-03-06)
 * <cl>Clearing level filters</c> now also resets <co>Completed Mode</c>
   * "Trim Spaces" option has been moved to a separate sub-menu
 * <cl>Saved Level Filters</c> now <cy>reset</c> on game restart (changeable in settings)
