@@ -28,6 +28,10 @@
         "eclipse.eclipse-menu": {
             "version": "v1.8.1",
             "required": false
+        },
+        "km7dev.server_api": {
+            "version": "v4.0.0",
+            "required": false
         }
     },
     "settings": {
