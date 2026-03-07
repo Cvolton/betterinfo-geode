@@ -54,6 +54,15 @@ bool CustomCreatorLayer::init() {
 
     addChild(label);
 
+    auto miniLabel = CCLabelBMFont::create("https://\n(v4.4.3)", "goldFont.fnt");
+    miniLabel->setPosition({(winSize.width / 2) + (label->getScaledContentWidth() / 2) + 13, winSize.height - 25});
+    miniLabel->setScale(0.25f);
+    miniLabel->setRotation(10.f);
+    miniLabel->setID("egg-label"_spr);
+    if(BetterInfo::randomNumber(70, 443) == 80) {
+        addChild(miniLabel);
+    }
+
     const std::vector<std::tuple<const char*, SearchType, const char*>> browserButtons = {
         { "BI_featuredBtn_001.png", SearchType::FeaturedGDW, "featured-button"_spr },
         { "BI_featuredLiteBtn_001.png", SearchType::FeaturedLite, "featured-lite-button"_spr },
