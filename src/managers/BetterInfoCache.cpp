@@ -226,7 +226,8 @@ void BetterInfoCache::saveJson() {
 }
 
 //TODO remove ifdef after next geode update
-#ifndef GEODE_IS_MACOS
+//or maybe not apparently this can also crash when its called too early???
+#if not defined(GEODE_IS_MACOS) && not defined(GEODE_IS_IOS)
 $on_mod(DataSaved) {
     BetterInfoCache::sharedState()->saveJson();
 }
