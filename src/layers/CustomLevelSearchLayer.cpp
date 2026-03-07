@@ -33,7 +33,7 @@ void CustomLevelSearchLayer::onSimilar(CCObject* sender) {
 
 void CustomLevelSearchLayer::onSong(CCObject* sender) {
     bool customSong = m_level->m_songID > 0;
-    int songID = customSong ? m_level->m_songID : m_level->m_audioTrack;
+    int songID = customSong ? m_level->m_songID : (m_level->m_audioTrack + 1);
 
     auto searchObject = GJSearchObject::create(SearchType::MostLiked);
     searchObject->m_customSongFilter = customSong;
