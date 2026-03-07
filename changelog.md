@@ -1,4 +1,10 @@
 # Changelog
+## <cg>v4.4.3</c> (2026-03-08)
+* <cg>Re-added</c> Server API mod support
+* <cg>Fixed</c> <cr>incorrect</c> <cl>level progress percentages</c>
+* <cg>Fixed</c> <cr>game exit crash</c> on <cp>macOS</c>
+* <cg>Fixed</c> <cl>Same Song</c> search finding <cr>incorrect song</c> for main level songs
+
 ## <cg>v4.4.2</c> (2026-03-06)
 * <cl>Clearing level filters</c> now also resets <co>Completed Mode</c>
   * "Trim Spaces" option has been moved to a separate sub-menu
