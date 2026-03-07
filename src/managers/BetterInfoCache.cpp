@@ -225,9 +225,12 @@ void BetterInfoCache::saveJson() {
     });
 }
 
+//TODO remove ifdef after next geode update
+#ifndef GEODE_IS_MACOS
 $on_mod(DataSaved) {
     BetterInfoCache::sharedState()->saveJson();
 }
+#endif
 
 /**
  * User Score Caching
