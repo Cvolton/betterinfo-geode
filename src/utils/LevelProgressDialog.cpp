@@ -14,9 +14,10 @@ std::string LevelProgressDialog::printableProgress(std::string_view personalBest
     }).collect<std::deque<int>>();
 
     std::string printable;
-    for(auto i : progresses){
+    while(!progresses.empty()){
         printable = std::to_string(percentage) + "% " + printable;
-        percentage -= i;
+        percentage -= progresses.back();
+        progresses.pop_back();
     }
 
     return printable;
