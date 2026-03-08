@@ -269,7 +269,7 @@ void ProfileSearchOptions::drawTogglesPrimary(){
 
     for(unsigned int i = 0; i <= 6; i++){
         createButtonToggle(
-            fmt::format("diff_{}", i).c_str(),
+            fmt::format("diff_{:02}", i).c_str(),
             CCSprite::createWithSpriteFrameName(fmt::format("difficulty_{:02}_btn_001.png", i).c_str()),
             -187 + (i * 53.5f),
             -70,
@@ -307,7 +307,7 @@ void ProfileSearchOptions::drawTogglesSecondary(){
         if(i == 3) diffSprite = 9;
 
         createButtonToggle(
-            fmt::format("demon_{}", i).c_str(),
+            fmt::format("demon_{:02}", i).c_str(),
             CCSprite::createWithSpriteFrameName(fmt::format("difficulty_{:02}_btn2_001.png", diffSprite).c_str()),
             -133.5f + (i * 66.875f),
             -102,
