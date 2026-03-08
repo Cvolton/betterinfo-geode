@@ -139,9 +139,9 @@ const char* BetterInfo::rankIcon(int position){
     else if (position <= 200) return "rankIcon_top200_001.png";
     else if (position <= 500) return "rankIcon_top500_001.png";
     else if (position <= 1000) return "rankIcon_top1000_001.png";
-    else if (position <= 2500) return "rankIcon_top2500_001.png";
-    else if (position <= 5000) return "rankIcon_top5000_001.png";
-    else if (position <= 10000) return "rankIcon_top10000_001.png";
+    else if (position <= 5000) return "rankIcon_top2500_001.png";
+    else if (position <= 10000) return "rankIcon_top5000_001.png";
+    else if (position <= 50000) return "rankIcon_top10000_001.png";
     return "rankIcon_all_001.png";
 }
 
