@@ -133,15 +133,15 @@ void BetterInfo::strToLower(std::string& str) {
 const char* BetterInfo::rankIcon(int position){
     if (position <= 0) return "rankIcon_all_001.png";
     if (position == 1) return "rankIcon_1_001.png";
-    else if (position <= 10) return "rankIcon_top10_001.png";
-    else if (position <= 50) return "rankIcon_top50_001.png";
-    else if (position <= 100) return "rankIcon_top100_001.png";
-    else if (position <= 200) return "rankIcon_top200_001.png";
-    else if (position <= 500) return "rankIcon_top500_001.png";
-    else if (position <= 1000) return "rankIcon_top1000_001.png";
-    else if (position <= 5000) return "rankIcon_top2500_001.png";
-    else if (position <= 10000) return "rankIcon_top5000_001.png";
-    else if (position <= 50000) return "rankIcon_top10000_001.png";
+    if (position <= 10) return "rankIcon_top10_001.png";
+    if (position <= 50) return "rankIcon_top50_001.png";
+    if (position <= 100) return "rankIcon_top100_001.png";
+    if (position <= 200) return "rankIcon_top200_001.png";
+    if (position <= 500) return "rankIcon_top500_001.png";
+    if (position <= 1000) return "rankIcon_top1000_001.png";
+    if (position <= 5000) return "rankIcon_top2500_001.png";
+    if (position <= 10000) return "rankIcon_top5000_001.png";
+    if (position <= 50000) return "rankIcon_top10000_001.png";
     return "rankIcon_all_001.png";
 }
 
