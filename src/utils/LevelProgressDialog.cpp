@@ -6,18 +6,18 @@
 #include "../utils.hpp"
 
 #include <asp/iter.hpp>
+#include <ranges>
 
 std::string LevelProgressDialog::printableProgress(std::string_view personalBests, int percentage){
 
     auto progresses = asp::iter::split(personalBests, ",").map([](std::string_view currentBest) {
         return BetterInfo::stoi(currentBest);
-    }).collect<std::deque<int>>();
+    }).collect<std::vector<int>>();
 
     std::string printable;
-    while(!progresses.empty()){
+    for(auto progress : std::views::reverse(progresses)){
         printable = std::to_string(percentage) + "% " + printable;
-        percentage -= progresses.back();
-        progresses.pop_back();
+        percentage -= progress;
     }
 
     return printable;
