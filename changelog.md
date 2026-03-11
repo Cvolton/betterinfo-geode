@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.4.4</c> (2026-03-11)
+* <cg>Fixed</c> <cr>incorrect</c> <cl>trophy colors</c> on <co>profiles</c>
+* <cg>Fixed</c> <cl>difficulty filtering</c> for <co>saved levels</c>
+
 ## <cg>v4.4.3</c> (2026-03-08)
 * <cg>Re-added</c> Server API mod support
 * <cg>Fixed</c> <cr>incorrect</c> <cl>level progress percentages</c>
