@@ -366,11 +366,3 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         return LevelBrowserLayer::onInfo(sender);
     }
 };
-
-class $modify(CCLayer) {
-    void onEnterTransitionDidFinish() {
-        CCLayer::onEnterTransitionDidFinish();
-
-        if(typeinfo_cast<LevelBrowserLayer*>(this)) reinterpret_cast<BILevelBrowserLayer*>(this)->refreshButtonVisibility();
-    }
-};
