@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.4.5</c> (2026-03-25)
+* <cg>Fixed</c> a conflict breaking some features (Icon Hack) in several mod menus
+
 ## <cg>v4.4.4</c> (2026-03-11)
 * <cg>Fixed</c> <cr>incorrect</c> <cl>trophy colors</c> on <co>profiles</c>
 * <cg>Fixed</c> <cl>difficulty filtering</c> for <co>saved levels</c>
