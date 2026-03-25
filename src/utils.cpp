@@ -678,7 +678,7 @@ void BetterInfo::loadImportantNotices(Ref<CCLayer> layer) {
     if(hasBeenCalled) return;
     hasBeenCalled = true;
 
-    auto url = fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&amazon={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true), getWineVersion(), getOSVersion(), (BetterInfo::isAmazon() || Loader::get()->isPatchless()) ? "1" : "0");
+    auto url = fmt::format("https://geometrydash.eu/mods/betterinfo/_api/importantNotices/?platform={}&version={}&loader={}&wine={}&os={}&amazon={}&notAlpha7=1", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toVString(true), Loader::get()->getVersion().toVString(true), getWineVersion(), getOSVersion(), (Loader::get()->isPatchless()) ? "1" : "0");
     async::spawn(
         web::WebRequest().get(url),
         [layer](web::WebResponse response) {
@@ -994,15 +994,6 @@ void BetterInfo::refreshAlertPrio(CCNode* node) {
         alert->onExit();
         alert->onEnter();
     }
-}
-
-static bool s_isAmazon = false;
-bool BetterInfo::isAmazon() {
-    return s_isAmazon;
-}
-
-void BetterInfo::setAmazon(bool value) {
-    s_isAmazon = value;
 }
 
 void BetterInfo::clearSavedValueGroup(std::string_view group) {
