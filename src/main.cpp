@@ -37,7 +37,7 @@ class BI_DLL $modify(MenuLayer) {
 
 $on_mod(Loaded) {
     #ifdef GEODE_IS_ANDROID
-        BetterInfo::setAmazon(((GJMoreGamesLayer* volatile)nullptr)->getMoreGamesList()->count() == 0);
+        //BetterInfo::setAmazon(((GJMoreGamesLayer* volatile)nullptr)->getMoreGamesList()->count() == 0);
     #endif
     Loader::get()->queueInMainThread([] {
         loadManagers();
