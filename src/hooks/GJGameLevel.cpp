@@ -8,7 +8,6 @@ using namespace geode::prelude;
 class BI_DLL $modify(BIGJGameLevel, GJGameLevel) {
     static GJGameLevel* create(cocos2d::CCDictionary* dict, bool download) {
         auto level = GJGameLevel::create(dict, download);
-        log::info("Level {} has been created with download={}", level->m_levelName, download);
         if (auto val = dict->valueForKey("62")) {
             level->setUserObject("key_62"_spr, CCInteger::create(val->intValue()));
         }
