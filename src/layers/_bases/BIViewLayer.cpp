@@ -129,7 +129,7 @@ void BIViewLayer::loadPage(){
 
     if(m_listLayer != nullptr) m_listLayer->removeFromParentAndCleanup(true);
     
-    m_listLayer = GJListLayer::create(m_listView, m_title.c_str(), {191, 114, 62, 255}, 356.f, 220.f, 0);
+    m_listLayer = GJListLayer::create(m_listView, m_hideTitle ? nullptr : m_title.c_str(), {191, 114, 62, 255}, 356.f, 220.f, 0);
     m_listLayer->setPosition(winSize / 2 - m_listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
     m_listLayer->setID("list-layer"_spr);
     addChild(m_listLayer);

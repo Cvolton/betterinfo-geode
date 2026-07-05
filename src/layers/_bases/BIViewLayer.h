@@ -25,6 +25,7 @@ protected:
     unsigned int m_page = 0;
     bool m_paginated = true;
     bool m_showNoInternet = false;
+    bool m_hideTitle = false;
 
     virtual bool init(bool paginated = true);
     virtual void keyBackClicked();

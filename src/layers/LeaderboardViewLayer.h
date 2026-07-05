@@ -8,17 +8,29 @@ enum class BILeaderboardMode {
     Top1000
 };
 
+enum class BILeaderboardTab {
+    Global,
+    Creator
+};
+
 class BI_DLL LeaderboardViewLayer : public BIViewLayer, public BILeaderboardDelegate {
     BILeaderboardMode m_mode = BILeaderboardMode::Account;
+    BILeaderboardTab m_tab = BILeaderboardTab::Global;
     int m_accountID = 0;
     int m_stat = 0;
     Ref<CCMenu> m_rightMenu = nullptr;
+    Ref<CCMenu> m_topMenu = nullptr;
+    Ref<CCClippingNode> m_tabsClipper = nullptr;
+    Ref<CCSprite> m_tabsGradientSpr = nullptr;
+    Ref<CCSprite> m_tabsGradientStencil = nullptr;
     std::vector<Ref<CCMenuItemSpriteExtra>> m_statBtns;
+    std::vector<Ref<TabButton>> m_topBtns;
 protected:
     virtual bool init(BILeaderboardMode mode, int accountID);
     virtual void keyBackClicked();
     void setupStatBtns();
     void onRefresh(cocos2d::CCObject*);
+    void onTabChanged(cocos2d::CCObject*);
     void loadStat(int stat, bool reload);
 public:
     virtual void loadPage();
