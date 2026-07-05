@@ -134,6 +134,13 @@ void BIViewLayer::loadPage(){
     m_listLayer->setID("list-layer"_spr);
     addChild(m_listLayer);
 
+    if(resultsPerPage() > 100) {
+        auto scrollBar = Scrollbar::create(m_listView->m_tableView);
+        scrollBar->setPosition({ 350, 112});
+        scrollBar->setZOrder(7);
+        m_listLayer->addChild(scrollBar);
+    }
+
     m_noInternet->setVisible(m_showNoInternet && m_data->count() == 0);
 
     updateCounter();
