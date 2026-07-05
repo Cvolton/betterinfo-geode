@@ -243,7 +243,14 @@ $on_mod(DataSaved) {
 arc::Future<> BetterInfoCache::cacheFollowedCreators() {
     log::debug("Started caching followed creators");
 
-    co_await BetterInfoOnline::sharedState()->loadGlobalScores(LeaderboardType::Creator, LeaderboardStat::Stars, false);
+    auto res = co_await BetterInfoOnline::sharedState()->loadGlobalScores(LeaderboardType::Creator, LeaderboardStat::Stars, false);
+    co_await waitForMainThread([this, res] {
+        for(auto score : CCArrayExt<GJUserScore>(res)) {
+            if(!GameLevelManager::sharedState()->m_followedCreators->objectForKey(fmt::to_string(score->m_accountID))) continue;
+
+            cacheUserScore(score->m_accountID, score);
+        }
+    });
 
     std::vector<int> followedCreatorIDs;
     co_await waitForMainThread([this, &followedCreatorIDs] {
