@@ -1,7 +1,7 @@
 #include "CustomCreatorLayer.h"
 #include "Geode/cocos/label_nodes/CCLabelBMFont.h"
 #include "LevelIDLayer.h"
-#include "LevelFiltering/LevelSearchViewLayer.h"
+#include "LeaderboardViewLayer.h"
 #include "LevelFiltering/LevelCategorySearchAlert.h"
 #include "../utils.hpp"
 #include <Geode/ui/GeodeUI.hpp>
@@ -29,7 +29,7 @@ bool CustomCreatorLayer::init() {
 
     auto buttonsMenu = CCMenu::create();
     buttonsMenu->setID("creator-buttons-menu"_spr);
-    buttonsMenu->setContentSize({ 300.f, 240.f });
+    buttonsMenu->setContentSize({ 420.f, 240.f });
     buttonsMenu->setPosition({winSize.width / 2, winSize.height / 2 + 4.5f});
     buttonsMenu->setLayout(
         RowLayout::create()
@@ -73,6 +73,15 @@ bool CustomCreatorLayer::init() {
         menuItem->setTag((int) std::get<1>(button));
         menuItem->setID(std::get<2>(button));
     }
+
+    auto scoreBtn = CCMenuItemSpriteExtra::create(
+        CCSprite::createWithSpriteFrameName("GJ_highscoreBtn_001.png"),
+        this,
+        menu_selector(CustomCreatorLayer::onScore)
+    );
+    buttonsMenu->addChild(scoreBtn);
+    scoreBtn->setSizeMult(1.2f);
+    scoreBtn->setID("score-button"_spr);
 
     auto searchIDBtn = CCMenuItemSpriteExtra::create(
         BetterInfo::createBISprite("BI_searchID_001.png"),
@@ -175,6 +184,12 @@ void CustomCreatorLayer::onBrowserButton(CCObject* object) {
 
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
 
+    CCDirector::sharedDirector()->pushScene(transitionFade);
+}
+
+void CustomCreatorLayer::onScore(CCObject* sender){
+    auto scene = LeaderboardViewLayer::scene(BILeaderboardMode::Top1000, 0);
+    auto transitionFade = CCTransitionFade::create(0.5, scene);
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
 

@@ -4,9 +4,9 @@
 #include "../managers/BetterInfoOnline.h"
 #include "../utils.hpp"
 
-LeaderboardViewLayer* LeaderboardViewLayer::create(int accountID) {
+LeaderboardViewLayer* LeaderboardViewLayer::create(BILeaderboardMode mode, int accountID) {
     auto ret = new LeaderboardViewLayer();
-    if (ret && ret->init(accountID)) {
+    if (ret && ret->init(mode, accountID)) {
         ret->autorelease();
     } else {
         delete ret;
@@ -15,11 +15,12 @@ LeaderboardViewLayer* LeaderboardViewLayer::create(int accountID) {
     return ret;
 }
 
-bool LeaderboardViewLayer::init(int accountID) {
+bool LeaderboardViewLayer::init(BILeaderboardMode mode, int accountID) {
     BIViewLayer::init(false);
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
+    m_mode = mode;
     m_accountID = accountID;
     m_title = "Global Leaderboards";
 
@@ -123,11 +124,18 @@ void LeaderboardViewLayer::loadStat(int stat, bool reload) {
 
     setupStatBtns();
 
-    BetterInfoOnline::sharedState()->loadScores(m_accountID, reload, this, nullptr, stat);
+    if(m_mode == BILeaderboardMode::Account) {
+        BetterInfoOnline::sharedState()->loadScores(m_accountID, reload, this, nullptr, stat);
+    } else if(m_mode == BILeaderboardMode::Top1000) {
+        async::spawn(
+            BetterInfoOnline::sharedState()->loadGlobalScores(LeaderboardType::Top100, (LeaderboardStat) stat, reload), 
+            [this, stat] (CCArray* scores) { this->onLeaderboardFinished(scores, stat); }
+        );
+    }
 }
 
-CCScene* LeaderboardViewLayer::scene(int accountID) {
-    auto layer = LeaderboardViewLayer::create(accountID);
+CCScene* LeaderboardViewLayer::scene(BILeaderboardMode mode, int accountID) {
+    auto layer = LeaderboardViewLayer::create(mode, accountID);
     auto scene = CCScene::create();
     scene->addChild(layer);
     return scene;

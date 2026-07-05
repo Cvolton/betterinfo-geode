@@ -93,7 +93,7 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
     void onProfilePageLeaderboard(CCObject* sender){
         auto score = this->m_score;
 
-        auto scene = LeaderboardViewLayer::scene(score->m_accountID);
+        auto scene = LeaderboardViewLayer::scene(BILeaderboardMode::Account, score->m_accountID);
         auto transitionFade = CCTransitionFade::create(0.5, scene);
         CCDirector::sharedDirector()->pushScene(transitionFade);
     }
