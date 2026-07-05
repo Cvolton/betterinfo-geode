@@ -153,12 +153,16 @@ arc::Future<CCArray*> BetterInfoOnline::loadGlobalScores(LeaderboardType type, L
         co_return nullptr;
     }
 
-    auto existing = co_await waitForMainThread([this, type = std::make_pair(type, stat)] -> CCArray* {
+    auto existing = co_await waitForMainThread<CCArray*>([this, type = std::make_pair(type, stat)] -> CCArray* {
         if(m_globalScoreDict.contains(type)) {
-            return m_globalScoreDict[type];
+             return m_globalScoreDict[type];
         }
         return nullptr;
     });
+
+    if(!force && existing && existing.value()) {
+        co_return existing.value();
+    }
 
     auto res = co_await ServerUtils::getBaseRequest(false)
         .get(fmt::format("https://www.geometrydash.com/data/top-{}.json", typeStr));
