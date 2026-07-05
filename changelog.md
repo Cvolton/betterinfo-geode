@@ -1,4 +1,8 @@
 # Changelog
+## <cg>v4.4.7</c> (2026-07-05)
+* <cg>Added</c> <cl>Top 1000 Leaderboards</c> to <co>BetterInfo Menu</c>
+  * Temporary location? We'll see in the future...
+
 ## <cg>v4.4.6</c> (2026-06-23)
 * <cg>Added</c> <cl>Exact Uploaded Dates</c> to <co>levels</c>
 * <cg>Improved</c> <cl>caching</c> of <co>followed users</c>
