@@ -174,6 +174,7 @@ arc::Future<CCArray*> BetterInfoOnline::loadGlobalScores(LeaderboardType type, L
         scores = CCArray::create();
         m_globalScoreDict[type] = scores;
 
+        size_t i = 0;
         for(const auto& entry : res) {
             auto score = GJUserScore::create();
             score->m_accountID = entry["accountID"].asInt().unwrapOr(0);
@@ -186,7 +187,8 @@ arc::Future<CCArray*> BetterInfoOnline::loadGlobalScores(LeaderboardType type, L
             score->m_secretCoins = entry["coins"].asInt().unwrapOr(0);
             score->m_userCoins = entry["userCoins"].asInt().unwrapOr(0);
             score->m_creatorPoints = entry["creatorScore"].asInt().unwrapOr(0);
-            score->m_playerRank = entry["globalRank"].asInt().unwrapOr(0);
+            score->m_globalRank = entry["globalRank"].asInt().unwrapOr(0);
+            score->m_playerRank = ++i;
             score->m_iconID = entry["icon"].asInt().unwrapOr(0);
             score->m_iconType = static_cast<IconType>(entry["iconType"].asInt().unwrapOr(0));
             score->m_special = entry["special"].asInt().unwrapOr(0);
