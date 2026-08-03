@@ -53,4 +53,5 @@ struct BISearchObject {
         bool favorite = false;
         RangeItem starRange;
         RangeItem gameVersion = {false, 0, 22};
+        bool ncs = false;
 };

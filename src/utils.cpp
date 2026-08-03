@@ -293,6 +293,13 @@ bool BetterInfo::isNewGrounds(int audioID) {
     return BetterInfo::getSongUrl(audioID).find("://audio.ngfiles.com/") != std::string::npos;
 }
 
+bool BetterInfo::isNCSSong(int audioID) {
+    if(audioID == 0) return false;
+
+    auto songInfo = static_cast<SongInfoObject*>(MusicDownloadManager::sharedState()->m_songObjects->objectForKey(std::to_string(audioID)));
+    return songInfo && songInfo->m_nongType == 1;
+}
+
 /*
     This is a reimplementation of GameLevelManager::responseToDict
     because I couldn't get it to work. It's not 1:1 with the original
@@ -353,6 +360,7 @@ bool BetterInfo::levelMatchesObject(GJGameLevel* level, const BISearchObject& se
         if(!searchObj.songCustom && level->m_audioTrack != searchObj.songID) return false;
         if(searchObj.songCustom && level->m_songID != searchObj.songID) return false;
     }
+    if(searchObj.ncs && !BetterInfo::isNCSSong(level->m_songID)) return false;
     if(searchObj.copied && level->m_originalLevel <= 0) return false;
         //TODO: searchObj.ldm
 

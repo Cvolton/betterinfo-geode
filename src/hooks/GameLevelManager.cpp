@@ -185,6 +185,7 @@ class BI_DLL $modify(GameLevelManager) {
             .unepic = Mod::get()->getSavedValue<bool>("user_search_noepic"),
             .starRange = createRangeOption("user_search_starrange"),
             .gameVersion = createRangeOption("user_search_gameversion"),
+            .ncs = Mod::get()->getSavedValue<bool>("user_search_ncs"),
         };
         
         //calculating levels
@@ -219,6 +220,7 @@ class BI_DLL $modify(GameLevelManager) {
                 if(searchObj.songCustom && level->m_songID != searchObj.songID) continue;
                 if(!searchObj.songCustom && (level->m_songID != 0 || level->m_audioTrack != searchObj.songID)) continue;
             }
+            if(searchObj.ncs && !BetterInfo::isNCSSong(level->m_songID)) continue;
             if(searchObj.noStar && level->m_stars != 0) continue;
             if(searchObj.verifiedCoins && (level->m_coinsVerified == 0)) continue;
             if(searchObj.unverifiedCoins && (level->m_coinsVerified)) continue;
