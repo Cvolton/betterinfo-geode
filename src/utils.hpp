@@ -57,6 +57,7 @@ namespace BetterInfo {
 
     BI_DLL std::string getSongUrl(int audioID);
     BI_DLL bool isNewGrounds(int audioID);
+    BI_DLL bool isNCSSong(int audioID);
 
     BI_DLL cocos2d::CCDictionary* responseToDict(std::string_view response);
 

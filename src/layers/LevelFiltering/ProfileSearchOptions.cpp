@@ -329,7 +329,7 @@ void ProfileSearchOptions::drawTogglesSecondary(){
     createToggle("twoplayer", "2-Player");
     createToggle("gameversion", "Game Ver.", menu_selector(ProfileSearchOptions::onGameVersionRange));
     createToggle("unverifiedcoins", "Unverified Coins");
-    
+    createToggle("ncs", "NCS Song");
 }
 
 void ProfileSearchOptions::drawTogglesTerciary(){
@@ -494,6 +494,8 @@ BISearchObject ProfileSearchOptions::getSearchObject() {
     setToRangeItem(searchObj.starRange, "starrange");
     setToRangeItem(searchObj.gameVersion, "gameversion");
 
+    searchObj.ncs = getOption("ncs");
+
     return searchObj;
 }
 
@@ -561,6 +563,8 @@ void ProfileSearchOptions::setSearchObject(const BISearchObject& searchObj) {
     setOption("favorite", searchObj.favorite);
     setFromRangeItem("starrange", searchObj.starRange);
     setFromRangeItem("gameversion", searchObj.gameVersion);
+
+    setOption("ncs", searchObj.ncs);
 
     destroyToggles();
     drawToggles();
