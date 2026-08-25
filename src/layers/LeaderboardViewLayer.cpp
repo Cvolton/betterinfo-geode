@@ -216,7 +216,7 @@ void LeaderboardViewLayer::loadStat(int stat, bool reload) {
     } else if(m_mode == BILeaderboardMode::Top1000) {
         async::spawn(
             BetterInfoOnline::sharedState()->loadGlobalScores(m_tab == BILeaderboardTab::Creator ? LeaderboardType::Creator : LeaderboardType::Top100, (LeaderboardStat) stat, reload), 
-            [this, stat] (CCArray* scores) { this->onLeaderboardFinished(scores, stat); }
+            [self = Ref(this), stat] (CCArray* scores) { self->onLeaderboardFinished(scores, stat); }
         );
     }
 }
