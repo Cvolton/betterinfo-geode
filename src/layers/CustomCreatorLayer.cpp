@@ -83,23 +83,28 @@ bool CustomCreatorLayer::init() {
     scoreBtn->setSizeMult(1.2f);
     scoreBtn->setID("score-button"_spr);
 
-    auto searchIDBtn = CCMenuItemSpriteExtra::create(
-        BetterInfo::createBISprite("BI_searchID_001.png"),
-        this,
-        menu_selector(CustomCreatorLayer::onSearchID)
-    );
-    buttonsMenu->addChild(searchIDBtn);
-    searchIDBtn->setSizeMult(1.2f);
-    searchIDBtn->setID("search-id-button"_spr);
+    auto GM = GameManager::sharedState();
+    if(!GM->getGameVariable(GameVar::OnlyAllowFeatured)) {
 
-    auto searchBtn = CCMenuItemSpriteExtra::create(
-        BetterInfo::createBISprite("BI_searchLevel_001.png"),
-        this,
-        menu_selector(CustomCreatorLayer::onSearch)
-    );
-    buttonsMenu->addChild(searchBtn);
-    searchBtn->setSizeMult(1.2f);
-    searchBtn->setID("search-button"_spr);
+        auto searchIDBtn = CCMenuItemSpriteExtra::create(
+            BetterInfo::createBISprite("BI_searchID_001.png"),
+            this,
+            menu_selector(CustomCreatorLayer::onSearchID)
+        );
+        buttonsMenu->addChild(searchIDBtn);
+        searchIDBtn->setSizeMult(1.2f);
+        searchIDBtn->setID("search-id-button"_spr);
+
+        auto searchBtn = CCMenuItemSpriteExtra::create(
+            BetterInfo::createBISprite("BI_searchLevel_001.png"),
+            this,
+            menu_selector(CustomCreatorLayer::onSearch)
+        );
+        buttonsMenu->addChild(searchBtn);
+        searchBtn->setSizeMult(1.2f);
+        searchBtn->setID("search-button"_spr);
+
+    }
 
     auto settingsSprite = CCSprite::createWithSpriteFrameName("GJ_optionsBtn_001.png");
     settingsSprite->setScale(0.775f);

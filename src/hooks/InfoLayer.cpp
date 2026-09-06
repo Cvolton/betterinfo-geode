@@ -11,7 +11,7 @@ using namespace geode::prelude;
 
 class BI_DLL $modify(BIInfoLayer, InfoLayer) {
     struct Fields {
-        ButtonSprite* m_pageBtn = nullptr;
+        Ref<ButtonSprite> m_pageBtn = nullptr;
     };
 
     static void onModify(auto& self) {
@@ -71,6 +71,7 @@ class BI_DLL $modify(BIInfoLayer, InfoLayer) {
 
     bool init(GJGameLevel* level, GJUserScore* score, GJLevelList* list) {
         if (!InfoLayer::init(level, score, list)) return false;
+        auto GM = GameManager::sharedState();
 
         if(auto playerName = static_cast<CCMenuItemSpriteExtra*>(m_buttonMenu->getChildByID("creator-button"))) {
             playerName->setEnabled(true);
@@ -86,26 +87,31 @@ class BI_DLL $modify(BIInfoLayer, InfoLayer) {
             buttonButton->setSizeMult(1.2f);
             buttonButton->setPosition({195,34});
             buttonButton->setID("comment-page-btn"_spr);
-            menu->addChild(buttonButton);
-            menu->updateLayout();
+
+            if(!GM->getGameVariable(GameVar::DisableComments)) {
+                menu->addChild(buttonButton);
+                menu->updateLayout();
+            }
         }
 
         if(level == nullptr && list == nullptr) return true;
         //end of profile stuff
 
-        auto scheduleOffSprite = CCSprite::createWithSpriteFrameName("GJ_playEditorBtn_001.png");
-        scheduleOffSprite->setScale(.625f);
-        auto scheduleOnSprite = CCSprite::createWithSpriteFrameName("GJ_stopEditorBtn_001.png");
-        scheduleOnSprite->setScale(.625f);
-        auto scheduleBtn = CCMenuItemToggler::create(
-            scheduleOffSprite, 
-            scheduleOnSprite, 
-            this,
-            menu_selector(BIInfoLayer::onInfoLayerToggleSchedule)
-        );
-        scheduleBtn->setPosition({202.5, 100});
-        scheduleBtn->setID("schedule-btn"_spr);
-        m_buttonMenu->addChild(scheduleBtn);
+        if(!GM->getGameVariable(GameVar::DisableComments)) {
+            auto scheduleOffSprite = CCSprite::createWithSpriteFrameName("GJ_playEditorBtn_001.png");
+            scheduleOffSprite->setScale(.625f);
+            auto scheduleOnSprite = CCSprite::createWithSpriteFrameName("GJ_stopEditorBtn_001.png");
+            scheduleOnSprite->setScale(.625f);
+            auto scheduleBtn = CCMenuItemToggler::create(
+                scheduleOffSprite, 
+                scheduleOnSprite, 
+                this,
+                menu_selector(BIInfoLayer::onInfoLayerToggleSchedule)
+            );
+            scheduleBtn->setPosition({202.5, 100});
+            scheduleBtn->setID("schedule-btn"_spr);
+            m_buttonMenu->addChild(scheduleBtn);
+        }
 
         if(auto originalBtn = m_buttonMenu->getChildByID("original-level-button")) {
             if(originalBtn->getPositionX() > 155.4f) originalBtn->setPosition({155.4f, originalBtn->getPositionY()});
@@ -115,18 +121,20 @@ class BI_DLL $modify(BIInfoLayer, InfoLayer) {
         //end of list stuff
 
         if(auto menu = m_mainLayer->getChildByID("refresh-menu")) {
-            auto searchSprite = CCSprite::createWithSpriteFrameName("gj_findBtn_001.png");
-            searchSprite->setScale(0.8f);
-            auto searchButton = CCMenuItemSpriteExtra::create(
-                searchSprite,
-                this,
-                menu_selector(BIInfoLayer::onCustomSearch)
-            );
-            menu->addChild(searchButton);
-            searchButton->setSizeMult(1.2f);
-            searchButton->setID("search-btn"_spr);
+            if(!GM->getGameVariable(GameVar::OnlyAllowFeatured)) {
+                auto searchSprite = CCSprite::createWithSpriteFrameName("gj_findBtn_001.png");
+                searchSprite->setScale(0.8f);
+                auto searchButton = CCMenuItemSpriteExtra::create(
+                    searchSprite,
+                    this,
+                    menu_selector(BIInfoLayer::onCustomSearch)
+                );
+                menu->addChild(searchButton);
+                searchButton->setSizeMult(1.2f);
+                searchButton->setID("search-btn"_spr);
 
-            menu->updateLayout();
+                menu->updateLayout();
+            }
         }
 
         return true;

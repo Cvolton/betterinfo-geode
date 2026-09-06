@@ -95,27 +95,35 @@ bool UnregisteredProfileLayer::init(GJUserScore* score, CCNode* invoker){
     icon->setID("simpleplayer"_spr);
     m_buttonMenu->addChild(icon);
 
-    auto myLevelsBtn = createButton(
-        "accountBtn_myLevels_001.png",
-        {154, -62},
-        menu_selector(UnregisteredProfileLayer::onMyLevels),
-        0.8f
-    );
-    myLevelsBtn->setID("my-levels-button"_spr);
+    if(!GM->getGameVariable(GameVar::OnlyAllowFeatured)) {
 
-    auto levelsText = CCSprite::createWithSpriteFrameName("GJ_myLevelsTxt_001.png");
-    levelsText->setScale(0.8f);
-    levelsText->setPosition({104, -62});
-    levelsText->setID("my-levels-text"_spr);
-    m_buttonMenu->addChild(levelsText);
+        auto myLevelsBtn = createButton(
+            "accountBtn_myLevels_001.png",
+            {154, -62},
+            menu_selector(UnregisteredProfileLayer::onMyLevels),
+            0.8f
+        );
+        myLevelsBtn->setID("my-levels-button"_spr);
 
-    auto commentBtn = createButton(
-        "GJ_chatBtn_001.png",
-        {154, 0},
-        menu_selector(UnregisteredProfileLayer::onCommentHistory),
-        0.8f
-    );
-    commentBtn->setID("comment-button"_spr);
+        auto levelsText = CCSprite::createWithSpriteFrameName("GJ_myLevelsTxt_001.png");
+        levelsText->setScale(0.8f);
+        levelsText->setPosition({104, -62});
+        levelsText->setID("my-levels-text"_spr);
+        m_buttonMenu->addChild(levelsText);
+
+    }
+
+    if(!GM->getGameVariable(GameVar::DisableComments)) {
+
+        auto commentBtn = createButton(
+            "GJ_chatBtn_001.png",
+            {154, 0},
+            menu_selector(UnregisteredProfileLayer::onCommentHistory),
+            0.8f
+        );
+        commentBtn->setID("comment-button"_spr);
+
+    }
 
     auto userIDTextNode = CCLabelBMFont::create(
         fmt::format("User ID: {}\nAccount ID: None", m_score->m_userID).c_str(), 
