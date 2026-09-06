@@ -1,9 +1,11 @@
 # Changelog
 ## <cg>v4.4.8</c> (2026-09-06)
-* <cg>Added</c> <cl>Friends Since</c> to <co>Friend Lists</c> (2.209 feature, thanks @rifct for discovering)
+* <cg>Added</c> <cl>Friends Since</c> to <co>Friend Lists</c> \
+  (2.209 feature, thanks @rifct for discovering)
 * <cg>Added</c> <cl>"Mystery 2.209 Feature"</c> to <co>User Info</c>
 * <cg>Added</c> <cl>proper support</c> for <co>Parental Controls</c>
-* <cg>Added</c> <cl>NCS Song</c> <co>filter</c> (thanks @damian-rom)
+* <cg>Added</c> <cl>NCS Song filter</c> to <co>filtered level search</c> \
+  (thanks @damian-rom)
 * Other bugfixes & improvements
 
 ## <cg>v4.4.7</c> (2026-07-05)
