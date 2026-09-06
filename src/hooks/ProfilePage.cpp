@@ -61,18 +61,26 @@ class BI_DLL $modify(BIProfilePage, ProfilePage) {
             contentStream << "\n\n\n";
 
             userButton = CopyableLabel::create("cy", "User ID", std::to_string(score->m_userID));
-            userButton->setPosition({-2, 175});
+            userButton->setPosition({-2, 175 + 40});
             userButton->setID("user-id-button"_spr);
 
             accountButton = CopyableLabel::create("cr", "Account ID", std::to_string(score->m_accountID));
-            accountButton->setPosition({-2, 155});
+            accountButton->setPosition({-2, 155 + 40});
             accountButton->setID("account-id-button"_spr);
         }
 
         contentStream << "<cg>Friend Requests:</c> " << StaticStringHelper::getFriendRequestType(score->m_friendStatus)
             << "\n<cl>Private Messages:</c> " << StaticStringHelper::getMessageType(score->m_messageState)
-            << "\n<cp>Comment History:</c> " << StaticStringHelper::getMessageType(score->m_commentHistoryStatus)
-            << "\n";
+            << "\n<cp>Comment History:</c> " << StaticStringHelper::getMessageType(score->m_commentHistoryStatus);
+
+        if(auto k62 = typeinfo_cast<CCInteger*>(score->getUserObject("key_62"_spr))) {
+            contentStream << "\n<cy>Mystery 2.209 feature (62):</c> " << StaticStringHelper::getMessageType(k62->getValue());
+        }
+        if(auto k63 = typeinfo_cast<CCInteger*>(score->getUserObject("key_63"_spr))) {
+            contentStream << "\n<cy>Mystery 2.209 feature (63):</c> " << StaticStringHelper::getMessageType(k63->getValue());
+        }
+
+        contentStream << "\n";
         if(score->m_userID == GM->m_playerUserID && !Loader::get()->isModLoaded("raydeeux.alertlayertweaks")) {
             contentStream << "\n\n";
 
