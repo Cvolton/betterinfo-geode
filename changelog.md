@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.4.8</c> (2026-09-06)
+* <cg>Added</c> <cl>Friends Since</c> to <co>Friend Lists</c> (2.209 feature)
+* <cg>Added</c> <cl>"Mystery 2.209 Feature"</c> to <co>User Info</c>
+* <cg>Added</c> <cl>proper support</c> for <co>Parental Controls</c>
+
 ## <cg>v4.4.7</c> (2026-07-05)
 * <cg>Added</c> <cl>Top 1000 Leaderboards</c> to <co>BetterInfo Menu</c>
   * Temporary location? We'll see in the future...
