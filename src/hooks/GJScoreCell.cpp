@@ -46,5 +46,20 @@ class BI_DLL $modify(BIGJScoreCell, GJScoreCell) {
             playerMenu->setID("player-icon-menu"_spr);
         }
 
+        auto timestamp = typeinfo_cast<CCInteger*>(b->getUserObject("key_64"_spr));
+        if(timestamp && timestamp->getValue() > 0) {
+            auto label = Label::create(
+                fmt::format("Friends since: {}", TimeUtils::timeToString(timestamp->getValue(), true)),
+                "chatFont.fnt"
+            );
+            label->setScale(.4f);
+            label->setAnchorPoint({1, 0});
+            label->setPosition({345, 2});
+            label->setColor({51,51,51});
+            label->setOpacity(200);
+            label->setID("friends-since-label"_spr);
+            m_mainLayer->addChild(label);
+        }
+
     }
 };

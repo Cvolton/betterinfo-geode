@@ -83,6 +83,12 @@ void LeaderboardViewLayer::onTabChanged(CCObject* object) {
 
     m_tab = (BILeaderboardTab) btn->getTag();
     this->loadStat(m_stat, false);
+
+    static bool friendsNoticeShown = false;
+    if(!friendsNoticeShown && m_tab == BILeaderboardTab::Friends) {
+        Notification::create("Extended friends leaderboard does not\nsupport Diamonds, Coins and User Coins", NotificationIcon::Info, NOTIFICATION_DEFAULT_TIME * 3.f)->show();
+        friendsNoticeShown = true;
+    }
 }
 
 void LeaderboardViewLayer::setupStatBtns() {
@@ -98,18 +104,23 @@ void LeaderboardViewLayer::setupStatBtns() {
 
     if(m_mode == BILeaderboardMode::Top1000) {
         auto top1000 = TabButton::create("Top 1000", this, menu_selector(LeaderboardViewLayer::onTabChanged));
+        auto friends = TabButton::create("Friends", this, menu_selector(LeaderboardViewLayer::onTabChanged));
         auto creator = TabButton::create("Creators", this, menu_selector(LeaderboardViewLayer::onTabChanged));
 
         top1000->setTag((int) BILeaderboardTab::Global);
+        friends->setTag((int) BILeaderboardTab::Friends);
         creator->setTag((int) BILeaderboardTab::Creator);
 
         top1000->toggle(m_tab == BILeaderboardTab::Global);
+        friends->toggle(m_tab == BILeaderboardTab::Friends);
         creator->toggle(m_tab == BILeaderboardTab::Creator);
 
         m_topBtns.push_back(top1000);
+        m_topBtns.push_back(friends);
         m_topBtns.push_back(creator);
 
         m_topMenu->addChild(top1000);
+        m_topMenu->addChild(friends);
         m_topMenu->addChild(creator);
 
         m_topMenu->updateLayout();
@@ -155,32 +166,44 @@ void LeaderboardViewLayer::setupStatBtns() {
         }
     }
 
-    if(m_tab == BILeaderboardTab::Global) {
-        std::array<std::pair<const char*, const char*>, 4> stats = {
-            std::make_pair("GJ_starsIcon_001.png", "stars"),
-            std::make_pair("GJ_moonsIcon_001.png", "moons"),
-            std::make_pair("GJ_demonIcon_001.png", "demons"),
-            std::make_pair("GJ_coinsIcon2_001.png", "user-coins")
+    if(m_tab == BILeaderboardTab::Global || m_tab == BILeaderboardTab::Friends) {
+        std::vector<std::tuple<const char*, const char*, int>> stats = {
+            std::make_tuple("GJ_starsIcon_001.png", "stars", 0),
+            std::make_tuple("GJ_moonsIcon_001.png", "moons", 1),
+            std::make_tuple("GJ_demonIcon_001.png", "demons", 2),
+            
         };
 
-        int i = 0;
-        for (const auto& stat : stats) {
-            auto icon = CCSprite::createWithSpriteFrameName(stat.first);
-            auto sprite = ButtonSprite::create(icon, 32, 0, 320.0, 1.0, true, m_stat == i ? "GJ_button_02.png" : "GJ_button_01.png", false);
+        if(m_tab == BILeaderboardTab::Friends) {
+            stats.push_back(std::make_tuple("GJ_hammerIcon_001.png", "creator-points", 4));
+            stats.push_back(std::make_tuple("GJ_sRecentIcon_001.png", "time-added", 5));
+        } else {
+            stats.push_back(std::make_tuple("GJ_coinsIcon2_001.png", "user-coins", 3));
+        }
+
+        for (const auto& [iconName, statName, statId] : stats) {
+            auto icon = CCSprite::createWithSpriteFrameName(iconName);
+            auto sprite = ButtonSprite::create(icon, 32, 0, 320.0, 1.0f, true, m_stat == statId ? "GJ_button_02.png" : "GJ_button_01.png", false);
             sprite->updateSpriteOffset({0, -1.5f});
             sprite->setScale(0.6f);
             icon->setScale(1.2f);
             auto btn = CCMenuItemExt::createSpriteExtra(
                 sprite,
-                [this, i] (auto sprite) {
-                    this->loadStat(i, false);
+                [this, statId] (auto sprite) {
+                    this->loadStat(statId, false);
                 }
             );
-            btn->setID(fmt::format("{}-button"_spr, stat.second));
+            btn->setID(fmt::format("{}-button"_spr, statName));
             btn->setSizeMult(1.5f);
             m_rightMenu->addChild(btn);
             m_statBtns.push_back(btn);
-            i++;
+        }
+
+        if(m_tab == BILeaderboardTab::Friends) {
+            auto lastBtn = m_statBtns.back();
+            if(auto lastSprite = typeinfo_cast<ButtonSprite*>(lastBtn->getNormalImage())) {
+                lastSprite->m_subSprite->setScale(1.6f);
+            }
         }
 
         m_rightMenu->updateLayout();
@@ -202,6 +225,44 @@ void LeaderboardViewLayer::onRefresh(CCObject* object) {
     this->loadStat(m_stat, true); 
 }
 
+void LeaderboardViewLayer::loadFriends(int stat, bool reload) {
+    auto getSortableStat = [stat] (GJUserScore* score) -> int {
+        switch(stat) {
+            case 0: return score->m_stars;
+            case 1: return score->m_moons;
+            case 2: return score->m_demons;
+            case 3: return score->m_userCoins;
+            case 4: return score->m_creatorPoints;
+            case 5: {
+                if(auto time = typeinfo_cast<CCInteger*>(score->getUserObject("key_64"_spr))) {
+                    return - time->getValue();
+                }
+                return 0;
+            }
+            default: return 0;
+        }
+    };
+
+    if(auto friends = typeinfo_cast<CCArray*>(GameLevelManager::sharedState()->m_storedLevels->objectForKey("get_friends"))) {
+        //auto friendsCopy = typeinfo_cast<CCArray*>(friends->copy())->asExt<GJUserScore*>();
+        auto friendsCopy = CCArray::create()->asExt<GJUserScore*>();
+        for(auto score : friends->asExt<GJUserScore*>()) {
+            friendsCopy.push_back(score);
+        }
+
+        std::sort(friendsCopy.begin(), friendsCopy.end(), [getSortableStat] (GJUserScore* a, GJUserScore* b) {
+            return getSortableStat(a) > getSortableStat(b);
+        });
+
+        int rank = 1;
+        for(auto score : friendsCopy) {
+            score->m_playerRank = rank++;
+        }
+
+        onLeaderboardFinished(friendsCopy.inner(), stat);
+    }
+}
+
 void LeaderboardViewLayer::loadStat(int stat, bool reload) {
     setData(CCArray::create());
     loadPage();
@@ -214,10 +275,14 @@ void LeaderboardViewLayer::loadStat(int stat, bool reload) {
     if(m_mode == BILeaderboardMode::Account) {
         BetterInfoOnline::sharedState()->loadScores(m_accountID, reload, this, nullptr, stat);
     } else if(m_mode == BILeaderboardMode::Top1000) {
-        async::spawn(
-            BetterInfoOnline::sharedState()->loadGlobalScores(m_tab == BILeaderboardTab::Creator ? LeaderboardType::Creator : LeaderboardType::Top100, (LeaderboardStat) stat, reload), 
-            [self = Ref(this), stat] (CCArray* scores) { self->onLeaderboardFinished(scores, stat); }
-        );
+        if(m_tab == BILeaderboardTab::Friends) {
+            loadFriends(stat, reload);
+        } else {
+            async::spawn(
+                BetterInfoOnline::sharedState()->loadGlobalScores(m_tab == BILeaderboardTab::Creator ? LeaderboardType::Creator : LeaderboardType::Top100, (LeaderboardStat) stat, reload), 
+                [self = Ref(this), stat] (CCArray* scores) { self->onLeaderboardFinished(scores, stat); }
+            );
+        }
     }
 }
 

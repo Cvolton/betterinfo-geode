@@ -10,7 +10,8 @@ enum class BILeaderboardMode {
 
 enum class BILeaderboardTab {
     Global,
-    Creator
+    Creator,
+    Friends
 };
 
 class BI_DLL LeaderboardViewLayer : public BIViewLayer, public BILeaderboardDelegate {
@@ -31,6 +32,7 @@ protected:
     void setupStatBtns();
     void onRefresh(cocos2d::CCObject*);
     void onTabChanged(cocos2d::CCObject*);
+    void loadFriends(int stat, bool reload);
     void loadStat(int stat, bool reload);
 public:
     virtual void loadPage();
