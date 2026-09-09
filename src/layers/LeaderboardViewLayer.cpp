@@ -84,7 +84,7 @@ void LeaderboardViewLayer::onTabChanged(CCObject* object) {
 
     static bool friendsNoticeShown = false;
     if(!friendsNoticeShown && m_tab == BILeaderboardTab::Friends) {
-        Notification::create("Extended friends leaderboard does not\nsupport Diamonds, Coins and User Coins", NotificationIcon::Info, NOTIFICATION_DEFAULT_TIME * 3.f)->show();
+        Notification::create("Extended friends leaderboard does not\nsupport Diamonds, Coins and User Coins", NotificationIcon::Info, NOTIFICATION_DEFAULT_TIME * 2.f)->show();
         friendsNoticeShown = true;
     }
 }
