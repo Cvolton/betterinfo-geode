@@ -1034,3 +1034,56 @@ std::pair<time_t, time_t> BetterInfo::getLevelDates(GJGameLevel* level) {
 
     return {created, updated};
 }
+
+GJUserScore* BetterInfo::createSelfScore() {
+    auto GSM = GameStatsManager::sharedState();
+    auto GM = GameManager::sharedState();
+
+    auto myScore = GJUserScore::create();
+    myScore->m_accountID = GJAccountManager::sharedState()->m_accountID;
+    myScore->m_userName = GM->m_playerName;
+    myScore->m_userID = GM->m_playerUserID;
+
+    myScore->m_stars = GSM->getStat("6");
+    myScore->m_secretCoins = GSM->getStat("8");
+    myScore->m_userCoins = GSM->getStat("12");
+    myScore->m_demons = GSM->getStat("5");
+    myScore->m_moons = GSM->getStat("28");
+    myScore->m_diamonds = GSM->getStat("13");
+
+    myScore->m_color1 = GM->m_playerColor;
+    myScore->m_color2 = GM->m_playerColor2;
+    myScore->m_color3 = GM->m_playerGlowColor;
+    myScore->m_iconType = GM->m_playerIconType;
+    switch (GM->m_playerIconType)
+    {
+      case IconType::Ship:
+        myScore->m_iconID = GM->m_playerShip;
+        break;
+      case IconType::Ball:
+        myScore->m_iconID = GM->m_playerBall;
+        break;
+      case IconType::Ufo:
+        myScore->m_iconID = GM->m_playerBird;
+        break;
+      case IconType::Wave:
+        myScore->m_iconID = GM->m_playerDart;
+        break;
+      case IconType::Robot:
+        myScore->m_iconID = GM->m_playerRobot;
+        break;
+      case IconType::Spider:
+        myScore->m_iconID = GM->m_playerSpider;
+        break;
+      case IconType::Swing:
+        myScore->m_iconID = GM->m_playerSwing;
+        break;
+      case IconType::Jetpack:
+        myScore->m_iconID = GM->m_playerJetpack;
+        break;
+      default:
+        myScore->m_iconID = GM->m_playerFrame;
+        break;
+    }
+    return myScore;
+}

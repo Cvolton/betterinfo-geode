@@ -113,4 +113,6 @@ namespace BetterInfo {
 
     BI_DLL void clearSavedValueGroup(std::string_view group);
     BI_DLL std::pair<time_t, time_t> getLevelDates(GJGameLevel* level);
+
+    BI_DLL GJUserScore* createSelfScore();
 }

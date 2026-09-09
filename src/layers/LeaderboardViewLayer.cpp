@@ -1,6 +1,4 @@
 #include "LeaderboardViewLayer.h"
-#include "JumpToPageLayer.h"
-//#include "../managers/CvoltonManager.h"
 #include "../managers/BetterInfoOnline.h"
 #include "../utils.hpp"
 
@@ -252,12 +250,13 @@ void LeaderboardViewLayer::loadFriends(int stat, bool reload) {
             for(auto score : friends->asExt<GJUserScore*>()) {
                 friendsCopy.push_back(score);
             }
+            friendsCopy.push_back(BetterInfo::createSelfScore());
 
             std::sort(friendsCopy.begin(), friendsCopy.end(), [getSortableStat] (GJUserScore* a, GJUserScore* b) {
                 return getSortableStat(a) > getSortableStat(b);
             });
 
-            int rank = 1;
+            int rank = stat == 5 ? 0 : 1;
             for(auto score : friendsCopy) {
                 score->m_playerRank = rank++;
             }
