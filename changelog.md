@@ -1,5 +1,5 @@
 # Changelog
-## <cg>v4.4.8</c> (2026-09-09)
+## <cg>v4.4.9</c> (2026-09-09)
 * <cg>Added</c> <cl>Extended Friends Leaderboard</c> (available next to <co>Top 1000 Leaderboards</c> in the BetterInfo Menu)
 
 ## <cg>v4.4.8</c> (2026-09-06)
