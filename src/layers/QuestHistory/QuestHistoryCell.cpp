@@ -1,9 +1,8 @@
 #include "QuestHistoryCell.h"
 #include "QuestHistoryObject.h"
-#include "../../utils.hpp"
 
 void QuestHistoryCell::loadFromData(CCObject* object) {
-    auto data = dynamic_cast<QuestHistoryObject*>(object);
+    auto data = typeinfo_cast<QuestHistoryObject*>(object);
 
     auto diamondIcon = CCSprite::createWithSpriteFrameName("GJ_bigDiamond_001.png");
     diamondIcon->setPosition({20.0f, this->m_height / 2});
