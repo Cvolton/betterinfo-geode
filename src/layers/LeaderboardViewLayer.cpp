@@ -226,6 +226,8 @@ void LeaderboardViewLayer::onRefresh(CCObject* object) {
 }
 
 void LeaderboardViewLayer::loadFriends(int stat, bool reload) {
+    if(m_tab != BILeaderboardTab::Friends) return;
+
     auto getSortableStat = [stat] (GJUserScore* score) -> int {
         switch(stat) {
             case 0: return score->m_stars;
@@ -243,24 +245,31 @@ void LeaderboardViewLayer::loadFriends(int stat, bool reload) {
         }
     };
 
-    if(auto friends = typeinfo_cast<CCArray*>(GameLevelManager::sharedState()->m_storedLevels->objectForKey("get_friends"))) {
-        //auto friendsCopy = typeinfo_cast<CCArray*>(friends->copy())->asExt<GJUserScore*>();
-        auto friendsCopy = CCArray::create()->asExt<GJUserScore*>();
-        for(auto score : friends->asExt<GJUserScore*>()) {
-            friendsCopy.push_back(score);
+    if(!reload) {
+        if(auto friends = typeinfo_cast<CCArray*>(GameLevelManager::sharedState()->m_storedLevels->objectForKey("get_friends"))) {
+            //auto friendsCopy = typeinfo_cast<CCArray*>(friends->copy())->asExt<GJUserScore*>();
+            auto friendsCopy = CCArray::create()->asExt<GJUserScore*>();
+            for(auto score : friends->asExt<GJUserScore*>()) {
+                friendsCopy.push_back(score);
+            }
+
+            std::sort(friendsCopy.begin(), friendsCopy.end(), [getSortableStat] (GJUserScore* a, GJUserScore* b) {
+                return getSortableStat(a) > getSortableStat(b);
+            });
+
+            int rank = 1;
+            for(auto score : friendsCopy) {
+                score->m_playerRank = rank++;
+            }
+
+            onLeaderboardFinished(friendsCopy.inner(), stat);
+            return;
         }
-
-        std::sort(friendsCopy.begin(), friendsCopy.end(), [getSortableStat] (GJUserScore* a, GJUserScore* b) {
-            return getSortableStat(a) > getSortableStat(b);
-        });
-
-        int rank = 1;
-        for(auto score : friendsCopy) {
-            score->m_playerRank = rank++;
-        }
-
-        onLeaderboardFinished(friendsCopy.inner(), stat);
     }
+
+    auto GLM = GameLevelManager::sharedState();
+    GLM->m_userListDelegate = this;
+    GLM->getUserList(UserListType::Friends);
 }
 
 void LeaderboardViewLayer::loadStat(int stat, bool reload) {
@@ -303,4 +312,23 @@ void LeaderboardViewLayer::onLeaderboardFinished(cocos2d::CCArray* scores, int s
 
 LeaderboardViewLayer::~LeaderboardViewLayer() {
     BetterInfoOnline::sharedState()->cancelScoresRequest(this);
+
+    auto GLM = GameLevelManager::sharedState();
+    if(GLM->m_userListDelegate == this) {
+        GLM->m_userListDelegate = nullptr;
+    }
+}
+
+void LeaderboardViewLayer::getUserListFinished(cocos2d::CCArray* scores, UserListType type) {
+    if(type == UserListType::Friends) {
+        loadFriends(m_stat, false);
+    }
+}
+
+void LeaderboardViewLayer::getUserListFailed(UserListType type, GJErrorCode errorType) {
+    if(type == UserListType::Friends) {
+        setData(CCArray::create());
+        loadPage();
+        hideCircle();
+    }
 }

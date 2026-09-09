@@ -14,7 +14,7 @@ enum class BILeaderboardTab {
     Friends
 };
 
-class BI_DLL LeaderboardViewLayer : public BIViewLayer, public BILeaderboardDelegate {
+class BI_DLL LeaderboardViewLayer : public BIViewLayer, public BILeaderboardDelegate, public UserListDelegate {
     BILeaderboardMode m_mode = BILeaderboardMode::Account;
     BILeaderboardTab m_tab = BILeaderboardTab::Global;
     int m_accountID = 0;
@@ -42,4 +42,7 @@ public:
     void onLeaderboardFinished(cocos2d::CCArray* scores, int stat);
 
     ~LeaderboardViewLayer();
+
+    virtual void getUserListFinished(cocos2d::CCArray* scores, UserListType type);
+    virtual void getUserListFailed(UserListType type, GJErrorCode errorType);
 };
