@@ -5,6 +5,7 @@
 #include "../RewardHistory/RewardCell.h"
 #include "../RewardHistory/RewardCategoryCell.h"
 #include "../QuestHistory/QuestHistoryCell.h"
+#include "../CulledScoreCell.h"
 
 using namespace geode::prelude;
 
@@ -66,3 +67,4 @@ template class CvoltonListView<DailyCell>;
 template class CvoltonListView<RewardCell>;
 template class CvoltonListView<RewardCategoryCell>;
 template class CvoltonListView<QuestHistoryCell>;
+template class CvoltonListView<CulledScoreCell>;
