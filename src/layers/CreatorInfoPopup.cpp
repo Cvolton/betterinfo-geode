@@ -108,6 +108,7 @@ bool CreatorInfoPopup::init(int userID){
 
 void CreatorInfoPopup::onClose(cocos2d::CCObject* sender)
 {
+    m_closed = true;
     if(m_circle) m_circle->fadeAndRemove();
 
     auto GLM = GameLevelManager::sharedState();
@@ -178,6 +179,9 @@ void CreatorInfoPopup::createTabs() {
 }
 
 void CreatorInfoPopup::showResults() {
+    auto GLM = GameLevelManager::sharedState();
+    if(GLM->m_levelManagerDelegate == this) GLM->m_levelManagerDelegate = nullptr;
+
     m_loading->setVisible(false);
     m_diffMenu->removeAllChildren();
     m_secondRowMenu->removeAllChildren();
@@ -261,6 +265,8 @@ void CreatorInfoPopup::showResults() {
 }
 
 void CreatorInfoPopup::loadLevels() {
+    if(m_closed || m_loaded) return;
+
     log::debug("Calculating creator info: page {}", m_searchObject->m_page);
 
     auto GLM = GameLevelManager::sharedState();
@@ -274,14 +280,29 @@ void CreatorInfoPopup::loadLevels() {
 }
 
 void CreatorInfoPopup::queueLoad(float dt) {
+    if(m_closed || m_loaded) return;
+
     auto GLM = GameLevelManager::sharedState();
     GLM->m_levelManagerDelegate = this;
     GLM->getOnlineLevels(m_searchObject);
 }
 
 void CreatorInfoPopup::loadLevelsFinished(cocos2d::CCArray* levels, const char*) {
+    if(m_closed || m_loaded) return;
+
+    int newLevels = 0;
     for(auto level : CCArrayExt<GJGameLevel*>(levels)) {
+        auto levelID = level->m_levelID.value();
+        if(levelID <= 0) continue;
+        if(!m_loadedLevelIDs.insert(levelID).second) continue;
+
         m_levels->addObject(level);
+        newLevels++;
+    }
+
+    if(shouldFinishLoading(levels, newLevels)) {
+        showResults();
+        return;
     }
 
     m_searchObject->m_page++;
@@ -289,7 +310,17 @@ void CreatorInfoPopup::loadLevelsFinished(cocos2d::CCArray* levels, const char*)
 }
 
 void CreatorInfoPopup::loadLevelsFailed(const char*) {
+    if(m_closed || m_loaded) return;
+
     showResults();
+}
+
+bool CreatorInfoPopup::shouldFinishLoading(cocos2d::CCArray* levels, int newLevels) {
+    if(levels->count() == 0) return true;
+    if(newLevels == 0) return true;
+    if(m_totalLevels > -1 && m_loadedPageEnd >= m_totalLevels) return true;
+
+    return false;
 }
 
 void CreatorInfoPopup::setupPageInfo(gd::string counts, const char* key) {
@@ -300,6 +331,9 @@ void CreatorInfoPopup::setupPageInfo(gd::string counts, const char* key) {
 
     if(countsVec.size() != 3) return;
     if(countsVec[0] == 0) return;
+
+    m_totalLevels = countsVec[0];
+    m_loadedPageEnd = countsVec[1] + countsVec[2];
 
     if(m_loading) m_loading->setString(fmt::format("{}%", 100 * countsVec[1] / countsVec[0]).c_str());
 }
