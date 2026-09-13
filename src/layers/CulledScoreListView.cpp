@@ -20,8 +20,7 @@ void CulledScoreListView::setupList(float separation) {
     size_t idx = 1;
     bool found = false;
     for(auto entry : m_entries->asExt<GJUserScore*>()) {
-        if(entry->getUserFlag("jump-here"_spr)) {
-            log::info("Found jump-here entry at index {}", idx);
+        if(entry->m_accountID == m_accountID) {
             found = true;
             break;
         }

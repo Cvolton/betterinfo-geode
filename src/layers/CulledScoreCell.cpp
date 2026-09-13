@@ -1,11 +1,8 @@
 #include "CulledScoreCell.h"
+#include "CulledScoreListView.h"
 
 void CulledScoreCell::loadFromData(CCObject* object) {
     m_score = static_cast<GJUserScore*>(object);
-
-    if(m_score && m_score->m_userID == m_idToHighlight) {
-        m_score->setUserFlag("jump-here"_spr);
-    }
 }
 
 void CulledScoreCell::draw() {
@@ -16,6 +13,16 @@ void CulledScoreCell::draw() {
         m_mainLayer->addChild(cell);
         m_scoreCell = cell;
     }
+
+    if(!m_colorChecked) {
+        if(auto listView = BetterInfo::getParentOfType<CulledScoreListView>(this)) {
+            if(listView->m_accountID == m_score->m_accountID) {
+                m_backgroundLayer->setColor({230, 150, 10});
+            }
+        }
+        m_colorChecked = true;
+    }
+
     reinterpret_cast<StatsCell*>(this)->StatsCell::draw();
 }
 
@@ -41,12 +48,4 @@ CulledScoreCell* CulledScoreCell::create(const char* key, CCSize size) {
         ret = nullptr;
     }
     return ret;
-}
-
-void CulledScoreCell::updateBGColor(int idx) {
-    GenericListCell::updateBGColor(idx);
-
-    if(m_score && m_score->getUserFlag("jump-here"_spr)) {
-        m_backgroundLayer->setColor({230, 150, 10});
-    }
 }

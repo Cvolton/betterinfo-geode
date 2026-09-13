@@ -8,7 +8,7 @@ using namespace geode::prelude;
 class BI_DLL CulledScoreCell : public GenericListCell {
         Ref<GJUserScore> m_score = nullptr;
         GJScoreCell* m_scoreCell = nullptr;
-        int m_idToHighlight = GameManager::sharedState()->m_playerUserID;
+        bool m_colorChecked = false;
         
         void draw() override;
         void setVisible(bool visible) override;
@@ -16,5 +16,4 @@ class BI_DLL CulledScoreCell : public GenericListCell {
         CulledScoreCell(const char* name, cocos2d::CCSize size);
         void loadFromData(CCObject* object);
         static CulledScoreCell* create(const char* key, cocos2d::CCSize size);
-        void updateBGColor(int idx);
 };
