@@ -1,5 +1,5 @@
 #include "LeaderboardViewLayer.h"
-#include "CulledScoreCell.h"
+#include "CulledScoreListView.h"
 #include "../managers/BetterInfoOnline.h"
 #include "../utils.hpp"
 
@@ -213,7 +213,7 @@ void LeaderboardViewLayer::loadPage(){
     if(!m_data) return;
 
     //m_listView = CustomListView::create(m_data, BoomListType::Score, 220.f, 356.f);
-    m_listView = CvoltonListView<CulledScoreCell>::create(m_data, 356.f, 220.f);
+    m_listView = CulledScoreListView::create(m_data, 356.f, 220.f);
     BIViewLayer::loadPage();
 }
 
