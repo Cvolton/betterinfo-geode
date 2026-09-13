@@ -6,9 +6,9 @@
 using namespace geode::prelude;
 
 class BI_DLL $modify(BICommentCell, CommentCell) {
-    struct Fields {
+    /*struct Fields {
         async::TaskHolder<web::WebResponse> m_dateListener;
-    };
+    };*/
 
     /*
      * Callbacks
@@ -125,8 +125,20 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
              * Show exact comment date
              */
              if(Mod::get()->getSettingValue<bool>("exact-comment-date"))
-             if(auto dateLabel = typeinfo_cast<CCLabelBMFont*>(m_mainLayer->getChildByIDRecursive("date-label"))) { 
-                static std::map<std::tuple<int, int, bool>, std::string> dateCache; // levelID, commentID, accountComment -> date
+             if(auto dateLabel = typeinfo_cast<CCLabelBMFont*>(m_mainLayer->getChildByIDRecursive("date-label"))) {
+                int stamp = 0;
+                if(auto timestamp = typeinfo_cast<CCInteger*>(m_comment->getUserObject("key_15"_spr))) {
+                    stamp = timestamp->getValue();
+                }
+
+                auto date = fmt::format(
+                    "{} | {} ago",
+                    TimeUtils::timeToString(stamp, true),
+                    m_comment->m_uploadDate
+                );
+                dateLabel->setString(date.c_str());
+
+                /*static std::map<std::tuple<int, int, bool>, std::string> dateCache; // levelID, commentID, accountComment -> date
                 int levelId = std::abs(m_accountComment ? b->m_accountID : b->m_levelID);
                 auto idPair = std::make_tuple(levelId, b->m_commentID, m_accountComment);
                 auto cacheIt = dateCache.find(idPair);
@@ -164,7 +176,7 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
 
                         dateLabel->setString(date.c_str());
                     }
-                );
+                );*/
             }
         }
     }
