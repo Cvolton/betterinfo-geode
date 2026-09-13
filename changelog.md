@@ -1,4 +1,9 @@
 # Changelog
+## <cg>v4.4.10</c> (2026-09-13)
+* <cg>Reworked</c> <cl>Exact Comment Dates</c> so it gets data directly from <cp>RobTop's server</c>
+* <cg>Optimized</c> <cl>Top 1000 Leaderboards</c> (should fix the big lag spike when loading & mobile crashes)
+* <cg>Fixed</c> your <cl>own user</c> being <cr>highlighted</c> in <co>View Leaderboard As</c>
+
 ## <cg>v4.4.9</c> (2026-09-09)
 * <cg>Added</c> <cl>Extended Friends Leaderboard</c> (available next to <co>Top 1000 Leaderboards</c> in the BetterInfo Menu)
 

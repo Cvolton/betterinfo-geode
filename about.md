@@ -3,6 +3,7 @@
 The best epic modification ever made for Geometry Dash is here! BetterInfo, now available for Geode!
 
 ## Features
+There's a lot more than this nowadays, I need to rewrite the feature list
 - Profiles for unregistered users
 - Extended level info
 - Way more search options

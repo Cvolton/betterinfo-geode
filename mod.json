@@ -1,6 +1,6 @@
 {
     "geode": "5.10.1",
-    "version": "v4.4.9",
+    "version": "v4.4.10",
     "gd": {
         "win": "2.2081",
         "android": "2.2081",
@@ -78,8 +78,8 @@
             "default": true
         },
         "exact-comment-date": {
-            "name": "Show Exact Comment Dates (read info)",
-            "description": "## Highly experimental feature\nShows full comment dates in YYYY-MM-DD using the GDHistory Date Estimator (online). Should be fully accurate as of September 2026.",
+            "name": "Show Exact Comment Dates",
+            "description": "Shows full comment dates in YYYY-MM-DD using timestamps provided directly by RobTop's server.",
             "type": "bool",
             "default": false
         },
