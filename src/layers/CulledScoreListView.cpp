@@ -3,14 +3,15 @@
 
 using namespace geode::prelude;
 
-CulledScoreListView* CulledScoreListView::create(cocos2d::CCArray* data, float width, float height, float separation) {
+CulledScoreListView* CulledScoreListView::create(cocos2d::CCArray* data, float width, float height, int accountID) {
     auto ret = new CulledScoreListView();
-    if (ret && ret->init(data, width, height, separation)) {
-        ret->autorelease();
+    if (accountID > 0) {
+        ret->m_accountID = accountID;
     } else {
-        delete ret;
-        ret = nullptr;
+        ret->m_accountID = GJAccountManager::sharedState()->m_accountID;
     }
+    ret->init(data, width, height, 55.f);
+    ret->autorelease();
     return ret;
 }
 

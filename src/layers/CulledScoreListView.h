@@ -9,7 +9,7 @@ protected:
     void setupList(float) override;
     
 public:
-    int m_accountID = GJAccountManager::sharedState()->m_accountID;
+    int m_accountID = 0;
 
-    static CulledScoreListView* create(cocos2d::CCArray* data, float width, float height, float separation = 55.0f);
+    static CulledScoreListView* create(cocos2d::CCArray* data, float width, float height, int accountID);
 };
