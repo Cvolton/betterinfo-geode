@@ -28,7 +28,9 @@ void CulledScoreListView::setupList(float separation) {
         idx++;
     }
 
-    if(idx > m_entries->count() - 1) return;
+    if(idx > m_entries->count() - 1) {
+        idx = m_entries->count() - 1;
+    };
 
     if(found) {
         float targetY = (idx * m_itemSeparation - m_height * 0.5f)
