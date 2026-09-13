@@ -81,7 +81,7 @@ void LeaderboardViewLayer::onTabChanged(CCObject* object) {
     if(!btn) return;
 
     m_tab = (BILeaderboardTab) btn->getTag();
-    this->loadStat(m_stat, false);
+    this->loadStat(0, false);
 
     static bool friendsNoticeShown = false;
     if(!friendsNoticeShown && m_tab == BILeaderboardTab::Friends) {
