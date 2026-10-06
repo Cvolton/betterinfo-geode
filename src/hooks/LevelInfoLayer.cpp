@@ -19,7 +19,7 @@ class BI_DLL $modify(LevelInfoLayer) {
         /**
          * Clickable green username
          */
-        auto playerName = static_cast<CCMenuItemSpriteExtra*>(this->getChildByID("creator-info-menu")->getChildByID("creator-name"));
+        auto playerName = static_cast<CCMenuItemSpriteExtra*>(this->querySelector("creator-info-menu > creator-name"));
         playerName->setEnabled(true);
 
         /**
