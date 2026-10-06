@@ -3,6 +3,7 @@
 
 void QuestHistoryCell::loadFromData(CCObject* object) {
     auto data = typeinfo_cast<QuestHistoryObject*>(object);
+    if(!data) return;
 
     auto diamondIcon = CCSprite::createWithSpriteFrameName("GJ_bigDiamond_001.png");
     diamondIcon->setPosition({20.0f, this->m_height / 2});
