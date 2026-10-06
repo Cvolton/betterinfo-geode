@@ -239,7 +239,7 @@ void BIViewLayer::onJumpToPageLayer(CCObject* sender){
 }
 
 void BIViewLayer::onRandom(CCObject* sender){
-    loadPage(BetterInfo::randomNumber(0, m_data->count() / resultsPerPage()));
+    loadPage(BetterInfo::randomNumber(0, (m_data->count() - 1) / resultsPerPage()));
 }
 
 CCScene* BIViewLayer::scene(bool paginated) {
