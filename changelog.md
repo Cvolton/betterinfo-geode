@@ -1,4 +1,7 @@
 # Changelog
+## <cg>v4.4.11</c> (2026-10-06)
+* Fixed multiple potential crashes, almost none of which I've seen actually happen to anyone
+
 ## <cg>v4.4.10</c> (2026-09-13)
 * <cg>Reworked</c> <cl>Exact Comment Dates</c> so it gets data directly from <cp>RobTop's server</c>
 * <cg>Optimized</c> <cl>Top 1000 Leaderboards</c> (should fix the big lag spike when loading & mobile crashes)
