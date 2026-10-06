@@ -5,24 +5,18 @@
 
 using namespace geode::prelude;
 
-class BI_DLL DropDownDelegateHelper : public GJDropDownLayerDelegate {
-public:
-    Ref<CCTextInputNode> m_input = nullptr;
-
-    virtual void dropDownLayerWillClose(GJDropDownLayer* layer) {
-        auto browser = static_cast<GJSongBrowser*>(layer);
-        browser->m_delegate = nullptr;
-
-        if(m_input) m_input->setString(std::to_string(browser->m_songID).c_str());
-
-        delete this;
-    }
-};
-
 class BI_DLL $modify(BIMoreSearchLayer, MoreSearchLayer) {
-    struct Fields {
+    struct Fields : public GJDropDownLayerDelegate {
         CCMenuItemSpriteExtra* m_savedBtn = nullptr;
         int m_songID = 0;
+        Ref<CCTextInputNode> m_input = nullptr;
+
+        virtual void dropDownLayerWillClose(GJDropDownLayer* layer) {
+            auto browser = static_cast<GJSongBrowser*>(layer);
+            browser->m_delegate = nullptr;
+
+            if(m_input) m_input->setString(std::to_string(browser->m_songID).c_str());
+        }
     };
 
     bool shouldSavedBtnBeVisible(){
@@ -40,7 +34,7 @@ class BI_DLL $modify(BIMoreSearchLayer, MoreSearchLayer) {
     }
 
     void onSaved(CCObject* sender){
-        auto delegate = new DropDownDelegateHelper();
+        auto delegate = m_fields.self();
         delegate->m_input = m_enterSongID;
 
         auto browser = GJSongBrowser::create();
