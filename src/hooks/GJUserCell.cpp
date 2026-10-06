@@ -9,7 +9,8 @@ class BI_DLL $modify(BIGJUserCell, GJUserCell) {
     void loadFromScore(GJUserScore* b) {
         GJUserCell::loadFromScore(b);
 
-        if(auto timestamp = typeinfo_cast<CCInteger*>(b->getUserObject("key_64"_spr))) {
+        auto timestamp = typeinfo_cast<CCInteger*>(b->getUserObject("key_64"_spr));
+        if(timestamp && timestamp->getValue() > 0) {
             auto label = Label::create(
                 fmt::format("Friends since: {}", TimeUtils::timeToString(timestamp->getValue(), true)),
                 "chatFont.fnt"
