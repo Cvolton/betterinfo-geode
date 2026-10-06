@@ -123,7 +123,7 @@ bool LevelIDLayer::init(){
         menu_selector(LevelIDLayer::onClassicLeaderboard)
     );
     buttonButton->setPosition({-47,-54});
-    buttonButton->setID("comments-button"_spr);
+    buttonButton->setID("classic-lb-button"_spr);
     m_buttonMenu->addChild(buttonButton);
 
     profileSprite = ButtonSprite::create("Platformer Lbs.", 100, true, "goldFont.fnt", "GJ_button_01.png", 30, 0.8f);
@@ -134,7 +134,7 @@ bool LevelIDLayer::init(){
         menu_selector(LevelIDLayer::onPlatformerLeaderboard)
     );
     profileButton->setPosition({47,-54});
-    profileButton->setID("profile-button"_spr);
+    profileButton->setID("platformer-lb-button"_spr);
     m_buttonMenu->addChild(profileButton);
 
     return true;
