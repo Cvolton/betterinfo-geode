@@ -247,12 +247,7 @@ void LeaderboardViewLayer::loadFriends(int stat, bool reload) {
 
     if(!reload) {
         if(auto friends = typeinfo_cast<CCArray*>(GameLevelManager::sharedState()->m_storedLevels->objectForKey("get_friends"))) {
-            //auto friendsCopy = typeinfo_cast<CCArray*>(friends->copy())->asExt<GJUserScore*>();
-            auto friendsCopy = CCArray::create()->asExt<GJUserScore*>();
-            for(auto score : friends->asExt<GJUserScore*>()) {
-                friendsCopy.push_back(score);
-            }
-            friendsCopy.push_back(BetterInfo::createSelfScore());
+            auto friendsCopy = friends->shallowCopy()->asExt<GJUserScore*>();
 
             std::sort(friendsCopy.begin(), friendsCopy.end(), [getSortableStat] (GJUserScore* a, GJUserScore* b) {
                 return getSortableStat(a) > getSortableStat(b);
