@@ -111,7 +111,9 @@ void CreatorInfoPopup::onClose(cocos2d::CCObject* sender)
     if(m_circle) m_circle->fadeAndRemove();
 
     auto GLM = GameLevelManager::sharedState();
-    GLM->m_levelManagerDelegate = nullptr;
+    if(GLM->m_levelManagerDelegate == this) {
+        GLM->m_levelManagerDelegate = nullptr;
+    }
 
     CvoltonAlertLayerStub::onClose(sender);
 }
