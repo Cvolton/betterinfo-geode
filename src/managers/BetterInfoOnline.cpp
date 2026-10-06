@@ -43,7 +43,10 @@ void BetterInfoOnline::loadScores(int accountID, bool force, BILeaderboardDelega
                 }
                 BetterInfoCache::sharedState()->cacheUserScores(m_scoreDict[loadKey]);
             } else {
-                sendScores(CCArray::create(), accountID, stat, delegate, profilePage);
+                if(m_delegates.contains(delegate)) {
+                    sendScores(CCArray::create(), accountID, stat, delegate, profilePage);
+                    m_delegates.erase(delegate);
+                }
                 ServerUtils::showResponseError(response);
             }
         });
