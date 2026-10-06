@@ -191,8 +191,8 @@ void LevelBrowserEndLayer::loadLevelsFailed(const char* key){
     }
 
     if(m_levelBrowserLayer) {
-        m_max = m_levelBrowserLayer->m_searchObject->m_page;
         if(m_levelBrowserLayer->m_searchObject->getKey() != std::string_view(key)) return;
+        m_max = m_levelBrowserLayer->m_searchObject->m_page;
     }
     if(m_infoLayer) m_max = m_infoLayer->m_page;
 
