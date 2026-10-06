@@ -2,9 +2,8 @@
 
 QuestHistoryObject* QuestHistoryObject::create(int diamondCount, int questCount) {
     auto ret = new QuestHistoryObject();
-    if (ret) {
-        ret->init(diamondCount, questCount);
-    }
+    ret->init(diamondCount, questCount);
+    ret->autorelease();
     return ret;
 }
 
