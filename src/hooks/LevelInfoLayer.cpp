@@ -19,8 +19,9 @@ class BI_DLL $modify(LevelInfoLayer) {
         /**
          * Clickable green username
          */
-        auto playerName = static_cast<CCMenuItemSpriteExtra*>(this->querySelector("creator-info-menu > creator-name"));
-        playerName->setEnabled(true);
+        if(auto playerName = static_cast<CCMenuItemSpriteExtra*>(this->querySelector("creator-info-menu > creator-name"))) {
+            playerName->setEnabled(true);
+        }
 
         /**
          * Add exact time label
