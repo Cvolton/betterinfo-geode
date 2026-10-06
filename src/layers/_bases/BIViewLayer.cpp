@@ -203,8 +203,10 @@ CCArray* BIViewLayer::trimData(){
     unsigned int lastIndex = (m_page+1) * levelCount;
 
     for(unsigned int i = firstIndex; i < lastIndex; i++){
+        if(i >= m_data->count()) break;
+
         auto levelObject = m_data->objectAtIndex(i);
-        if(i >= m_data->count() || levelObject == nullptr) break;
+        if(levelObject == nullptr) break;
 
         displayedLevels->addObject(levelObject);
     }
