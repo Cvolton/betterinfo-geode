@@ -47,7 +47,7 @@ void LevelIDLayer::onClassicLeaderboard(cocos2d::CCObject* sender){
 
     onClose(sender);
 
-    Loader::get()->queueInMainThread([level]() {
+    Loader::get()->queueInMainThread([level = Ref(level)]() {
         auto popup = LevelLeaderboard::create(level, LevelLeaderboardType::Global, LevelLeaderboardMode::Time);
         popup->onUpdate(nullptr);
         popup->show();
@@ -62,7 +62,7 @@ void LevelIDLayer::onPlatformerLeaderboard(cocos2d::CCObject* sender){
 
     onClose(sender);
 
-    Loader::get()->queueInMainThread([level]() {
+    Loader::get()->queueInMainThread([level = Ref(level)]() {
         auto popup = LevelLeaderboard::create(level, LevelLeaderboardType::Global, LevelLeaderboardMode::Time);
         popup->onUpdate(nullptr);
         popup->show();
