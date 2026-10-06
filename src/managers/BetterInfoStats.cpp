@@ -70,7 +70,11 @@ void BetterInfoStats::migrateSaveData() {
 
     if(std::filesystem::exists(oldPath) && !std::filesystem::exists(newPath)) {
         log::info("CCBetterInfoStats exists in main GD folder but not in mod folder, migrating");
-        std::filesystem::rename(oldPath, newPath);
+        std::error_code ec;
+        std::filesystem::rename(oldPath, newPath, ec);
+        if(ec) {
+            log::error("Failed to migrate CCBetterInfoStats: {}", ec.message());
+        }
         
         this->getScheduler()->scheduleSelector(schedule_selector(BetterInfoStats::migrationPopup), this, 1, 0, 3, false);
     }
