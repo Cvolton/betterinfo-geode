@@ -25,7 +25,7 @@ void LevelIDLayer::onLevelComments(cocos2d::CCObject* sender){
 
     onClose(sender);
 
-    Loader::get()->queueInMainThread([level]() {
+    Loader::get()->queueInMainThread([level = Ref(level)]() {
         InfoLayer::create(level, nullptr, nullptr)->show();
     });
 }
