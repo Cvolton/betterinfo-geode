@@ -7,7 +7,7 @@ using namespace geode::prelude;
 
 class BI_DLL $modify(BILevelAreaInnerLayer, LevelAreaInnerLayer) {
     struct Fields {
-        CCMenu* m_menu = nullptr;
+        Ref<CCMenu> m_menu = nullptr;
     };
 
     /*
