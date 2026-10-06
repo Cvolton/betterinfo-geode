@@ -110,6 +110,9 @@ public:
 
     void setCurrentValue(Key value) {
         m_current = m_enumMap.find(value);
+        if(m_current == m_enumMap.end()) {
+            m_current = m_enumMap.begin();
+        }
         refreshLabel();
         m_callback(value);
     }
