@@ -78,7 +78,7 @@ void JumpToPageLayer::onLast(cocos2d::CCObject* sender)
         return;
     }
 
-    m_infoLayer->loadPage(m_infoLayer->m_itemCount / m_infoLayer->m_pageEndIdx, false);
+    m_infoLayer->loadPage((m_infoLayer->m_itemCount - 1) / m_infoLayer->m_pageEndIdx, false);
     onClose(sender);
 }
 
