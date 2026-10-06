@@ -31,6 +31,17 @@ class BI_DLL $modify(MenuLayer) {
             finishLoadingManagers();
         }
 
+        // clean up cache.json v1 (not used anymore)
+        async::spawn([] -> arc::Future<void> {
+            std::error_code ec;
+            std::filesystem::remove(Mod::get()->getSaveDir() / "cache.json", ec);
+            if(ec) {
+                log::warn("Failed to delete cache.json: {}", ec.message());
+            }
+
+            co_return;
+        });
+
         return true;
     }
 };
