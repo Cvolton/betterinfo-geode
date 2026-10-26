@@ -69,8 +69,8 @@ class BI_DLL $modify(BIInfoLayer, InfoLayer) {
         Notification::create(text, NotificationIcon::None, .1f)->show();
     }
 
-    bool init(GJGameLevel* level, GJUserScore* score, GJLevelList* list) {
-        if (!InfoLayer::init(level, score, list)) return false;
+    bool init(GJGameLevel* level, GJUserScore* score, GJLevelList* list, GJEditorSoundConfig* sfx) {
+        if (!InfoLayer::init(level, score, list, sfx)) return false;
         auto GM = GameManager::sharedState();
 
         if(auto playerName = static_cast<CCMenuItemSpriteExtra*>(m_buttonMenu->getChildByID("creator-button"))) {

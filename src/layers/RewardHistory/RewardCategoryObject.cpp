@@ -26,7 +26,7 @@ cocos2d::CCDictionary* RewardCategoryObject::filteredChests() {
     if (!m_filteredChests) {
         m_filteredChests = cocos2d::CCDictionary::create();
 
-        for (auto&& [key, chest] : CCDictionaryExt<gd::string, BIGJRewardItem*>(m_chests)) {
+        for (auto&& [key, chest] : CCDictionaryExt<std::string, BIGJRewardItem*>(m_chests)) {
             chest->setKey(key);
             if (m_filter(chest)) {
                 m_filteredChests->setObject(chest, key);
@@ -40,7 +40,7 @@ cocos2d::CCDictionary* RewardCategoryObject::filteredChests() {
 std::map<SpecialRewardItem, int> RewardCategoryObject::countSpecialItems() {
     std::map<SpecialRewardItem, int> counts;
 
-    for (auto&& [key, chest] : CCDictionaryExt<gd::string, BIGJRewardItem*>(filteredChests())) {
+    for (auto&& [key, chest] : CCDictionaryExt<std::string, BIGJRewardItem*>(filteredChests())) {
         for(auto&& reward : CCArrayExt<GJRewardObject*>(chest->m_rewardObjects)) {
             auto item = reward->m_specialRewardItem;
             if(((int) item >= 0x1 && (int) item <= 0x5) || ((int) item >= 0xA && (int) item <= 0xE)) {

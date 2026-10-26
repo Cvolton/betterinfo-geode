@@ -2,7 +2,6 @@
 #include "RewardCell.h"
 #include "../../hooks/GJRewardItem.h"
 
-using namespace gd;
 using namespace cocos2d;
 
 RewardViewLayer* RewardViewLayer::create(CCDictionary* chests, const char* title) {
@@ -34,7 +33,7 @@ bool RewardViewLayer::init(CCDictionary* chests, const char* title) {
     m_noInternetText = fmt::format("You have not <cg>opened</c> any\n<cl>{} Chests</c> yet!", title);
     m_showNoInternet = true;
 
-    for(auto [key, reward] : CCDictionaryExt<gd::string, GJRewardItem*>(chests)) {
+    for(auto [key, reward] : CCDictionaryExt<std::string, GJRewardItem*>(chests)) {
         if(reward == nullptr) continue;
 
         static_cast<BIGJRewardItem*>(reward)->setKey(key);

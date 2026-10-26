@@ -1,6 +1,7 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/MenuLayer.hpp>
 #include <Geode/modify/GameManager.hpp>
+#include <asp/fs.hpp>
 
 #include "managers/BetterInfoStats.h"
 #include "managers/BetterInfoCache.h"
@@ -32,11 +33,9 @@ class BI_DLL $modify(MenuLayer) {
         }
 
         // clean up cache.json v1 (not used anymore)
-        async::spawn([] -> arc::Future<void> {
-            std::error_code ec;
-            std::filesystem::remove(Mod::get()->getSaveDir() / "cache.json", ec);
-            if(ec) {
-                log::warn("Failed to delete cache.json: {}", ec.message());
+        async::spawn([] -> arc::Future<void> {;
+            if(auto err = asp::fs::remove(Mod::get()->getSaveDir() / "cache.json").err()) {
+                log::warn("Failed to delete cache.json: {}", err->message());
             }
 
             co_return;

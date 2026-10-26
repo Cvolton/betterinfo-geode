@@ -153,7 +153,7 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         popup->show();
     }
 
-    void setupPageInfo(gd::string a1, const char* a2) {
+    void setupPageInfo(std::string a1, const char* a2) {
         LevelBrowserLayer::setupPageInfo(a1, a2);
 
         if(this->m_itemCount == 9999 || BetterInfo::isFalseTotal(this->m_searchObject)) this->m_rightArrow->setVisible(true);
@@ -334,7 +334,7 @@ $modify(BILevelBrowserLayer, LevelBrowserLayer) {
         return true;
     }
 
-    gd::string getSearchTitle() {
+    std::string getSearchTitle() {
         if(m_searchObject->m_folder > 0 && (m_searchObject->m_searchType == SearchType::MyLists || m_searchObject->m_searchType == SearchType::FavouriteLists)) {
             auto folderName = GameLevelManager::sharedState()->getFolderName(m_searchObject->m_folder, m_searchObject->m_searchType == SearchType::MyLists);
 

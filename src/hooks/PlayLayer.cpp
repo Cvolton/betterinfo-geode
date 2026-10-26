@@ -20,8 +20,8 @@ class BI_DLL $modify(BIPlayLayer, PlayLayer) {
         stats->logCompletion(this->m_level, this->m_isPracticeMode);
     }
 
-    bool init(GJGameLevel* level, bool a, bool b){
-        if(!PlayLayer::init(level, a, b)) return false;
+    bool init(GJGameLevel* level, bool a){
+        if(!PlayLayer::init(level, a)) return false;
 
         auto stats = BetterInfoStats::sharedState();
         stats->logPlay(this->m_level);

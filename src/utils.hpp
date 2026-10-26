@@ -47,7 +47,7 @@ namespace BetterInfo {
 
     BI_DLL bool isSavedFiltered();
 
-    BI_DLL gd::string decodeBase64Gzip(const gd::string& input);
+    BI_DLL std::string decodeBase64Gzip(const std::string& input);
     BI_DLL std::string fileSize(size_t bytes);
     BI_DLL std::string fixColorCrashes(std::string input);
     BI_DLL std::string fixNullByteCrash(std::string input);
@@ -67,7 +67,7 @@ namespace BetterInfo {
     BI_DLL std::vector<GJGameLevel*> completedLevelsInStarRange(int min, int max, bool platformer, CCDictionary* dict = GameLevelManager::sharedState()->m_onlineLevels);
 
     BI_DLL uint64_t timeInMs();
-    BI_DLL float timeForLevelString(const gd::string& levelString);
+    BI_DLL float timeForLevelString(const std::string& levelString);
     BI_DLL int maxObjectIDForDecompressedLevelString(std::string_view levelString);
     BI_DLL std::string gameVerForDecompressedLevelString(std::string_view levelString);
     BI_DLL int gameVerObjectForLevelStringHeader(std::string_view levelString);

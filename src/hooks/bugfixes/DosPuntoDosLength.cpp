@@ -6,7 +6,7 @@
 using namespace geode::prelude;
 
 class BI_DLL $modify(GJGameLevel) {
-    static gd::string lengthKeyToString(int key) {
+    static std::string lengthKeyToString(int key) {
         switch (key) {
             case 0: return "Tiny";
             case 1: return "Short";

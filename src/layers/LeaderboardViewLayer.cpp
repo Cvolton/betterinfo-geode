@@ -182,7 +182,7 @@ void LeaderboardViewLayer::setupStatBtns() {
 
         for (const auto& [iconName, statName, statId] : stats) {
             auto icon = CCSprite::createWithSpriteFrameName(iconName);
-            auto sprite = ButtonSprite::create(icon, 32, 0, 320.0, 1.0f, true, m_stat == statId ? "GJ_button_02.png" : "GJ_button_01.png", false);
+            auto sprite = ButtonSprite::create(icon, 32, 0, 320.0, 1.0f, true, m_stat == statId ? "GJ_button_02.png" : "GJ_button_01.png", false, 0.0);
             sprite->updateSpriteOffset({0, -1.5f});
             sprite->setScale(0.6f);
             icon->setScale(1.2f);

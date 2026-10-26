@@ -32,7 +32,7 @@ bool FoundListsPopup::init(){
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-    auto textLabel = TextArea::create(fmt::format("You can claim rewards\nfrom <cg>{}</c> new lists!", BetterInfoCache::sharedState()->claimableListsCount()), "chatFont.fnt", 1, 295, {0.5,0.5}, 20, false);
+    auto textLabel = TextArea::create(fmt::format("You can claim rewards\nfrom <cg>{}</c> new lists!", BetterInfoCache::sharedState()->claimableListsCount()), "chatFont.fnt", 1, 295, {0.5,0.5}, 20, false, 0);
     textLabel->setAnchorPoint({0.5,0.5});
     textLabel->setPosition({0,1});
     textLabel->setID("text-label"_spr);

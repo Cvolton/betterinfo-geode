@@ -98,7 +98,7 @@ bool BIViewLayer::init(bool paginated) {
     m_lastBtn->setID("last-button"_spr);
     menu->addChild(m_lastBtn);
 
-    m_noInternet = TextArea::create(m_noInternetText.c_str(), "bigFont.fnt", 1.0f, 600, {0.5f, 0.5f}, 40, false);
+    m_noInternet = TextArea::create(m_noInternetText.c_str(), "bigFont.fnt", 1.0f, 600, {0.5f, 0.5f}, 40, false, 0);
     m_noInternet->setPosition(winSize / 2);
     m_noInternet->setScale(0.6f);
     m_noInternet->setZOrder(20);

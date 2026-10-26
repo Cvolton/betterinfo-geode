@@ -1,7 +1,6 @@
 #include "RewardGroupLayer.h"
 #include "RewardCategoryCell.h"
 
-using namespace gd;
 using namespace cocos2d;
 
 RewardGroupLayer* RewardGroupLayer::create(const char* title, CCDictionary* chests, RewardGroupCategoryVector categories) {

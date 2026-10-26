@@ -2,7 +2,7 @@
 #include "../utils.hpp"
 
 bool CopyableLabel::init(const char* color, const char* title, const std::string& value, const char* font) {
-    auto area = TextArea::create(fmt::format("<{}>{}:</c> {}", color, title, value), "chatFont.fnt", 1, 200, {0.5,0.5}, 20, false);
+    auto area = TextArea::create(fmt::format("<{}>{}:</c> {}", color, title, value), "chatFont.fnt", 1, 200, {0.5,0.5}, 20, false, 0);
     m_value = value;
 
     if(!CCMenuItemSpriteExtra::init(area, nullptr, this, nullptr)) return false;

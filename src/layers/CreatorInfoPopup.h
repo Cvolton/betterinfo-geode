@@ -30,7 +30,7 @@ public:
 
     void loadLevelsFinished(cocos2d::CCArray*, const char*);
     void loadLevelsFailed(const char*);
-    void setupPageInfo(gd::string counts, const char* key);
+    void setupPageInfo(std::string counts, const char* key);
 
     int levelsForDifficulty(int difficulty, bool platformer);
 

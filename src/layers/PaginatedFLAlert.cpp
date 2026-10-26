@@ -75,7 +75,7 @@ void PaginatedFLAlert::loadPage(size_t page) {
     auto parent = m_pParent ? m_pParent : CCDirector::sharedDirector()->getRunningScene();
     auto zOrder = getZOrder();
 
-    onBtn1(this);
+    onButtonTag(2);
 
     auto newAlert = PaginatedFLAlert::create(title, content, parent, page);
     newAlert->setZOrder(zOrder);

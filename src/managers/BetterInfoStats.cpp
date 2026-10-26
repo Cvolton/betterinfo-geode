@@ -2,7 +2,8 @@
 #include "../utils.hpp"
 
 #include <fmt/format.h>
-#include <cvolton.level-id-api/include/EditorIDs.hpp>
+#include <asp/fs.hpp>
+//#include <cvolton.level-id-api/include/EditorIDs.hpp>
 
 bool BetterInfoStats::init(){
     bool init = CCNode::init();
@@ -13,7 +14,7 @@ bool BetterInfoStats::init(){
     this->migrateSaveData();
     this->setup();
 
-    if(std::filesystem::exists(Mod::get()->getSaveDir() / "stats_diffs.json")) {
+    if(asp::fs::exists(Mod::get()->getSaveDir() / "stats_diffs.json")) {
         m_diffJson = utils::file::readJson(Mod::get()->getSaveDir() / "stats_diffs.json").unwrapOrDefault();
     }
     this->importJsonData();
@@ -48,7 +49,7 @@ void BetterInfoStats::importJsonData() {
 
 void BetterInfoStats::save() {
     m_saved = false;
-    GManager::save();
+    GManager::save(true);
 
     m_diffJson.clear();
     
@@ -68,12 +69,10 @@ void BetterInfoStats::migrateSaveData() {
     auto oldPath = dirs::getSaveDir() / "CCBetterInfoStats.dat";
     auto newPath = dirs::getSaveDir() / std::string(this->m_fileName); //it would be better to utilize Mod::get()->getSaveDir, however that can result in future issues
 
-    if(std::filesystem::exists(oldPath) && !std::filesystem::exists(newPath)) {
-        log::info("CCBetterInfoStats exists in main GD folder but not in mod folder, migrating");
-        std::error_code ec;
-        std::filesystem::rename(oldPath, newPath, ec);
-        if(ec) {
-            log::error("Failed to migrate CCBetterInfoStats: {}", ec.message());
+    if(asp::fs::exists(oldPath) && !asp::fs::exists(newPath)) {
+        log::info("CCBetterInfoStats exists in main GD folder but not in mod folder, migrating");;
+        if(auto err = asp::fs::rename(oldPath, newPath).err()) {
+            log::error("Failed to migrate CCBetterInfoStats: {}", err->message());
         }
         
         this->getScheduler()->scheduleSelector(schedule_selector(BetterInfoStats::migrationPopup), this, 1, 0, 3, false);
@@ -128,7 +127,7 @@ void BetterInfoStats::establishListFolders() {
         list->m_folder = this->getListFolder(list);
     }
     
-    for(auto [key, list] : CCDictionaryExt<gd::string, GJLevelList*>(GameLevelManager::sharedState()->m_favoriteLists)) {
+    for(auto [key, list] : CCDictionaryExt<std::string, GJLevelList*>(GameLevelManager::sharedState()->m_favoriteLists)) {
         list->m_folder = this->getListFolder(list);
     }
 }
@@ -190,7 +189,9 @@ std::string BetterInfoStats::keyForLevel(GJGameLevel* level) {
     auto type = static_cast<int>(level->m_levelType);
     if(!type) type = 3;
 
-    return fmt::format("{}_{}_{}_{}", EditorIDs::getID(level), type, level->m_dailyID.value(), level->m_gauntletLevel);
+    // TODO: 2.209
+    //return fmt::format("{}_{}_{}_{}", EditorIDs::getID(level), type, level->m_dailyID.value(), level->m_gauntletLevel);
+    return "TODO";
 }
 
 void BetterInfoStats::logAttempt(GJGameLevel* level, bool practice) {
@@ -211,7 +212,9 @@ int BetterInfoStats::getAttempts(GJGameLevel* level, bool practice) {
 }
 
 std::string BetterInfoStats::keyForList(GJLevelList* list) {
-    return fmt::format("{}_{}", (int) list->m_listType, EditorIDs::getID(list));
+    // TODO: 2.209
+    return "TODO";
+    //return fmt::format("{}_{}", (int) list->m_listType, EditorIDs::getID(list));
 }
 
 void BetterInfoStats::setListFolder(GJLevelList* list, int folder) {

@@ -25,7 +25,7 @@ bool DailyViewLayer::init(GJTimedLevelType timedType) {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
     setData(CCArray::create());
 
-    for(auto [key, level] : CCDictionaryExt<gd::string, GJGameLevel*>(GLM->m_dailyLevels)){
+    for(auto [key, level] : CCDictionaryExt<std::string, GJGameLevel*>(GLM->m_dailyLevels)){
         if(level == nullptr) continue;
 
         if(timedType == GJTimedLevelType::Event && level->m_dailyID >= 200000){

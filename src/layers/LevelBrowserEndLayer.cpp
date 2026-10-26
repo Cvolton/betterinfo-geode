@@ -72,7 +72,7 @@ bool LevelBrowserEndLayer::init(LevelBrowserLayer* levelBrowserLayer, InfoLayer*
     auto title = createTextLabel("Finding Last Page", {0,63}, 0.7f, m_buttonMenu, "goldFont.fnt");
     title->setID("title-label"_spr);
 
-    m_textLabel = TextArea::create("Press <cg>Go</c> to start searching.\nThis might take several\nminutes with certain\nfilter combinations.", "chatFont.fnt", 1, 295, {0,1}, 20, false);
+    m_textLabel = TextArea::create("Press <cg>Go</c> to start searching.\nThis might take several\nminutes with certain\nfilter combinations.", "chatFont.fnt", 1, 295, {0,1}, 20, false, 0);
     m_textLabel->setAnchorPoint({0,1});
     m_textLabel->setPosition({-90,44});
     m_textLabel->setID("text-label"_spr);
@@ -218,7 +218,7 @@ void LevelBrowserEndLayer::loadLevelsFailed(const char* test, int){
     //lists overload
     loadLevelsFailed(test);
 }
-void LevelBrowserEndLayer::setupPageInfo(gd::string, const char*){
+void LevelBrowserEndLayer::setupPageInfo(std::string, const char*){
     
 }
 

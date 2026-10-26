@@ -1,6 +1,6 @@
 #include "ServerUtils.h"
 #include "../utils.hpp"
-#include <km7dev.server_api/include/ServerAPIEvents.hpp>
+//#include <km7dev.server_api/include/ServerAPIEvents.hpp>
 
 #include <asp/iter.hpp>
 
@@ -17,20 +17,21 @@ web::WebRequest ServerUtils::getBaseRequest(bool setUserAgent) {
 }
 
 std::string ServerUtils::getBaseURL() {
-    if(Loader::get()->isModLoaded("km7dev.server_api")) {
+    // TODO: 2.209
+    /*if(Loader::get()->isModLoaded("km7dev.server_api")) {
         auto url = ServerAPIEvents::getCurrentServer().url;
         if(!url.empty() && url != "NONE_REGISTERED") {
             while(url.ends_with("/")) url.pop_back();
             return url;
         }
-    }
+    }*/
 
-    // The addresses are pointing to "https://www.boomlings.com/database/getGJLevels21.php"
+    // The addresses are pointing to "https://www.boomlings.com/database/getGJComments21.php"
     // in the main game executable
     char* originalUrl = nullptr;
     #ifdef GEODE_IS_WINDOWS
-        static_assert(GEODE_COMP_GD_VERSION == 22081, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0x558b70);
+        static_assert(GEODE_COMP_GD_VERSION == 22091, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x758A88);
     #elif defined(GEODE_IS_ARM_MAC)
         static_assert(GEODE_COMP_GD_VERSION == 22081, "Unsupported GD version");
         originalUrl = (char*)(base::get() + 0x77d709);
@@ -122,7 +123,7 @@ void ServerUtils::storeUserNames(std::string_view userData) {
         int userID = BetterInfo::stoi(info[0]);
         int accountID = BetterInfo::stoi(info[2]);
 
-        if(userID > 0) GLM->storeUserName(userID, accountID, gd::string(info[1].data(), info[1].size()));
+        if(userID > 0) GLM->storeUserName(userID, accountID, std::string(info[1].data(), info[1].size()));
     }
 }
 
@@ -162,7 +163,7 @@ CCArray* cacheSearchResult(const std::string& key, const std::vector<Ref<T>>& le
         levelArray->addObject(level);
     }
 
-    if(key.length() < 255) GLM->storeSearchResult(levelArray, gd::string(pageData.data(), pageData.size()), key.c_str());
+    if(key.length() < 255) GLM->storeSearchResult(levelArray, std::string(pageData.data(), pageData.size()), key.c_str());
     else s_cache[key] = levelArray;
 
     return levelArray;
@@ -269,7 +270,7 @@ void ServerUtils::getOnlineLevels(GJSearchObject* searchObject, std::function<vo
             std::string_view songData = parsed.m_parts[2];
             std::string_view pageData = parsed.m_parts[3];
 
-            MusicDownloadManager::sharedState()->createSongsInfo(gd::string(songData.data(), songData.size()), "");
+            MusicDownloadManager::sharedState()->createSongsInfo(std::string(songData.data(), songData.size()), "");
             ServerUtils::storeUserNames(userData);
 
             *levels = asp::iter::split(levelData, '|').map([](auto currentLevel) {

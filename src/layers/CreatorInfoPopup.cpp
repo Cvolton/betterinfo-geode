@@ -294,7 +294,7 @@ void CreatorInfoPopup::loadLevelsFailed(const char*) {
     showResults();
 }
 
-void CreatorInfoPopup::setupPageInfo(gd::string counts, const char* key) {
+void CreatorInfoPopup::setupPageInfo(std::string counts, const char* key) {
 
     auto countsVec = asp::iter::split(counts, ":").map([](std::string_view currentKey) {
         return BetterInfo::stoi(currentKey);

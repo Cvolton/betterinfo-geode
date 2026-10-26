@@ -192,7 +192,7 @@ void BetterInfoCache::loadJson() {
 }
 
 void BetterInfoCache::saveJson() {
-    auto dict = GameLevelManager::sharedState()->m_onlineLevels->asExt<gd::string, GJGameLevel*>();
+    auto dict = GameLevelManager::sharedState()->m_onlineLevels->asExt<std::string, GJGameLevel*>();
     std::erase_if(m_levelDateStringCache, [&dict](const auto& item) {
         auto idNum = fmt::to_string(item.first);
         if (!dict.contains(idNum)) {
@@ -307,7 +307,7 @@ arc::Future<> BetterInfoCache::cacheLevels(CCDictionary* levels) {
     std::vector<int> needsDownloadingUnrated;
 
     co_await waitForMainThread([this, levels, &needsDownloadingRated, &needsDownloadingUnrated] {
-        for(auto [id, level] : levels->asExt<gd::string, GJGameLevel*>()) {
+        for(auto [id, level] : levels->asExt<std::string, GJGameLevel*>()) {
             auto idNum = level->m_levelID.value();
             if(m_levelCache.contains(idNum) || (m_levelFailures.contains(idNum) && m_levelFailures[idNum] > 5)) continue;
 

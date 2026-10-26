@@ -7,7 +7,7 @@ using namespace geode::prelude;
 
 class BI_DLL $modify(BILevelSearchLayer, LevelSearchLayer) {
 
-    GJSearchObject* getSearchObject(SearchType type, gd::string gdstr) {
+    GJSearchObject* getSearchObject(SearchType type, std::string gdstr) {
         std::string str = gdstr;
 
         std::string::const_iterator it = str.begin();

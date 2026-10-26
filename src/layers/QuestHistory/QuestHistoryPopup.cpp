@@ -26,7 +26,7 @@ bool QuestHistoryPopup::init(){
     std::map<int, int> completed;
     size_t completedSum = 0;
 
-    for(auto [key, value] : CCDictionaryExt<gd::string, cocos2d::CCString*>(GSM->m_challengeDiamonds)) {
+    for(auto [key, value] : CCDictionaryExt<std::string, cocos2d::CCString*>(GSM->m_challengeDiamonds)) {
         if(key.size() < 1 || key[0] != 'c') continue;
 
         completed[value->intValue()] += 1;

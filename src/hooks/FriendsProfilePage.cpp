@@ -45,7 +45,7 @@ class BI_DLL $modify(BIFriendsProfilePage, FriendsProfilePage) {
         
         std::map<std::string, Ref<GJUserScore>> followedCreators;
         
-        for(auto [key,trueString] : CCDictionaryExt<gd::string, CCString*>(GLM->m_followedCreators)) {
+        for(auto [key,trueString] : CCDictionaryExt<std::string, CCString*>(GLM->m_followedCreators)) {
             auto id = BetterInfo::stoi(key);
             auto score = BICache->getUserScore(id);
 

@@ -241,7 +241,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
     float descDelimiter = 1;
     if(descLength > 140) descLength = 140;
     if(descLength > 70) descDelimiter = ((((140 - descLength) / 140) * 0.3f) + 0.7f);
-    auto description = TextArea::create(descText, "chatFont.fnt", 1, 295 / descDelimiter, {0.5f,0.5f}, 20, false);
+    auto description = TextArea::create(descText, "chatFont.fnt", 1, 295 / descDelimiter, {0.5f,0.5f}, 20, false, 0);
     description->setScale(descDelimiter);
     description->setAnchorPoint({1,1});
     description->setPosition( ( (description->getContentSize() / 2 ) * descDelimiter ) + (CCPoint(340,55) / 2) );
@@ -267,7 +267,7 @@ bool ExtendedLevelInfo::init(GJGameLevel* level){
     refreshInfoTexts();
     setupAdditionalInfo();
 
-    m_info = TextArea::create(m_primary, "chatFont.fnt", 1, 185, {0,1}, 20, false);
+    m_info = TextArea::create(m_primary, "chatFont.fnt", 1, 185, {0,1}, 20, false, 0);
     m_info->setPosition({-160.5,26});
     m_info->setAnchorPoint({0,1});
     //m_info->setScale(0.925f);

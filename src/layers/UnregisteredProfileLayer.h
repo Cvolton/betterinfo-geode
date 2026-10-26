@@ -7,7 +7,7 @@ class BI_DLL UnregisteredProfileLayer : public CvoltonAlertLayerStub {
 public:
     static UnregisteredProfileLayer* create(GJUserScore* score, CCNode* invoker = nullptr);
     void onClose(CCObject* sender);
-    static void displayProfile(int userID, gd::string userName, CCNode* invoker = nullptr);
+    static void displayProfile(int userID, std::string userName, CCNode* invoker = nullptr);
     static void doSearch(int userID);
     void onMyLevels(CCObject* sender);
     void onCommentHistory(CCObject* sender);

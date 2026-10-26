@@ -35,7 +35,7 @@ public:
     void loadLevelsFinished(cocos2d::CCArray*, const char*, int);
     void loadLevelsFailed(const char*);
     void loadLevelsFailed(const char*, int);
-    void setupPageInfo(gd::string, const char*);
+    void setupPageInfo(std::string, const char*);
 
     void loadCommentsFinished(cocos2d::CCArray*, char const*);
 	void loadCommentsFailed(char const*);

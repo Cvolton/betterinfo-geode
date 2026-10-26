@@ -38,7 +38,7 @@ class BI_DLL $modify(GameLevelManager) {
      * Hooks
      */
 
-    gd::string userNameForUserID(int userID) {
+    std::string userNameForUserID(int userID) {
         auto userName = GameLevelManager::userNameForUserID(userID);
         auto userNameStd = std::string(userName);
 
@@ -67,7 +67,7 @@ class BI_DLL $modify(GameLevelManager) {
 
         //uint64_t now = BetterInfo::timeInMs();
 
-        for(auto [key, currentLvl] : CCDictionaryExt<gd::string, GJGameLevel>(this->m_onlineLevels)) {
+        for(auto [key, currentLvl] : CCDictionaryExt<std::string, GJGameLevel>(this->m_onlineLevels)) {
             switch(mode){
                 case CompleteMode::completed:
                     if(currentLvl->m_normalPercent == 100) pRet->addObject(currentLvl);

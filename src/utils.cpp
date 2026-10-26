@@ -98,7 +98,8 @@ CCMenuItemSpriteExtra* BetterInfo::createSearchButton(cocos2d::CCLayer* parent, 
         "GJ_longBtn04_001.png",
         text,
         scale,
-        icon
+        icon,
+        1.1f
     );
     if(searchTexture->m_icon) {
         auto ogSize = searchTexture->m_icon->getScaledContentSize();
@@ -235,7 +236,7 @@ bool BetterInfo::isSavedFiltered() {
     return false;
 }
 
-gd::string BetterInfo::decodeBase64Gzip(const gd::string& input) {
+std::string BetterInfo::decodeBase64Gzip(const std::string& input) {
     return ZipUtils::decompressString(input, false, 0);
 }
 
@@ -406,7 +407,7 @@ bool BetterInfo::levelProgressMatchesObject(GJGameLevel* level, const BISearchOb
 std::vector<GJGameLevel*> BetterInfo::completedLevelsInStarRange(int min, int max, bool platformer, CCDictionary* dict) {
     std::vector<GJGameLevel*> levels;
 
-    for(auto [key, level] : CCDictionaryExt<gd::string, GJGameLevel*>(dict)) {
+    for(auto [key, level] : CCDictionaryExt<std::string, GJGameLevel*>(dict)) {
         if(level->m_normalPercent < 100) continue;
         if(level->m_stars < min || level->m_stars > max) continue;
         if((platformer && !level->isPlatformer()) || (!platformer && level->isPlatformer())) continue;
@@ -488,7 +489,7 @@ uint64_t BetterInfo::timeInMs() {
     return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
-float BetterInfo::timeForLevelString(const gd::string& levelString) {
+float BetterInfo::timeForLevelString(const std::string& levelString) {
     struct SpeedPortalObject {
         int id;
         float xPos;

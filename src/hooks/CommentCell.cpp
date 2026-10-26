@@ -22,7 +22,7 @@ class BI_DLL $modify(BICommentCell, CommentCell) {
         auto level = GJGameLevel::create();
         level->m_levelID = this->m_comment->m_levelID;
 
-        InfoLayer* infoLayer = InfoLayer::create(level, nullptr, nullptr);
+        InfoLayer* infoLayer = InfoLayer::create(level, nullptr, nullptr, nullptr);
         infoLayer->m_scene = BetterInfo::getParentOfType<InfoLayer>(this);
         infoLayer->show();
     }

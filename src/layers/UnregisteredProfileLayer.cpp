@@ -29,7 +29,7 @@ void UnregisteredProfileLayer::onCopyPlayerName(CCObject* sender)
     BetterInfo::copyToClipboard(m_score->m_userName.c_str(), this);
 }
 
-void UnregisteredProfileLayer::displayProfile(int userID, gd::string userName, CCNode* invoker){
+void UnregisteredProfileLayer::displayProfile(int userID, std::string userName, CCNode* invoker){
     GJUserScore* score = GJUserScore::create();
     score->m_userID = userID;
     score->m_userName = userName;
@@ -55,7 +55,7 @@ void UnregisteredProfileLayer::onMyLevels(CCObject* sender) {
 }
 
 void UnregisteredProfileLayer::onCommentHistory(CCObject* sender) {
-    InfoLayer* infoLayer = InfoLayer::create(nullptr, m_score, nullptr);
+    InfoLayer* infoLayer = InfoLayer::create(nullptr, m_score, nullptr, nullptr);
     infoLayer->m_scene = m_invoker;
     infoLayer->show();
     onClose(sender);
