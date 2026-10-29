@@ -48,7 +48,6 @@ void BetterInfoStats::importJsonData() {
 }
 
 void BetterInfoStats::save() {
-    m_saved = false;
     GManager::save(true);
 
     m_diffJson.clear();
