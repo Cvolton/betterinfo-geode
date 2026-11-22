@@ -41,7 +41,7 @@ jobs:
         with:
           combine: true
           target: ${{ matrix.config.target }}
-          build-args: '--parallel 16'
+          build-args: '--parallel 64'
       
   package:
     name: Package builds
