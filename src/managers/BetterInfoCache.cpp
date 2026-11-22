@@ -140,7 +140,6 @@ void BetterInfoCache::startLoading() {
 
     async::spawn([this] -> arc::Future<> {
         co_await cacheSavedLevels();
-        co_await cacheFollowedCreators();
     }, [this] {
         log::debug("Finished initial caching");
         saveJson();
@@ -240,38 +239,6 @@ $on_mod(DataSaved) {
 /**
  * User Score Caching
  */
-arc::Future<> BetterInfoCache::cacheFollowedCreators() {
-    log::debug("Started caching followed creators");
-
-    auto res = co_await BetterInfoOnline::sharedState()->loadGlobalScores(LeaderboardType::Creator, LeaderboardStat::Stars, false);
-    co_await waitForMainThread([this, res] {
-        for(auto score : CCArrayExt<GJUserScore>(res)) {
-            if(!GameLevelManager::sharedState()->m_followedCreators->objectForKey(fmt::to_string(score->m_accountID))) continue;
-
-            cacheUserScore(score->m_accountID, score);
-        }
-    });
-
-    std::vector<int> followedCreatorIDs;
-    co_await waitForMainThread([this, &followedCreatorIDs] {
-        auto followedCreators = GameLevelManager::sharedState()->m_followedCreators->asExt();
-        for(auto [id, _] : followedCreators) {
-            auto idNum = BetterInfo::stoi(id);
-            if(m_userScoreCache.contains(idNum)) continue;
-
-            followedCreatorIDs.push_back(idNum);
-        }
-    });
-
-    for(auto id : followedCreatorIDs) {
-        co_await arc::sleep(asp::Duration::fromSecs(5));
-        co_await waitForMainThread([id] {
-            log::debug("Caching score for followed creator with ID: {}", id);
-            BetterInfoOnline::sharedState()->loadScores(id, false, nullptr);
-        });
-    }
-}
-
 void BetterInfoCache::cacheUserScore(int accountID, GJUserScore* score) {
     m_userScoreCache[accountID] = score;
 }
