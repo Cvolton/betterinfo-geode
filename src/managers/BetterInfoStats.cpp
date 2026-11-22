@@ -3,7 +3,7 @@
 
 #include <fmt/format.h>
 #include <asp/fs.hpp>
-//#include <cvolton.level-id-api/include/EditorIDs.hpp>
+#include <cvolton.level-id-api/EditorIDs.hpp>
 
 bool BetterInfoStats::init(){
     bool init = CCNode::init();
@@ -188,9 +188,7 @@ std::string BetterInfoStats::keyForLevel(GJGameLevel* level) {
     auto type = static_cast<int>(level->m_levelType);
     if(!type) type = 3;
 
-    // TODO: 2.209
-    //return fmt::format("{}_{}_{}_{}", EditorIDs::getID(level), type, level->m_dailyID.value(), level->m_gauntletLevel);
-    return "TODO";
+    return fmt::format("{}_{}_{}_{}", EditorIDs::getID(level), type, level->m_dailyID.value(), level->m_gauntletLevel);
 }
 
 void BetterInfoStats::logAttempt(GJGameLevel* level, bool practice) {
@@ -211,9 +209,7 @@ int BetterInfoStats::getAttempts(GJGameLevel* level, bool practice) {
 }
 
 std::string BetterInfoStats::keyForList(GJLevelList* list) {
-    // TODO: 2.209
-    return "TODO";
-    //return fmt::format("{}_{}", (int) list->m_listType, EditorIDs::getID(list));
+    return fmt::format("{}_{}", (int) list->m_listType, EditorIDs::getID(list));
 }
 
 void BetterInfoStats::setListFolder(GJLevelList* list, int folder) {

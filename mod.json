@@ -24,10 +24,7 @@
     "dependencies": {
         "geode.node-ids": "v1.23.0",
         "cvolton.misc_bugfixes": "v1.10.0",
-        "cvolton.level-id-api": {
-            "version": "v2.0.0",
-            "required": false
-        },
+        "cvolton.level-id-api": "v2.1.0",
         "eclipse.eclipse-menu": {
             "version": "v1.8.1",
             "required": false
