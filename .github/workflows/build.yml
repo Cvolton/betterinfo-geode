@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Build the mod
-        uses: geode-sdk/build-geode-mod@main
+        uses: TeamHaxGD/better-improved-build-geode-mod-v2-moreepic@main
         with:
           combine: true
           target: ${{ matrix.config.target }}
