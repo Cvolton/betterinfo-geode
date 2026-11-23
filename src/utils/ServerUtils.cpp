@@ -39,11 +39,11 @@ std::string ServerUtils::getBaseURL() {
         static_assert(GEODE_COMP_GD_VERSION == 22091, "Unsupported GD version");
         originalUrl = (char*)(base::get() + 0xa5c98d);
     #elif defined(GEODE_IS_ANDROID64)
-        static_assert(GEODE_COMP_GD_VERSION == 22081, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0xECCF90);
+        static_assert(GEODE_COMP_GD_VERSION == 22091, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0x11483C0);
     #elif defined(GEODE_IS_ANDROID32)
-        static_assert(GEODE_COMP_GD_VERSION == 22081, "Unsupported GD version");
-        originalUrl = (char*)(base::get() + 0x96C0DB);
+        static_assert(GEODE_COMP_GD_VERSION == 22091, "Unsupported GD version");
+        originalUrl = (char*)(base::get() + 0xB9D75A);
     #elif defined(GEODE_IS_IOS)
         static_assert(GEODE_COMP_GD_VERSION == 22091, "Unsupported GD version");
         originalUrl = (char*)(base::get() + 0x7f1da1);
