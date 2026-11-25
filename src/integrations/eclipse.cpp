@@ -1,5 +1,5 @@
 #define ECLIPSE_MODULES_HPP
-#include <eclipse.eclipse-menu/include/eclipse.hpp>
+#include <eclipse.eclipse-menu/eclipse.hpp>
 
 using namespace eclipse;
 using namespace geode::prelude;

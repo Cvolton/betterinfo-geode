@@ -1,5 +1,5 @@
 {
-    "geode": "6.0.0-beta.1",
+    "geode": "6.0.0",
     "version": "v4.4.11",
     "gd": {
         "win": "2.2091",
@@ -26,7 +26,7 @@
         "cvolton.misc_bugfixes": "v1.10.0",
         "cvolton.level-id-api": "v2.1.0",
         "eclipse.eclipse-menu": {
-            "version": "v1.8.1",
+            "version": "v1.10.0",
             "required": false
         },
         "km7dev.server_api": {
